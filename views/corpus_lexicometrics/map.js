@@ -17,9 +17,8 @@ function(doc) {
     }
   }
   for (word in counts) {
-    emit([word,doc.corpus], {
+    emit([word], {
       "this":counts[word],
-      "on":sum,
       "in":1
     });
   }

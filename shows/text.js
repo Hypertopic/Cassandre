@@ -1,4 +1,5 @@
 function(doc, req){
+  log(req.id);
   const ALPHA = /[a-zàâçéêèëïîôöüùû]+|[^a-zàâçéêèëïîôöüùû]+/gi;
   var html = '<html>';
   html += '<script src="/_utils/script/couch.js"></script>';
@@ -12,31 +13,48 @@ function(doc, req){
   html += '  }';
   html += '}';
   html += 'function wholeMetrics() {';
-  html += '  metrics = {};';
   html += '  var db = new CouchDB("cassandre");';
-  html += '  var lexcorpus = db.view("cassandre/lexicometrics",{group_level:"1"});';//TODO level 2 would need a filter on corpus
+  html += '  const D = ' + (req.info.doc_count-1) + ';';
+  html += '  var corpus = {};';
+  html += '  var lexcorpus = db.view("cassandre/corpus_lexicometrics",{group:"true"});';//TODO level 2 would need a filter on corpus
   html += '  for each (c in lexcorpus.rows) {';
-  html += '    metrics[c.key[0]] = {corpus:c.value};';
+  html += '    corpus[c.key] = c.value;';
   html += '  }';
-  html += '  var lexdoc = db.view("cassandre/lexicometrics",{reduce:"false"});';
+  html += '  var lexdoc = db.view("cassandre/document_lexicometrics",{key:["' + req.id + '"]});';
+  html += '  var metrics = {};';
+  html += '  var max_cheap = 0;';
+  html += '  var max_tfidf = 0;';
   html += '  for each (d in lexdoc.rows) {';
-  html += '    metrics[d.key[0]].doc = d.value;';
+  html += '    metrics[d.value.word] = {';
+  html += '      cheapest: 1/corpus[d.value.word].in,';
+  html += '      cheap: Math.sqrt(d.value.this)/corpus[d.value.word].in,';
+  html += '      tfidf: d.value.this/d.value.on*Math.log(D/corpus[d.value.word].in)';
+  html += '    };';
+  html += '    max_tfidf = Math.max(max_tfidf,metrics[d.value.word].tfidf);';
+  html += '    max_cheap = Math.max(max_cheap,metrics[d.value.word].cheap);';
   html += '  }';
+  html += '  for each (m in metrics) {';
+  html += '    m.tfidf /= max_tfidf;';
+  html += '    m.cheap /= max_cheap;';
+  html += '  }';
+  html += '  console.log("max tfidf "+max_tfidf);';
+  html += '  console.log("max cheap "+max_cheap);';
+  html += '  console.log(JSON.stringify(metrics));';
   html += '  return metrics;';
   html += '}';
   html += 'function wordMetrics(metrics, word) {';
   html += '  var w = metrics[word.toLowerCase()];';
   html += '  if (!w) return .05;';
-  switch (req.metrics) {
+  switch (req.query.metrics) {
     case "tfidf":
-      html += 'return w.doc.this/w.doc.on*log(D/w.corpus.in);';//TODO D and normalize
+      html += 'return w.tfidf;';
       break;
     case "cheap":
-      html += 'return sqrt(w.doc.this)/w.corpus.in;';//TODO normalize
+      html += 'return w.cheap;';
       break;
     case "cheapest":  
     default:
-      html += 'return 1/w.corpus.in;';
+      html += 'return w.cheapest;';
   } 
   html += '}';
   html += '</script><body onload="highlight();"><table><h1>';

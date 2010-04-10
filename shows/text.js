@@ -1,5 +1,4 @@
 function(doc, req){
-  log(req.id);
   const ALPHA = /[a-zàâçéêèëïîôöüùû]+|[^a-zàâçéêèëïîôöüùû]+/gi;
   var html = '<html>';
   html += '<script src="/_utils/script/couch.js"></script>';
@@ -22,37 +21,34 @@ function(doc, req){
   html += '  }';
   html += '  var lexdoc = db.view("cassandre/document_lexicometrics",{key:["' + req.id + '"]});';
   html += '  var metrics = {};';
-  html += '  var max_cheap = 0;';
-  html += '  var max_tfidf = 0;';
+  html += '  var max_specific1 = 0;';
+  html += '  var max_specific2 = 0;';
   html += '  for each (d in lexdoc.rows) {';
   html += '    metrics[d.value.word] = {';
-  html += '      cheapest: 1/corpus[d.value.word].in,';
-  html += '      cheap: Math.sqrt(d.value.this)/corpus[d.value.word].in,';
-  html += '      tfidf: d.value.this/d.value.on*Math.log(D/corpus[d.value.word].in)';
+  html += '      rare: 1/corpus[d.value.word].this,';
+  html += '      specific1: Math.sqrt(d.value.this)/corpus[d.value.word].in,';
+  html += '      specific2: d.value.this/d.value.on*Math.log(D/corpus[d.value.word].in)';
   html += '    };';
-  html += '    max_tfidf = Math.max(max_tfidf,metrics[d.value.word].tfidf);';
-  html += '    max_cheap = Math.max(max_cheap,metrics[d.value.word].cheap);';
+  html += '    max_specific1 = Math.max(max_specific1,metrics[d.value.word].specific1);';
+  html += '    max_specific2 = Math.max(max_specific2,metrics[d.value.word].specific2);';
   html += '  }';
   html += '  for each (m in metrics) {';
-  html += '    m.tfidf /= max_tfidf;';
-  html += '    m.cheap /= max_cheap;';
+  html += '    m.specific1 /= max_specific1;';
+  html += '    m.specific2 /= max_specific2;';
   html += '  }';
-  html += '  console.log("max tfidf "+max_tfidf);';
-  html += '  console.log("max cheap "+max_cheap);';
-  html += '  console.log(JSON.stringify(metrics));';
   html += '  return metrics;';
   html += '}';
   html += 'function wordMetrics(metrics, word) {';
   html += '  var w = metrics[word.toLowerCase()];';
   switch (req.query.metrics) {
-    case "tfidf":
-      html += 'return (w)?w.tfidf:.05;';
+    case "specific1":
+      html += 'return (w)?w.specific1:.05;';
       break;
-    case "cheap":
-      html += 'return (w)?w.cheap:.05;';
+    case "specific2":
+      html += 'return (w)?w.specific2:.05;';
       break;
-    case "cheapest":  
-      html += 'return (w)?w.cheapest:.05;';
+    case "rare":  
+      html += 'return (w)?w.rare:.05;';
     default:
       html += 'return 1;';
   } 

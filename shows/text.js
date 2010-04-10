@@ -53,8 +53,9 @@ function(doc, req){
       html += 'return w.cheap;';
       break;
     case "cheapest":  
-    default:
       html += 'return w.cheapest;';
+    default:
+      html += 'return 1;';
   } 
   html += '}';
   html += '</script><body onload="highlight();"><table><h1>';

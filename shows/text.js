@@ -44,16 +44,15 @@ function(doc, req){
   html += '}';
   html += 'function wordMetrics(metrics, word) {';
   html += '  var w = metrics[word.toLowerCase()];';
-  html += '  if (!w) return .05;';
   switch (req.query.metrics) {
     case "tfidf":
-      html += 'return w.tfidf;';
+      html += 'return (w)?w.tfidf:.05;';
       break;
     case "cheap":
-      html += 'return w.cheap;';
+      html += 'return (w)?w.cheap:.05;';
       break;
     case "cheapest":  
-      html += 'return w.cheapest;';
+      html += 'return (w)?w.cheapest:.05;';
     default:
       html += 'return 1;';
   } 

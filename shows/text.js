@@ -53,7 +53,14 @@ function(doc, req){
       html += 'return 1;';
   } 
   html += '}';
-  html += '</script><body onload="highlight();"><table><h1>';
+  html += '</script><body onload="highlight();">';
+  html += '<form>';
+  html += '<input type="button" onClick="self.location=\'../../_list/corpus/corpus\'" value="Corpus" />';
+  html += '<input type="button" onClick="self.location=\'?\'" value="Raw" />';
+  html += '<input type="button" onClick="self.location=\'?metrics=specific1\'" value="Specific" />';
+  html += '<input type="button" onClick="self.location=\'?metrics=rare\'" value="Rare" />';
+  html += '</form>';
+  html += '<table><h1>';
   html += doc.name;
   html += '</h1>';
   for each (p in doc.posts) {

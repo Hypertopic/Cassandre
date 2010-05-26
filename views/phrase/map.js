@@ -1,5 +1,5 @@
 function(doc) {
-  const ALPHA = /[a-zàâçéêèëïîôöüùû]+|[^a-zàâçéêèëïîôöüùû]+/gi;
+  const ALPHA = /[a-zàâçéêèëïîôöüùû0-9]+|[^a-zàâçéêèëïîôöüùû0-9]+/gi;
   words = [];
   for each (p in doc.posts) {
     words = words.concat(p.text.match(ALPHA));

@@ -1,5 +1,5 @@
 function(doc, req){
-  const ALPHA = /[a-zàâçéêèëïîôöüùû]+|[^a-zàâçéêèëïîôöüùû]+/gi;
+  const ALPHA = /[a-zàâçéêèëïîôöüùû0-9]+|[^a-zàâçéêèëïîôöüùû0-9]+/gi;
   send('<html>');
   send('<script src="/_utils/script/couch.js"></script>');
   send('<script type="text/javascript">');

@@ -52,7 +52,7 @@ function(doc, req){
     default:
       send('return 1;');
   } 
-  send('}';
+  send('}');
   send('</script><body onload="highlight();">');
   send('<form>');
   send('<input type="button" onClick="self.location=\'../../_list/corpus/corpus\'" value="Corpus" />');

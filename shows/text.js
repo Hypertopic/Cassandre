@@ -3,11 +3,6 @@ function(doc, req){
   send('<html>');
   send('<script src="/_utils/script/couch.js"></script>');
   send('<script type="text/javascript">');
-  send('function preload() {');
-  send('  var db = new CouchDB("cassandre");');
-  send('  db.view("cassandre/corpus_lexicometrics",{group:"true"});');
-  send('  db.view("cassandre/document_lexicometrics",{key:["' + req.id + '"]});');
-  send('}');
   send('function highlight(type) {');
   send('  var words = document.getElementsByTagName("font");');
   send('  var metrics = wholeMetrics(type);');
@@ -54,7 +49,7 @@ function(doc, req){
   send('      return (w)?w.rare:.05;');
   send('  }'); 
   send('}');
-  send('</script><body onload="preload();">');
+  send('</script><body>');
   send('<form>');
   send('<input type="button" onClick="self.location=\'../../_list/corpus/corpus\'" value="Corpus" />');
   send('<input type="button" onClick="self.location.reload(true)" value="Raw" />');

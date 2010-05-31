@@ -3,15 +3,20 @@ function(doc, req){
   send('<html>');
   send('<script src="/_utils/script/couch.js"></script>');
   send('<script type="text/javascript">');
-  send('function highlight() {');
+  send('function preload() {');
+  send('  var db = new CouchDB("cassandre");');
+  send('  db.view("cassandre/corpus_lexicometrics",{group:"true"});');
+  send('  db.view("cassandre/document_lexicometrics",{key:["' + req.id + '"]});');
+  send('}');
+  send('function highlight(type) {');
   send('  var words = document.getElementsByTagName("font");');
-  send('  var metrics = wholeMetrics();');
+  send('  var metrics = wholeMetrics(type);');
   send('  for each (w in words) {');
-  send('    var grayLevel = Math.floor(255*(1-wordMetrics(metrics, w.textContent))).toString(16);');
+  send('    var grayLevel = Math.floor(255*(1-wordMetrics(metrics, w.textContent, type))).toString(16);');
   send('    w.color = "#" + grayLevel + grayLevel + grayLevel;');
   send('  }');
   send('}');
-  send('function wholeMetrics() {');
+  send('function wholeMetrics(type) {');
   send('  var db = new CouchDB("cassandre");');
   send('  const D = ' + (req.info.doc_count-1) + ';');
   send('  var corpus = {};');
@@ -38,27 +43,23 @@ function(doc, req){
   send('  }');
   send('  return metrics;');
   send('}');
-  send('function wordMetrics(metrics, word) {');
+  send('function wordMetrics(metrics, word, type) {');
   send('  var w = metrics[word.toLowerCase()];');
-  switch (req.query.metrics) {
-    case "specific1":
-      send('return (w)?w.specific1:.05;');
-      break;
-    case "specific2":
-      send('return (w)?w.specific2:.05;');
-      break;
-    case "rare":  
-      send('return (w)?w.rare:.05;');
-    default:
-      send('return 1;');
-  } 
+  send('  switch (type) {');
+  send('    case "specific1":');
+  send('      return (w)?w.specific1:.05;');
+  send('    case "specific2":');
+  send('      return (w)?w.specific2:.05;');
+  send('    case "rare":'); 
+  send('      return (w)?w.rare:.05;');
+  send('  }'); 
   send('}');
-  send('</script><body onload="highlight();">');
+  send('</script><body onload="preload();">');
   send('<form>');
   send('<input type="button" onClick="self.location=\'../../_list/corpus/corpus\'" value="Corpus" />');
-  send('<input type="button" onClick="self.location=\'?\'" value="Raw" />');
-  send('<input type="button" onClick="self.location=\'?metrics=specific1\'" value="Specific" />');
-  send('<input type="button" onClick="self.location=\'?metrics=rare\'" value="Rare" />');
+  send('<input type="button" onClick="self.location.reload(true)" value="Raw" />');
+  send('<input type="button" onClick="highlight(\'specific1\')" value="Specific" />');
+  send('<input type="button" onClick="highlight(\'rare\')" value="Rare" />');
   send('</form>');
   send('<table><h1>');
   send(doc.name);

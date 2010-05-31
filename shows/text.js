@@ -30,9 +30,9 @@ function(doc, req){
   send('  var max_specific2 = 0;');
   send('  for each (d in lexdoc.rows) {');
   send('    metrics[d.value.word] = {');
-  send('      rare: 1/corpus[d.value.word].this,');
-  send('      specific1: Math.sqrt(d.value.this)/corpus[d.value.word].in,');
-  send('      specific2: d.value.this/d.value.on*Math.log(D/corpus[d.value.word].in)');
+  send('      rare: 1/corpus[d.value.word].sum,');
+  send('      specific1: Math.sqrt(d.value.this)/corpus[d.value.word].count,');
+  send('      specific2: d.value.this/d.value.on*Math.log(D/corpus[d.value.word].count)');
   send('    };');
   send('    max_specific1 = Math.max(max_specific1,metrics[d.value.word].specific1);');
   send('    max_specific2 = Math.max(max_specific2,metrics[d.value.word].specific2);');

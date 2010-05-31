@@ -17,9 +17,6 @@ function(doc) {
     }
   }
   for (word in counts) {
-    emit([word], {
-      "this":counts[word],
-      "in":1
-    });
+    emit([word], counts[word]);
   }
 }

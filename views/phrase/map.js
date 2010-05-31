@@ -1,8 +1,7 @@
 function(doc) {
   const ALPHA = /[a-zàâçéêèëïîôöüùû0-9]+|[^a-zàâçéêèëïîôöüùû0-9]+/gi;
-  words = [];
   for each (p in doc.posts) {
-    words = p.text.match(ALPHA);
+    var words = p.text.match(ALPHA);
     for (i=0; i<words.length-4; i+=2) {
       if (
         (words[i].length>3 || words[i+2].length>3 || words[i+4].length>3)

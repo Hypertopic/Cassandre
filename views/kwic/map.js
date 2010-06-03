@@ -27,8 +27,8 @@ function(doc) {
   var postStart = doc.name.length + COORDINATES_HEADER_OFFSET;
   for each (p in doc.posts) {
     var postEnd = postStart 
-        + p.author.length 
-        + p.timestamp.length 
+        + (p.author? p.author.length : 0) 
+        + (p.timestamp? p.timestamp.length : 0) 
         + p.text.length;
     var charIndex = 0;
     var word = "";
@@ -38,12 +38,11 @@ function(doc) {
         word += character;
       } else if (word.length>0) {
         const BEGIN = charIndex - (word.length + KWIC_OFFSET);
-        emit (word, {
+        emit ([doc.corpus, word], {
           text: extract(p.text, BEGIN, BEGIN + KWIC_FRAME),
           begin: postStart,
           end: postEnd,
-          author: p.author,
-          corpus: doc.corpus
+          author: p.author
         });
         word = "";
       }

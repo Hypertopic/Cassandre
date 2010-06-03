@@ -1,5 +1,5 @@
 function(doc) {
-  const WORD_CUTTER = /[\s\.;:\-,\!\?\)\(\]\[\{\}\'\`\’\"\″\“\”\«\»\\\/]/gi;
+  const WORD_CUTTER = /[\s\.;:\-,\!\?\)\(\]\[\{\}\'\`\‘\’\"\″\“\”\«\»\\\/]/gi;
   const KWIC_OFFSET = 35;
   const KWIC_FRAME = 80
   const COORDINATES_HEADER_OFFSET = 1;
@@ -33,19 +33,23 @@ function(doc) {
     var charIndex = 0;
     var word = "";
     for each (character in p.text) {
-      charIndex++;
       if (!character.match(WORD_CUTTER)) {
         word += character;
       } else if (word.length>0) {
-        const BEGIN = charIndex - (word.length + KWIC_OFFSET);
-        emit ([doc.corpus, word], {
-          text: extract(p.text, BEGIN, BEGIN + KWIC_FRAME),
+        const WORD_POSITION = charIndex - word.length;
+        const KWIC_START = WORD_POSITION - KWIC_OFFSET;
+        emit ([
+          doc.corpus, 
+          extract(p.text, WORD_POSITION, KWIC_START + KWIC_FRAME)
+        ], {
+          before: extract(p.text, KWIC_START, KWIC_START + KWIC_OFFSET),
           begin: postStart,
           end: postEnd,
           author: p.author
         });
         word = "";
       }
+      charIndex++;
     }
     postStart = postEnd + COORDINATES_ROW_OFFSET;  
   }

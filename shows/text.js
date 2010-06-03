@@ -1,6 +1,7 @@
 function(doc, req){
   const ALPHA = /[a-zàâçéêèëïîôöüùû0-9]+|[^a-zàâçéêèëïîôöüùû0-9]+/gi;
-  send('<html>');
+  send('<html><head>');
+  send('<meta http-equiv="Content-Type" content="text/html;charset=utf-8">');
   send('<script src="/_utils/script/couch.js"></script>');
   send('<script type="text/javascript">\n');
   send('function toColor(metrics) {');
@@ -83,7 +84,7 @@ function(doc, req){
   send('      return (w)?w.rare:.05;');
   send('  }'); 
   send('}\n');
-  send('</script><body>');
+  send('</script></head><body>');
   send('<form>');
   send('<input type="button" onClick="self.location=\'../../_list/corpus/corpus\'" value="Corpus" />');
   send('<input type="button" onClick="self.location.reload(true)" value="Raw text" />');

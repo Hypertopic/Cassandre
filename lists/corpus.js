@@ -1,7 +1,7 @@
 function(head, req) {
   var doc;
   var corpus;
-  start({"headers":{"Content-Type" : "text/html"}});
+  start({"headers":{"Content-Type" : "text/html;charset=utf-8"}});
   send('<html><body><ul>');
   while (doc = getRow()) {
     if (doc.key[0]!=corpus) {
@@ -18,3 +18,4 @@ function(head, req) {
   }  
   send('</ul></body></html>');
 }
+

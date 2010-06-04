@@ -24,33 +24,38 @@ function(doc) {
     return preblank + aString.substring(begin, end) + postblank;
   }
 
-  var postStart = doc.name.length + COORDINATES_HEADER_OFFSET;
-  for each (p in doc.posts) {
-    var postEnd = postStart 
-        + (p.author? p.author.length : 0) 
-        + (p.timestamp? p.timestamp.length : 0) 
-        + p.text.length;
-    var charIndex = 0;
-    var word = "";
-    for each (character in p.text) {
-      if (!character.match(WORD_CUTTER)) {
-        word += character;
-      } else if (word.length>0) {
-        const WORD_POSITION = charIndex - word.length;
-        const KWIC_START = WORD_POSITION - KWIC_OFFSET;
-        emit ([
-          doc.corpus, 
-          extract(p.text, WORD_POSITION, KWIC_START + KWIC_FRAME)
-        ], {
-          before: extract(p.text, KWIC_START, KWIC_START + KWIC_OFFSET),
-          begin: postStart,
-          end: postEnd,
-          author: p.author
-        });
-        word = "";
+  if (doc.pattern) { 
+    emit([doc.corpus, doc.pattern], {broader: doc.notion});
+  } else {
+    var postStart = doc.name.length + COORDINATES_HEADER_OFFSET;
+    for each (p in doc.posts) {
+      var postEnd = postStart 
+          + (p.author? p.author.length : 0) 
+          + (p.timestamp? p.timestamp.length : 0) 
+          + p.text.length;
+      var charIndex = 0;
+      var word = "";
+      for each (character in p.text) {
+        if (!character.match(WORD_CUTTER)) {
+          word += character;
+        } else if (word.length>0) {
+          const WORD_POSITION = charIndex - word.length;
+          const KWIC_START = WORD_POSITION - KWIC_OFFSET;
+          emit ([
+            doc.corpus, 
+            extract(p.text, WORD_POSITION, KWIC_START + KWIC_FRAME)
+          ], {
+            before: extract(p.text, KWIC_START, KWIC_START + KWIC_OFFSET),
+            word: word,
+            begin: postStart,
+            end: postEnd,
+            author: p.author
+          });
+          word = "";
+        }
+        charIndex++;
       }
-      charIndex++;
+      postStart = postEnd + COORDINATES_ROW_OFFSET;  
     }
-    postStart = postEnd + COORDINATES_ROW_OFFSET;  
   }
 }

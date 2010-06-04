@@ -13,10 +13,10 @@ function(head, req) {
       pattern = r.key[1];
     } else if (r.key[1].startsWith(pattern) && r.key[0]==corpus) {
       var key = [r.key[0], r.id, r.value.begin, r.value.end];
-      var json = {key: key, value: {topic: pattern}};
-      send(JSON.stringify(json));
-      send(',\n');
-      json = {key: key, value: {text: r.value.before + r.key[1]}};
+      var json = { key: key, value: {
+        topic: pattern, 
+        text: r.value.before + r.key[1]
+      }};
       send(JSON.stringify(json));
       send(',\n');
       var resource  = '../../_show/text/';
@@ -28,6 +28,11 @@ function(head, req) {
       json = {key: key, value: {resource: resource}};
       send(JSON.stringify(json));
       send(',\n');
+      if (r.value.author) {
+	json = {key: key, value: {speaker: r.value.author}};
+	send(JSON.stringify(json));
+	send(',\n');
+      }
     }
   }  
   send(']\n');

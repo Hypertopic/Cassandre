@@ -1,0 +1,10 @@
+[
+  {
+    "from": "item/", 
+    "to": "_list/mapping/kwic",
+    "query": {
+      "startkey": [":corpus"],
+      "endkey": [":corpus",{}]
+    }
+  }
+]

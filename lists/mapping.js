@@ -8,18 +8,19 @@ function(head, req) {
   var corpus;
   var patterns = ["a wannabe pattern"];
   while (r = getRow()) {
+    var segment = r.key[1].toLowerCase();
     if (r.value.broader) {
-      if (r.key[1].startsWith(patterns[0])  && r.key[0]==corpus) {
-        patterns.push(r.key[1]);
+      if (segment.startsWith(patterns[0])  && r.key[0]==corpus) {
+        patterns.push(segment);
       } else {
 	corpus = r.key[0]; 
-	patterns = [r.key[1]];
+	patterns = [segment];
       }
     } else {
       var p = 0;
       while (
         p<patterns.length 
-        && r.key[1].startsWith(patterns[p]) 
+        && segment.startsWith(patterns[p]) 
         && r.key[0]==corpus
       ){
         var key = [r.key[0], r.id, r.value.begin, r.value.end];

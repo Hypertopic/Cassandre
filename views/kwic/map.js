@@ -26,8 +26,8 @@ function(doc) {
 
   if (doc.pattern) { 
     emit([doc.corpus, doc.pattern], {
-      viewpoint: doc.viewpoint,
-      broader: doc.notion
+      viewpoint: doc.viewpointId,
+      notion: doc.notionId
     });
   } else {
     var postStart = doc.name.length + COORDINATES_HEADER_OFFSET;

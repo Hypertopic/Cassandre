@@ -4,16 +4,16 @@ function(head, req) {
       return this.indexOf(prefix) === 0;
   }
 
-  send('[\n');
+  send('{rows:[\n');
   var corpus;
   var topics = [{pattern:"a wannabe pattern"}];
   while (r = getRow()) {
     var segment = r.key[1].toLowerCase();
-    if (r.value.broader) {
+    if (r.value.notion) {
       var t = {
           id: r.id,
-          pattern: segment,
-          viewpoint: r.value.viewpoint
+          viewpoint: r.value.viewpoint,
+          notion: r.value.notion
       };
       if (segment.startsWith(topics[0].pattern)  && r.key[0]==corpus) {
         topics.push(t);
@@ -29,11 +29,15 @@ function(head, req) {
         && r.key[0]==corpus
       ){
         var key = [r.key[0], r.id, r.value.begin, r.value.end];
-        var json = { key: key, value: {
-          viewpoint: topics[p].viewpoint,
-          topic: topics[p++].id, 
-          text: r.value.before + r.key[1]
-        }};
+        var json = { 
+          id: topics[p].id,
+          key: key, 
+          value: {
+            viewpoint: topics[p].viewpoint,
+            topic: topics[p++].notion, 
+            text: r.value.before + r.key[1]
+          }
+        };
         send(JSON.stringify(json));
         send(',\n');
         var resource  = '../../_show/text/';
@@ -53,5 +57,5 @@ function(head, req) {
       }
     }
   }  
-  send(']\n');
+  send(']}\n');
 }

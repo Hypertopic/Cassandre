@@ -25,7 +25,10 @@ function(doc) {
   }
 
   if (doc.pattern) { 
-    emit([doc.corpus, doc.pattern], {broader: doc.notion});
+    emit([doc.corpus, doc.pattern], {
+      viewpoint: doc.viewpoint,
+      broader: doc.notion
+    });
   } else {
     var postStart = doc.name.length + COORDINATES_HEADER_OFFSET;
     for each (p in doc.posts) {

@@ -1,5 +1,11 @@
 [
   {
+    "from": "text/", 
+    "to": "_list/corpus/corpus"
+  }, {
+    "from": "text/:text", 
+    "to": "_show/text/:text"
+  }, {
     "from": "item/", 
     "to": "_list/mapping/kwic",
     "query": {

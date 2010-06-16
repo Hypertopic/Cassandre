@@ -8,12 +8,12 @@ function(doc, req){
   send('    var grayLevel = Math.floor(255*(1-metrics)).toString(16);');
   send('    return "#" + grayLevel + grayLevel + grayLevel;');
   send('}\n');
-  send('function highlightWords(type) {');
-  send('  var words = document.getElementsByTagName("font");');
-  send('  var metrics = wholeMetrics(type);');
-  send('  for each (w in words) {');
-  send('    w.color = toColor(wordMetrics(metrics, w.textContent, type));');
-  send('  }');
+  send('function highlightWords(type) {\n');
+  send('  var words = document.getElementsByTagName("font");\n');
+  send('  var metrics = wholeMetrics(type);\n');
+  send('  for each (var w in words) {\n');
+  send('    w.color = toColor(wordMetrics(metrics, w.textContent, type));\n');
+  send('  }\n');
   send('}\n');
   send('function highlightPhrases() {');
   send('  var db = new CouchDB("cassandre");');
@@ -86,15 +86,16 @@ function(doc, req){
   send('}\n');
   send('</script></head><body>');
   send('<form>');
-  send('<input type="button" onClick="self.location=\'../../_list/corpus/corpus\'" value="Corpus" />');
+  send('<input type="button" onClick="self.location=\'.\'" value="Corpus" />');
   send('<input type="button" onClick="self.location.reload(true)" value="Raw text" />');
   send('<input type="button" onClick="highlightWords(\'specific1\')" value="Specific words" />');
   send('<input type="button" onClick="highlightWords(\'rare\')" value="Rare words" />');
   send('<input type="button" onClick="highlightPhrases()" value="Repeated phrases" />');
   send('</form>');
-  send('<table><h1>');
+  send('<h1>');
   send(doc.name);
   send('</h1>');
+  send('<table>');
   for each (p in doc.posts) {
     send('<tr><th><div>');
     send(p.author?p.author:"");

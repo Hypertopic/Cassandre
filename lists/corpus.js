@@ -10,7 +10,7 @@ function(head, req) {
       send(corpus);
       send("</h1><ul>");
     }
-    send('<li><a href="../../_show/text/');
+    send('<li><a href="');
     send(doc.id);
     send('">');
     send(doc.key[1]);

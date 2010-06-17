@@ -12,6 +12,7 @@ function(head, req) {
     if (r.value.notion) {
       var t = {
           id: r.id,
+          pattern: segment,
           viewpoint: r.value.viewpoint,
           notion: r.value.notion
       };

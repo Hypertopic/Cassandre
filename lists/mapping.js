@@ -4,9 +4,10 @@ function(head, req) {
       return this.indexOf(prefix) === 0;
   }
 
-  send('{rows:[\n');
+  send('{"rows":[\n');
   var corpus;
   var topics = [{pattern:"a wannabe pattern"}];
+  var first = true;
   while (r = getRow()) {
     var segment = r.key[1].toLowerCase();
     if (r.value.notion) {
@@ -39,8 +40,12 @@ function(head, req) {
             text: r.value.before + r.key[1]
           }
         };
+        if (first) {
+          first = false;
+        } else {
+          send(',\n');
+        }
         send(JSON.stringify(json));
-        send(',\n');
         var resource  = '../text/';
         resource += r.id;
         resource += '#';
@@ -48,12 +53,12 @@ function(head, req) {
         resource += '-';
         resource += r.value.end;
         json = {key: key, value: {resource: resource}};
-        send(JSON.stringify(json));
         send(',\n');
+        send(JSON.stringify(json));
         if (r.value.author) {
           json = {key: key, value: {speaker: r.value.author}};
-          send(JSON.stringify(json));
           send(',\n');
+          send(JSON.stringify(json));
         }
       }
     }

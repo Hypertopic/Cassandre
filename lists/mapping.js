@@ -41,7 +41,7 @@ function(head, req) {
         };
         send(JSON.stringify(json));
         send(',\n');
-        var resource  = '../../_show/text/';
+        var resource  = '../text/';
         resource += r.id;
         resource += '#';
         resource += r.value.begin;

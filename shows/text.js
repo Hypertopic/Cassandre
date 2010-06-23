@@ -106,17 +106,20 @@ function(doc, req){
   send('</h1>');
   send('<table>');
   for each (p in doc.posts) {
-    send('<tr><th><div>');
+    send('<tr><th>');
     send(p.author?p.author:"");
-    send('</div><div>');
+    send('</th><td>');
+    send('<div class="timestamp">');
     send(p.timestamp?p.timestamp:"");
-    send('</div></th><td>');
+    send('</div>');
+    send('<div class="post">');
     var words = p.text.match(ALPHA);
     for each (w in words) {
       send('<font>');
       send(w);
       send('</font>');
     }
+    send('</div>');
     send('</td></tr>');
   }
   send('</table>');

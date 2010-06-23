@@ -15,8 +15,9 @@ body {
 }
 
 #menu {
-  background-color: LightGray;
+  background-color: black;
   margin-bottom: 0;
+  padding: 2px;
 }
 
 #content {
@@ -25,6 +26,20 @@ body {
 
 #content h1 {
   margin-top: 0;
+}
+
+th {
+  vertical-align: top;
+  text-align: left;
+}
+
+div.timestamp {
+  background-color: LightGray;
+}
+
+div.post {
+  padding-top: 6px;
+  padding-bottom: 6px;
 }
 
 #footer {

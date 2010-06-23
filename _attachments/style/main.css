@@ -1,0 +1,43 @@
+body {
+  height: 100%;
+  margin: 0; 
+}
+
+#watermark {
+  background-image: url(http://cassandre-qda.sourceforge.net/cassandre_background.png); 
+  background-position: 100% 0%;
+  background-repeat: no-repeat; 
+}
+
+#container {
+  min-height: 100%;
+  position: relative;
+}
+
+#menu {
+  background-color: LightGray;
+  margin-bottom: 0;
+}
+
+#content {
+  padding: 30px;
+}
+
+#content h1 {
+  margin-top: 0;
+}
+
+#footer {
+  background-color: black;
+  bottom: 0;
+  color: white;
+  font-size: small;
+  position: absolute;
+  text-align: right;
+  width: 100%;
+}
+
+#footer a {
+  text-decoration:none;
+  color:white;
+}

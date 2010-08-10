@@ -1,16 +1,35 @@
 [
   {
+    "from": "user/:user",
+    "to": "_view/user",
+    "query": {
+      "key": [":user"]
+    }
+  }, {
     "from": "text/", 
-    "to": "_list/corpus/corpus"
+    "to": "_list/text/text"
   }, {
     "from": "text/:text", 
     "to": "_show/text/:text"
   }, {
-    "from": "item/", 
-    "to": "_list/mapping/kwic",
+    "from": "corpus/:corpus", 
+    "to": "_list/corpus/kwic",
     "query": {
       "startkey": [":corpus"],
       "endkey": [":corpus",{}]
     }
+  }, {
+    "from": "item/:corpus/:item", 
+    "to": "_list/corpus/kwic",
+    "query": {
+      "startkey": [":corpus"],
+      "endkey": [":corpus",{}]
+    }
+  }, {
+    "from": "viewpoint/:viewpoint", 
+    "to": "_list/viewpoint/kwic"
+  }, {
+    "from": "topic/:viewpoint/:topic", 
+    "to": "_list/viewpoint/kwic"
   }
 ]

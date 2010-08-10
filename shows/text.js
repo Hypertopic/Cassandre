@@ -106,7 +106,7 @@ function(doc, req){
   send(doc.name);
   send('</h1>');
   send('<table>');
-  for each (p in doc.posts) {
+  for each (p in doc.speeches) {
     send('<tr><th>');
     send(p.author?p.author:"");
     send('</th><td>');

@@ -1,7 +1,7 @@
 function(doc) {
   const ALPHA = /[a-zàâçéêèëïîôöüùû0-9]+/gi;
   words = [];
-  for each (p in doc.posts) {
+  for each (p in doc.speeches) {
     words = words.concat(p.text.match(ALPHA));
   }
   counts = {};

@@ -1,4 +1,4 @@
-function(doc) {
+function(o) {
   const WORD_CUTTER = /[\s\.;:\-,\!\?\)\(\]\[\{\}\'\`\‘\’\"\″\“\”\«\»\\\/]/gi;
   const KWIC_OFFSET = 35;
   const KWIC_FRAME = 80
@@ -24,16 +24,20 @@ function(doc) {
     return preblank + aString.substring(begin, end) + postblank;
   }
 
-  if (doc.pattern) { 
-    emit([doc.corpus, doc.pattern], {
-      viewpoint: doc.viewpointId,
-      notion: doc.notionId
-    });
-  } else {
-    var postStart = doc.name.length + COORDINATES_HEADER_OFFSET;
-    for each (p in doc.posts) {
+  if (o.highlights) { //corpus 
+    for (h in o.highlights) {
+      var highlight = o.highlights[h];
+      emit([o._id, highlight.text], {
+        highlight: h,
+        viewpoint: highlight.viewpoint,
+        topic: highlight.topic
+      });
+    }
+  } else { //text
+    var postStart = o.name.length + COORDINATES_HEADER_OFFSET;
+    for each (p in o.speeches) {
       var postEnd = postStart 
-          + (p.author? p.author.length : 0) 
+          + (p.actor? p.actor.length : 0) 
           + (p.timestamp? p.timestamp.length : 0) 
           + p.text.length;
       var charIndex = 0;
@@ -45,14 +49,13 @@ function(doc) {
           const WORD_POSITION = charIndex - word.length;
           const KWIC_START = WORD_POSITION - KWIC_OFFSET;
           emit ([
-            doc.corpus, 
+            o.corpus, 
             extract(p.text, WORD_POSITION, KWIC_START + KWIC_FRAME)
           ], {
             before: extract(p.text, KWIC_START, KWIC_START + KWIC_OFFSET),
-            word: word,
             begin: postStart,
             end: postEnd,
-            author: p.author
+            actor: p.actor
           });
           word = "";
         }

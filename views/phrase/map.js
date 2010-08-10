@@ -1,6 +1,6 @@
 function(doc) {
   const ALPHA = /[a-zàâçéêèëïîôöüùû0-9]+|[^a-zàâçéêèëïîôöüùû0-9]+/gi;
-  for each (p in doc.posts) {
+  for each (p in doc.speeches) {
     var words = p.text.match(ALPHA);
     for (i=0; i<words.length-4; i+=2) {
       if (

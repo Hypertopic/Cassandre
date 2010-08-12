@@ -31,5 +31,11 @@
   }, {
     "from": "topic/:viewpoint/:topic", 
     "to": "_list/viewpoint/kwic"
+  }, { 
+    "from": "", 
+    "to": "../../"
+  }, { 
+    "from": ":object", 
+    "to": "../../:object"
   }
 ]

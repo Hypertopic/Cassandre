@@ -4,7 +4,7 @@ function(doc, req){
   send('<head>');
   send('<link rel="icon" type="image/png" href="../../favicon.png" />');
   send('<link rel="stylesheet" type="text/css" href="../../main.css" />');
-  send('<meta http-equiv="Content-Type" content="text/html;charset=utf-8">');
+  send('<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />');
   send('<script src="/_utils/script/couch.js"></script>');
   send('<script type="text/javascript">\n');
   send('function toColor(metrics) {');

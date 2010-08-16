@@ -4,6 +4,11 @@ function(head, req) {
     return this.indexOf(prefix) === 0;
   }
 
+  if (req.headers.Accept.indexOf("application/json",0) > -1) {
+    start({"headers":{"Content-Type" : "application/json;charset=utf-8"}});
+  } else {
+    start({"headers":{"Content-Type" : "text/plain;charset=utf-8"}});
+  }
   send('{"rows":[\n');
   var corpus;
   var topics = [{pattern:"a wannabe pattern"}];

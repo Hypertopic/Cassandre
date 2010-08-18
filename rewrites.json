@@ -31,6 +31,9 @@
   }, {
     "from": "topic/:viewpoint/:topic", 
     "to": "_list/viewpoint/kwic"
+  }, {
+    "from": "resource/:resource", 
+    "to": "_list/resource/resource"
   }, { 
     "from": "", 
     "to": "../../"

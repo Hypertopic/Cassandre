@@ -17,11 +17,11 @@ function(head, req) {
     if (found) {
       send("{\"key\":[\"");
       send(url);
-      send("\"], \"value\":{\"corpus\":\"");
+      send("\"], \"value\":{\"item\":{\"corpus\":\"");
       send(r.value.corpus);
-      send("\", \"item\":\"");
+      send("\", \"id\":\"");
       send(id);
-      send("\"}}\n");
+      send("\"}}}\n");
     }
   }
   send(']}');

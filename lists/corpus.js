@@ -36,17 +36,18 @@ function(head, req) {
         && segment.startsWith(topics[p].pattern) 
         && r.key[0]==corpus
       ){
-        var key = [r.key[0], r.id, r.value.begin, r.value.end];
         var json = { 
-          id: topics[p].id,
-          key: key, 
-          value: {highlight:{
-            id: topics[p].highlight,
-            viewpoint: topics[p].viewpoint,
-            topic: topics[p++].topic, 
+          id: r.key[0],
+          key: [r.key[0], r.id, topics[p].highlight],
+          value: {
+            coordinates: [r.value.begin, r.value.end],
+            topic:{
+              viewpoint: topics[p].viewpoint,
+              topic: topics[p++].topic
+            }, 
             text: r.value.before + r.key[1],
             actor: r.value.actor
-          }}
+          }
         };
         if (first) {
           first = false;

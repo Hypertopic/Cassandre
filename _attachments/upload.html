@@ -1,0 +1,102 @@
+<html>
+ <head>
+  <title>Cassandre :: Upload</title>
+  <link rel="stylesheet" type="text/css" href="main.css" />
+  <script src="http://code.jquery.com/jquery-1.4.2.min.js"></script>
+  <script type="text/javascript">
+
+    $(document).ready(function(){
+	$("#addfield").click(function() {
+	  strFieldTitle = 'conversation';
+	  strNewField = '<tr><td><input type="text" name="author_%" id="author_%" /></td><td><input type="text" name="speech_%" id="speech_%" /></td></tr>';
+	  addField(strFieldTitle, strNewField);
+	});
+    });
+    
+    var intFields = 1;
+    function addField(strFieldTitle, strNewField) {    
+	// We store a count of the total number of fields
+	strCountField = '#' + strFieldTitle + '_count';    
+	intFields = $(strCountField).val();
+
+	// Create the new ID/Name for the form element by replacing % with the current field count 
+	strNewField = strNewField.replace(/%/g, intFields);
+
+	// Increment the total field count and update the count field
+	intFields = Number(intFields) + 1;  
+	$(strCountField).val(intFields); 
+
+	//  Add the new field to the bottom of the table	  
+	$("#" + strFieldTitle + " tr:last").after(strNewField);  
+    }
+
+   function upLoad() {
+	var flux = [] ;
+	for (var i = 0; i<intFields; i++) {
+	  var author_id = "author_"+ i;
+	  var speech_id = "speech_"+ i;
+	  flux.push({author : document.getElementById(author_id).value, text : document.getElementById(speech_id).value});
+	}
+
+     var data = {
+	name:$("#name").val(), 
+	person:$("#user").val(), 
+	person:"christophe@hypertopic.org", 
+	speeches:flux
+     };
+
+     $.ajax({
+        url: "http://127.0.0.1:5984/cassandre/",
+        type: "POST",
+        dataType: 'json',
+        contentType: "application/json",
+        data: JSON.stringify(data),
+        success: function(data) {location.replace('_rewrite/text/'+ data.id)}  // /_utils/document.html?cassandre/ 
+     });
+   }
+
+   function deleteTag(id) {
+     $.ajax({
+       url: "http://127.0.0.1:5984/cassandre/" + id,
+       type: "DELETE",
+       success: location.reload()
+     });
+   }
+
+  </script>
+ </head>
+<body id="watermark"><div id="container"><div id="content">
+  <div>Cassandre</div>
+  <h1>Interview Upload </h1>
+  <form>
+<!-- Meta -->
+<div style="
+ position:fixed;
+ top: 10px;
+ right: 10px;
+ width:200px;
+ paddin: 10px;
+ border-right:2px solid #8cacbb;
+ border-bottom:2px solid #8cacbb;
+ border-top:1px solid #8cacbb;
+ border-left:1px solid #8cacbb;
+ background-color:#ccc;
+">
+	<h2>Context</h2>
+	Titre <input id="name" type="text" /><br />
+	Scientist <input id="user" type="textarea" /> 
+</div>
+<!-- Turns -->
+    <h2>Interview</h2>
+    <input type="hidden" name="conversation_count" id="conversation_count" value="1" />
+      <table id="conversation">
+	<tr><th>Author</th><th>Speech</th></tr>
+	<tr><td><input id="author_0" type="text" /></td><td><input id="speech_0" type="textarea" /></td></tr> 
+     </table>
+     <p><a id="addfield">[+] Add field</a></p>
+
+   <br /> <button type="button" onclick="upLoad()">Upload</button>
+  </form>
+  <div id="addresses"></div>
+ </div>
+ <div id="footer"><a href="http://cassandre-qda.sourceforge.net/about.html">Cassandre</a> &nbsp;</div></div></body></html>

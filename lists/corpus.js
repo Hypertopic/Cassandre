@@ -38,8 +38,9 @@ function(head, req) {
       ){
         var json = { 
           id: r.key[0],
-          key: [r.key[0], r.id, topics[p].highlight],
-          value: {
+          key: [r.key[0], r.id], 
+          value: {highlight: {
+            id: topics[p].highlight,
             coordinates: [r.value.begin, r.value.end],
             topic:{
               viewpoint: topics[p].viewpoint,
@@ -47,7 +48,7 @@ function(head, req) {
             }, 
             text: r.value.before + r.key[1],
             actor: r.value.actor
-          }
+          }}
         };
         if (first) {
           first = false;

@@ -26,26 +26,26 @@ function(head, req) {
       if (segment.startsWith(topics[0].pattern) && r.key[0]==corpus) {
         topics.push(t);
       } else {
-	corpus = r.key[0]; 
+	corpus = r.key[0];
 	topics = [t];
       }
     } else if (!req.query.item || req.query.item==r.id) {
       var p = 0;
       while (
-        p<topics.length 
-        && segment.startsWith(topics[p].pattern) 
+        p<topics.length
+        && segment.startsWith(topics[p].pattern)
         && r.key[0]==corpus
       ){
-        var json = { 
+        var json = {
           id: r.key[0],
-          key: [r.key[0], r.id], 
+          key: [r.key[0], r.id],
           value: {highlight: {
             id: topics[p].highlight,
             coordinates: [r.value.begin, r.value.end],
             topic:{
               viewpoint: topics[p].viewpoint,
-              topic: topics[p++].topic
-            }, 
+              id: topics[p++].topic
+            },
             text: r.value.before + r.key[1],
             actor: r.value.actor
           }}
@@ -58,6 +58,6 @@ function(head, req) {
         send(JSON.stringify(json));
       }
     }
-  }  
+  }
   send('\n]}');
 }

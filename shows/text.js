@@ -107,12 +107,18 @@ function(doc, req){
   send('</h1>');
   send('<table>');
   for each (p in doc.speeches) {
-    send('<tr><th>');
-    send(p.actor?p.actor:"");
-    send('</th><td>');
-    send('<div class="timestamp">');
-    send(p.timestamp?p.timestamp:"");
-    send('</div>');
+    send('<tr>');
+    if (p.actor) {
+      send('<th>');
+      send(p.actor);
+      send('</th>');
+    }
+    send('<td>');
+    if (p.timestamp) {
+      send('<div class="timestamp">');
+      send(p.timestamp);
+      send('</div>');
+    }
     send('<div class="post">');
     var words = p.text.match(ALPHA);
     for each (w in words) {

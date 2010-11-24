@@ -35,10 +35,10 @@ th {
 
 div.timestamp {
   background-color: LightGray;
+  margin-bottom: 6px;
 }
 
 div.post {
-  padding-top: 6px;
   padding-bottom: 6px;
 }
 

@@ -2,8 +2,8 @@ function(doc, req){
   const ALPHA = /[a-zàâçéêèëïîôöüùû0-9]+|[^a-zàâçéêèëïîôöüùû0-9]+/gi;
   send('<html>');
   send('<head>');
-  send('<link rel="icon" type="image/png" href="../../favicon.png" />');
-  send('<link rel="stylesheet" type="text/css" href="../../main.css" />');
+  send('<link rel="icon" type="image/png" href="../style/favicon.png" />');
+  send('<link rel="stylesheet" type="text/css" href="../style/main.css" />');
   send('<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />');
   send('<script src="/_utils/script/couch.js"></script>');
   send('<script type="text/javascript">\n');

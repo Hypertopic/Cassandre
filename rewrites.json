@@ -40,5 +40,8 @@
   }, { 
     "from": ":object", 
     "to": "../../:object"
+  }, { 
+    "from": "style/:file", 
+    "to": ":file"
   }
 ]

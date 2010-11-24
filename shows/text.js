@@ -108,7 +108,7 @@ function(doc, req){
   send('<table>');
   for each (p in doc.speeches) {
     send('<tr><th>');
-    send(p.author?p.author:"");
+    send(p.actor?p.actor:"");
     send('</th><td>');
     send('<div class="timestamp">');
     send(p.timestamp?p.timestamp:"");

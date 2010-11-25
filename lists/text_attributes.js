@@ -3,7 +3,7 @@ function(head, req) {
   var corpus;
   start({"headers":{"Content-Type" : "text/html;charset=utf-8"}});
   var datafield = "var data = {";
-  var forminputs = '<form><fieldset><legend>Context</legend><table>';
+  var forminputs = '<form><fieldset><legend>Attributes</legend><table>';
   while (doc = getRow()) {
     attribute = doc.key[1];
     forminputs +='<tr><th><label>';
@@ -53,11 +53,11 @@ function(head, req) {
   send('<body id="watermark">');
   send('<div id="container">');
   send('<div id="content">');
-  send('<h1>Set Attributes </h1>');
+  send('<h1>New text </h1>');
 
   send(forminputs);
 
-  send('<tr><th></th><td><button type="button" onclick="upLoad()">Add new text</button></td></table>\n');
+  send('<tr><th></th><td><button type="button" onclick="upLoad()">Set attributes</button></td></table>\n');
   send('</fieldset></form></div>');
   send('<div id="footer"><a href="http://cassandre-qda.sourceforge.net/about.html">Cassandre</a> &nbsp;</div>');
   send('</div>');

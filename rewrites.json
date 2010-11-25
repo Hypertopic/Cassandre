@@ -12,6 +12,14 @@
     "from": "text/:text", 
     "to": "_show/text/:text"
   }, {
+    "from": "text_attributes/:corpus", 
+    "to": "_list/text_attributes/attribute",
+    "query": {
+      "startkey": [":corpus"],
+      "endkey": [":corpus",{}],
+      "group_level": 2
+    }
+  }, {
     "from": "corpus/:corpus", 
     "to": "_list/corpus/kwic",
     "query": {

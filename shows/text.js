@@ -2,8 +2,8 @@ function(doc, req){
   const ALPHA = /[a-zàâçéêèëïîôöüùû0-9]+|[^a-zàâçéêèëïîôöüùû0-9]+/gi;
   send('<html>');
   send('<head>');
-  send('<link rel="icon" type="image/png" href="../../favicon.png" />');
-  send('<link rel="stylesheet" type="text/css" href="../../main.css" />');
+  send('<link rel="icon" type="image/png" href="../style/favicon.png" />');
+  send('<link rel="stylesheet" type="text/css" href="../style/main.css" />');
   send('<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />');
   send('<script src="/_utils/script/couch.js"></script>');
   send('<script type="text/javascript">\n');
@@ -107,12 +107,18 @@ function(doc, req){
   send('</h1>');
   send('<table>');
   for each (p in doc.speeches) {
-    send('<tr><th>');
-    send(p.actor?p.actor:"");
-    send('</th><td>');
-    send('<div class="timestamp">');
-    send(p.timestamp?p.timestamp:"");
-    send('</div>');
+    send('<tr>');
+    if (p.actor) {
+      send('<th>');
+      send(p.actor);
+      send('</th>');
+    }
+    send('<td>');
+    if (p.timestamp) {
+      send('<div class="timestamp">');
+      send(p.timestamp);
+      send('</div>');
+    }
     send('<div class="post">');
     var words = p.text.match(ALPHA);
     for each (w in words) {

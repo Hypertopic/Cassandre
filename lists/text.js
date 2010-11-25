@@ -4,8 +4,8 @@ function(head, req) {
   start({"headers":{"Content-Type" : "text/html;charset=utf-8"}});
   send('<html>');
   send('<head>');
-  send('<link rel="icon" type="image/png" href="/style/favicon.png" />');
-  send('<link rel="stylesheet" type="text/css" href="/style/main.css" />');
+  send('<link rel="icon" type="image/png" href="../style/favicon.png" />');
+  send('<link rel="stylesheet" type="text/css" href="../style/main.css" />');
   send('</head>');
   send('<body id="watermark">');
   send('<div id="container">');

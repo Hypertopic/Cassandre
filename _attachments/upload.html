@@ -8,7 +8,7 @@
     $(document).ready(function(){
 	$("#addfield").click(function() {
 	  strFieldTitle = 'conversation';
-	  strNewField = '<tr><td><input type="text" name="author_%" id="author_%" /></td><td><input type="text" name="speech_%" id="speech_%" /></td></tr>';
+	  strNewField = '<tr><td><input type="text" name="actor_%" id="actor_%" /></td><td><textarea name="speech_%" id="speech_%" cols="80" rows="5"></textarea></td></tr>';
 	  addField(strFieldTitle, strNewField);
 	});
     });
@@ -33,15 +33,16 @@
    function upLoad() {
 	var flux = [] ;
 	for (var i = 0; i<intFields; i++) {
-	  var author_id = "author_"+ i;
+	  var actor_id = "actor_"+ i;
 	  var speech_id = "speech_"+ i;
-	  flux.push({author : document.getElementById(author_id).value, text : document.getElementById(speech_id).value});
+	  flux.push({actor : document.getElementById(actor_id).value, text : document.getElementById(speech_id).value});
 	}
 
      var data = {
 	name:$("#name").val(), 
-	person:$("#user").val(), 
-	person:"christophe@hypertopic.org", 
+	scientist:$("#user").val(), 
+	corpus:$("#corpus").val(), 
+	scientist:"christophe@hypertopic.org", 
 	speeches:flux
      };
 
@@ -70,32 +71,25 @@
   <h1>Interview Upload </h1>
   <form>
 <!-- Meta -->
-<div style="
- position:fixed;
- top: 10px;
- right: 10px;
- width:200px;
- paddin: 10px;
- border-right:2px solid #8cacbb;
- border-bottom:2px solid #8cacbb;
- border-top:1px solid #8cacbb;
- border-left:1px solid #8cacbb;
- background-color:#ccc;
-">
-	<h2>Context</h2>
-	Titre <input id="name" type="text" /><br />
-	Scientist <input id="user" type="textarea" /> 
-</div>
+<fieldset id="right">
+	<legend>Context</legend>
+	<label>Title <input id="name" type="text" /></label><br />
+	<label>Scientist <input id="user" /></label>
+	<label>Corpus <input id="corpus" /></label>
+	<label><input name='statut' type='checkbox' value='confidentiel' />confidentiel </label>
+</fieldset>
+<fieldset>
 <!-- Turns -->
-    <h2>Interview</h2>
+    <legend>Interview transcript</legend>
     <input type="hidden" name="conversation_count" id="conversation_count" value="1" />
       <table id="conversation">
-	<tr><th>Author</th><th>Speech</th></tr>
-	<tr><td><input id="author_0" type="text" /></td><td><input id="speech_0" type="textarea" /></td></tr> 
+	<tr><th>Actor</th><th>Speech</th></tr>
+	<tr><td><input id="actor_0" type="text" /></td><td><textarea id="speech_0" cols="80" rows="5"></textarea></td></tr> 
      </table>
      <p><a onmouseover="style.cursor='pointer'" id="addfield">[+] Add field</a></p>
 
    <br /> <button type="button" onclick="upLoad()">Upload</button>
+</fieldset>
   </form>
   <div id="addresses"></div>
  </div>

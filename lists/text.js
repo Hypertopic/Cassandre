@@ -4,8 +4,8 @@ function(head, req) {
   start({"headers":{"Content-Type" : "text/html;charset=utf-8"}});
   send('<html>');
   send('<head>');
-  send('<link rel="icon" type="image/png" href="../../favicon.png" />');
-  send('<link rel="stylesheet" type="text/css" href="../../main.css" />');
+  send('<link rel="icon" type="image/png" href="/style/favicon.png" />');
+  send('<link rel="stylesheet" type="text/css" href="/style/main.css" />');
   send('</head>');
   send('<body id="watermark">');
   send('<div id="container">');
@@ -17,6 +17,9 @@ function(head, req) {
       send("</ul><h1>");
       send(corpus);
       send("</h1><ul>");
+      send("<p>[<a onmouseover='style.cursor=pointer' href='/cassandre/_design/cassandre/_rewrite/text_attributes/")
+      send(corpus);
+      send("'> + </a>]</p>");
     }
     send('<li><a href="');
     send(doc.id);

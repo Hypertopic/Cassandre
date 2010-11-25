@@ -64,10 +64,11 @@ div.post {
 }
 
 label {
+	text-transform:capitalize;
 	display: block;
 	width: 70%;
 	float: left;
-	text-align: right;
+	text-align: left;
 	color: gray;
 }
 

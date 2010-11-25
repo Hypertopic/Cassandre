@@ -33,6 +33,12 @@ th {
   text-align: left;
 }
 
+td {
+  vertical-align: top;
+  text-align: left;
+}
+
+
 div.timestamp {
   background-color: LightGray;
 }
@@ -55,4 +61,29 @@ div.post {
 #footer a {
   text-decoration:none;
   color:white;
+}
+
+label {
+	display: block;
+	width: 70%;
+	float: left;
+	text-align: right;
+	color: gray;
+}
+
+input.button {
+	float: right;
+}
+
+#right {
+	position:fixed;
+	top: 10px;
+	right: 10px;
+	width:200px;
+	padding: 10px;
+	border-right:2px solid #8cacbb;
+	border-bottom:2px solid #8cacbb;
+	border-top:1px solid #8cacbb;
+	border-left:1px solid #8cacbb;
+	background-color:#ccc;
 }

@@ -17,7 +17,7 @@ function(head, req) {
       send("</ul><h1>");
       send(corpus);
       send("</h1><ul>");
-      send("<p>[<a onmouseover='style.cursor=pointer' href='/cassandre/_design/cassandre/_rewrite/text_attributes/")
+      send("<p>[<a onmouseover='style.cursor=pointer' href='../text_attributes/")
       send(corpus);
       send("'> + </a>]</p>");
     }

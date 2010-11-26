@@ -5,8 +5,14 @@ function(doc, req){
   send('<link rel="icon" type="image/png" href="../style/favicon.png" />');
   send('<link rel="stylesheet" type="text/css" href="../style/main.css" />');
   send('<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />');
-  send('<script src="/_utils/script/couch.js"></script>');
   send('<script type="text/javascript">\n');
+  send('function httpGet(url) {\n');
+  send('  var http = new XMLHttpRequest();\n');
+  send('  http.open("GET", "../" + url, false);\n');
+  send('  http.setRequestHeader("Accept", "application/json");\n');
+  send('  http.send("");\n');
+  send('  return JSON.parse(http.responseText);\n');
+  send('}\n');
   send('function toColor(metrics) {');
   send('    var grayLevel = Math.floor(255*(1-metrics)).toString(16);');
   send('    return "#" + grayLevel + grayLevel + grayLevel;');
@@ -20,8 +26,7 @@ function(doc, req){
   send('  }\n');
   send('}\n');
   send('function highlightPhrases() {');
-  send('  var db = new CouchDB("cassandre");');
-  send('  var view = db.view("cassandre/phrase",{group:"true"});');
+  send('  var view = httpGet("phrase/");');
   send('  var trigrams = [];');
   send('  for (i in view.rows) {');
   send('    var r = view.rows[i];');
@@ -52,15 +57,14 @@ function(doc, req){
   send('  }');
   send('}\n');
   send('function wholeMetrics(type) {\n');
-  send('  var db = new CouchDB("cassandre");\n');
   send('  const D = ' + (req.info.doc_count-1) + ';\n');
   send('  var corpus = {};\n');
-  send('  var lexcorpus = db.view("cassandre/corpus_lexicometrics",{group:"true"});\n');//TODO level 2 would need a filter on corpus
+  send('  var lexcorpus = httpGet("lexicometrics/");\n');//TODO level 2 would need a filter on corpus
   send('  for (i in lexcorpus.rows) {\n');
   send('    var c = lexcorpus.rows[i];\n');
   send('    corpus[c.key] = c.value;\n');
   send('  }\n');
-  send('  var lexdoc = db.view("cassandre/document_lexicometrics",{key:["' + req.id + '"]});\n');
+  send('  var lexdoc = httpGet("lexicometrics/' + req.id + '");\n');
   send('  var metrics = {};\n');
   send('  var max_specific1 = 0;\n');
   send('  var max_specific2 = 0;\n');

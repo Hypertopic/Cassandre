@@ -43,6 +43,24 @@
     "from": "resource/:resource", 
     "to": "_list/resource/resource"
   }, { 
+    "from": "phrase/", 
+    "to": "_view/phrase",
+    "query": {
+      "group": true
+    }
+  }, { 
+    "from": "lexicometrics/", 
+    "to": "_view/corpus_lexicometrics",
+    "query": {
+      "group": true
+    }
+  }, { 
+    "from": "lexicometrics/:document", 
+    "to": "_view/document_lexicometrics",
+    "query": {
+      "key": [":document"]
+    }
+  }, { 
     "from": "", 
     "to": "../../"
   }, { 

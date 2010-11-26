@@ -23,9 +23,33 @@ function(o){
   send('<script src="/_utils/script/jquery.js"></script>');
   send('<script type="text/javascript">\n');
 
+  send('function goTo(text) {\n');
+  send('  self.location = "../text/" + text;');
+  send('}\n');
+ 
+  send('function save(toDoAfter) {\n');
+  send('  data = {name: "Bond", _rev:"'+o['_rev']+'"};\n');
+  send('  saved = false;\n');
+  send('  $.ajax({\n');
+  send('    type: "PUT",\n');
+  send('    url: "../');
+  send(o['_id']);
+  send('",\n');
+  send('    contentType: "application/json",\n');
+  send('    data: JSON.stringify(data),\n');
+  send('    error: function() {\n');
+  send('      alert("Someone has probably edited the text meanwhile!");\n');
+  send('    },\n');
+  send('    success: function() {toDoAfter();}\n');
+  send('  });\n');
+  send('}\n');
+
   send('</script>');
   send('</head>');
   send('<body id="watermark">');
+  send('<form id="menu">');
+  send('<input type="button" onclick="goTo(\'\')" value="Corpus" />');
+  send('</form>');
   send('<div id="container">');
   send('<div id="content">');
   send('<form>');
@@ -64,6 +88,9 @@ function(o){
   }
   sendRow((i>0)? o.speeches[i-1].actor : '', '');
   send('</table>');
+  send('<input type="button" onclick="save(function () { goTo(\'');
+  send(o['_id']);
+  send('\');})" value="Save" />');
   send('</form>');
   send('</div>');
   send('<div id="footer"><a href="http://cassandre-qda.sourceforge.net/about.html">Cassandre</a> &nbsp;</div>');

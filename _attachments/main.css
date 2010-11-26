@@ -88,3 +88,9 @@ input.button {
 	border-left:1px solid #8cacbb;
 	background-color:#ccc;
 }
+
+#center {
+	position: absolute;
+	top: 40%;
+	left: 30%;
+}

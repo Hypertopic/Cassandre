@@ -65,7 +65,12 @@
     }
   }, { 
     "from": "", 
-    "to": "../../"
+    "to": "../../",
+    "method": "POST"
+  }, { 
+    "from": "", 
+    "to": "index.html",
+    "method": "GET"
   }, { 
     "from": ":object", 
     "to": "../../:object"

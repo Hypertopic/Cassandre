@@ -32,6 +32,13 @@ function(o){
   send('  $("#attributes").children("input").each(function() {\n')
   send('    data[$(this).attr("id")] = $(this).val();\n');
   send('  })\n');
+  send('  data.speeches = [];\n');
+  send('  $(".turn").each(function() {\n')
+  send('    data.speeches.push({\n');
+  send('      actor:$(this).children().children("input").val(),\n');
+  send('      text:$(this).children().children("textarea").val()\n');
+  send('    })\n');
+  send('  })\n');
   send('  $.ajax({\n');
   send('    type: "PUT",\n');
   send('    url: "../');
@@ -83,7 +90,7 @@ function(o){
     }
   }
   send('</fieldset>');
-  send('<table id="conversation">');
+  send('<table>');
   send('<tr><th>Actor</th><th>Speech</th></tr>');
   var i = 0;
   for (i in o.speeches) {

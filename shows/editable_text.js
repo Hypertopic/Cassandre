@@ -99,6 +99,8 @@ function(o){
   }
   sendRow((i>0)? o.speeches[i-1].actor : '', '');
   send('</table>');
+  send('<input type="button" onclick="save(function(){location.reload();})" ');
+  send('value="Add row" />');
   send('<input type="button" onclick="save(function () { goTo(\'');
   send(o['_id']);
   send('\');})" value="Save" />');

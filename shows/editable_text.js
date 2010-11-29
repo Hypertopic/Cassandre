@@ -1,14 +1,14 @@
 function(o){
 
   function sendRow(actor, text) {
-    send('<tr>');
+    send('<tr class="turn">');
     send('<td>');
     send('<input type="text" value="');
     send(actor?actor:"");
     send('" />');
     send('</td>');
     send('<td>');
-    send('<textarea type="text">');
+    send('<textarea cols="80" rows="3" type="text">');
     send(text);
     send('</textarea>');
     send('</td>');
@@ -28,8 +28,10 @@ function(o){
   send('}\n');
  
   send('function save(toDoAfter) {\n');
-  send('  data = {name: "Bond", _rev:"'+o['_rev']+'"};\n');
-  send('  saved = false;\n');
+  send('  var data = {};\n');
+  send('  $("#attributes").children("input").each(function() {\n')
+  send('    data[$(this).attr("id")] = $(this).val();\n');
+  send('  })\n');
   send('  $.ajax({\n');
   send('    type: "PUT",\n');
   send('    url: "../');
@@ -53,7 +55,7 @@ function(o){
   send('<div id="container">');
   send('<div id="content">');
   send('<form>');
-  send('<table>');
+  send('<fieldset id="attributes">');
   for (key in o) {
     switch (key) {
       case '_id':
@@ -68,18 +70,20 @@ function(o){
       case '_revisions':
         break;
       default:
-        send('<label>');
+        send('<label for="');
         send(key);
+        send('">');
+        send(key);
+        send('</label>');
         send('<input id="');
         send(key);
         send('" type="text" value="');
         send(o[key]);
         send('" />');
-        send('</label>');
     }
   }
-  send('</table>');
-  send('<table>');
+  send('</fieldset>');
+  send('<table id="conversation">');
   send('<tr><th>Actor</th><th>Speech</th></tr>');
   var i = 0;
   for (i in o.speeches) {

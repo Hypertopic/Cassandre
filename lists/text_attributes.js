@@ -12,7 +12,7 @@ function(head, req) {
       } else {
       forminputs += attribute;
       }
-    forminputs +='</th><td><input id="';
+    forminputs +='</label></th><td><input id="';
     forminputs += attribute;
     if (attribute == "corpus"){
       forminputs += '" type="text" value="';
@@ -25,7 +25,7 @@ function(head, req) {
       datafield += attribute;
       datafield += '").val(), ';
       }
-    forminputs += '</label></td></tr>\n';
+    forminputs += '</td></tr>\n';
   }
   datafield += 'corpus:$("#corpus").val()     };';
 
@@ -33,7 +33,7 @@ function(head, req) {
   send('<head>');
   send('<link rel="icon" type="image/png" href="../style/favicon.png" />');
   send('<link rel="stylesheet" type="text/css" href="../style/main.css" />');
-  send('<script src="http://code.jquery.com/jquery-1.4.2.min.js"></script>\n');
+  send('<script src="../script/jquery.js"></script>');
   send('<script type="text/javascript">');
   send('   function upLoad() {\n');
 

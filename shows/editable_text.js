@@ -20,7 +20,7 @@ function(o){
   send('<link rel="icon" type="image/png" href="../style/favicon.png" />');
   send('<link rel="stylesheet" type="text/css" href="../style/main.css" />');
   send('<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />');
-  send('<script src="/_utils/script/jquery.js"></script>');
+  send('<script src="../script/jquery.js"></script>');
   send('<script type="text/javascript">\n');
 
   send('function goTo(text) {\n');

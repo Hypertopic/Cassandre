@@ -40,7 +40,7 @@ function(head, req) {
   send(datafield);
 
   send('\n     $.ajax({');
-  send('        url: "http://127.0.0.1:5984/cassandre/",');
+  send('        url: "../",');
   send('        type: "POST",');
   send('        dataType: "json",');
   send('        contentType: "application/json",');

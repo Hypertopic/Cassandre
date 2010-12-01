@@ -22,6 +22,8 @@ function(head, req) {
       send("'> + </a>]</p>");
     }
     send('<li><a href="');
+    send(corpus);
+    send('/');
     send(doc.id);
     send('">');
     send(doc.key[1]);

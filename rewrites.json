@@ -9,7 +9,7 @@
     "from": "text/", 
     "to": "_list/text/text"
   }, {
-    "from": "text/:text", 
+    "from": "text/:corpus/:text", 
     "to": "_show/text/:text"
   }, {
     "from": "text_attributes/:corpus", 

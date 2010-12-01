@@ -1,14 +1,20 @@
 function(doc, req){
   const ALPHA = /[a-zàâçéêèëïîôöüùû0-9]+|[^a-zàâçéêèëïîôöüùû0-9]+/gi;
+  if (req.query.corpus!=doc.corpus) {
+    return {
+      "code": 302, 
+      "headers":{ "Location": "../" + doc.corpus + "/" + doc._id }
+    };
+  }
   send('<html>');
   send('<head>');
-  send('<link rel="icon" type="image/png" href="../style/favicon.png" />');
-  send('<link rel="stylesheet" type="text/css" href="../style/main.css" />');
+  send('<link rel="icon" type="image/png" href="../../style/favicon.png" />');
+  send('<link rel="stylesheet" type="text/css" href="../../style/main.css" />');
   send('<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />');
   send('<script type="text/javascript">\n');
   send('function httpGet(url) {\n');
   send('  var http = new XMLHttpRequest();\n');
-  send('  http.open("GET", "../" + url, false);\n');
+  send('  http.open("GET", "../../" + url, false);\n');
   send('  http.setRequestHeader("Accept", "application/json");\n');
   send('  http.send("");\n');
   send('  return JSON.parse(http.responseText);\n');
@@ -99,7 +105,7 @@ function(doc, req){
   send('</script></head><body>');
   send('<div id="container">');
   send('<form id="menu">');
-  send('<input type="button" onClick="self.location=\'.\'" value="Corpus" />');
+  send('<input type="button" onClick="self.location=\'..\'" value="Corpus" />');
   send('<input type="button" onClick="self.location.reload(true)" value="Raw text" />');
   send('<input type="button" onClick="highlightWords(\'specific1\')" value="Specific words" />');
   send('<input type="button" onClick="highlightWords(\'rare\')" value="Rare words" />');

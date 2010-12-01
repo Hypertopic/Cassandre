@@ -67,6 +67,7 @@ function(o){
     switch (key) {
       case '_id':
       case '_rev':
+      case 'corpus':
         send('<input id="');
         send(key);
         send('" type="hidden" value="');
@@ -102,6 +103,8 @@ function(o){
   send('<input type="button" onclick="save(function(){location.reload();})" ');
   send('value="Add row" />');
   send('<input type="button" onclick="save(function () { goTo(\'');
+  send(o['corpus']);
+  send('/');
   send(o['_id']);
   send('\');})" value="Save" />');
   send('</form>');

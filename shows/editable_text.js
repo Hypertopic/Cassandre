@@ -1,14 +1,14 @@
 function(o){
 
   function sendRow(actor, text) {
-    send('<tr>');
+    send('<tr class="turn">');
     send('<td>');
     send('<input type="text" value="');
     send(actor?actor:"");
     send('" />');
     send('</td>');
     send('<td>');
-    send('<textarea type="text">');
+    send('<textarea cols="80" rows="3" type="text">');
     send(text);
     send('</textarea>');
     send('</td>');
@@ -20,7 +20,7 @@ function(o){
   send('<link rel="icon" type="image/png" href="../style/favicon.png" />');
   send('<link rel="stylesheet" type="text/css" href="../style/main.css" />');
   send('<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />');
-  send('<script src="/_utils/script/jquery.js"></script>');
+  send('<script src="../script/jquery.js"></script>');
   send('<script type="text/javascript">\n');
 
   send('function goTo(text) {\n');
@@ -28,8 +28,17 @@ function(o){
   send('}\n');
  
   send('function save(toDoAfter) {\n');
-  send('  data = {name: "'+o['name']+'", corpus: "'+o['corpus']+'",_rev:"'+o['_rev']+'"};\n');
-  send('  saved = false;\n');
+  send('  var data = {};\n');
+  send('  $("#attributes").children("input").each(function() {\n')
+  send('    data[$(this).attr("id")] = $(this).val();\n');
+  send('  })\n');
+  send('  data.speeches = [];\n');
+  send('  $(".turn").each(function() {\n')
+  send('    data.speeches.push({\n');
+  send('      actor:$(this).children().children("input").val(),\n');
+  send('      text:$(this).children().children("textarea").val()\n');
+  send('    })\n');
+  send('  })\n');
   send('  $.ajax({\n');
   send('    type: "PUT",\n');
   send('    url: "../');
@@ -53,7 +62,7 @@ function(o){
   send('<div id="container">');
   send('<div id="content">');
   send('<form>');
-  send('<table>');
+  send('<fieldset id="attributes">');
   for (key in o) {
     switch (key) {
       case '_id':
@@ -68,17 +77,19 @@ function(o){
       case '_revisions':
         break;
       default:
-        send('<label>');
+        send('<label for="');
         send(key);
+        send('">');
+        send(key);
+        send('</label>');
         send('<input id="');
         send(key);
         send('" type="text" value="');
         send(o[key]);
         send('" />');
-        send('</label>');
     }
   }
-  send('</table>');
+  send('</fieldset>');
   send('<table>');
   send('<tr><th>Actor</th><th>Speech</th></tr>');
   var i = 0;
@@ -88,6 +99,8 @@ function(o){
   }
   sendRow((i>0)? o.speeches[i-1].actor : '', '');
   send('</table>');
+  send('<input type="button" onclick="save(function(){location.reload();})" ');
+  send('value="Add row" />');
   send('<input type="button" onclick="save(function () { goTo(\'');
   send(o['_id']);
   send('\');})" value="Save" />');

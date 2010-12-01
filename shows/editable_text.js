@@ -28,7 +28,7 @@ function(o){
   send('}\n');
  
   send('function save(toDoAfter) {\n');
-  send('  data = {name: "Bond", _rev:"'+o['_rev']+'"};\n');
+  send('  data = {name: "'+o['name']+'", corpus: "'+o['corpus']+'",_rev:"'+o['_rev']+'"};\n');
   send('  saved = false;\n');
   send('  $.ajax({\n');
   send('    type: "PUT",\n');

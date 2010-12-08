@@ -8,7 +8,7 @@ function(head, req) {
     start({"headers":{"Content-Type" : "text/plain;charset=utf-8"}});
   }
   send('{"rows":[\n');
-  if (resourcePath[last-1]=="text") {
+  if (resourcePath[last-2]=="text") {
     const id = resourcePath[last];
     var found = false;
     while (!found && (r=getRow())) {

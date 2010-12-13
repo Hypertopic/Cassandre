@@ -61,7 +61,9 @@
     "from": "lexicometrics/:document", 
     "to": "_view/document_lexicometrics",
     "query": {
-      "key": [":document"]
+      "startkey": [":document"],
+      "endkey": [":document", {}],
+      "group": true
     }
   }, { 
     "from": "", 

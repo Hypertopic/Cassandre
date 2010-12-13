@@ -63,7 +63,6 @@ function(doc, req){
   send('  }');
   send('}\n');
   send('function wholeMetrics(type) {\n');
-  send('  const D = ' + (req.info.doc_count-1) + ';\n');
   send('  var corpus = {};\n');
   send('  var lexcorpus = httpGet("lexicometrics/");\n');//TODO level 2 would need a filter on corpus
   send('  for (i in lexcorpus.rows) {\n');
@@ -73,21 +72,19 @@ function(doc, req){
   send('  var lexdoc = httpGet("lexicometrics/' + req.id + '");\n');
   send('  var metrics = {};\n');
   send('  var max_specific1 = 0;\n');
-  send('  var max_specific2 = 0;\n');
   send('  for (i in lexdoc.rows) {\n');
   send('    var d = lexdoc.rows[i];\n');
-  send('    metrics[d.value.word] = {\n');
-  send('      rare: 1/corpus[d.value.word].sum,\n');
-  send('      specific1: Math.sqrt(d.value["this"])/corpus[d.value.word].count,\n');
-  send('      specific2: d.value["this"]/d.value.on*Math.log(D/corpus[d.value.word].count)\n');
+  send('    var word = d.key[1];\n');
+  send('    var inCorpus = corpus[word];\n');
+  send('    metrics[word] = {\n');
+  send('      rare: 1/inCorpus.sum,\n');
+  send('      specific1: Math.sqrt(d.value)/inCorpus.count,\n');
   send('    };\n');
-  send('    max_specific1 = Math.max(max_specific1,metrics[d.value.word].specific1);\n');
-  send('    max_specific2 = Math.max(max_specific2,metrics[d.value.word].specific2);\n');
+  send('    max_specific1 = Math.max(max_specific1,metrics[word].specific1);\n');
   send('  }\n');
   send('  for (i in metrics) {\n');
   send('    var m = metrics[i];\n');
   send('    m.specific1 /= max_specific1;\n');
-  send('    m.specific2 /= max_specific2;\n');
   send('  }\n');
   send('  return metrics;\n');
   send('}\n');
@@ -96,8 +93,6 @@ function(doc, req){
   send('  switch (type) {');
   send('    case "specific1":');
   send('      return (w)?w.specific1:.05;');
-  send('    case "specific2":');
-  send('      return (w)?w.specific2:.05;');
   send('    case "rare":'); 
   send('      return (w)?w.rare:.05;');
   send('  }'); 

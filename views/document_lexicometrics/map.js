@@ -1,12 +1,15 @@
 function(doc) {
   const ALPHA = /[a-zàâçéêèëïîôöüùû0-9]+/gi;
-  words = [];
-  for each (p in doc.speeches) {
-    words = words.concat(p.text.match(ALPHA));
+  var words = [];
+  for each (var p in doc.speeches) {
+    var speechWords = p.text.match(ALPHA);
+    if (speechWords) {
+      words = words.concat(speechWords);
+    }
   }
-  counts = {};
-  sum = 0;
-  for each (t in words) {
+  var counts = {};
+  var sum = 0;
+  for each (var t in words) {
     if (t.length>0) {
       t = t.toLowerCase();
       sum++;
@@ -16,7 +19,7 @@ function(doc) {
       counts[t]++;
     }
   }
-  for (word in counts) {
+  for (var word in counts) {
     emit([doc._id], {
       "word":word,
       "this":counts[word],

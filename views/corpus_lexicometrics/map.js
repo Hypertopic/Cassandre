@@ -1,6 +1,7 @@
 function(doc) {
   const ALPHA = /[a-zàâçéêèëïîôöüùû0-9]+/gi;
   var counts = {};
+  counts["watch"] = 0;
   for each (var p in doc.speeches) {
     var words = p.text.match(ALPHA);
     if (words) for each (var t in words) {

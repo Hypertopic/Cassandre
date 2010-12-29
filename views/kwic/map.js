@@ -24,44 +24,33 @@ function(o) {
     return preblank + aString.substring(begin, end) + postblank;
   }
 
-  if (o.highlights) { //corpus 
-    for (h in o.highlights) {
-      var highlight = o.highlights[h];
-      emit([o._id, highlight.text], {
-        highlight: h,
-        viewpoint: highlight.viewpoint,
-        topic: highlight.topic
-      });
-    }
-  } else { //text
-    var postStart = o.name.length + COORDINATES_HEADER_OFFSET;
-    for each (p in o.speeches) {
-      var postEnd = postStart 
-          + (p.actor? p.actor.length : 0) 
-          + (p.timestamp? p.timestamp.length : 0) 
-          + p.text.length;
-      var charIndex = 0;
-      var word = "";
-      for each (character in p.text) {
-        if (!character.match(WORD_CUTTER)) {
-          word += character;
-        } else if (word.length>0) {
-          const WORD_POSITION = charIndex - word.length;
-          const KWIC_START = WORD_POSITION - KWIC_OFFSET;
-          emit ([
-            o.corpus, 
-            extract(p.text, WORD_POSITION, KWIC_START + KWIC_FRAME)
-          ], {
-            before: extract(p.text, KWIC_START, KWIC_START + KWIC_OFFSET),
-            begin: postStart,
-            end: postEnd,
-            actor: p.actor
-          });
-          word = "";
-        }
-        charIndex++;
+  var postStart = o.name.length + COORDINATES_HEADER_OFFSET;
+  for each (p in o.speeches) {
+    var postEnd = postStart 
+      + (p.actor? p.actor.length : 0) 
+      + (p.timestamp? p.timestamp.length : 0) 
+      + p.text.length;
+    var charIndex = 0;
+    var word = "";
+    for each (character in p.text) {
+      if (!character.match(WORD_CUTTER)) {
+        word += character;
+      } else if (word.length>0) {
+        const WORD_POSITION = charIndex - word.length;
+        const KWIC_START = WORD_POSITION - KWIC_OFFSET;
+        const PATTERN = extract(p.text, WORD_POSITION, KWIC_START + KWIC_FRAME);
+        const VALUE = {
+          before: extract(p.text, KWIC_START, KWIC_START + KWIC_OFFSET),
+          begin: postStart,
+          end: postEnd,
+          actor: p.actor
+        };
+        emit([o.corpus, PATTERN], VALUE);
+        emit([o._id, PATTERN], VALUE);
+        word = "";
       }
-      postStart = postEnd + COORDINATES_ROW_OFFSET;  
+      charIndex++;
     }
+    postStart = postEnd + COORDINATES_ROW_OFFSET;  
   }
 }

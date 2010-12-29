@@ -23,28 +23,8 @@
     "from": "editable_text/:text", 
     "to": "_show/editable_text/:text"
   }, {
-    "from": "corpus/:corpus", 
-    "to": "_list/corpus/kwic",
-    "query": {
-      "startkey": [":corpus"],
-      "endkey": [":corpus",{}]
-    }
-  }, {
     "from": "item/", 
     "to": "_list/resource/resource"
-  }, { 
-    "from": "item/:corpus/:item", 
-    "to": "_list/corpus/kwic",
-    "query": {
-      "startkey": [":corpus"],
-      "endkey": [":corpus",{}]
-    }
-  }, {
-    "from": "viewpoint/:viewpoint", 
-    "to": "_list/viewpoint/kwic"
-  }, {
-    "from": "topic/:viewpoint/:topic", 
-    "to": "_list/viewpoint/kwic"
   }, {
     "from": "phrase/", 
     "to": "_view/phrase",

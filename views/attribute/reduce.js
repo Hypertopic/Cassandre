@@ -1,3 +1,1 @@
-function () {
-	return null;
-}
+_count

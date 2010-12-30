@@ -1,12 +1,18 @@
 function(o) {
-  if (o.name) {
+
+  function isReserved(key) {
+    return key.charAt(0)=='_'
+      || key=='name'
+      || key=='corpus'
+      || key=='speeches';
+  }
+
+  if (o.corpus) {
     for (key in o) {
-        value = o[key];
-        if (key != 'speeches' && key != '_id' && key != '_rev' ) { 
-	emit([o.corpus,key], null);
-	}
+      if (!isReserved(key)) {
+        emit([o.corpus, key, o[key]], {item:{id:o._id, name:o.name}});
+      }
     }
   }
+
 }
-
-

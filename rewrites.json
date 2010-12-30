@@ -1,5 +1,29 @@
 [
   {
+       "from": "attribute/:corpus/",
+       "to": "_view/attribute",
+       "query": {
+           "startkey": [":corpus"],
+           "endkey": [":corpus", {}],
+           "group_level": 2
+       }
+   }, {
+       "from": "attribute/:corpus/:attribute/",
+       "to": "_view/attribute",
+       "query": {
+           "startkey": [":corpus", ":attribute"],
+           "endkey": [":corpus", ":attribute", {}],
+           "group_level": 3
+       }
+   }, {
+       "from": "attribute/:corpus/:attribute/:value",
+       "to": "_view/attribute",
+       "query": {
+           "startkey": [":corpus", ":attribute", ":value"],
+           "endkey": [":corpus", ":attribute", ":value", {}],
+           "reduce": false
+       }
+   }, {
     "from": "user/:user",
     "to": "_view/user",
     "query": {

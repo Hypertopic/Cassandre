@@ -2,8 +2,6 @@ function(o) {
 
   function isReserved(key) {
     return key.charAt(0)=='_'
-      || key=='name'
-      || key=='corpus'
       || key=='speeches';
   }
 

@@ -1,4 +1,5 @@
 function(doc) {
+if (doc.draft != 'ongoing') {
   const ALPHA = /[a-zàâçéêèëïîôöüùû0-9]+/gi;
   var counts = {};
   for each (var p in doc.speeches) {
@@ -14,4 +15,5 @@ function(doc) {
   for (var word in counts) {
     emit([word], counts[word]);
   }
+} else emit([""], 0);
 }

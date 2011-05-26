@@ -32,6 +32,10 @@ function(o){
   send('  $("#attributes").children("input").each(function() {\n')
   send('    data[$(this).attr("id")] = $(this).val();\n');
   send('  })\n');
+  send('  var next=""+toDoAfter;');
+  send('  if (next.match(/goTo/g)) {');
+  send('    data.draft = "final";');
+  send('  } else {data.draft = "ongoing";}\n');
   send('  data.speeches = [];\n');
   send('  $(".turn").each(function() {\n')
   send('    data.speeches.push({\n');
@@ -67,6 +71,7 @@ function(o){
     switch (key) {
       case '_id':
       case '_rev':
+      case 'draft':
       case 'corpus':
         send('<input id="');
         send(key);

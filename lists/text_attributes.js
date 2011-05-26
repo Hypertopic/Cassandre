@@ -5,7 +5,8 @@ function(head, req) {
   var datafield = "var data = {";
   var forminputs = '<form><fieldset><legend>Attributes</legend><table>';
   while (doc = getRow()) {
-    attribute = doc.key[1];
+   attribute = doc.key[1];
+   if (attribute != "draft") {
     forminputs +='<tr><th><label>';
     if (attribute == "name"){
       forminputs += 'title';
@@ -26,6 +27,7 @@ function(head, req) {
       datafield += '").val(), ';
       }
     forminputs += '</td></tr>\n';
+   }
   }
   datafield += 'corpus:$("#corpus").val()     };';
 

@@ -43,6 +43,7 @@ if (o.draft != 'ongoing') {
         const VALUE = {
           before: extract(p.text, KWIC_START, KWIC_START + KWIC_OFFSET),
           begin: postStart,
+          match: postStart+WORD_POSITION,
           end: postEnd,
           actor: p.actor
         };

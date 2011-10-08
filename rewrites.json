@@ -50,23 +50,19 @@
     "from": "item/", 
     "to": "_list/resource/resource"
   }, {
-    "from": "phrase/", 
+    "from": "phrase/:corpus", 
     "to": "_view/phrase",
     "query": {
+      "startkey": [":corpus"],
+      "endkey": [":corpus",{}],
       "group": true
     }
   }, { 
-    "from": "lexicometrics/", 
-    "to": "_view/corpus_lexicometrics",
+    "from": "lexicometrics/:documentOrCorpus", 
+    "to": "_view/lexicometrics",
     "query": {
-      "group": true
-    }
-  }, { 
-    "from": "lexicometrics/:document", 
-    "to": "_view/document_lexicometrics",
-    "query": {
-      "startkey": [":document"],
-      "endkey": [":document", {}],
+      "startkey": [":documentOrCorpus"],
+      "endkey": [":documentOrCorpus", {}],
       "group": true
     }
   }, { 

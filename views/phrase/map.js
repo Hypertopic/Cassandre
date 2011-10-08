@@ -9,6 +9,7 @@ function(doc) {
         && words[i+3].length==1
       ) {
         emit([
+          doc.corpus,
           words[i].toLowerCase(),
           words[i+2].toLowerCase(),
           words[i+4].toLowerCase()

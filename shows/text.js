@@ -32,7 +32,7 @@ function(doc, req){
   send('  }\n');
   send('}\n');
   send('function highlightPhrases() {');
-  send('  var view = httpGet("phrase/");');
+  send('  var view = httpGet("phrase/' + doc.corpus + '");');
   send('  var trigrams = [];');
   send('  for (i in view.rows) {');
   send('    var r = view.rows[i];');
@@ -64,7 +64,7 @@ function(doc, req){
   send('}\n');
   send('function wholeMetrics(type) {\n');
   send('  var corpus = {};\n');
-  send('  var lexcorpus = httpGet("lexicometrics/");\n');//TODO level 2 would need a filter on corpus
+  send('  var lexcorpus = httpGet("lexicometrics/' + doc.corpus + '");\n');
   send('  for (i in lexcorpus.rows) {\n');
   send('    var c = lexcorpus.rows[i];\n');
   send('    corpus[c.key] = c.value;\n');
@@ -78,7 +78,7 @@ function(doc, req){
   send('    var inCorpus = corpus[word];\n');
   send('    metrics[word] = {\n');
   send('      rare: 1/inCorpus.sum,\n');
-  send('      specific1: Math.sqrt(d.value)/inCorpus.count,\n');
+  send('      specific1: Math.sqrt(d.value.count)/inCorpus.count,\n');
   send('    };\n');
   send('    max_specific1 = Math.max(max_specific1,metrics[word].specific1);\n');
   send('  }\n');

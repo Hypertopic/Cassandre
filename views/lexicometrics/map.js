@@ -3,13 +3,13 @@ function(o) {
   const CRUNCHER = /[a-zàâçéêèëïîôöüùû0-9]+|[^a-zàâçéêèëïîôöüùû0-9]+/gi;
 
   function emitWord(corpus, doc, word) {
-    emit([corpus, word]);
-    emit([doc, word]);
+    emit([corpus, "countOccurrences", word]);
+    emit([doc, "countOccurrences", word]);
   }
 
   function emitPhrase(corpus, doc, prior, previous, current) {
-    emit([corpus, prior, previous, current]);
-    emit([doc, prior]);
+    emit([corpus, "countOccurrences", prior, previous, current]);
+    emit([doc, "countOccurrences", prior]);
   }
 
   function emitEndOfSentence(corpus, doc, prior, previous, current) {
@@ -38,12 +38,14 @@ function(o) {
     var current = null;
     var previous = null;
     var prior = null;
+    var words = {};
     for each (var s in o.speeches) {
       for each (var m in s.text.match(CRUNCHER)) {
         if (isWord(m)) {
           prior = previous;
           previous = current;
           current = m.toLowerCase();
+          words[current] = null;
         } else {
           if (m.length>1) {
             emitEndOfSentence(o.corpus, o._id, prior, previous, current);
@@ -59,6 +61,9 @@ function(o) {
       prior = null;
       previous = null;
       current = null;
+    }
+    for (var w in words) {
+      emit([o.corpus, "countDocuments", w]);
     }
   }
 }

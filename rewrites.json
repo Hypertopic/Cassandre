@@ -71,7 +71,7 @@
     "method": "POST"
   }, { 
     "from": "", 
-    "to": "index.html",
+    "to": "_show/index",
     "method": "GET"
   }, { 
     "from": ":object", 
@@ -79,8 +79,5 @@
   }, { 
     "from": "style/:file", 
     "to": ":file"
-  }, { 
-    "from": "script/:file", 
-    "to": "../../../_utils/script/:file"
   }
 ]

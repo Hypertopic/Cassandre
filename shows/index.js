@@ -1,7 +1,7 @@
 function(doc, req) {
   if('Accept' in req.headers && req.headers['Accept'].indexOf('json') > 0) {
     return {
-        body : JSON.stringify({'service':'Cassandre', 'revision': '0.1'}),
+        body : JSON.stringify({'service':'Cassandre', 'revision': '2'}),
         headers : { 
           "Content-Type" : "application/json",
         }

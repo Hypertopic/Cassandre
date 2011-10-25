@@ -79,5 +79,8 @@
   }, { 
     "from": "style/:file", 
     "to": ":file"
+  }, {
+    "from": "script/:file", 
+    "to": "../../../_utils/script/:file"
   }
 ]

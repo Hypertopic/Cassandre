@@ -36,7 +36,7 @@ function(doc, req){
   send('  var trigrams = [];');
   send('  for (i in view.rows) {');
   send('    var r = view.rows[i];');
-  send('    trigrams[r.key] = r.value;');
+  send('    trigrams[r.key[1], r.key[2], r.key[3]] = r.value;');
   send('  }\n');
   send('  var markups = document.getElementsByTagName("font");');
   send('  var words = [];');
@@ -49,9 +49,7 @@ function(doc, req){
   send('  words[3].count = 0;\n');
   send('  var max = 0;\n');
   send('  for (w=0; w<words.length-4; w++) {\n');
-  send('    var key =');
-  send('      new Array(words[w].text, words[w+2].text, words[w+4].text);\n');
-  send('    var nb = trigrams[key];\n');
+  send('    var nb = trigrams[words[w].text, words[w+2].text, words[w+4].text];\n');
   send('    if (!nb) nb = 1;');
   send('    words[w].count = Math.max(words[w].count, nb);\n');
   send('    words[w+2].count = Math.max(words[w+2].count, nb);\n');
@@ -64,12 +62,12 @@ function(doc, req){
   send('}\n');
   send('function wholeMetrics(type) {\n');
   send('  var corpus = {};\n');
-  send('  var lexcorpus = httpGet("lexicometrics/' + doc.corpus + '");\n');
+  send('  var lexcorpus = httpGet("corpus_words/' + doc.corpus + '");\n');
   send('  for (i in lexcorpus.rows) {\n');
   send('    var c = lexcorpus.rows[i];\n');
-  send('    corpus[c.key] = c.value;\n');
+  send('    corpus[c.key[1]] = c.value;\n');
   send('  }\n');
-  send('  var lexdoc = httpGet("lexicometrics/' + req.id + '");\n');
+  send('  var lexdoc = httpGet("text_words/' + req.id + '");\n');
   send('  var metrics = {};\n');
   send('  var max_specific1 = 0;\n');
   send('  for (i in lexdoc.rows) {\n');
@@ -78,7 +76,7 @@ function(doc, req){
   send('    var inCorpus = corpus[word];\n');
   send('    metrics[word] = {\n');
   send('      rare: 1/inCorpus.sum,\n');
-  send('      specific1: Math.sqrt(d.value.count)/inCorpus.count,\n');
+  send('      specific1: Math.sqrt(d.value)/inCorpus.count,\n');
   send('    };\n');
   send('    max_specific1 = Math.max(max_specific1,metrics[word].specific1);\n');
   send('  }\n');

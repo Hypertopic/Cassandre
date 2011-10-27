@@ -40,7 +40,7 @@
     "to": "_list/text_attributes/attribute",
     "query": {
       "startkey": [":corpus"],
-      "endkey": [":corpus",{}],
+      "endkey": [":corpus", {}],
       "group_level": 2
     }
   }, {
@@ -54,16 +54,24 @@
     "to": "_view/phrase",
     "query": {
       "startkey": [":corpus"],
-      "endkey": [":corpus",{}],
+      "endkey": [":corpus", {}],
       "group": true
     }
   }, { 
-    "from": "lexicometrics/:documentOrCorpus", 
-    "to": "_view/lexicometrics",
+    "from": "corpus_words/:corpus",
+    "to": "_view/word",
     "query": {
-      "startkey": [":documentOrCorpus"],
-      "endkey": [":documentOrCorpus", {}],
+      "startkey": [":corpus"],
+      "endkey": [":corpus", {}],
       "group": true
+    }
+  }, { 
+    "from": "text_words/:text",
+    "to": "_view/word",
+    "query": {
+      "startkey": [":text"],
+      "endkey": [":text", {}],
+      "reduce": false
     }
   }, { 
     "from": "", 

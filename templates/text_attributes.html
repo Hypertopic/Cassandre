@@ -1,0 +1,59 @@
+<html>
+  <head>
+    <link rel="icon" type="image/png" href="../style/favicon.png" />
+    <link rel="stylesheet" type="text/css" href="../style/main.css" />
+    <script src="../script/jquery.js"></script>
+    <script type="text/javascript">
+    function upload() {
+      var data = {};
+      $('input').each(function() {
+        data[$(this).attr("id")] = $(this).val();
+      });
+      $.ajax({
+        url: "../",
+        type: "POST",
+        dataType: "json",
+        contentType: "application/json",
+        data: JSON.stringify(data),
+        success: function(data) {location.replace("../editable_text/"+ data.id)}
+      });
+    }
+    </script>
+  </head>
+  <body id="watermark">
+    <div id="container">
+      <div id="content">
+        <h1>New text </h1>
+        <form>
+          <fieldset>
+            <legend>Attributes</legend>
+            <table>
+              <tr>
+                <th><label>title</label></th>
+                <td><input id="name" type="text" /></td>
+              </tr>
+              <tr>
+                <th><label>corpus</label></th>
+                <td><input id="corpus" type="text" value="{{corpus}}" /></td>
+              </tr>
+              {{#attributes}}
+              <tr>
+                <th><label>{{.}}</label></th>
+                <td><input id="{{.}}" type="text" /></td>
+              </tr>
+              {{/attributes}}
+              <tr>
+                <th></th>
+                <td><button type="button" onclick="upload()">Set attributes</button></td>
+              </tr>
+            </table>
+          </fieldset>
+        </form>
+      </div>
+      <div id="footer">
+        <a href="http://cassandre-qda.sourceforge.net/about.html">Cassandre</a> &nbsp;
+      </div>
+    </div>
+  </body>
+</html>
+

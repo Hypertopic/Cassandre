@@ -3,38 +3,79 @@
     <link rel="icon" type="image/png" href="../../style/favicon.png" />
     <link rel="stylesheet" type="text/css" href="../../style/main.css" />
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <script src="../../script/jquery.js"></script>
     <script type="text/javascript">
-    function httpGet(url) {
-      var http = new XMLHttpRequest();
-      http.open("GET", "../../" + url, false);
-      http.setRequestHeader("Accept", "application/json");
-      http.send("");
-      return JSON.parse(http.responseText);
-    }
+    var metrics = {};
+    var trigrams = [];
+    $(document).ready(function() {
+      $.ajax({
+        url: "../../corpus_words/{{corpus}}",
+        type: "GET",
+        dataType: "json",
+        success: function(lexcorpus) {
+          var corpus = {};
+          for (var i in lexcorpus.rows) {
+            var c = lexcorpus.rows[i];
+            corpus[c.key[1]] = c.value;
+          }
+          $.ajax({
+            url: "../../text_words/{{_id}}",
+            type: "GET",
+            dataType: "json",
+            success: function(lexdoc) {
+              var max_specific = 0;
+              for (var j in lexdoc.rows) {
+                var d = lexdoc.rows[j];
+                var word = d.key[1];
+                var inCorpus = corpus[word];
+                metrics[word] = {
+                  rare: 1/inCorpus.sum,
+                  specific: Math.sqrt(d.value)/inCorpus.count,
+                };
+                max_specific = Math.max(max_specific, metrics[word].specific);
+              }
+              for (var k in metrics) {
+                var m = metrics[k];
+                m.specific /= max_specific;
+              }
+              $("#rare").removeAttr("disabled");
+              $("#specific").removeAttr("disabled");
+            }
+          });
+        }
+      });
+      $.ajax({
+        url: "../../phrase/{{corpus}}",
+        type: "GET",
+        dataType: "json",
+        success: function(phrases) {
+          for (var l in phrases.rows) {
+            var r = phrases.rows[l];
+            trigrams[r.key[1], r.key[2], r.key[3]] = r.value;
+          }
+          $("#repeated").removeAttr("disabled");
+        }
+      });
+    });
     function toColor(metrics) {
       var grayLevel = Math.floor(255*(1-metrics)).toString(16);
       return "#" + grayLevel + grayLevel + grayLevel;
     }
+    function clearHighlights() {
+      $("font").each(function() {
+        $(this).removeAttr("color");
+      });
+    }
     function highlightWords(type) {
-      var words = document.getElementsByTagName("font");
-      var metrics = wholeMetrics(type);
-      for (i in words) {
-        var w = words[i];
-        w.color = toColor(wordMetrics(metrics, w.textContent, type));
-      }
+      $("font").each(function() {
+        $(this).attr("color", toColor(wordMetrics(metrics, $(this).text(), type)));
+      });
     }
     function highlightPhrases() {
-      var view = httpGet("phrase/{{corpus}}");
-      var trigrams = [];
-      for (i in view.rows) {
-        var r = view.rows[i];
-        trigrams[r.key[1], r.key[2], r.key[3]] = r.value;
-      }
-      var markups = document.getElementsByTagName("font");
       var words = [];
-      for (m=0; m<markups.length; m++) {
-        words[m] = {text: markups[m].textContent.toLowerCase()};
-      }
+      $("font").each(function(i) {
+        words[i] = {text: $(this).text().toLowerCase()};
+      });
       words[0].count = 0;
       words[1].count = 0;
       words[2].count = 0;
@@ -48,41 +89,15 @@
         words[w+4].count = nb;
         max = Math.max(max, words[w].count);
       }
-      for (m=0; m<markups.length; m++) {
-        markups[m].color = toColor(words[m].count/max);
-      }
-    }
-    function wholeMetrics(type) {
-      var corpus = {};
-      var lexcorpus = httpGet("corpus_words/{{corpus}}");
-      for (i in lexcorpus.rows) {
-        var c = lexcorpus.rows[i];
-        corpus[c.key[1]] = c.value;
-      }
-      var lexdoc = httpGet("text_words/{{_id}}");
-      var metrics = {};
-      var max_specific1 = 0;
-      for (i in lexdoc.rows) {
-        var d = lexdoc.rows[i];
-        var word = d.key[1];
-        var inCorpus = corpus[word];
-        metrics[word] = {
-          rare: 1/inCorpus.sum,
-          specific1: Math.sqrt(d.value)/inCorpus.count,
-        };
-        max_specific1 = Math.max(max_specific1,metrics[word].specific1);
-      }
-      for (i in metrics) {
-        var m = metrics[i];
-        m.specific1 /= max_specific1;
-      }
-      return metrics;
+      $("font").each(function(i) {
+        $(this).attr("color", toColor(words[i].count/max));
+      });
     }
     function wordMetrics(metrics, word, type) {
       var w = metrics[word.toLowerCase()];
       switch (type) {
-        case "specific1":
-          return (w)?w.specific1:.05;
+        case "specific":
+          return (w)?w.specific:.05;
         case "rare": 
           return (w)?w.rare:.05;
       } 
@@ -93,14 +108,13 @@
     <div id="container">
       <form id="menu">
         <input type="button" onClick="self.location='..'" value="Corpus" />
-        <input type="button" onClick="self.location.reload(true)"
-          value="Raw text" />
-        <input type="button" onClick="highlightWords('specific1')"
-          value="Specific words" />
-        <input type="button" onClick="highlightWords('rare')"
-          value="Rare words" />
-        <input type="button" onClick="highlightPhrases()"
-          value="Repeated phrases" />
+        <input type="button" onClick="clearHighlights()" value="Raw text" />
+        <input id="specific" type="button" onClick="highlightWords('specific')"
+          value="Specific words" disabled="disabled" />
+        <input id="rare" type="button" onClick="highlightWords('rare')"
+          value="Rare words" disabled="disabled" />
+        <input id="repeated" type="button" onClick="highlightPhrases()"
+          value="Repeated phrases" disabled="disabled" />
       </form>
       <div id="content">
         <h1>{{name}}</h1>

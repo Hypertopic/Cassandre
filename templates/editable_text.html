@@ -1,0 +1,83 @@
+<html>
+  <head>
+    <link rel="icon" type="image/png" href="../style/favicon.png" />
+    <link rel="stylesheet" type="text/css" href="../style/main.css" />
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <script src="../script/jquery.js"></script>
+    <script type="text/javascript">
+    function goTo(text) {
+      self.location = "../text/" + text;
+    }
+    function save(toDoAfter) {
+      var data = {
+        speeches: []
+      };
+      $("#attributes").children("input").each(function() {
+        data[$(this).attr("id")] = $(this).val();
+      })
+      var next = "" + toDoAfter;
+      if (next.match(/goTo/g)) {
+        data.draft = "final"; //TODO replace with boolean
+      } else {
+        data.draft = "ongoing";
+      }
+      $(".turn").each(function() {
+        data.speeches.push({
+          actor: $(this).children().children("input").val(),
+          text: $(this).children().children("textarea").val()
+        })
+      })
+      $.ajax({
+        type: "PUT",
+        url: "../{{_id}}",
+        contentType: "application/json",
+        data: JSON.stringify(data),
+        error: function() {
+          alert("Someone has probably edited the text meanwhile!");
+        },
+        success: function() {toDoAfter();}
+      });
+    }
+    </script>
+  </head>
+  <body id="watermark">
+    <form id="menu">
+      <input type="button" onclick="goTo('')" value="Corpus" />
+    </form>
+    <div id="container">
+      <div id="content">
+        <form>
+          <fieldset id="attributes">
+            <input id="_id" type="hidden" value="{{_id}}" />
+            <input id="_rev" type="hidden" value="{{_rev}}" />
+            <input id="corpus" type="hidden" value="{{corpus}}" />
+            {{#attributes}}
+            <label for="{{key}}">{{key}}</label>
+            <input id="{{key}}" type="text" value="{{value}}" />
+            {{/attributes}}
+          </fieldset>
+          <table>
+            <tr><th>Actor</th><th>Speech</th></tr>
+            {{#speeches}}
+            <tr class="turn">
+              <td>
+                <input type="text" value="{{actor}}" />
+              </td>
+              <td>
+                <textarea cols="80" rows="3" type="text">{{text}}</textarea>
+              </td>
+            </tr>
+            {{/speeches}}
+          </table>
+          <input type="button" onclick="save(function(){location.reload();})" 
+            value="Add row" />
+          <input type="button" onclick="save(function(){goTo('{{corpus}}/{{_id}}');})"
+            value="Save" />
+        </form>
+      </div>
+      <div id="footer">
+        <a href="http://cassandre-qda.sourceforge.net/about.html">Cassandre</a> &nbsp;
+      </div>
+    </div>
+  </body>
+</html>

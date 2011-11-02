@@ -1,40 +1,28 @@
 function(head, req) {
-  var doc;
+  // !json templates.corpora
+  // !code lib/mustache.js
+  start({"headers":{"Content-Type":"text/html;charset=utf-8"}});
+  var data = {
+    corpora: []
+  };
   var corpus;
-  start({"headers":{"Content-Type" : "text/html;charset=utf-8"}});
-  send('<html>');
-  send('<head>');
-  send('<link rel="icon" type="image/png" href="../style/favicon.png" />');
-  send('<link rel="stylesheet" type="text/css" href="../style/main.css" />');
-  send('</head>');
-  send('<body id="watermark">');
-  send('<div id="container">');
-  send('<div id="content">');
-  send('<ul>');
-  while (doc = getRow()) {
-    if (doc.key[0]!=corpus) {
-      corpus = doc.key[0];
-      send('</ul><h1>');
-      send(corpus);
-      send('</h1><ul>');
-      send('<p>[<a onmouseover="style.cursor=pointer" href="../text_attributes/')
-      send(corpus);
-      send('"> + </a>]</p>');
+  var row;
+  while (row = getRow()) {
+    if (!corpus || row.key[0]!=corpus.name) {
+      corpus = {
+        name: row.key[0], 
+        texts: []
+      };
+    } else {
+      corpus = data.corpora.pop();
     }
-    send('<li><a href="');
-    send(corpus);
-    send('/');
-    send(doc.id);
-    send('">');
-    send(doc.key[1]);
-    send('</a> <!--| <a href="../editable_text/');
-    send(doc.id);
-    send('"> m </a>!--> </li>');
-  }  
-  send('</ul>');
-  send('</div>');
-  send('<div id="footer"><a href="http://cassandre-qda.sourceforge.net/about.html">Cassandre</a> &nbsp;</div>');
-  send('</div>');
-  send('</body></html>');
+    corpus.texts.push({
+      name: row.key[1],
+      url: row.key[0] + '/' + row.id
+    });
+    data.corpora.push(corpus);
+  }
+  return Mustache.to_html(templates.corpora, data);
 }
+
 

@@ -14,12 +14,12 @@ function(head, req) {
   while (doc = getRow()) {
     if (doc.key[0]!=corpus) {
       corpus = doc.key[0];
-      send("</ul><h1>");
+      send('</ul><h1>');
       send(corpus);
-      send("</h1><ul>");
-      send("<p>[<a onmouseover='style.cursor=pointer' href='../text_attributes/")
+      send('</h1><ul>');
+      send('<p>[<a onmouseover="style.cursor=pointer" href="../text_attributes/')
       send(corpus);
-      send("'> + </a>]</p>");
+      send('"> + </a>]</p>');
     }
     send('<li><a href="');
     send(corpus);
@@ -27,7 +27,9 @@ function(head, req) {
     send(doc.id);
     send('">');
     send(doc.key[1]);
-    send('</a></li>');
+    send('</a> <!--| <a href="../editable_text/');
+    send(doc.id);
+    send('"> m </a>!--> </li>');
   }  
   send('</ul>');
   send('</div>');

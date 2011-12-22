@@ -2,11 +2,38 @@
   <head>
     <link rel="icon" type="image/png" href="../../style/favicon.png" />
     <link rel="stylesheet" type="text/css" href="../../style/main.css" />
+    <script src="../../script/jquery.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+      $.ajax({
+        url: "../../attribute/{{corpus}}/",
+        type: "GET",
+        dataType: "json",
+        success: function(result) {
+          const BY = "{{by}}";
+          $.each(result.rows, function(i, o) {
+            var attribute = o.key[1];
+            if ("name"!=attribute && "corpus"!=attribute) {
+              $("#by").append(
+                "<option"
+                + ((attribute==BY)?" selected":"")
+                + ">" + attribute + "</option>"
+              );
+            }
+          });
+        }
+      });
+    });
+    </script>
   </head>
   <body id="watermark">
     <div id="container">
-      <form id="menu">
+      <form id="menu" method="get">
         <input type="button" onClick="self.location='..'" value="Corpora" />
+        <select id="by" name="by">
+          <option value="name">title</option>
+        </select>
+        <button type="submit">Sort</button>
       </form>
       <div id="content">
         {{#sections}}

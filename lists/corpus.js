@@ -3,6 +3,8 @@ function(head, req) {
   // !code lib/mustache.js
   start({"headers":{"Content-Type":"text/html;charset=utf-8"}});
   var data = {
+    by: req.query.by,
+    corpus: req.query.corpus,
     sections: []
   };
   var section;

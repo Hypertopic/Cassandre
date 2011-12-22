@@ -95,12 +95,7 @@
     }
     function wordMetrics(metrics, word, type) {
       var w = metrics[word.toLowerCase()];
-      switch (type) {
-        case "specific":
-          return (w)?w.specific:.05;
-        case "rare": 
-          return (w)?w.rare:.05;
-      } 
+      return (w)?w[type]:.05;
     }
     </script>
     <style type="text/css">

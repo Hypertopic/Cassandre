@@ -1,7 +1,7 @@
 function(o, req){
   // !json templates.text
   // !code lib/mustache.js
-  const ALPHA = /[a-zàâçéêèëïîôöüùû0-9]+|[^a-zàâçéêèëïîôöüùû0-9]+/gi;
+  const ALPHA = /[a-zàâçéêèëïîôöüùû0æœ0-9]+|[^a-zàâçéêèëïîôöüùûæœ0-9]+/gi;
   if (req.query.corpus!=o.corpus) {
     return {
       "code": 302, 

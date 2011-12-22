@@ -1,4 +1,4 @@
-const ALPHA = /[a-zàâçéêèëïîôöüùû0-9]+/gi;
+const ALPHA = /[a-zàâçéêèëïîôöüùûæœ0-9]+/gi;
 
 function(o) {
   if (o.draft!='ongoing') {

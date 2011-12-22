@@ -1,4 +1,4 @@
-const CRUNCHER = /[a-zàâçéêèëïîôöüùû0-9]+|[^a-zàâçéêèëïîôöüùû0-9]+/gi;
+const CRUNCHER = /[a-zàâçéêèëïîôöüùûæœ0-9]+|[^a-zàâçéêèëïîôöüùûæœ0-9]+/gi;
 
 function(o) {
   if (o.draft!='ongoing') {

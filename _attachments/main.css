@@ -4,7 +4,7 @@ body {
 }
 
 #watermark {
-  background-image: url(http://cassandre-qda.sourceforge.net/cassandre_background.png); 
+  background-image: url(cassandre_background.png); 
   background-position: 100% 0%;
   background-repeat: no-repeat; 
 }

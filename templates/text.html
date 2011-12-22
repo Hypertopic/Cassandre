@@ -103,6 +103,24 @@
       } 
     }
     </script>
+    <style type="text/css">
+    .speeches{
+      display: table;
+    }
+    .speeches-row{
+      display: table-row;
+    }
+    .actor{
+      display: table-cell;
+      font-weight: bold !important;
+      padding: 0 5px 0 0;
+      text-align: right;
+      vertical-align: top;
+    }
+    .words{
+      display:inline-block;
+    }
+    </style>
   </head>
   <body>
     <div id="container">
@@ -118,23 +136,23 @@
       </form>
       <div id="content">
         <h1>{{name}}</h1>
-        <table>
+          <div class="speeches">
           {{#speeches}}
-          <tr>
+          <div class="speeches-row">
             {{#actor}}
-            <th>{{actor}}</th>
+            <div class="actor">{{actor}}</div>
             {{/actor}}
-            <td>
+            <div class="words">
               {{#timestamp}}
               <div class="timestamp">{{timestamp}}</div>
               {{/timestamp}}
               <div class="post">
                 {{#words}}<font>{{.}}</font>{{/words}}
               </div>
-            </td>
-          </tr>
+            </div>
+          </div>
           {{/speeches}}
-        </table>
+          </div>
       </div>
       <div id="footer">
         <a href="http://cassandre-qda.sourceforge.net/about.html">Cassandre</a> &nbsp;

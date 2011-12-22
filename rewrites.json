@@ -31,7 +31,18 @@
     }
   }, {
     "from": "text/", 
-    "to": "_list/text/text"
+    "to": "_list/corpora/corpora",
+    "query": {
+      "group": true
+    }
+  }, {
+    "from": "text/:corpus/", 
+    "to": "_list/corpus/attribute",
+    "query": {
+      "startkey": [":corpus", ":by"],
+      "endkey": [":corpus", ":by", {}],
+      "reduce": false
+    }
   }, {
     "from": "text/:corpus/:text", 
     "to": "_show/text/:text"

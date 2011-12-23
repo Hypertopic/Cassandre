@@ -44,40 +44,38 @@
     <form id="menu">
       <input type="button" onclick="goTo('')" value="Corpus" />
     </form>
-    <div id="container">
+    <form id="container">
       <div id="content">
-        <form>
-          <fieldset id="attributes">
-            <input id="_id" type="hidden" value="{{_id}}" />
-            <input id="_rev" type="hidden" value="{{_rev}}" />
-            <input id="corpus" type="hidden" value="{{corpus}}" />
-            {{#attributes}}
-            <label for="{{key}}">{{key}}</label>
-            <input id="{{key}}" type="text" value="{{value}}" />
-            {{/attributes}}
-          </fieldset>
-          <table>
-            <tr><th>Actor</th><th>Speech</th></tr>
-            {{#speeches}}
-            <tr class="turn">
-              <td>
-                <input type="text" value="{{actor}}" />
-              </td>
-              <td>
-                <textarea cols="80" rows="3" type="text">{{text}}</textarea>
-              </td>
-            </tr>
-            {{/speeches}}
-          </table>
-          <input type="button" onclick="save(function(){location.reload();})" 
-            value="Add row" />
-          <input type="button" onclick="save(function(){goTo('{{corpus}}/{{_id}}');})"
-            value="Save" />
-        </form>
+        <fieldset id="attributes">
+          <input id="_id" type="hidden" value="{{_id}}" />
+          <input id="_rev" type="hidden" value="{{_rev}}" />
+          <input id="corpus" type="hidden" value="{{corpus}}" />
+          {{#attributes}}
+          <label for="{{key}}">{{key}}</label>
+          <input id="{{key}}" type="text" value="{{value}}" />
+          {{/attributes}}
+        </fieldset>
+        <table>
+          <tr><th>Actor</th><th>Speech</th></tr>
+          {{#speeches}}
+          <tr class="turn">
+            <td>
+              <input type="text" value="{{actor}}" />
+            </td>
+            <td>
+              <textarea cols="80" rows="3" type="text">{{text}}</textarea>
+            </td>
+          </tr>
+          {{/speeches}}
+        </table>
       </div>
       <div id="footer">
+        <input type="button" onclick="save(function(){location.reload();})" 
+          value="Add row" />
+        <input type="button" onclick="save(function(){goTo('{{corpus}}/{{_id}}');})"
+          value="Save" />
         <a href="http://cassandre-qda.sourceforge.net/about.html">Cassandre</a> &nbsp;
       </div>
-    </div>
+    </form>
   </body>
 </html>

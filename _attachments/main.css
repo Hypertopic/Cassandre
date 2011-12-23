@@ -94,3 +94,24 @@ input.button {
 	top: 40%;
 	left: 30%;
 }
+
+.speeches{
+  display: table;
+}
+
+.speeches-row{
+  display: table-row;
+}
+
+.actor{
+  display: table-cell;
+  font-weight: bold !important;
+  padding: 0 5px 0 0;
+  text-align: right;
+  vertical-align: top;
+}
+
+.words{
+  display:inline-block;
+}
+

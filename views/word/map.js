@@ -1,7 +1,7 @@
 const ALPHA = /[a-zàâçéêèëïîôöüùûæœ0-9]+/gi;
 
 function(o) {
-  if (o.draft!='ongoing') {
+  if (!o.draft) {
     var counts = {};
     for each (var s in o.speeches) {
       var words = s.text.match(ALPHA);

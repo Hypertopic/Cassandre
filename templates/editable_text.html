@@ -17,9 +17,9 @@
       })
       var next = "" + toDoAfter;
       if (next.match(/goTo/g)) {
-        data.draft = "final"; //TODO replace with boolean
+        delete data.draft;
       } else {
-        data.draft = "ongoing";
+        data.draft = true;
       }
       $(".turn").each(function() {
         data.speeches.push({

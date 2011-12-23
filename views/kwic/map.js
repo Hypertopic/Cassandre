@@ -25,7 +25,7 @@ function(o) {
   }
 
   var postStart = o.name.length + COORDINATES_HEADER_OFFSET;
-if (o.draft != 'ongoing') {
+if (!o.draft) {
   for each (p in o.speeches) {
     var postEnd = postStart 
       + (p.actor? p.actor.length : 0) 

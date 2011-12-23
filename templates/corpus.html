@@ -27,14 +27,14 @@
     </script>
   </head>
   <body id="watermark">
-    <div id="container">
-      <form id="menu" method="get">
+    <form id="container" method="get">
+      <div id="menu">
         <input type="button" onClick="self.location='..'" value="Corpora" />
         <select id="by" name="by">
           <option value="name">title</option>
         </select>
         <button type="submit">Sort</button>
-      </form>
+      </div>
       <div id="content">
         <h1>{{corpus}}</h1>
         {{#sections}}
@@ -46,11 +46,11 @@
         </ul>
         {{/sections}}
       </div>
-      <form id="footer">
+      <div id="footer">
         <input type="button" onClick="self.location='../../text_attributes/{{corpus}}'" value="+" />
         <a href="http://cassandre-qda.sourceforge.net/about.html">Cassandre</a> &nbsp;
-      </form>
-    </div>
+      </div>
+    </form>
   </body>
 </html>
 

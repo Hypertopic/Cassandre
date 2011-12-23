@@ -54,11 +54,11 @@ div.post {
   color: white;
   font-size: small;
   position: absolute;
-  text-align: right;
   width: 100%;
 }
 
 #footer a {
+  float: right;
   text-decoration:none;
   color:white;
 }

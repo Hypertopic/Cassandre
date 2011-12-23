@@ -6,17 +6,15 @@
   <body id="watermark">
     <div id="container">
       <div id="content">
-        {{#corpora}}
-        <h1>{{id}}</h1>
+        <h1>Corpora</h1>
         <ul>
-          <p>
-            <a href='../text/{{id}}/?by=name' >{{count}} document(s)</a>
-          </p>
-          <p>[
-            <a onmouseover='style.cursor=pointer' href='../text_attributes/{{id}}' > + </a>
-          ]</p>
+          {{#corpora}}
+          <li>
+            <b>{{id}}</b>&nbsp;–
+            <a href='../text/{{id}}/?by=name' >{{count}} text(s)</a>
+          </li>
+          {{/corpora}}
         </ul>
-        {{/corpora}}
       </div>
       <div id="footer">
         <a href="http://cassandre-qda.sourceforge.net/about.html">Cassandre</a> &nbsp;

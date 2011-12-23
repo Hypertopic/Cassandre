@@ -36,8 +36,9 @@
         <button type="submit">Sort</button>
       </form>
       <div id="content">
+        <h1>{{corpus}}</h1>
         {{#sections}}
-        <h1>{{value}}</h1>
+        <h2>{{value}}</h2>
         <ul>
           {{#texts}}
           <li><a href="{{url}}">{{name}}</a></li>
@@ -45,9 +46,10 @@
         </ul>
         {{/sections}}
       </div>
-      <div id="footer">
+      <form id="footer">
+        <input type="button" onClick="self.location='../../text_attributes/{{corpus}}'" value="+" />
         <a href="http://cassandre-qda.sourceforge.net/about.html">Cassandre</a> &nbsp;
-      </div>
+      </form>
     </div>
   </body>
 </html>

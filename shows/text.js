@@ -8,6 +8,12 @@ function(o, req){
       "headers":{ "Location": "../" + o.corpus + "/" + o._id }
     };
   }
+  if (o.draft) {
+    return {
+      "code": 302, 
+      "headers":{ "Location": "../../editable_text/" + o._id }
+    };
+  }
   var data = {
     _id: o._id,
     corpus: o.corpus,

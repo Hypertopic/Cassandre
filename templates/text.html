@@ -68,25 +68,23 @@
     }
     function highlightWords(type) {
       $("font").each(function() {
-        $(this).attr("color", toColor(wordMetrics(metrics, $(this).text(), type)));
+        $(this).attr("color", toColor(wordMetrics(metrics, $.trim($(this).text()), type)));
       });
     }
     function highlightPhrases() {
       var words = [];
       $("font").each(function(i) {
-        words[i] = {text: $(this).text().toLowerCase()};
+        words[i] = {text: $.trim($(this).text()).toLowerCase()};
       });
       words[0].count = 0;
       words[1].count = 0;
-      words[2].count = 0;
-      words[3].count = 0;
       var max = 0;
-      for (w=0; w<words.length-4; w++) {
-        var nb = trigrams[words[w].text, words[w+2].text, words[w+4].text];
+      for (w=0; w<words.length-2; w++) {
+        var nb = trigrams[words[w].text, words[w+1].text, words[w+2].text];
         if (!nb) nb = 1;
         words[w].count = Math.max(words[w].count, nb);
-        words[w+2].count = Math.max(words[w+2].count, nb);
-        words[w+4].count = nb;
+        words[w+1].count = Math.max(words[w+1].count, nb);
+        words[w+2].count = nb;
         max = Math.max(max, words[w].count);
       }
       $("font").each(function(i) {

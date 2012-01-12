@@ -2,6 +2,7 @@ function(o, req){
   // !json templates.text
   // !code lib/mustache.js
   const ALPHA = /[a-zàâçéêèëïîôöüùû0æœ0-9]+|[^a-zàâçéêèëïîôöüùûæœ0-9]+/gi;
+  const SPACES = /^ +$/;
   if (req.query.corpus!=o.corpus) {
     return {
       "code": 302, 
@@ -27,6 +28,9 @@ function(o, req){
       words: []
     };
     for each (var w in s.text.match(ALPHA)) {
+      if (w.match(SPACES) && speech.words.length>0) {
+        w = speech.words.pop() + w;
+      }
       speech.words.push(w);
     }
     data.speeches.push(speech);

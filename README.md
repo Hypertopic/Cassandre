@@ -22,12 +22,12 @@ Installation procedure
 
 * In any folder:
 
-    git clone git://github.com/Hypertopic/Cassandre.git
-    couchapp push http://127.0.0.1:5984/cassandre
+        git clone git://github.com/Hypertopic/Cassandre.git
+        couchapp push http://127.0.0.1:5984/cassandre
 
 * In a Web folder:
 
-    git clone git://github.com/christophe-lejeune/cassandre_2_php.git
+        git clone git://github.com/christophe-lejeune/cassandre_2_php.git
 
 * Change ``RewriteBase`` in ``.htaccess`` if the web folder is not the Web root.
 

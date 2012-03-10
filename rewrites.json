@@ -47,6 +47,9 @@
     "from": "text/:corpus/:text", 
     "to": "_show/text/:text"
   }, {
+    "from": "text_attributes/", 
+    "to": "text_attributes.html"
+  }, {
     "from": "text_attributes/:corpus", 
     "to": "_list/text_attributes/attribute",
     "query": {

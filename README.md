@@ -5,7 +5,12 @@ License: [GNU Affero General Public License](http://www.gnu.org/licenses/agpl.ht
 
 Contact: <christophe.lejeune@ulg.ac.be>
 
-Home page: <http://cassandre-qda.sf.net/>
+Home page: <https://github.com/Hypertopic/Cassandre>
+
+Notice
+------
+
+Cassandre is a server software. There is no need to install it on your own computer to use it. The usual way is to be "hosted" by one's own institution (ask your system administrator). If your use cases meet our research interests, we can also host your data on our community server.
 
 Installation requirements
 -------------------------

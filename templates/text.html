@@ -95,10 +95,28 @@
       var w = metrics[word.toLowerCase()];
       return (w)?w[type]:.05;
     }
+
+
+    function getSelText() {
+      var txt = '';
+      var url = '/kwic/{{corpus}}/' ;
+      if (window.getSelection) {
+        txt = window.getSelection();
+      }
+      else if (document.getSelection) {
+        txt = document.getSelection();
+      }
+      else if (document.selection) {
+        txt = document.selection.createRange().text;
+      }
+      else return;
+    url = url + txt;
+    document.location.href = url;
+    }
     </script>
   </head>
   <body>
-    <form id="container">
+    <form id="container" name="tokwic">
       <div id="menu">
         <input type="button" onClick="self.location='../{{corpus}}/?by=name'" value="{{corpus}}" />
         <input type="button" onClick="clearHighlights()" value="Raw text" />
@@ -108,6 +126,7 @@
           value="Rare words" disabled="disabled" />
         <input id="repeated" type="button" onClick="highlightPhrases()"
           value="Repeated phrases" disabled="disabled" />
+        <input type="button" value="Kwic" onmousedown="getSelText()"> 
       </div>
       <div id="content">
         <h1>{{name}}</h1>

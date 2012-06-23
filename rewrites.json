@@ -79,7 +79,7 @@
       "endkey": [":corpus", {}],
       "group": true
     }
-  }, { 
+  }, {
     "from": "text_words/:text",
     "to": "_view/word",
     "query": {

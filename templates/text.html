@@ -98,7 +98,9 @@
 
     function prepareKwic() {
       var txt = (document.all) ? document.selection.createRange().text : document.getSelection();
-      if (txt != "") {
+      txt = txt.toString();
+      if (txt != '') {
+        if (txt[0] == ' ') txt = txt.substring(1);
         document.getElementById('kwic').value = txt + " in context";
         $("#kwic").removeAttr("disabled");
       } else { 
@@ -108,12 +110,11 @@
     }
     function gotoKwic() {
       var txt = (document.all) ? document.selection.createRange().text : document.getSelection();
+      txt = txt.toString();
+      if (txt[0] == ' ') txt = txt.substring(1);
       var url = '/kwic/{{corpus}}/' ;
       url = url + txt;
       document.location.href = url;
-    }
-    function gotoKwic0() {
-      document.location.href = document.getElementById('kwic').url.value;
     }
 
     document.onmouseup = prepareKwic;

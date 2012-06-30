@@ -96,23 +96,28 @@
       return (w)?w[type]:.05;
     }
 
-
-    function getSelText() {
-      var txt = '';
-      var url = '/kwic/{{corpus}}/' ;
-      if (window.getSelection) {
-        txt = window.getSelection();
+    function prepareKwic() {
+      var txt = (document.all) ? document.selection.createRange().text : document.getSelection();
+      if (txt != "") {
+        document.getElementById('kwic').value = txt + " in context";
+        $("#kwic").removeAttr("disabled");
+      } else { 
+        document.getElementById('kwic').value = "Kwic";
+        document.getElementById('kwic').disabled = "disabled";
       }
-      else if (document.getSelection) {
-        txt = document.getSelection();
-      }
-      else if (document.selection) {
-        txt = document.selection.createRange().text;
-      }
-      else return;
-    url = url + txt;
-    document.location.href = url;
     }
+    function gotoKwic() {
+      var txt = (document.all) ? document.selection.createRange().text : document.getSelection();
+      var url = '/kwic/{{corpus}}/' ;
+      url = url + txt;
+      document.location.href = url;
+    }
+    function gotoKwic0() {
+      document.location.href = document.getElementById('kwic').url.value;
+    }
+
+    document.onmouseup = prepareKwic;
+
     </script>
   </head>
   <body>
@@ -126,7 +131,8 @@
           value="Rare words" disabled="disabled" />
         <input id="repeated" type="button" onClick="highlightPhrases()"
           value="Repeated phrases" disabled="disabled" />
-        <input type="button" value="Kwic" onmousedown="getSelText()"> 
+        <input id="kwic" type="button" onClick="gotoKwic()"
+          value="Kwic" disabled="disabled" /> 
       </div>
       <div id="content">
         <h1>{{name}}</h1>

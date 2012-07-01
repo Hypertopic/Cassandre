@@ -24,24 +24,79 @@
         }
       });
     });
+
+
+    function remove() {
+      var checked = $(".text :checked");
+      var countdown = checked.size();
+      checked.each(function() {
+        var text = $(this).closest(".text");
+        $.ajax({
+          type: "DELETE",  
+          url: "/" + text.attr("id") + "?rev=" + text.attr("name"),
+          success: function() {
+            countdown--;
+            if (countdown<1) {
+              location.reload();
+            }
+          }
+        });
+      });
+    }
+
+
+    function toggleSelect() {
+      var checked = $("#toggle").is(":checked");
+      $("input[type='checkbox']").each(function() {
+        $(this).attr("checked", checked);
+      });
+    }
+    function resetUI() {
+      $("header>div").replaceWith(
+        "<div id='menu'>"
+        + "<input type='button' onClick='self.location=\"..\"' value='Corpora' /> "
+
+        + "<select id='by' name='by'>"
+        + "<option value='name'>title</option>"
+        + "</select> "
+        + "<button type='submit'>Sort</button> "
+        + "<button type='button' onclick='showDelete()'>Delete...</button>"
+        + "</div>"
+      );
+      $("input[type='checkbox']").remove();
+    }
+
+    function showDelete() {
+      $("header>div").replaceWith(
+        "<div id='menu'>"
+        + "<button onclick='resetUI()' type='button'>Cancel</button>"
+        + "<input id='toggle' type='checkbox' onclick='toggleSelect()'>Select all</button>&nbsp;"
+        + "<button type='button' onclick='remove()'>Delete</button>"
+        + "</div>"
+      );
+      $(".text>span").prepend("<input type='checkbox' />");
+    }
     </script>
   </head>
   <body id="watermark">
     <form id="container" method="get">
+      <header>
       <div id="menu">
         <input type="button" onClick="self.location='..'" value="Corpora" />
         <select id="by" name="by">
           <option value="name">title</option>
         </select>
         <button type="submit">Sort</button>
+        <button type='button' onclick='showDelete()'>Delete...</button>
       </div>
+      </header>
       <div id="content">
         <h1>{{corpus}}</h1>
         {{#sections}}
         <h2>{{value}}</h2>
         <ul>
           {{#texts}}
-          <li><a href="{{url}}">{{name}}</a></li>
+          <li id="{{url}}" name="{{rev}}" class="text"><span/> <a href="{{url}}">{{name}}</a></li>
           {{/texts}}
         </ul>
         {{/sections}}

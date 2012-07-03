@@ -52,6 +52,11 @@
       });
     }
 
+    function insertRow(here) {
+      var n = here.rowIndex + 1;
+      $("<tr class='turn'><td><input type='text' /></td><td><textarea cols='80' rows='3' type='text' /></td></tr>").insertBefore(document.getElementsByTagName("tr")[n]);
+    }
+
     function ShowDialogue() {
       $("header>div").replaceWith(
         "<div id='menu'>"
@@ -95,7 +100,7 @@
         <table>
           <tr><th>Actor</th><th>Speech</th></tr>
           {{#speeches}}
-          <tr class="turn">
+          <tr class="turn" onclick="insertRow(this)" >
             {{#actor}}
             <td>
               <input type="text" value="{{actor}}" /><span />

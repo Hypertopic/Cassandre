@@ -53,8 +53,14 @@
     }
 
     function insertRow(here) {
-      var n = here.rowIndex + 1;
+      var n = here.parentNode.parentNode.rowIndex + 1;
       $("<tr class='turn'><td><input type='text' /></td><td><textarea cols='80' rows='3' type='text' /></td></tr>").insertBefore(document.getElementsByTagName("tr")[n]);
+    }
+
+    function removeRow(here) {
+      var n = here.parentNode.parentNode.rowIndex;
+      former = document.getElementsByTagName("tr")[n];
+      former.parentNode.removeChild(former);
     }
 
     function ShowDialogue() {
@@ -100,14 +106,19 @@
         <table>
           <tr><th>Actor</th><th>Speech</th></tr>
           {{#speeches}}
-          <tr class="turn" onclick="insertRow(this)" >
+          <tr class="turn">
             {{#actor}}
             <td>
               <input type="text" value="{{actor}}" /><span />
             </td>
             {{/actor}}
+            </td>
             <td>
               <textarea cols="80" rows="3" type="text">{{text}}</textarea>
+            </td>
+            <td>
+              <input type="button" onclick="removeRow(this)" value="-"/>
+              <input type="button" onclick="insertRow(this)" value="+"/>
             </td>
           </tr>
           {{/speeches}}

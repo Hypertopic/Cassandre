@@ -22,10 +22,17 @@
         data.draft = true;
       }
       $(".turn").each(function() {
-        data.speeches.push({
-          actor: $(this).children().children("input").val(),
-          text: $(this).children().children("textarea").val()
-        })
+        var actor = "" + $(this).children().children("input").val();
+        if (actor == "") {
+          data.speeches.push({
+            text: $(this).children().children("textarea").val()
+          })
+        } else {
+          data.speeches.push({
+            actor: $(this).children().children("input").val(),
+            text: $(this).children().children("textarea").val()
+          })
+        }
       })
       $.ajax({
         type: "PUT",
@@ -38,13 +45,43 @@
         success: function() {toDoAfter();}
       });
     }
+
+    function monologize() {
+      $(".turn>td>input").each(function() {
+        $(this).val("");
+      });
+    }
+
+    function ShowDialogue() {
+      $("header>div").replaceWith(
+        "<div id='menu'>"
+        + "<input type='button' onclick=\"goTo('')\" value='Corpus' />"
+        + "<button onclick='ShowMonologue()' type='button'>Monologue</button>"
+        + "</div>"
+      );
+      $(".turn>span").prepend("<input type='text' value='{{actor}}' />");
+    }
+
+    function ShowMonologue() {
+      $("header>div").replaceWith(
+        "<div id='menu'>"
+        + "<input type='button' onclick=\"goTo('')\" value='Corpus' />"
+        + "<button onclick='ShowDialogue()' type='button'>Dialogue</button>"
+        + "</div>"
+      );
+      $("input[type='text']").remove();
+    }
+
     </script>
   </head>
   <body id="watermark">
     <form id="container">
-      <div id="menu">
-        <input type="button" onclick="goTo('')" value="Corpus" />
-      </div>
+      <header>
+        <div id="menu">
+          <input type="button" onclick="goTo('')" value="Corpus" />
+          <input type="button" onclick="monologize('')" value="Monologue" />
+        </div>
+      </header>
       <div id="content">
         <fieldset id="attributes">
           <input id="_id" type="hidden" value="{{_id}}" />
@@ -59,9 +96,11 @@
           <tr><th>Actor</th><th>Speech</th></tr>
           {{#speeches}}
           <tr class="turn">
+            {{#actor}}
             <td>
-              <input type="text" value="{{actor}}" />
+              <input type="text" value="{{actor}}" /><span />
             </td>
+            {{/actor}}
             <td>
               <textarea cols="80" rows="3" type="text">{{text}}</textarea>
             </td>

@@ -116,6 +116,10 @@ input.button {
   vertical-align: top;
 }
 
+.insert{
+  vertical-align: bottom;
+}
+
 .words{
   display:inline-block;
 }

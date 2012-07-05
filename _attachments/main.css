@@ -116,8 +116,22 @@ input.button {
   vertical-align: top;
 }
 
-.insert{
-  vertical-align: bottom;
+#remove{
+  cursor:pointer;
+  display:block;
+  text-decoration:none;
+  background: url('x.png') no-repeat;
+  width: 25px; 
+  height: 29px; 
+}
+
+#insert{
+  cursor:pointer;
+  display:block;
+  text-decoration:none;
+  background: url('add.png') no-repeat;
+  width: 25px; 
+  height: 29px; 
 }
 
 .words{

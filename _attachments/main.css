@@ -116,7 +116,7 @@ input.button {
   vertical-align: top;
 }
 
-#remove{
+a#remove:hover{
   cursor:pointer;
   display:block;
   text-decoration:none;
@@ -125,13 +125,18 @@ input.button {
   height: 29px; 
 }
 
-#insert{
+a#insert:hover {
   cursor:pointer;
   display:block;
   text-decoration:none;
   background: url('add.png') no-repeat;
   width: 25px; 
   height: 29px; 
+}
+
+a#insert,a#remove {
+  background: rgba(100,100,100,0);
+  color:rgba(100,100,100,0);
 }
 
 .words{

@@ -53,12 +53,18 @@
     }
 
     function insertRow(here) {
+      var m = document.getElementsByTagName("tr").length;
       var n = here.parentNode.parentNode.parentNode.rowIndex + 1;
-      var newrow =  "<tr class='turn'><td><input type='text' />"
-        + "</td><td><textarea cols='80' rows='3' type='text' /></td>"
-        + '<td><div class="remove"><a onclick="removeRow(this)" id="remove"> </a></div><br/>'
-        + '<div class="insert"><a onclick="insertRow(this)" id="insert"> </a></div></td></tr>';
-      $(newrow).insertBefore(document.getElementsByTagName("tr")[n]);
+      if(n<m){
+        var newrow =  "<tr class='turn'><td><input type='text' />"
+          + "</td><td><textarea cols='80' rows='3' type='text' /></td><td>"
+          + '<div class="remove"><a onclick="removeRow(this)" id="remove"> &nbsp;x&nbsp;</a></div><br/>'
+          + '<div class="insert"><a onclick="insertRow(this)" id="insert"> &nbsp;+&nbsp; </a></div>'
+          + '</td></tr>';
+          $(newrow).insertBefore(document.getElementsByTagName("tr")[n]);
+      } else {
+        save(function(){location.reload();})
+      }     
     }
               
     function removeRow(here) {
@@ -66,6 +72,9 @@
       former = document.getElementsByTagName("tr")[n];
       former.parentNode.removeChild(former);
     }
+
+
+
 
     </script>
   </head>
@@ -101,8 +110,8 @@
               <textarea cols="80" rows="3" type="text">{{text}}</textarea>
             </td>
             <td>
-              <div class="remove"><a onclick="removeRow(this)" id="remove"> </a></div><br/>
-              <div class="insert"><a onclick="insertRow(this)" id="insert"> </a></div>
+              <div class="remove"><a onclick="removeRow(this)" id="remove"> &nbsp;x&nbsp;</a></div><br/>
+              <div class="insert"><a onclick="insertRow(this)" id="insert"> &nbsp;+&nbsp; </a></div>
             </td>
           </tr>
           {{/speeches}}

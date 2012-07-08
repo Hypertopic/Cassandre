@@ -24,9 +24,11 @@ function(o){
     }
   }
   var n = data.speeches.length;
+
   data.speeches.push({
-    actor: (n<2)? "" : data.speeches[n-2].actor,
+    actor: (n<2)? "Erase for monologue" : data.speeches[n-2].actor,
     text: ""
   });
+
   return Mustache.to_html(templates.editable_text, data);
 }

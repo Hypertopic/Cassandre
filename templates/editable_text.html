@@ -22,10 +22,17 @@
         data.draft = true;
       }
       $(".turn").each(function() {
-        data.speeches.push({
-          actor: $(this).children().children("input").val(),
-          text: $(this).children().children("textarea").val()
-        })
+        var actor = "" + $(this).children("#actor").children("input").val();
+        if (actor == "") {
+          data.speeches.push({
+            text: $(this).children().children("textarea").val()
+          })
+        } else {
+          data.speeches.push({
+            actor: $(this).children("#actor").children("input").val(),
+            text: $(this).children().children("textarea").val()
+          })
+        }
       })
       $.ajax({
         type: "PUT",
@@ -38,13 +45,38 @@
         success: function() {toDoAfter();}
       });
     }
+
+    function monologize() {
+      $("#actor>input").each(function() {
+        $(this).val("");
+      });
+    }
+
+    function insertRow(here) {
+      var n = here.parentNode.parentNode.parentNode.rowIndex + 1;
+      var newrow =  "<tr class='turn'><td><input type='text' />"
+        + "</td><td><textarea cols='80' rows='3' type='text' /></td>"
+        + '<td><div class="remove"><a onclick="removeRow(this)" id="remove"> </a></div><br/>'
+        + '<div class="insert"><a onclick="insertRow(this)" id="insert"> </a></div></td></tr>';
+      $(newrow).insertBefore(document.getElementsByTagName("tr")[n]);
+    }
+              
+    function removeRow(here) {
+      var n = here.parentNode.parentNode.parentNode.rowIndex;
+      former = document.getElementsByTagName("tr")[n];
+      former.parentNode.removeChild(former);
+    }
+
     </script>
   </head>
   <body id="watermark">
     <form id="container">
-      <div id="menu">
-        <input type="button" onclick="goTo('')" value="Corpus" />
-      </div>
+      <header>
+        <div id="menu">
+          <input type="button" onclick="goTo('')" value="Corpus" />
+          <input type="button" onclick="monologize('')" value="Monologue" />
+        </div>
+      </header>
       <div id="content">
         <fieldset id="attributes">
           <input id="_id" type="hidden" value="{{_id}}" />
@@ -59,11 +91,18 @@
           <tr><th>Actor</th><th>Speech</th></tr>
           {{#speeches}}
           <tr class="turn">
-            <td>
-              <input type="text" value="{{actor}}" />
+            <td id="actor">
+            {{#actor}}
+              <input type="text" value="{{actor}}" /><span />
+            {{/actor}}
+            </td>
+
+            <td id="speech">
+              <textarea cols="80" rows="3" type="text">{{text}}</textarea>
             </td>
             <td>
-              <textarea cols="80" rows="3" type="text">{{text}}</textarea>
+              <div class="remove"><a onclick="removeRow(this)" id="remove"> </a></div><br/>
+              <div class="insert"><a onclick="insertRow(this)" id="insert"> </a></div>
             </td>
           </tr>
           {{/speeches}}

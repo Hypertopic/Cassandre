@@ -26,7 +26,8 @@ function(head, req) {
       }
       section.texts.push({
         name: row.value.item.name,
-        url: row.value.item.id
+        url: row.value.item.id,
+        rev: row.value.item.rev
       });
       data.sections.push(section);
   }

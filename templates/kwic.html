@@ -1,0 +1,25 @@
+<html>
+  <head>
+    <link rel="icon" type="image/png" href="../../style/favicon.png" />
+    <link rel="stylesheet" type="text/css" href="../../style/main.css" />
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  </head>
+  <body id="watermark">
+    <div id="container">
+      <div id="menu">
+        <input type="button" onClick="document.location='/text/'" value="Corpora" />
+      </div>
+      <div id="content">
+        <h1>Kwic </h1>
+        <pre>
+{{#occurrences}}
+<a href="/text/{{corpus}}/{{id}}">{{before}}{{match}}</a>
+{{/occurrences}}
+        </pre>
+      </div>
+      <div id="footer">
+        <a href="http://cassandre-qda.sourceforge.net/about.html">Cassandre</a> &nbsp;
+      </div>
+    </div>
+  </body>
+</html>

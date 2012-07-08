@@ -21,7 +21,7 @@ function(o) {
       }
       end = aString.length;
     }
-    return preblank + aString.substring(begin, end) + postblank;
+    return preblank + aString.substring(begin, end).replace("\n"," ","g") + postblank;
   }
 
   var postStart = o.name.length + COORDINATES_HEADER_OFFSET;

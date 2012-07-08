@@ -3,6 +3,10 @@ body {
   margin: 0; 
 }
 
+pre a {
+  background-color: white;
+}
+
 #watermark {
   background-image: url(cassandre_background.png); 
   background-position: 100% 0%;
@@ -15,6 +19,7 @@ body {
 }
 
 #menu {
+  color: white;
   background-color: black;
   margin-bottom: 0;
   padding: 2px;
@@ -109,6 +114,24 @@ input.button {
   padding: 0 5px 0 0;
   text-align: right;
   vertical-align: top;
+}
+
+#remove{
+  cursor:pointer;
+  display:block;
+  text-decoration:none;
+  background: url('x.png') no-repeat;
+  width: 25px; 
+  height: 29px; 
+}
+
+#insert{
+  cursor:pointer;
+  display:block;
+  text-decoration:none;
+  background: url('add.png') no-repeat;
+  width: 25px; 
+  height: 29px; 
 }
 
 .words{

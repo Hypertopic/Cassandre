@@ -5,6 +5,22 @@
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
     <script src="../script/jquery.js"></script>
     <script type="text/javascript">
+    $(document).ready(function() {
+      var actors = [];
+      $("#actor").children("input").each(function() {
+        actors = $(this).val();
+      })
+      if (actors.length<1){
+        $("header>div").replaceWith(
+          '<div id="menu">'
+          + '<input type="button" onclick="goTo(\'\')" value="Corpus" />'
+          + '</div>'
+        );
+        $("thead").replaceWith(
+          "<thead><th/><th>Speech</th></thead>"
+        );
+      }
+    });
     function goTo(text) {
       self.location = "../text/" + text;
     }
@@ -45,19 +61,11 @@
         success: function() {toDoAfter();}
       });
     }
-
-    function monologize() {
+    function clearActors() {
       $("#actor>input").each(function() {
         $(this).val("");
       });
     }
-
-    function removeLastRow(){
-      var m = document.getElementsByTagName("tr").length;
-      last = document.getElementsByTagName("tr")[1];
-      last.parentNode.removeChild(last);
-    }
-
     function insertRow(here) {
       var m = document.getElementsByTagName("tr").length;
       var n = here.parentNode.parentNode.parentNode.rowIndex + 1;
@@ -72,8 +80,7 @@
       } else {
       save(function(){location.reload();})
       }
-    }
-              
+    }         
     function removeRow(here) {
       var n = here.parentNode.parentNode.parentNode.rowIndex;
       former = document.getElementsByTagName("tr")[n];
@@ -87,7 +94,7 @@
       <header>
         <div id="menu">
           <input type="button" onclick="goTo('')" value="Corpus" />
-          <input type="button" onclick="monologize('')" value="Monologue" />
+          <input type="button" onclick="clearActors('')" value="Clear all actors" />
         </div>
       </header>
       <div id="content">
@@ -101,7 +108,7 @@
           {{/attributes}}
         </fieldset>
         <table>
-          <tr><th>Actor</th><th>Speech</th></tr>
+          <tr><thead><th>Actor</th><th>Speech</th></thead></tr>
           {{#speeches}}
           <tr class="turn">
             <td id="actor">

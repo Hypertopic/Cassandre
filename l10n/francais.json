@@ -17,8 +17,9 @@
   "Speech": 			"Tour de parole",
   "Clear all actors":		"Effacer les acteurs",
   "Add row":		 	"Ajouter un tour de parole",
-  "Name":		 	"Titre",
   "title":		 	"Titre",
   "Kwic":		 	"Concordances",
+  "New text":		 	"Nouveau texte",
+  "Set attributes":	 	"Enregistrer les attributs",
   "in context":		 	"en contexte"
 }

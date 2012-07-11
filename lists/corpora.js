@@ -1,6 +1,8 @@
 function(head, req) {
   // !json templates.corpora
   // !code lib/mustache.js
+  // !json l10n.francais  
+  // !code l10n/l10n.js
   start({"headers":{"Content-Type":"text/html;charset=utf-8"}});
   var data = {
     corpora: []
@@ -11,7 +13,7 @@ function(head, req) {
       count: row.value
     });
   }
-  return Mustache.to_html(templates.corpora, data);
+  return Mustache.to_html(local(templates.corpora), data);
 }
 
 

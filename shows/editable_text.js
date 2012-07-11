@@ -1,6 +1,8 @@
 function(o){
   // !json templates.editable_text
   // !code lib/mustache.js
+  // !json l10n.francais  
+  // !code l10n/l10n.js
   var data = {
     attributes:[],
     speeches: []
@@ -30,5 +32,5 @@ function(o){
     text: ""
   });
 
-  return Mustache.to_html(templates.editable_text, data);
+  return Mustache.to_html(local(templates.editable_text), data);
 }

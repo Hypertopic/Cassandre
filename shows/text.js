@@ -1,6 +1,8 @@
 function(o, req){
   // !json templates.text
+  // !json l10n.francais  
   // !code lib/mustache.js
+  // !code l10n/l10n.js
   const ALPHA = /[a-zàâçéêèëïîôöüùû0æœ0-9]+|[^a-zàâçéêèëïîôöüùûæœ0-9]+/gi;
   const SPACES = /^ +$/;
   if (req.query.corpus!=o.corpus) {
@@ -35,5 +37,5 @@ function(o, req){
     }
     data.speeches.push(speech);
   }
-  return Mustache.to_html(templates.text, data);
+  return Mustache.to_html(local(templates.text), data);
 }

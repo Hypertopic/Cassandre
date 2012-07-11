@@ -1,6 +1,8 @@
 function(head, req) {
   // !json templates.corpus
   // !code lib/mustache.js
+  // !json l10n.francais  
+  // !code l10n/l10n.js
   start({"headers":{"Content-Type":"text/html;charset=utf-8"}});
   var data = {
     by: req.query.by,
@@ -31,5 +33,5 @@ function(head, req) {
       });
       data.sections.push(section);
   }
-  return Mustache.to_html(templates.corpus, data);
+  return Mustache.to_html(local(templates.corpus), data);
 }

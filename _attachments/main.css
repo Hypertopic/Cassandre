@@ -7,6 +7,12 @@ pre a {
   background-color: white;
 }
 
+form {
+  margin-bottom: 0px;
+}
+
+
+
 #watermark {
   background-image: url(cassandre_background.png); 
   background-position: 100% 0%;

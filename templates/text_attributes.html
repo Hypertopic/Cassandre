@@ -4,19 +4,47 @@
     <link rel="stylesheet" type="text/css" href="../style/main.css" />
     <script src="../script/jquery.js"></script>
     <script type="text/javascript">
+    $(document).ready(function() {
+      var corpus = $("#corpus").val();
+      const attr = 
+          '<div class="custom">'
+            +'<label class="actor"><input type="text" placeholder="attribute" /></label>'
+            +'<input type="text" placeholder="value" />'
+            +'</div>';
+      if (corpus.length<1){
+        $("h1").replaceWith(
+          '<h1>New text in a new corpus</h1>'
+        );
+        $("#submit").before(
+           attr + attr + attr + attr
+        );
+      } else {
+        // Ajouter la propriété  readonly="readonly" à corpus
+        $("#corpus").attr({
+           readonly: "readonly"
+        });
+      }
+    });
     function upload() {
-      var data = {};
-      $('input').each(function() {
-        data[$(this).attr("id")] = $(this).val();
-      });
-      $.ajax({
-        url: "../",
-        type: "POST",
-        dataType: "json",
-        contentType: "application/json",
-        data: JSON.stringify(data),
-        success: function(data) {location.replace("../editable_text/"+ data.id)}
-      });
+      var data = {
+        "name": $("#name").val(),
+        "corpus": $("#corpus").val()
+      };
+      if (data.name && data.corpus) {
+        $(".custom").each(function() {
+          var key = $(this).children(".actor").children("input").val();
+          if (key)
+            data[key] = $(this).children("input").val();
+        });
+        $.ajax({
+          url: "../",
+          type: "POST",
+          dataType: "json",
+          contentType: "application/json",
+          data: JSON.stringify(data),
+          success: function(data) {location.replace("../editable_text/"+ data.id)}
+        });
+      }
     }
     </script>
   </head>
@@ -27,26 +55,26 @@
         <form>
           <fieldset>
             <legend>Attributes</legend>
-            <table>
-              <tr>
-                <th><label>title</label></th>
-                <td><input id="name" type="text" /></td>
-              </tr>
-              <tr>
-                <th><label>corpus</label></th>
-                <td><input id="corpus" type="text" value="{{corpus}}" /></td>
-              </tr>
+            <div class="speeches">
+              <div class="speeches-row">
+                <label class="actor">title</label>
+                <input id="name" type="text" />
+              </div>
+              <div class="speeches-row">
+                <label class="actor">corpus</label>
+                <input id="corpus" type="text" value="{{corpus}}" />
+              </div>
               {{#attributes}}
-              <tr>
-                <th><label>{{.}}</label></th>
-                <td><input id="{{.}}" type="text" /></td>
-              </tr>
+              <div class="custom">
+                <label class="actor"><input type="hidden" value="{{.}}">{{.}}</label>
+                <input id="{{.}}" type="text" />
+              </div>
               {{/attributes}}
-              <tr>
-                <th></th>
-                <td><button type="button" onclick="upload()">Set attributes</button></td>
-              </tr>
-            </table>
+              <div class="speeches-row" id="submit">
+                <label class="actor"></label>
+                <button type="button" onclick="upload()">Set attributes</button>
+              </div>
+            </div>
           </fieldset>
         </form>
       </div>

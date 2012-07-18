@@ -74,13 +74,18 @@ div.post {
   color:white;
 }
 
-label {
+#attributes>label {
 	text-transform:capitalize;
 	display: block;
 	width: 70%;
 	float: left;
 	text-align: left;
 	color: gray;
+}
+
+input.actor {
+  text-transform:capitalize;
+  display: table-cell;
 }
 
 input.button {
@@ -111,6 +116,10 @@ input.button {
 }
 
 .speeches-row{
+  display: table-row;
+}
+
+.custom{
   display: table-row;
 }
 

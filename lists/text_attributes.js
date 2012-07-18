@@ -1,6 +1,8 @@
 function(head, req) {
   // !json templates.text_attributes
   // !code lib/mustache.js
+  // !json l10n.francais  
+  // !code l10n/l10n.js
   start({"headers":{"Content-Type" : "text/html;charset=utf-8"}});
   var row;
   var data = {attributes:[]};
@@ -17,6 +19,6 @@ function(head, req) {
         data.attributes.push(row.key[1]);
     }
   }
-  return Mustache.to_html(templates.text_attributes, data);
+  return Mustache.to_html(local(templates.text_attributes), data);
 }
 

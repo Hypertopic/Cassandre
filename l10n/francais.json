@@ -2,6 +2,7 @@
   "Texts Qualitative Analysis":	"Analyse qualitative de textes",
   "Qualitative Research":	"Recherche qualitative",
   "New text in a new corpus":	"Nouveau texte dans un nouveau corpus",
+  "in a new corpus":		"dans un nouveau corpus",
   "Edit":			"Éditer",
   "text(s)":			"texte(s)",
   "Delete":			"Supprimer",
@@ -23,5 +24,6 @@
   "Kwic":		 	"Concordances",
   "New text":		 	"Nouveau texte",
   "Set attributes":	 	"Enregistrer les attributs",
+  "Attributes":	 		"Attributs",
   "in context":		 	"en contexte"
 }

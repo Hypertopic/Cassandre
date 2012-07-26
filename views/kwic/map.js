@@ -5,6 +5,21 @@ function(o) {
   const COORDINATES_HEADER_OFFSET = 1;
   const COORDINATES_ROW_OFFSET = 1;
 
+  function emitPattern(word, charIndex, postContent, postStart, postEnd, postActor) {
+    const WORD_POSITION = charIndex - word.length;
+    const KWIC_START = WORD_POSITION - KWIC_OFFSET;
+    const PATTERN = extract(postContent, WORD_POSITION, KWIC_START + KWIC_FRAME);
+    const VALUE = {
+      before: extract(postContent, KWIC_START, KWIC_START + KWIC_OFFSET),
+      begin: postStart,
+      match: postStart+WORD_POSITION,
+      end: postEnd,
+      actor: postActor
+    };
+    emit([o.corpus, PATTERN], VALUE);
+    emit([o._id, PATTERN], VALUE);
+  }
+
   function extract(aString, begin, end) {
     var preblank = "";
     if (begin < 0) {
@@ -37,21 +52,13 @@ if (!o.draft) {
       if (!character.match(WORD_CUTTER)) {
         word += character;
       } else if (word.length>0) {
-        const WORD_POSITION = charIndex - word.length;
-        const KWIC_START = WORD_POSITION - KWIC_OFFSET;
-        const PATTERN = extract(p.text, WORD_POSITION, KWIC_START + KWIC_FRAME);
-        const VALUE = {
-          before: extract(p.text, KWIC_START, KWIC_START + KWIC_OFFSET),
-          begin: postStart,
-          match: postStart+WORD_POSITION,
-          end: postEnd,
-          actor: p.actor
-        };
-        emit([o.corpus, PATTERN], VALUE);
-        emit([o._id, PATTERN], VALUE);
+        emitPattern(word, charIndex, p.text, postStart, postEnd, p.actor);
         word = "";
       }
       charIndex++;
+    }
+    if (word == p.text) {
+      emitPattern(word, charIndex, p.text, postStart, postEnd, p.actor);
     }
     postStart = postEnd + COORDINATES_ROW_OFFSET;  
   }

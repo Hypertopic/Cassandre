@@ -1,7 +1,6 @@
 function(o, req){
   // !json templates.editable_text
   // !code lib/mustache.js
-  // !json l10n.francais  
   // !code l10n/l10n.js
   var data = {
     attributes:[],

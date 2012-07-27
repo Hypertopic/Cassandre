@@ -1,6 +1,5 @@
 function(o, req) {
   // !json templates.index
-  // !json l10n.francais  
   // !code l10n/l10n.js
   if('Accept' in req.headers && req.headers['Accept'].indexOf('json')>0) {
     return {

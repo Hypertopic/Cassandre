@@ -14,5 +14,5 @@ function(head, req) {
       match: row.key[1]
     });
   }
-  return Mustache.to_html(templates.kwic, data);
+  return Mustache.to_html(local(templates.kwic), data);
 }

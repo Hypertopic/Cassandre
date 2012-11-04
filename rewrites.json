@@ -21,7 +21,7 @@
        "query": {
            "startkey": [":corpus", ":attribute", ":value"],
            "endkey": [":corpus", ":attribute", ":value", {}],
-           "reduce": false
+           "reduce": "false"
        }
    }, {
     "from": "user/:user",
@@ -33,7 +33,7 @@
     "from": "text/", 
     "to": "_list/corpora/corpora",
     "query": {
-      "group": true
+      "group": "true"
     }
   }, {
     "from": "text/:corpus/", 
@@ -41,7 +41,7 @@
     "query": {
       "startkey": [":corpus", ":by"],
       "endkey": [":corpus", ":by", {}],
-      "reduce": false
+      "reduce": "false"
     }
   }, {
     "from": "text/:corpus/:text", 
@@ -74,7 +74,7 @@
     "query": {
       "startkey": [":corpus"],
       "endkey": [":corpus", {}],
-      "group": true
+      "group": "true"
     }
   }, { 
     "from": "corpus_words/:corpus",
@@ -82,7 +82,7 @@
     "query": {
       "startkey": [":corpus"],
       "endkey": [":corpus", {}],
-      "group": true
+      "group": "true"
     }
   }, {
     "from": "text_words/:text",
@@ -90,7 +90,7 @@
     "query": {
       "startkey": [":text"],
       "endkey": [":text", {}],
-      "reduce": false
+      "reduce": "false"
     }
   }, { 
     "from": "", 

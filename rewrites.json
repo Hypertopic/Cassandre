@@ -92,6 +92,16 @@
       "endkey": [":text", {}],
       "reduce": "false"
     }
+  }, {
+    "from": "kwic/",
+    "to": "_list/kwics/corpus_pattern"
+  }, {
+    "from": "kwic/:corpus",
+    "to": "_list/kwics/corpus_pattern",
+    "query": {
+      "startkey": ":corpus",
+      "endkey": ":corpus"
+    }
   }, { 
     "from": "", 
     "to": "../../",

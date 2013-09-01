@@ -33,7 +33,7 @@
         var text = $(this).closest(".text");
         $.ajax({
           type: "DELETE",  
-          url: "/" + text.attr("id") + "?rev=" + text.attr("name"),
+          url: "../../" + text.attr("id") + "?rev=" + text.attr("name"),
           success: function() {
             countdown--;
             if (countdown<1) {

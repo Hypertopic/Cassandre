@@ -5,7 +5,7 @@
        "query": {
            "startkey": [":corpus"],
            "endkey": [":corpus", {}],
-           "group_level": 2
+           "group_level": "2"
        }
    }, {
        "from": "attribute/:corpus/:attribute/",
@@ -13,7 +13,7 @@
        "query": {
            "startkey": [":corpus", ":attribute"],
            "endkey": [":corpus", ":attribute", {}],
-           "group_level": 3
+           "group_level": "3"
        }
    }, {
        "from": "attribute/:corpus/:attribute/:value",
@@ -52,7 +52,7 @@
     "query": {
       "startkey": [":corpus"],
       "endkey": [":corpus", {}],
-      "group_level": 2
+      "group_level": "2"
     }
   }, {
     "from": "text_attributes/:corpus", 
@@ -60,7 +60,7 @@
     "query": {
       "startkey": [":corpus"],
       "endkey": [":corpus", {}],
-      "group_level": 2
+      "group_level": "2"
     }
   }, {
     "from": "editable_text/:text", 

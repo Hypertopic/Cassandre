@@ -2,6 +2,7 @@ function(o) {
 
   function isReserved(key) {
     return key.charAt(0)=='_'
+      || key=='highlights'
       || key=='speeches';
   }
 

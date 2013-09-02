@@ -3,6 +3,7 @@ function(o, req){
   // !code lib/mustache.js
   // !code l10n/l10n.js
   var data = {
+    highlights: "{}",
     attributes:[],
     speeches: []
   }
@@ -13,6 +14,9 @@ function(o, req){
       case 'corpus':
       case 'speeches':
         data[key] = o[key];
+        break;
+      case 'highlights':
+        data.highlights = toJSON(o[key]);
         break;
       case 'draft':
       case '_revisions':

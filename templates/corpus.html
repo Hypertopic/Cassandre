@@ -26,7 +26,7 @@
     });
 
 
-    function remove() {
+    function deleteText() {
       var checked = $(".text :checked");
       var countdown = checked.size();
       checked.each(function() {
@@ -71,7 +71,7 @@
         "<div id='menu'>"
         + "<button onclick='resetUI()' type='button'>Cancel</button>"
         + "<input id='toggle' type='checkbox' onclick='toggleSelect()'>Select all</button>&nbsp;"
-        + "<button type='button' onclick='remove()'>Delete</button>"
+        + "<button type='button' onclick='deleteText()'>Delete</button>"
         + "</div>"
       );
       $(".text>span").prepend("<input type='checkbox' />");

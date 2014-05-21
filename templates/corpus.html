@@ -1,4 +1,5 @@
 <html>
+  {{#i18n}}
   <head>
     <link rel="icon" type="image/png" href="../../style/favicon.png" />
     <link rel="stylesheet" type="text/css" href="../../style/main.css" />
@@ -57,7 +58,7 @@
         + "<input type='button' onClick='self.location=\"..\"' value='Corpora' /> "
 
         + "<select id='by' name='by'>"
-        + "<option value='name'>title</option>"
+        + "<option value='name'>{{i_title}}</option>"
         + "</select> "
         + "<button type='submit'>Sort</button> "
         + "<button type='button' onclick='showDelete()'>Delete...</button>"
@@ -84,11 +85,11 @@
       <div id="menu">
         <input type="button" onClick="self.location='..'" value="Corpora" />
         <select id="by" name="by">
-          <option value="name">title</option>
+          <option value="name">{{i_title}}</option>
         </select>
-        <button type="submit">Sort</button>
-        <button type='button' onclick='showDelete()'>Delete...</button>
-        <input type='button' onClick="self.location='../../kwic/{{corpus}}'" value="Kwic" />
+        <button type="submit">{{i_sort}}</button>
+        <button type='button' onclick='showDelete()'>{{i_delete}}...</button>
+        <input type='button' onClick="self.location='../../kwic/{{corpus}}'" value="{{i_kwic}}" />
       </div>
       </header>
       <div id="content">
@@ -108,5 +109,6 @@
       </div>
     </form>
   </body>
+  {{/i18n}}
 </html>
 

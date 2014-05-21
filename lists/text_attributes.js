@@ -4,7 +4,10 @@ function(head, req) {
   // !code l10n/l10n.js
   start({"headers":{"Content-Type" : "text/html;charset=utf-8"}});
   var row;
-  var data = {attributes:[]};
+  var data = {
+    i18n: localized(),
+    attributes:[]
+  };
   while (row = getRow()) {
     var attribute = row.key[1];
     switch (attribute) {
@@ -18,6 +21,6 @@ function(head, req) {
         data.attributes.push(row.key[1]);
     }
   }
-  return Mustache.to_html(local(templates.text_attributes), data);
+  return Mustache.to_html(templates.text_attributes, data);
 }
 

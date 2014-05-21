@@ -1,4 +1,5 @@
 <html>
+  {{#i18n}}
   <head>
     <link rel="icon" type="image/png" href="../style/favicon.png" />
     <link rel="stylesheet" type="text/css" href="../style/main.css" />
@@ -13,11 +14,11 @@
       if (actors.length<1){
         $("header>div").replaceWith(
           '<div id="menu">'
-          + '<input type="button" onclick="goTo(\'\')" value="Corpus" />'
+          + '<input type="button" onclick="goTo(\'\')" value="{{i_corpus}}" />'
           + '</div>'
         );
         $("thead").replaceWith(
-          "<thead><th/><th>Speech</th></thead>"
+          "<thead><th/><th>{{i_speech}}</th></thead>"
         );
       }
     });
@@ -94,8 +95,8 @@
     <form id="container">
       <header>
         <div id="menu">
-          <input type="button" onclick="goTo('')" value="Corpus" />
-          <input type="button" onclick="clearActors('')" value="Clear all actors" />
+          <input type="button" onclick="goTo('')" value="{{i_corpus}}" />
+          <input type="button" onclick="clearActors('')" value="{{i_clear_actors}}" />
         </div>
       </header>
       <div id="content">
@@ -109,7 +110,7 @@
           {{/attributes}}
         </fieldset>
         <table>
-          <tr><thead><th>Actor</th><th>Speech</th></thead></tr>
+          <tr><thead><th>{{i_actor}}</th><th>{{i_speech}}</th></thead></tr>
           {{#speeches}}
           <tr class="turn">
             <td id="actor">
@@ -131,11 +132,12 @@
       </div>
       <div id="footer">
         <input type="button" onclick="save(function(){location.reload();})" 
-          value="Add row" />
+          value="{{i_add_row}}" />
         <input type="button" onclick="save(function(){goTo('{{corpus}}/{{_id}}');})"
-          value="Save" />
+          value="{{i_save}}" />
         <a href="http://cassandre-qda.sourceforge.net/about.html">Cassandre</a> &nbsp;
       </div>
     </form>
   </body>
+  {{/i18n}}
 </html>

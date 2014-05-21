@@ -3,6 +3,7 @@ function(o, req){
   // !code lib/mustache.js
   // !code l10n/l10n.js
   var data = {
+    i18n: localized(),
     highlights: "{}",
     attributes:[],
     speeches: []
@@ -31,9 +32,9 @@ function(o, req){
   var n = data.speeches.length;
 
   data.speeches.push({
-    actor: (n<2)? "Erase for monologue" : data.speeches[n-2].actor,
+    actor: (n<2)? "..." : data.speeches[n-2].actor,
     text: ""
   });
 
-  return Mustache.to_html(local(templates.editable_text), data);
+  return Mustache.to_html(templates.editable_text, data);
 }

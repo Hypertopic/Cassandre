@@ -17,6 +17,7 @@ function(o, req){
     };
   }
   var data = {
+    i18n: localized(),
     _id: o._id,
     corpus: o.corpus,
     name: o.name,
@@ -36,5 +37,5 @@ function(o, req){
     }
     data.speeches.push(speech);
   }
-  return Mustache.to_html(local(templates.text), data);
+  return Mustache.to_html(templates.text, data);
 }

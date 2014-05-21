@@ -1,14 +1,16 @@
-/*
-  l10n.js — Localisation templates in JavaScript
-*/
-function local(str) {
-    if (req.headers["Accept-Language"].indexOf('fr')>-1) {
-      // !json l10n.francais  
-      var dico = l10n.francais ;
-      for ( key in dico ) {
-        str = str.replace( new RegExp( key.replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1") , 'g' ), dico[ key ] );
+// !json l10n.i18n
+
+function localized() {
+  var available = "en";
+  var required = req.headers["Accept-Language"];
+  if (required) {
+    for each (var l in required.split(",")) {
+      var preferred = l.substring(0,2);
+      if (l10n.i18n.hasOwnProperty(preferred)) {
+        available = preferred;
+        break;
       }
     }
-  return str;
+  }
+  return l10n.i18n[available];
 }
-

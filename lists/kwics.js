@@ -4,6 +4,7 @@ function(head, req) {
   // !code l10n/l10n.js
   start({"headers":{"Content-Type":"text/html;charset=utf-8"}});
   var data = {
+    i18n: localized(),
     kwics: []
   };
   while (row = getRow()) {
@@ -14,7 +15,7 @@ function(head, req) {
       kwic: row.value.text
     });
   }
-  return Mustache.to_html(local(templates.kwics), data);
+  return Mustache.to_html(templates.kwics, data);
 }
 
 

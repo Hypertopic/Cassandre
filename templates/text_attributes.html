@@ -1,4 +1,5 @@
 <html>
+  {{#i18n}}
   <head>
     <link rel="icon" type="image/png" href="../style/favicon.png" />
     <link rel="stylesheet" type="text/css" href="../style/main.css" />
@@ -8,12 +9,12 @@
       var corpus = $("#corpus").val();
       const attr = 
           '<div class="custom">'
-            +'<label class="actor"><input type="text" placeholder="attribute" /></label>'
-            +'<input type="text" placeholder="value" />'
+            +'<label class="actor"><input type="text" placeholder="{{i_attribute}}" /></label>'
+            +'<input type="text" placeholder="{{i_value}}" />'
             +'</div>';
       if (corpus.length<1){
         $("h1").replaceWith(
-          '<h1>New text in a new corpus</h1>'
+          '<h1>{{i_new_corpus}}</h1>'
         );
         $("#submit").before(
            attr + attr + attr + attr
@@ -51,17 +52,17 @@
   <body id="watermark">
     <div id="container">
       <div id="content">
-        <h1>New text </h1>
+        <h1>{{i_new_text}}</h1>
         <form>
           <fieldset>
-            <legend>Attributes</legend>
+            <legend>{{i_attributes}}</legend>
             <div class="speeches">
               <div class="speeches-row">
-                <label class="actor">title</label>
+                <label class="actor">{{i_title}}</label>
                 <input id="name" type="text" />
               </div>
               <div class="speeches-row">
-                <label class="actor">corpus</label>
+                <label class="actor">{{i_corpus}}</label>
                 <input id="corpus" type="text" value="{{corpus}}" />
               </div>
               {{#attributes}}
@@ -72,7 +73,7 @@
               {{/attributes}}
               <div class="speeches-row" id="submit">
                 <label class="actor"></label>
-                <button type="button" onclick="upload()">Set attributes</button>
+                <button type="button" onclick="upload()">{{i_set_attributes}}</button>
               </div>
             </div>
           </fieldset>
@@ -83,5 +84,6 @@
       </div>
     </div>
   </body>
+  {{/i18n}}
 </html>
 

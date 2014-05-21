@@ -4,6 +4,7 @@ function(head, req) {
   // !code l10n/l10n.js
   start({"headers":{"Content-Type":"text/html;charset=utf-8"}});
   var data = {
+    i18n: localized(),
     occurrences: []
   };
   while (row = getRow()) {
@@ -14,5 +15,5 @@ function(head, req) {
       match: row.key[1]
     });
   }
-  return Mustache.to_html(local(templates.kwic), data);
+  return Mustache.to_html(templates.kwic, data);
 }

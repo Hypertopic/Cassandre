@@ -1,4 +1,5 @@
 <html>
+  {{#i18n}}
   <head>
     <link rel="icon" type="image/png" href="../../style/favicon.png" />
     <link rel="stylesheet" type="text/css" href="../../style/main.css" />
@@ -101,10 +102,10 @@
       txt = txt.toString();
       if (txt != '') {
         if (txt[0] == ' ') txt = txt.substring(1);
-        document.getElementById('kwic').value = txt + " in context";
+        document.getElementById('kwic').value = txt + " {{i_in_context}}";
         $("#kwic").removeAttr("disabled");
       } else { 
-        document.getElementById('kwic').value = "Kwic";
+        document.getElementById('kwic').value = "{{i_kwic}}";
         document.getElementById('kwic').disabled = "disabled";
       }
     }
@@ -125,15 +126,15 @@
     <form id="container">
       <div id="menu">
         <input type="button" onClick="self.location='../{{corpus}}/?by=name'" value="{{corpus}}" />
-        <input type="button" onClick="clearHighlights()" value="Raw text" />
+        <input type="button" onClick="clearHighlights()" value="{{i_raw}}" />
         <input id="specific" type="button" onClick="highlightWords('specific')"
-          value="Specific words" disabled="disabled" />
+          value="{{i_specific}}" disabled="disabled" />
         <input id="rare" type="button" onClick="highlightWords('rare')"
-          value="Rare words" disabled="disabled" />
+          value="{{i_rare}}" disabled="disabled" />
         <input id="repeated" type="button" onClick="highlightPhrases()"
-          value="Repeated phrases" disabled="disabled" />
+          value="{{i_phrases}}" disabled="disabled" />
         <input id="kwic" type="button" onClick="gotoKwic()"
-          value="Kwic" disabled="disabled" /> 
+          value="{{i_kwic}}" disabled="disabled" />
       </div>
       <div id="content">
         <h1>{{name}}</h1>
@@ -158,9 +159,10 @@
           </div>
       </div>
       <div id="footer">
-        <input type="button" onClick="self.location='../../editable_text/{{_id}}'" value="Edit" />
+        <input type="button" onClick="self.location='../../editable_text/{{_id}}'" value="{{i_edit}}" />
         <a href="http://cassandre-qda.sourceforge.net/about.html">Cassandre</a> &nbsp;
       </div>
     </form>
   </body>
+  {{/i18n}}
 </html>

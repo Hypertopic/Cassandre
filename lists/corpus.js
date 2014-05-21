@@ -4,6 +4,7 @@ function(head, req) {
   // !code l10n/l10n.js
   start({"headers":{"Content-Type":"text/html;charset=utf-8"}});
   var data = {
+    i18n: localized(),
     by: req.query.by,
     corpus: req.query.corpus,
     sections: []
@@ -32,5 +33,5 @@ function(head, req) {
       });
       data.sections.push(section);
   }
-  return Mustache.to_html(local(templates.corpus), data);
+  return Mustache.to_html(templates.corpus, data);
 }

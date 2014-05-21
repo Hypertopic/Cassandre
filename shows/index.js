@@ -1,5 +1,6 @@
 function(o, req) {
   // !json templates.index
+  // !code lib/mustache.js
   // !code l10n/l10n.js
   if('Accept' in req.headers && req.headers['Accept'].indexOf('json')>0) {
     return {
@@ -13,7 +14,7 @@ function(o, req) {
     }
   } else {
     return {
-      body: local(templates.index),
+      body: Mustache.to_html(templates.index, {i18n: localized()}),
       headers: { 
         "Content-Type": "text/html",
       }

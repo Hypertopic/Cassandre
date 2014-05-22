@@ -3,6 +3,7 @@
     <link rel="icon" type="image/png" href="../../style/favicon.png" />
     <link rel="stylesheet" type="text/css" href="../../style/main.css" />
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <script src="../../script/jquery.js"></script>
   </head>
   <body id="watermark">
     <div id="container">
@@ -14,13 +15,45 @@
 	<h2>{{i18n.i_occurrences}}: {{pattern}}</h2>
         <pre>
 {{#occurrences}}
-<a href="../../text/{{corpus}}/{{id}}">{{before}}{{match}}</a>
+<a data-text="{{id}}" class="occurrence" href="../../text/{{corpus}}/{{id}}">{{before}}{{match}}</a>
 {{/occurrences}}
         </pre>
       </div>
       <div id="footer">
+        <input type="button" id="new_pattern" value="{{i18n.i_new_pattern}}" />
         <a href="http://cassandre-qda.sourceforge.net/about.html">Cassandre</a> &nbsp;
       </div>
     </div>
+  <script> 
+  function getUUID() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+      return v.toString(16);
+    });
+  }
+
+  $('#new_pattern').on('click',function(){
+    var text_id = $('.occurrence').data('text');
+    $.ajax({
+      url: "../../" + text_id,
+      type: "GET",
+      dataType: "json",
+      success: function(text) {
+        if (!text.highlights) {
+          text.highlights = {};
+        }
+        text.highlights[getUUID()] = {
+          text: "{{pattern}}"
+        }
+        $.ajax({
+          url: "../../" + text_id,
+          type: "PUT",
+          contentType: "application/json",
+          data: JSON.stringify(text)
+        });
+      }
+    });
+  });
+  </script> 
   </body>
 </html>

@@ -26,6 +26,7 @@
     "i_set_attributes": "Set attributes",
     "i_attributes": "Attributes",
     "i_occurrences": "Occurrences",
+    "i_new_pattern": "Save pattern",
     "i_in_context": "in context"
   },
   "fr": {
@@ -55,6 +56,7 @@
     "i_set_attributes": "Enregistrer les attributs",
     "i_attributes": "Attributs",
     "i_occurrences": "Occurrences ",
+    "i_new_pattern": "Enregistrer comme marqueur",
     "i_in_context": "en contexte"
   }
 }

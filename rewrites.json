@@ -118,6 +118,6 @@
     "to": ":file"
   }, {
     "from": "script/:file", 
-    "to": "../../../_utils/script/:file"
+    "to": ":file"
   }
 ]

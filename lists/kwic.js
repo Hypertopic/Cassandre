@@ -3,8 +3,11 @@ function(head, req) {
   // !code lib/mustache.js
   // !code l10n/l10n.js
   start({"headers":{"Content-Type":"text/html;charset=utf-8"}});
+  var parameters = req.query.startkey;
   var data = {
     i18n: localized(),
+    corpus: parameters[0],
+    pattern: parameters[1],
     occurrences: []
   };
   while (row = getRow()) {

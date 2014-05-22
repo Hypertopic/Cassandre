@@ -25,6 +25,7 @@
     "i_value": "Value",
     "i_set_attributes": "Set attributes",
     "i_attributes": "Attributes",
+    "i_occurrences": "Occurrences",
     "i_in_context": "in context"
   },
   "fr": {
@@ -53,6 +54,7 @@
     "i_value": "Valeur",
     "i_set_attributes": "Enregistrer les attributs",
     "i_attributes": "Attributs",
+    "i_occurrences": "Occurrences ",
     "i_in_context": "en contexte"
   }
 }

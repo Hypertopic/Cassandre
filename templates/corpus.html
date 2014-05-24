@@ -61,8 +61,8 @@
         + "<select id='by' name='by'>"
         + "<option value='name'>{{i_title}}</option>"
         + "</select> "
-        + "<button type='submit'>Sort</button> "
-        + "<button type='button' onclick='showDelete()'>Delete...</button>"
+        + "<button type='submit'>{{i_sort}}</button> "
+        + "<button type='button' onclick='showDelete()'>{{i_delete}}...</button>"
         + "</div>"
       );
       $("input[type='checkbox']").remove();
@@ -71,9 +71,9 @@
     function showDelete() {
       $("header>div").replaceWith(
         "<div id='menu'>"
-        + "<button onclick='resetUI()' type='button'>Cancel</button>"
-        + "<input id='toggle' type='checkbox' onclick='toggleSelect()'>Select all</button>&nbsp;"
-        + "<button type='button' onclick='deleteText()'>Delete</button>"
+        + "<button onclick='resetUI()' type='button'>{{i_cancel}}</button>"
+        + "<input id='toggle' type='checkbox' onclick='toggleSelect()'>{{i_select}}</button>&nbsp;"
+        + "<button type='button' onclick='deleteText()'>{{i_delete}}</button>"
         + "</div>"
       );
       $(".text>span").prepend("<input type='checkbox' />");

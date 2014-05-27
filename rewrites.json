@@ -99,8 +99,7 @@
     "from": "kwic/:corpus",
     "to": "_list/kwics/corpus_pattern",
     "query": {
-      "startkey": ":corpus",
-      "endkey": ":corpus"
+      "key": ":corpus"
     }
   }, { 
     "from": "", 

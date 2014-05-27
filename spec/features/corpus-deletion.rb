@@ -12,10 +12,12 @@ feature 'Delete a corpus' do
     fill_in 'name', :with => $a_title
     fill_in 'corpus', :with => $a_corpus
     click_on 'Enregistrer les attributs'
+    page.should have_content 'Tour de parole'
+    click_on 'Enregistrer'
   end
   
   scenario 'checking if corpus exists' do
-    visit '/text/' + $a_corpus + '/?by=name'
+    click_on $a_corpus
     click_on 'Supprimer...'
     check 'toggle'
     click_on 'Supprimer'

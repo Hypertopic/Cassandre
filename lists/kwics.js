@@ -11,7 +11,9 @@ function(head, req) {
     data.kwics.push({
       id: row.key,
       corpus: row.key,
+      document: row.id,
       count: row.value,
+      highlight: row.value.highlight,
       kwic: row.value.text
     });
   }

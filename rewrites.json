@@ -70,7 +70,7 @@
     "to": "_list/resource/resource"
   }, {
     "from": "phrase/:corpus", 
-    "to": "_view/phrase",
+    "to": "_list/phrase/phrase",
     "query": {
       "startkey": [":corpus"],
       "endkey": [":corpus", {}],

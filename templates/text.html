@@ -8,7 +8,7 @@
     <script src="../../script/jquery.js"></script>
     <script type="text/javascript">
     var metrics = {};
-    var trigrams = [];
+    var trigrams = {};
     $(document).ready(function() {
       $.ajax({
         url: "../../corpus_words/{{corpus}}",
@@ -53,7 +53,7 @@
         success: function(phrases) {
           for (var l in phrases.rows) {
             var r = phrases.rows[l];
-            trigrams[r.key[1], r.key[2], r.key[3]] = r.value;
+            trigrams[[r.key[1], r.key[2], r.key[3]]] = r.value;
           }
           $("#repeated").removeAttr("disabled");
         }
@@ -82,7 +82,7 @@
       words[1].count = 0;
       var max = 0;
       for (w=0; w<words.length-2; w++) {
-        var nb = trigrams[words[w].text, words[w+1].text, words[w+2].text];
+        var nb = trigrams[[words[w].text, words[w+1].text, words[w+2].text]];
         if (!nb) nb = 1;
         words[w].count = Math.max(words[w].count, nb);
         words[w+1].count = Math.max(words[w+1].count, nb);

@@ -6,7 +6,7 @@ function(o, req) {
     return {
       body: JSON.stringify({
         service: 'Cassandre', 
-        revision: '2.13.12.28',
+        revision: '2.14.08.27',
         update_seq: req.info.update_seq
       }), headers: { 
         "Content-Type": "application/json",

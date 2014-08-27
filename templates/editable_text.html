@@ -57,8 +57,11 @@
         url: "../{{_id}}",
         contentType: "application/json",
         data: JSON.stringify(data),
-        error: function() {
-          alert("Someone has probably edited the text meanwhile!");
+        error: function(request) {
+          alert(
+            (JSON.parse(request.responseText).reason || request.responseText)
+            + '\nCode ' + request.status
+          );
         },
         success: function() {toDoAfter();}
       });

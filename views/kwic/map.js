@@ -39,7 +39,7 @@ function(o) {
     return preblank + aString.substring(begin, end).replace(/[\n\s]/g," ") + postblank;
   }
 
-  var postStart = o.name.length + COORDINATES_HEADER_OFFSET;
+  var postStart = (o.name? o.name.length : 0) + COORDINATES_HEADER_OFFSET;
 if (!o.draft) {
   for each (p in o.speeches) {
     var postEnd = postStart 

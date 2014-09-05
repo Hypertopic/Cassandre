@@ -41,14 +41,14 @@ function(o) {
 
   var postStart = (o.name? o.name.length : 0) + COORDINATES_HEADER_OFFSET;
 if (!o.draft) {
-  for each (p in o.speeches) {
+  for each (var p in o.speeches) {
     var postEnd = postStart 
       + (p.actor? p.actor.length : 0) 
       + (p.timestamp? p.timestamp.length : 0) 
       + p.text.length;
     var charIndex = 0;
     var word = "";
-    for each (character in p.text) {
+    for each (var character in p.text) {
       if (!character.match(WORD_CUTTER)) {
         word += character;
       } else if (word.length>0) {

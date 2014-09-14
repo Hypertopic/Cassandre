@@ -93,8 +93,8 @@
       "reduce": "false"
     }
   }, {
-    "from": "kwic/",
-    "to": "_list/kwics/corpus_pattern"
+    "from": "kwic",
+    "to": "_list/kwic/kwic"
   }, {
     "from": "kwic/:corpus",
     "to": "_list/kwics/corpus_pattern",

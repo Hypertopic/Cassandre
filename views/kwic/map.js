@@ -15,8 +15,13 @@ function (o) {
       while ((match = WORD_MATCHER.exec(speech_text))) {
         var keyword = speech_text.substr(match.index, KEYWORD_LENGTH);
         var context_begin = match.index - OFFSET;
+        var context_length = FRAME;
+        if (context_begin<0) {
+          context_length += context_begin;
+          context_begin = 0;
+        }
         var value = {
-          context: speech_text.substr(context_begin>0? context_begin : 0, FRAME),
+          context: speech_text.substr(context_begin, context_length),
           begin: speech_begin,
           end: speech_end,
           match: speech_begin + match.index

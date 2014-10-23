@@ -64,6 +64,7 @@
       <header>
       <div id="menu">
         <button type='button' onclick='showDelete()'>{{i18n.i_delete}}...</button>
+        <input id="kwic" type="search" placeholder="{{i18n.i_search}}" />
       </div>
       </header>
       <div id="content">
@@ -81,5 +82,14 @@
       </div>
     </div>
   </body>
+  <script>
+
+$('#kwic').on('keypress', function(key) {
+  if (key.which == 13) {
+    self.location = '../kwic/{{corpus}}/' + $('#kwic').val().toLowerCase();
+  }
+});
+
+  </script>
 </html>
 

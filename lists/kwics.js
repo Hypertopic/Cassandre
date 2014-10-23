@@ -5,14 +5,12 @@ function(head, req) {
   start({"headers":{"Content-Type":"text/html;charset=utf-8"}});
   var data = {
     i18n: localized(),
+    corpus: req.query.corpus,
     kwics: []
   };
   while (row = getRow()) {
     data.kwics.push({
-      id: row.key,
-      corpus: row.key,
       document: row.id,
-      count: row.value,
       highlight: row.value.highlight,
       kwic: row.value.text
     });

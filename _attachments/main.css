@@ -28,7 +28,7 @@ form {
   color: white;
   background-color: black;
   margin-bottom: 0;
-  padding: 2px;
+  padding: 4px;
 }
 
 #content {
@@ -158,3 +158,6 @@ a#insert,a#remove {
   display:inline-block;
 }
 
+#kwic {
+  float: right;
+}

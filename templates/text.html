@@ -98,29 +98,6 @@
       return (w)?w[type]:.05;
     }
 
-    function prepareKwic() {
-      var txt = (document.all) ? document.selection.createRange().text : document.getSelection();
-      txt = txt.toString();
-      if (txt != '') {
-        if (txt[0] == ' ') txt = txt.substring(1);
-        document.getElementById('kwic').value = txt + " {{i_in_context}}";
-        $("#kwic").removeAttr("disabled");
-      } else { 
-        document.getElementById('kwic').value = "{{i_kwic}}";
-        document.getElementById('kwic').disabled = "disabled";
-      }
-    }
-    function gotoKwic() {
-      var txt = (document.all) ? document.selection.createRange().text : document.getSelection();
-      txt = txt.toString();
-      if (txt[0] == ' ') txt = txt.substring(1);
-      var url = '../../kwic/{{corpus}}/' ;
-      url = url + txt;
-      document.location.href = url;
-    }
-
-    document.onmouseup = prepareKwic;
-
     </script>
   </head>
   <body>
@@ -134,8 +111,7 @@
           value="{{i_rare}}" disabled="disabled" />
         <input id="repeated" type="button" onClick="highlightPhrases()"
           value="{{i_phrases}}" disabled="disabled" />
-        <input id="kwic" type="button" onClick="gotoKwic()"
-          value="{{i_kwic}}" disabled="disabled" />
+        <input id="kwic" type="search" placeholder="{{i_search}}" />
       </div>
       <div id="content">
         <h1>{{name}}</h1>
@@ -166,4 +142,23 @@
     </form>
   </body>
   {{/i18n}}
+  <script>
+
+String.prototype.trimLeft = String.prototype.trimLeft || function() {
+  return this.replace(/^\s+/,'');
+};
+
+$('#content').on('mouseup', function() {
+  $('#kwic').val(
+    document.getSelection().toString().trimLeft()
+  );
+});
+
+$('#kwic').on('keypress', function(key) {
+  if (key.which == 13) {
+    self.location = '../../kwic/{{corpus}}/' + $('#kwic').val().toLowerCase();
+  }
+});
+
+  </script>
 </html>

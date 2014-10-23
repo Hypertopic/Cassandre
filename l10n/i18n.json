@@ -27,7 +27,7 @@
     "i_attributes": "Attributes",
     "i_occurrences": "Occurrences",
     "i_new_pattern": "Save pattern",
-    "i_in_context": "in context"
+    "i_search": "Search in the corpus..."
   },
   "fr": {
     "i_qda": "Analyse qualitative de textes",
@@ -57,6 +57,6 @@
     "i_attributes": "Attributs",
     "i_occurrences": "Occurrences ",
     "i_new_pattern": "Enregistrer comme marqueur",
-    "i_in_context": "en contexte"
+    "i_search": "Chercher dans le corpus..."
   }
 }

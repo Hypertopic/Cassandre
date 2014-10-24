@@ -16,6 +16,7 @@ function(head, req) {
     var v = row.value;
     var missing = v.begin + OFFSET - v.match;
     data.occurrences.push({
+      title: v.title,
       corpus: row.key[0],
       id: row.id,
       context: ' '.repeat(missing>0? missing : 0)

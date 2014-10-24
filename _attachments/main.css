@@ -161,3 +161,17 @@ a#insert,a#remove {
 #kwic {
   float: right;
 }
+
+.occurrence{
+  display: table-row;
+}
+
+.occurrence>div{
+  display:table-cell;
+}
+
+.context{
+  font-family: monospace;
+  white-space: pre;
+  padding-right: 10;
+}

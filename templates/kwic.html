@@ -9,15 +9,17 @@
     <div id="container">
       <div id="menu">
         <input type="button" onClick="self.location='../../text/{{corpus}}/?by=name'" value="{{corpus}}" />
+        <input id="kwic" type="search" placeholder="{{i18n.i_search}}" />
       </div>
       <div id="content">
         <h1>{{i18n.i_kwic}}</h1>
-	<h2>{{i18n.i_occurrences}}: {{pattern}}</h2>
-        <pre>
-{{#occurrences}}
-<a data-text="{{id}}" class="occurrence" href="../../text/{{corpus}}/{{id}}">{{context}}</a>
-{{/occurrences}}
-        </pre>
+        <h2>{{i18n.i_occurrences}}: {{pattern}}</h2>
+        {{#occurrences}}
+        <div class="occurrence" data-text="{{id}}">
+          <div class="context">{{context}}</div>
+          <div>[<a href="../../text/{{corpus}}/{{id}}">{{title}}</a>]</div>
+        </div>
+        {{/occurrences}}
       </div>
       <div id="footer">
         <input type="button" id="new_pattern" value="{{i18n.i_new_pattern}}" />
@@ -55,6 +57,23 @@
       }
     });
   });
+
+  String.prototype.trimLeft = String.prototype.trimLeft || function() {
+    return this.replace(/^\s+/,'');
+  };
+
+  $('#content').on('mouseup', function() {
+    $('#kwic').val(
+      document.getSelection().toString().trimLeft()
+    );
+  });
+
+  $('#kwic').on('keypress', function(key) {
+    if (key.which == 13) {
+      self.location = $('#kwic').val().toLowerCase();
+    }
+  });
+
   </script> 
   </body>
 </html>

@@ -21,6 +21,7 @@ function (o) {
           context_begin = 0;
         }
         var value = {
+          title: o.name,
           context: speech_text.substr(context_begin, context_length),
           begin: speech_begin,
           end: speech_end,

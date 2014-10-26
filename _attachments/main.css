@@ -72,6 +72,7 @@ div.post {
   float: right;
   text-decoration:none;
   color:white;
+  padding: 4px 6px;
 }
 
 #attributes>label {

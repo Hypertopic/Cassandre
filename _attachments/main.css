@@ -18,13 +18,16 @@ form {
   position: relative;
 }
 
-#menu {
+.menu {
   color: white;
   background-color: black;
+  width: 100%;
+}
+
+#header {
   margin-bottom: 0;
   padding: 4px;
   position: fixed;
-  width: 100%;
 }
 
 #menu>* {
@@ -59,19 +62,16 @@ div.post {
 }
 
 #footer {
-  background-color: black;
   bottom: 0;
-  color: white;
-  font-size: small;
   position: absolute;
-  width: 100%;
 }
 
 #footer a {
   float: right;
   text-decoration:none;
-  color:white;
+  color: white;
   padding: 4px 6px;
+  font-size: small;
 }
 
 #attributes>label {

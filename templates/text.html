@@ -102,7 +102,7 @@
   </head>
   <body>
     <form id="container">
-      <div id="menu">
+      <div id="header" class="menu">
         <input type="button" onClick="self.location='../{{corpus}}/?by=name'" value="{{corpus}}" />
         <input type="button" onClick="clearHighlights()" value="{{i_raw}}" />
         <input id="specific" type="button" onClick="highlightWords('specific')"
@@ -135,7 +135,7 @@
           {{/speeches}}
           </div>
       </div>
-      <div id="footer">
+      <div id="footer" class="menu">
         <input type="button" onClick="self.location='../../editable_text/{{_id}}'" value="{{i_edit}}" />
         <a href="http://cassandre-qda.sourceforge.net/about.html">Cassandre</a>
       </div>

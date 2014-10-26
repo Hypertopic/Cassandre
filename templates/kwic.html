@@ -7,7 +7,7 @@
   </head>
   <body id="watermark">
     <div id="container">
-      <div id="menu">
+      <div id="header" class="menu">
         <input type="button" onClick="self.location='../../text/{{corpus}}/?by=name'" value="{{corpus}}" />
         <input id="kwic" type="search" placeholder="{{i18n.i_search}}" />
       </div>
@@ -21,7 +21,7 @@
         </div>
         {{/occurrences}}
       </div>
-      <div id="footer">
+      <div id="footer" class="menu">
         <input type="button" id="new_pattern" value="{{i18n.i_new_pattern}}" />
         <a href="http://cassandre-qda.sourceforge.net/about.html">Cassandre</a>
       </div>

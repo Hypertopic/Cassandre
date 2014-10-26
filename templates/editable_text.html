@@ -97,7 +97,7 @@
   <body id="watermark">
     <form id="container">
       <header>
-        <div id="menu">
+        <div id="header" class="menu">
           <input type="button" onclick="goTo('')" value="{{i_corpus}}" />
           <input type="button" onclick="clearActors('')" value="{{i_clear_actors}}" />
         </div>
@@ -133,7 +133,7 @@
           {{/speeches}}
         </table>
       </div>
-      <div id="footer">
+      <div id="footer" class="menu">
         <input type="button" onclick="save(function(){location.reload();})" 
           value="{{i_add_row}}" />
         <input type="button" onclick="save(function(){goTo('{{corpus}}/{{_id}}');})"

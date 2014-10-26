@@ -1,100 +1,13 @@
 <html>
-  {{#i18n}}
   <head>
     <title>{{corpus}}</title>
     <link rel="icon" type="image/png" href="../../style/favicon.png" />
     <link rel="stylesheet" type="text/css" href="../../style/main.css" />
-    <script src="../../script/jquery.js"></script>
-    <script type="text/javascript">
-    $(document).ready(function() {
-      $.ajax({
-        url: "../../attribute/{{corpus}}/",
-        type: "GET",
-        dataType: "json",
-        success: function(result) {
-          const BY = "{{by}}";
-          $.each(result.rows, function(i, o) {
-            var attribute = o.key[1];
-            if ("name"!=attribute && "corpus"!=attribute) {
-              $("#by").append(
-                "<option"
-                + ((attribute==BY)?" selected":"")
-                + ">" + attribute + "</option>"
-              );
-            }
-          });
-        }
-      });
-    });
-
-
-    function deleteText() {
-      var checked = $(".text :checked");
-      var countdown = checked.size();
-      if (!countdown) {
-        resetUI();
-      }
-      checked.each(function() {
-        var text = $(this).closest(".text");
-        $.ajax({
-          type: "DELETE",  
-          url: "../../" + text.attr("id") + "?rev=" + text.attr("name"),
-          success: function() {
-            countdown--;
-            if (countdown<1) {
-              location.reload();
-            }
-          }
-        });
-      });
-    }
-
-
-    function toggleSelect() {
-      var checked = $("#toggle").is(":checked");
-      $("input[type='checkbox']").each(function() {
-        $(this).attr("checked", checked);
-      });
-    }
-    function resetUI() {
-      $("header>div").replaceWith(
-        "<div id='menu'>"
-        + "<input type='button' onClick='self.location=\"..\"' value='Corpora' /> "
-
-        + "<select id='by' name='by'>"
-        + "<option value='name'>{{i_title}}</option>"
-        + "</select> "
-        + "<button type='submit'>{{i_sort}}</button> "
-        + "<button type='button' onclick='showDelete()'>{{i_delete}}...</button>"
-        + "</div>"
-      );
-      $("input[type='checkbox']").remove();
-    }
-
-    function showDelete() {
-      $("header>div").replaceWith(
-        "<div id='menu'>"
-        + "<button onclick='resetUI()' type='button'>{{i_cancel}}</button>"
-        + "<input id='toggle' type='checkbox' onclick='toggleSelect()'>{{i_select}}</button>&nbsp;"
-        + "<button type='button' onclick='deleteText()'>{{i_delete}}</button>"
-        + "</div>"
-      );
-      $(".text>span").prepend("<input type='checkbox' />");
-    }
-    </script>
   </head>
   <body id="watermark">
-    <form id="container" method="get">
+    <div id="container">
       <header>
-      <div id="menu">
-        <input type="button" onClick="self.location='..'" value="Corpora" />
-        <select id="by" name="by">
-          <option value="name">{{i_title}}</option>
-        </select>
-        <button type="submit">{{i_sort}}</button>
-        <button type='button' onclick='showDelete()'>{{i_delete}}...</button>
-        <input type='button' onClick="self.location='../../kwic/{{corpus}}'" value="{{i_kwic}}" />
-      </div>
+        <div id="menu" />
       </header>
       <div id="content">
         <h1>{{corpus}}</h1>
@@ -108,11 +21,105 @@
         {{/sections}}
       </div>
       <div id="footer">
-        <input type="button" onClick="self.location='../../text_attributes/{{corpus}}'" value="+" />
-        <a href="http://cassandre-qda.sourceforge.net/about.html">Cassandre</a> &nbsp;
+        <button type="button" id="create">{{i18n.i_create}}</button>
+        <a href="http://cassandre-qda.sourceforge.net/about.html">Cassandre</a>
       </div>
-    </form>
+    </div>
   </body>
-  {{/i18n}}
+  <script src="../../script/jquery.js"></script>
+  <script>
+
+  resetUI();
+  $.ajax({
+    url: "../../attribute/{{corpus}}/",
+    type: "GET",
+    dataType: "json",
+    success: function(result) {
+      const BY = "{{by}}";
+      $.each(result.rows, function(i, o) {
+        var attribute = o.key[1];
+        if ("name"!=attribute && "corpus"!=attribute) {
+          $("#sort").append(
+            "<option"
+            + ((attribute==BY)?" selected":"")
+            + ">" + attribute + "</option>"
+          );
+        }
+      });
+    }
+  });
+
+  $('#sort').on('change', function() {
+    self.location = '?by=' + $('#sort').val();
+  });
+
+  $('#create').on('click', function() {
+    self.location = '../../text_attributes/{{corpus}}';
+  });
+
+  $('#menu')
+    .on('click', '#corpora', function() {
+      self.location = '..';
+    })
+
+    .on('click', '#patterns', function() {
+      self.location = '../../kwic/{{corpus}}';
+    })
+
+    .on('click', '#show_delete', function() {
+      $("#menu").html(
+        '<button id="cancel" type="button">{{i18n.i_cancel}}</button>'
+        + '<input id="toggle" type="checkbox">{{i18n.i_select}}</button>'
+        + '<button id="delete" type="button">{{i18n.i_delete}}</button>'
+      );
+      $(".text>span").prepend("<input type='checkbox' />");
+    })
+
+    .on('click', '#cancel', function() {
+      resetUI();
+    })
+
+    .on('click', '#toggle', function() {
+      var checked = $("#toggle").is(":checked");
+      $("input[type='checkbox']").each(function() {
+        $(this).attr("checked", checked);
+      });
+    })
+
+    .on('click', '#delete', function() {
+      var checked = $(".text :checked");
+      var countdown = checked.size();
+      if (!countdown) {
+        resetUI();
+      }
+      checked.each(function() {
+        var text = $(this).closest(".text");
+        $.ajax({
+          type: "DELETE",
+          url: "../../" + text.attr("id") + "?rev=" + text.attr("name"),
+          success: function() {
+            countdown--;
+            if (countdown<1) {
+              location.reload();
+            }
+          }
+        });
+      });
+    });
+
+  function resetUI() {
+    $("#menu").html(
+      '<button type="button" id="corpora">{{i18n.i_corpora}}</button>'
+      + '{{i18n.i_sort}}'
+      + '<select id="sort">'
+      + '<option value="name">{{i18n.i_title}}</option>'
+      + '</select>'
+      + '<button type="button" id="show_delete">{{i18n.i_delete}}...</button>'
+      + '<button type="button" id="patterns">{{i18n.i_kwic}}</button>'
+    );
+    $("input[type='checkbox']").remove();
+  }
+
+  </script>
 </html>
 

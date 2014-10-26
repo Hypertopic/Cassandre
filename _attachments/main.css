@@ -3,15 +3,9 @@ body {
   margin: 0; 
 }
 
-pre a {
-  background-color: white;
-}
-
 form {
   margin-bottom: 0px;
 }
-
-
 
 #watermark {
   background-image: url(cassandre_background.png); 
@@ -55,7 +49,6 @@ td {
   text-align: left;
 }
 
-
 div.timestamp {
   background-color: LightGray;
   margin-bottom: 6px;
@@ -93,10 +86,6 @@ div.post {
 input.actor {
   text-transform:capitalize;
   display: table-cell;
-}
-
-input.button {
-	float: left;
 }
 
 #attributes {

@@ -29,6 +29,8 @@ form {
   background-color: black;
   margin-bottom: 0;
   padding: 4px;
+  position: fixed;
+  width: 100%;
 }
 
 #content {

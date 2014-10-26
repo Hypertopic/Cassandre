@@ -17,10 +17,18 @@
         </ul>
       </div>
       <div id="footer">
-        <input type="button" onClick="self.location='../text_attributes/'" value="+" />
+        <button type="button" id="create">{{i18n.i_create}}</button>
         <a href="http://cassandre-qda.sourceforge.net/about.html">Cassandre</a>
       </div>
     </div>
   </body>
+  <script src="../script/jquery.js"></script>
+  <script>
+
+  $('#create').on('click', function() {
+    self.location = '../text_attributes/';
+  });
+
+  </script>
 </html>
 

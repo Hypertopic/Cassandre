@@ -31,6 +31,9 @@
     function deleteText() {
       var checked = $(".text :checked");
       var countdown = checked.size();
+      if (!countdown) {
+        resetUI();
+      }
       checked.each(function() {
         var text = $(this).closest(".text");
         $.ajax({

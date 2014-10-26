@@ -33,6 +33,10 @@ form {
   width: 100%;
 }
 
+#menu>* {
+  margin: 0px 2px;
+}
+
 #content {
   padding: 30px;
 }
@@ -163,6 +167,7 @@ a#insert,a#remove {
 
 #kwic {
   float: right;
+  margin: 0px 10px;
 }
 
 .occurrence{

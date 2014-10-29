@@ -97,7 +97,7 @@
     "to": "_list/kwic/kwic"
   }, {
     "from": "kwic/:corpus",
-    "to": "_list/kwics/corpus_pattern",
+    "to": "_list/patterns/corpus_pattern",
     "query": {
       "key": ":corpus"
     }

@@ -3,12 +3,11 @@
     <link rel="icon" type="image/png" href="../../style/favicon.png" />
     <link rel="stylesheet" type="text/css" href="../../style/main.css" />
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-    <script src="../../script/jquery.js"></script>
   </head>
   <body id="watermark">
     <div id="container">
       <div id="header" class="menu">
-        <input type="button" onClick="self.location='../../text/{{corpus}}/?by=name'" value="{{corpus}}" />
+        <button type="button" id="corpus">{{corpus}}</button>
         <input id="kwic" type="search" placeholder="{{i18n.i_search}}" />
       </div>
       <div id="content">
@@ -26,7 +25,14 @@
         <a href="http://cassandre-qda.sourceforge.net/about.html">Cassandre</a>
       </div>
     </div>
+  </body>
+  <script src="../../script/jquery.js"></script>
   <script> 
+
+  $('#corpus').on('click', function(){
+    self.location = '../../text/{{corpus}}/?by=name';
+  });
+
   function getUUID() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
       var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
@@ -75,5 +81,4 @@
   });
 
   </script> 
-  </body>
 </html>

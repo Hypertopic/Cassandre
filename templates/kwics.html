@@ -52,6 +52,9 @@
     .on('click', '#delete', function() {
       var checked = $(".kwic :checked");
       var countdown = checked.size();
+      if (!countdown) {
+        resetUI();
+      }
       checked.each(function() {
         var kwic = $(this).closest(".kwic");
         var text_id = "../" + kwic.data('text');

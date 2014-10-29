@@ -7,6 +7,7 @@
     <div id="container">
       <header>
       <div id="header" class="menu">
+        <button type="button" id="corpus">{{corpus}}</button>
         <input id="kwic" type="search" placeholder="{{i18n.i_search}}" />
       </div>
       </header>
@@ -27,6 +28,10 @@
   <script>
 
   resetUI();
+
+  $('#corpus').on('click', function(){
+    self.location = '../text/{{corpus}}/?by=name';
+  });
 
   $('#footer')
     .on('click', '#show_delete', function() {

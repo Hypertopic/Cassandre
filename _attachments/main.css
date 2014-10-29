@@ -22,12 +22,12 @@ form {
   color: white;
   background-color: black;
   width: 100%;
+  position: fixed;
 }
 
 #header {
   margin-bottom: 0;
   padding: 4px;
-  position: fixed;
 }
 
 #menu>* {
@@ -63,7 +63,6 @@ div.post {
 
 #footer {
   bottom: 0;
-  position: absolute;
 }
 
 #footer a {

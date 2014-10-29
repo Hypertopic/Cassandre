@@ -2,7 +2,7 @@
   "en": {
     "i_qda": "Texts Qualitative Analysis",
     "i_corpora": "Corpora",
-    "i_create": "+",
+    "i_create": "Create...",
     "i_new_corpus": "New text in a new corpus",
     "i_edit": "Edit",
     "i_texts": "text(s)",
@@ -35,7 +35,7 @@
   "fr": {
     "i_qda": "Analyse qualitative de textes",
     "i_corpora": "Corpus",
-    "i_create": "+",
+    "i_create": "Créer...",
     "i_new_corpus": "Nouveau texte dans un nouveau corpus",
     "i_edit": "Éditer",
     "i_texts": "texte(s)",

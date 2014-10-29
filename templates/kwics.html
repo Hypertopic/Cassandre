@@ -2,68 +2,11 @@
   <head>
     <link rel="icon" type="image/png" href="../style/favicon.png" />
     <link rel="stylesheet" type="text/css" href="../style/main.css" />
-    <script src="../script/jquery.js"></script>
-    <script type="text/javascript">
-    function deleteKwic() {
-      var checked = $(".kwic :checked");
-      var countdown = checked.size();
-      checked.each(function() {
-        var kwic = $(this).closest(".kwic");
-        var kwic_id = kwic.attr("id");
-        var text_id = kwic.data('text');
-        $.ajax({
-          url: "../" + text_id,
-          type: "GET",
-          dataType: "json",
-          success: function(text) {
-            delete text.highlights[kwic_id];
-            $.ajax({
-              url: "../" + text_id,
-              type: "PUT",
-              contentType: "application/json",
-              data: JSON.stringify(text),
-              success: function() {
-                countdown--;
-                if (countdown<1) {
-                  location.reload();
-                }
-              }
-            });
-          }
-        });
-      });
-    }
-    function toggleSelect() {
-      var checked = $("#toggle").is(":checked");
-      $("input[type='checkbox']").each(function() {
-        $(this).attr("checked", checked);
-      });
-    }
-    function resetUI() {
-      $("header>div").replaceWith(
-        "<div id='menu'>"
-        + "<button type='button' onclick='showDelete()'>{{i18n.i_delete}}...</button>"
-        + "</div>"
-      );
-      $("input[type='checkbox']").remove();
-    }
-    function showDelete() {
-      $("header>div").replaceWith(
-        "<div id='menu'>"
-        + "<button onclick='resetUI()' type='button'>{{i18n.i_cancel}}</button>"
-        + "<input id='toggle' type='checkbox' onclick='toggleSelect()'>{{i18n.i_select}}</button>&nbsp;"
-        + "<button type='button' onclick='deleteKwic()'>{{i18n.i_delete}}</button>"
-        + "</div>"
-      );
-      $(".kwic>span").prepend("<input type='checkbox' />");
-    }
-    </script>
   </head>
   <body id="watermark">
     <div id="container">
       <header>
       <div id="header" class="menu">
-        <button type='button' onclick='showDelete()'>{{i18n.i_delete}}...</button>
         <input id="kwic" type="search" placeholder="{{i18n.i_search}}" />
       </div>
       </header>
@@ -77,18 +20,77 @@
           {{/kwics}}
         </ul>
       </div>
-      <div id="footer" class="menu">
-        <a href="http://cassandre-qda.sourceforge.net/about.html">Cassandre</a>
-      </div>
+      <div id="footer" class="menu" />
     </div>
   </body>
+  <script src="../script/jquery.js"></script>
   <script>
 
-$('#kwic').on('keypress', function(key) {
-  if (key.which == 13) {
-    self.location = '../kwic/{{corpus}}/' + $('#kwic').val().toLowerCase();
+  resetUI();
+
+  $('#footer')
+    .on('click', '#show_delete', function() {
+      $("#footer").html(
+        '<button id="cancel" type="button">{{i18n.i_cancel}}</button>'
+        + '<input id="toggle" type="checkbox">{{i18n.i_select}}</button>'
+        + '<button id="delete" type="button">{{i18n.i_delete}}</button>'
+      );
+      $(".kwic>span").prepend("<input type='checkbox' />");
+    })
+
+    .on('click', '#cancel', function() {
+      resetUI();
+    })
+
+    .on('click', '#toggle', function() {
+      var checked = $('#toggle').is(':checked');
+      $('input[type="checkbox"]').each(function() {
+        $(this).attr('checked', checked);
+      });
+    })
+
+    .on('click', '#delete', function() {
+      var checked = $(".kwic :checked");
+      var countdown = checked.size();
+      checked.each(function() {
+        var kwic = $(this).closest(".kwic");
+        var text_id = "../" + kwic.data('text');
+        $.ajax({
+          url: text_id,
+          type: "GET",
+          dataType: "json",
+          success: function(text) {
+            delete text.highlights[kwic.attr("id")];
+            $.ajax({
+              url: text_id,
+              type: "PUT",
+              contentType: "application/json",
+              data: JSON.stringify(text),
+              success: function() {
+                countdown--;
+                if (countdown<1) {
+                  location.reload();
+                }
+              }
+            });
+          }
+        });
+      });
+    });
+
+  $('#kwic').on('keypress', function(key) {
+    if (key.which == 13) {
+      self.location = '../kwic/{{corpus}}/' + $('#kwic').val().toLowerCase();
+    }
+  });
+
+  function resetUI() {
+    $('#footer').html(
+      '<button type="button" id="show_delete">{{i18n.i_delete}}...</button>'
+      + '<a href="http://cassandre-qda.sourceforge.net/about.html">Cassandre</a>'
+    );
+    $('input[type="checkbox"]').remove();
   }
-});
 
   </script>
 </html>

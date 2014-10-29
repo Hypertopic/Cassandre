@@ -7,7 +7,14 @@
   <body id="watermark">
     <div id="container">
       <header>
-        <div id="menu" />
+        <div id="header" class="menu">
+          <button type="button" id="corpora">{{i18n.i_corpora}}</button>
+          {{i18n.i_sort}}
+          <select id="sort">
+            <option value="name">{{i18n.i_title}}</option>
+          </select>
+          <button type="button" id="patterns">{{i18n.i_patterns}}</button>
+        </div>
       </header>
       <div id="content">
         <h1>{{corpus}}</h1>
@@ -20,9 +27,7 @@
         </ul>
         {{/sections}}
       </div>
-      <div id="footer">
-        <button type="button" id="create">{{i18n.i_create}}</button>
-        <a href="http://cassandre-qda.sourceforge.net/about.html">Cassandre</a>
+      <div id="footer" class="menu">
       </div>
     </div>
   </body>
@@ -57,17 +62,18 @@
     self.location = '../../text_attributes/{{corpus}}';
   });
 
-  $('#menu')
+  $('#header')
     .on('click', '#corpora', function() {
       self.location = '..';
     })
 
     .on('click', '#patterns', function() {
       self.location = '../../kwic/{{corpus}}';
-    })
+    });
 
+  $('#footer')
     .on('click', '#show_delete', function() {
-      $("#menu").html(
+      $("#footer").html(
         '<button id="cancel" type="button">{{i18n.i_cancel}}</button>'
         + '<input id="toggle" type="checkbox">{{i18n.i_select}}</button>'
         + '<button id="delete" type="button">{{i18n.i_delete}}</button>'
@@ -108,14 +114,10 @@
     });
 
   function resetUI() {
-    $("#menu").html(
-      '<button type="button" id="corpora">{{i18n.i_corpora}}</button>'
-      + '{{i18n.i_sort}}'
-      + '<select id="sort">'
-      + '<option value="name">{{i18n.i_title}}</option>'
-      + '</select>'
+    $("#footer").html(
+      '<button type="button" id="create">{{i18n.i_create}}</button>'
       + '<button type="button" id="show_delete">{{i18n.i_delete}}...</button>'
-      + '<button type="button" id="patterns">{{i18n.i_kwic}}</button>'
+      + '<a href="http://cassandre-qda.sourceforge.net/about.html">Cassandre</a>'
     );
     $("input[type='checkbox']").remove();
   }

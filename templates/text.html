@@ -1,117 +1,21 @@
 <html>
-  {{#i18n}}
   <head>
     <title>{{name}} ({{corpus}})</title>
     <link rel="icon" type="image/png" href="../../style/favicon.png" />
     <link rel="stylesheet" type="text/css" href="../../style/main.css" />
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-    <script src="../../script/jquery.js"></script>
-    <script type="text/javascript">
-    var metrics = {};
-    var trigrams = {};
-    $(document).ready(function() {
-      $.ajax({
-        url: "../../corpus_words/{{corpus}}",
-        type: "GET",
-        dataType: "json",
-        success: function(lexcorpus) {
-          var corpus = {};
-          for (var i in lexcorpus.rows) {
-            var c = lexcorpus.rows[i];
-            corpus[c.key[1]] = c.value;
-          }
-          $.ajax({
-            url: "../../text_words/{{_id}}",
-            type: "GET",
-            dataType: "json",
-            success: function(lexdoc) {
-              var max_specific = 0;
-              for (var j in lexdoc.rows) {
-                var d = lexdoc.rows[j];
-                var word = d.key[1];
-                var inCorpus = corpus[word];
-                metrics[word] = {
-                  rare: 1/inCorpus.sum,
-                  specific: Math.sqrt(d.value)/inCorpus.count,
-                };
-                max_specific = Math.max(max_specific, metrics[word].specific);
-              }
-              for (var k in metrics) {
-                var m = metrics[k];
-                m.specific /= max_specific;
-              }
-              $("#rare").removeAttr("disabled");
-              $("#specific").removeAttr("disabled");
-            }
-          });
-        }
-      });
-      $.ajax({
-        url: "../../phrase/{{corpus}}",
-        type: "GET",
-        dataType: "json",
-        success: function(phrases) {
-          for (var l in phrases.rows) {
-            var r = phrases.rows[l];
-            trigrams[[r.key[1], r.key[2], r.key[3]]] = r.value;
-          }
-          $("#repeated").removeAttr("disabled");
-        }
-      });
-    });
-    function toColor(metrics) {
-      var grayLevel = Math.floor(255*(1-metrics)).toString(16);
-      return "#" + grayLevel + grayLevel + grayLevel;
-    }
-    function clearHighlights() {
-      $("font").each(function() {
-        $(this).removeAttr("color");
-      });
-    }
-    function highlightWords(type) {
-      $("font").each(function() {
-        $(this).attr("color", toColor(wordMetrics(metrics, $.trim($(this).text()), type)));
-      });
-    }
-    function highlightPhrases() {
-      var words = [];
-      $("font").each(function(i) {
-        words[i] = {text: $.trim($(this).text()).toLowerCase()};
-      });
-      words[0].count = 0;
-      words[1].count = 0;
-      var max = 0;
-      for (w=0; w<words.length-2; w++) {
-        var nb = trigrams[[words[w].text, words[w+1].text, words[w+2].text]];
-        if (!nb) nb = 1;
-        words[w].count = Math.max(words[w].count, nb);
-        words[w+1].count = Math.max(words[w+1].count, nb);
-        words[w+2].count = nb;
-        max = Math.max(max, words[w].count);
-      }
-      $("font").each(function(i) {
-        $(this).attr("color", toColor(words[i].count/max));
-      });
-    }
-    function wordMetrics(metrics, word, type) {
-      var w = metrics[word.toLowerCase()];
-      return (w)?w[type]:.05;
-    }
-
-    </script>
   </head>
   <body>
-    <form id="container">
+    <div id="container">
       <div id="header" class="menu">
-        <input type="button" onClick="self.location='../{{corpus}}/?by=name'" value="{{corpus}}" />
-        <input type="button" onClick="clearHighlights()" value="{{i_raw}}" />
-        <input id="specific" type="button" onClick="highlightWords('specific')"
-          value="{{i_specific}}" disabled="disabled" />
-        <input id="rare" type="button" onClick="highlightWords('rare')"
-          value="{{i_rare}}" disabled="disabled" />
-        <input id="repeated" type="button" onClick="highlightPhrases()"
-          value="{{i_phrases}}" disabled="disabled" />
-        <input id="kwic" type="search" placeholder="{{i_search}}" />
+        <button type="button" id="corpus">{{corpus}}</button>
+        <button type="button" id="clear_highlights">{{i18n.i_raw}}</button>
+        <button type="button" id="specific" class="highlight_words"
+          disabled="disabled">{{i18n.i_specific}}</button>
+        <button type="button" id="rare" class="highlight_words"
+          disabled="disabled">{{i18n.i_rare}}</button>
+        <button type="button" id="repeated" disabled="disabled">
+          {{i18n.i_phrases}}</button>
+        <input id="kwic" type="search" placeholder="{{i18n.i_search}}" />
       </div>
       <div id="content">
         <h1>{{name}}</h1>
@@ -136,30 +40,134 @@
           </div>
       </div>
       <div id="footer" class="menu">
-        <input type="button" onClick="self.location='../../editable_text/{{_id}}'" value="{{i_edit}}" />
+        <button type="button" id="edit">{{i18n.i_edit}}</button>
         <a href="http://cassandre-qda.sourceforge.net/about.html">Cassandre</a>
       </div>
-    </form>
+    </div>
   </body>
-  {{/i18n}}
+  <script src="../../script/jquery.js"></script>
   <script>
 
-String.prototype.trimLeft = String.prototype.trimLeft || function() {
-  return this.replace(/^\s+/,'');
-};
+  var metrics = {};
+  var trigrams = {};
+  $(document).ready(function() {
+    $.ajax({
+      url: "../../corpus_words/{{corpus}}",
+      type: "GET",
+      dataType: "json",
+      success: function(lexcorpus) {
+        var corpus = {};
+        for (var i in lexcorpus.rows) {
+          var c = lexcorpus.rows[i];
+          corpus[c.key[1]] = c.value;
+        }
+        $.ajax({
+          url: "../../text_words/{{_id}}",
+          type: "GET",
+          dataType: "json",
+          success: function(lexdoc) {
+            var max_specific = 0;
+            for (var j in lexdoc.rows) {
+              var d = lexdoc.rows[j];
+              var word = d.key[1];
+              var inCorpus = corpus[word];
+              metrics[word] = {
+                rare: 1/inCorpus.sum,
+                specific: Math.sqrt(d.value)/inCorpus.count,
+              };
+              max_specific = Math.max(max_specific, metrics[word].specific);
+            }
+            for (var k in metrics) {
+              var m = metrics[k];
+              m.specific /= max_specific;
+            }
+            $('#rare').removeAttr('disabled');
+            $('#specific').removeAttr('disabled');
+          }
+        });
+      }
+    });
+    $.ajax({
+      url: "../../phrase/{{corpus}}",
+      type: "GET",
+      dataType: "json",
+      success: function(phrases) {
+        for (var l in phrases.rows) {
+          var r = phrases.rows[l];
+          trigrams[[r.key[1], r.key[2], r.key[3]]] = r.value;
+        }
+        $('#repeated').removeAttr('disabled');
+      }
+    });
+  });
 
-$('#content').on('mouseup', function() {
-  $('#kwic').val(
-    document.getSelection().toString().trimLeft()
-  );
-});
-
-$('#kwic').on('keypress', function(key) {
-  if (key.which == 13) {
-    key.preventDefault();
-    self.location = '../../kwic/{{corpus}}/' + $('#kwic').val().toLowerCase();
+  function toColor(metrics) {
+    var grayLevel = Math.floor(255*(1-metrics)).toString(16);
+    return '#' + grayLevel + grayLevel + grayLevel;
   }
-});
+
+  $('#clear_highlights').on('click', function() {
+    $('font').each(function() {
+      $(this).removeAttr('color');
+    });
+  });
+
+  $('.highlight_words').on('click', function() {
+    var type = this.id;
+    $('font').each(function() {
+      $(this).attr('color', toColor(wordMetrics(metrics, $.trim($(this).text()), type)));
+    });
+  });
+
+  $('#repeated').on('click', function() {
+    var words = [];
+    $('font').each(function(i) {
+      words[i] = {text: $.trim($(this).text()).toLowerCase()};
+    });
+    words[0].count = 0;
+    words[1].count = 0;
+    var max = 0;
+    for (w=0; w<words.length-2; w++) {
+      var nb = trigrams[[words[w].text, words[w+1].text, words[w+2].text]];
+      if (!nb) nb = 1;
+      words[w].count = Math.max(words[w].count, nb);
+      words[w+1].count = Math.max(words[w+1].count, nb);
+      words[w+2].count = nb;
+      max = Math.max(max, words[w].count);
+    }
+    $('font').each(function(i) {
+      $(this).attr('color', toColor(words[i].count/max));
+    });
+  });
+
+  function wordMetrics(metrics, word, type) {
+    var w = metrics[word.toLowerCase()];
+    return (w)?w[type]:.05;
+  }
+
+  String.prototype.trimLeft = String.prototype.trimLeft || function() {
+    return this.replace(/^\s+/,'');
+  };
+
+  $('#content').on('mouseup', function() {
+    $('#kwic').val(
+      document.getSelection().toString().trimLeft()
+    );
+  });
+
+  $('#kwic').on('keypress', function(key) {
+    if (key.which == 13) {
+      self.location = '../../kwic/{{corpus}}/' + $('#kwic').val().toLowerCase();
+    }
+  });
+
+  $('#corpus').on('click', function() {
+    self.location = '../{{corpus}}/?by=name';
+  });
+
+  $('#edit').on('click', function() {
+    self.location = '../../editable_text/{{_id}}';
+  });
 
   </script>
 </html>

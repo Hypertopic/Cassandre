@@ -1,68 +1,22 @@
 <html>
-  {{#i18n}}
   <head>
     <link rel="icon" type="image/png" href="../style/favicon.png" />
     <link rel="stylesheet" type="text/css" href="../style/main.css" />
-    <script src="../script/jquery.js"></script>
-    <script type="text/javascript">
-    $(document).ready(function() {
-      var corpus = $("#corpus").val();
-      const attr = 
-          '<div class="custom">'
-            +'<label class="actor"><input type="text" placeholder="{{i_attribute}}" /></label>'
-            +'<input type="text" placeholder="{{i_value}}" />'
-            +'</div>';
-      if (corpus.length<1){
-        $("h1").replaceWith(
-          '<h1>{{i_new_corpus}}</h1>'
-        );
-        $("#submit").before(
-           attr + attr + attr + attr
-        );
-      } else {
-        // Ajouter la propriété  readonly="readonly" à corpus
-        $("#corpus").attr({
-           readonly: "readonly"
-        });
-      }
-    });
-    function upload() {
-      var data = {
-        "name": $("#name").val(),
-        "corpus": $("#corpus").val()
-      };
-      if (data.name && data.corpus) {
-        $(".custom").each(function() {
-          var key = $(this).children(".actor").children("input").val();
-          if (key)
-            data[key] = $(this).children("input").val();
-        });
-        $.ajax({
-          url: "../",
-          type: "POST",
-          dataType: "json",
-          contentType: "application/json",
-          data: JSON.stringify(data),
-          success: function(data) {location.replace("../editable_text/"+ data.id)}
-        });
-      }
-    }
-    </script>
   </head>
   <body id="watermark">
     <div id="container">
       <div id="content">
-        <h1>{{i_new_text}}</h1>
+        <h1>{{i18n.i_new_text}}</h1>
         <form>
           <fieldset>
-            <legend>{{i_attributes}}</legend>
+            <legend>{{i18n.i_attributes}}</legend>
             <div class="speeches">
               <div class="speeches-row">
-                <label class="actor">{{i_title}}</label>
+                <label class="actor">{{i18n.i_title}}</label>
                 <input id="name" type="text" />
               </div>
               <div class="speeches-row">
-                <label class="actor">{{i_corpus}}</label>
+                <label class="actor">{{i18n.i_corpus}}</label>
                 <input id="corpus" type="text" value="{{corpus}}" />
               </div>
               {{#attributes}}
@@ -73,7 +27,7 @@
               {{/attributes}}
               <div class="speeches-row" id="submit">
                 <label class="actor"></label>
-                <button type="button" onclick="upload()">{{i_set_attributes}}</button>
+                <button type="button" id="upload">{{i18n.i_set_attributes}}</button>
               </div>
             </div>
           </fieldset>
@@ -84,6 +38,50 @@
       </div>
     </div>
   </body>
-  {{/i18n}}
+  <script src="../script/jquery.js"></script>
+  <script>
+
+  var corpus = $('#corpus').val();
+  const attr =
+      '<div class="custom">'
+        +'<label class="actor"><input type="text" placeholder="{{i18n.i_attribute}}" /></label>'
+        +'<input type="text" placeholder="{{i18n.i_value}}" />'
+        +'</div>';
+  if (corpus.length<1){
+    $('h1').html('{{i18n.i_new_corpus}}');
+    $('#submit').before(
+       attr + attr + attr + attr
+    );
+  } else {
+    $('#corpus').attr({
+       readonly: "readonly"
+    });
+  }
+
+  $('#upload').on('click', function() {
+    var data = {
+      name: $('#name').val(),
+      corpus: $('#corpus').val()
+    };
+    if (data.name && data.corpus) {
+      $('.custom').each(function() {
+        var key = $(this).children('.actor').children('input').val();
+        if (key)
+          data[key] = $(this).children('input').val();
+      });
+      $.ajax({
+        url: "../",
+        type: "POST",
+        dataType: "json",
+        contentType: "application/json",
+        data: JSON.stringify(data),
+        success: function(data) {
+          location.replace('../editable_text/'+ data.id)
+        }
+      });
+    }
+  });
+
+  </script>
 </html>
 

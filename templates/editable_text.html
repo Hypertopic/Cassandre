@@ -1,105 +1,13 @@
 <html>
-  {{#i18n}}
   <head>
     <link rel="icon" type="image/png" href="../style/favicon.png" />
     <link rel="stylesheet" type="text/css" href="../style/main.css" />
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-    <script src="../script/jquery.js"></script>
-    <script type="text/javascript">
-    $(document).ready(function() {
-      var actors = [];
-      $("#actor").children("input").each(function() {
-        actors = $(this).val();
-      })
-      if (actors.length<1){
-        $("header>div").replaceWith(
-          '<div id="menu">'
-          + '<input type="button" onclick="goTo(\'\')" value="{{i_corpus}}" />'
-          + '</div>'
-        );
-        $("thead").replaceWith(
-          "<thead><th/><th>{{i_speech}}</th></thead>"
-        );
-      }
-    });
-    function goTo(text) {
-      self.location = "../text/" + text;
-    }
-    function save(toDoAfter) {
-      var data = {
-        highlights: {{{highlights}}},
-        speeches: []
-      };
-      $("#attributes").children("input").each(function() {
-        data[$(this).attr("id")] = $(this).val();
-      })
-      var next = "" + toDoAfter;
-      if (next.match(/goTo/g)) {
-        delete data.draft;
-      } else {
-        data.draft = true;
-      }
-      $(".turn").each(function() {
-        var actor = "" + $(this).children("#actor").children("input").val();
-        if (actor == "") {
-          data.speeches.push({
-            text: $(this).children().children("textarea").val()
-          })
-        } else {
-          data.speeches.push({
-            actor: $(this).children("#actor").children("input").val(),
-            text: $(this).children().children("textarea").val()
-          })
-        }
-      })
-      $.ajax({
-        type: "PUT",
-        url: "../{{_id}}",
-        contentType: "application/json",
-        data: JSON.stringify(data),
-        error: function(request) {
-          alert(
-            (JSON.parse(request.responseText).reason || request.responseText)
-            + '\nCode ' + request.status
-          );
-        },
-        success: function() {toDoAfter();}
-      });
-    }
-    function clearActors() {
-      $("#actor>input").each(function() {
-        $(this).val("");
-      });
-    }
-    function insertRow(here) {
-      var m = document.getElementsByTagName("tr").length;
-      var n = here.parentNode.parentNode.parentNode.rowIndex + 1;
-      if(n<m){
-        var a = here.parentNode.parentNode.parentNode.childNodes[1].childNodes[1].value;
-        var newrow =  '<tr class="turn"><td id="actor"><input type="text" value="' + a + '"/>'
-          + '</td><td id="speech"><textarea cols="80" rows="3" type="text" /></td><td>'
-          + '<div class="remove"><a onclick="removeRow(this)" id="remove"> &nbsp;x&nbsp;</a></div><br/>'
-          + '<div class="insert"><a onclick="insertRow(this)" id="insert"> &nbsp;+&nbsp; </a></div>'
-          + '</td></tr>';
-          $(newrow).insertBefore(document.getElementsByTagName("tr")[n]);
-      } else {
-      save(function(){location.reload();})
-      }
-    }         
-    function removeRow(here) {
-      var n = here.parentNode.parentNode.parentNode.rowIndex;
-      former = document.getElementsByTagName("tr")[n];
-      former.parentNode.removeChild(former);
-    }
-
-    </script>
   </head>
   <body id="watermark">
     <form id="container">
       <header>
         <div id="header" class="menu">
-          <input type="button" onclick="goTo('')" value="{{i_corpus}}" />
-          <input type="button" onclick="clearActors('')" value="{{i_clear_actors}}" />
+          <button type="button" id="corpus">{{corpus}}</button>
         </div>
       </header>
       <div id="content">
@@ -113,34 +21,103 @@
           {{/attributes}}
         </fieldset>
         <table>
-          <tr><thead><th>{{i_actor}}</th><th>{{i_speech}}</th></thead></tr>
           {{#speeches}}
           <tr class="turn">
-            <td id="actor">
-            {{#actor}}
-              <input type="text" value="{{actor}}" /><span />
-            {{/actor}}
+            <td class="actor">
+              <input type="text" value="{{actor}}"
+                placeHolder="{{i18n.i_actor}}" />
             </td>
-
-            <td id="speech">
-              <textarea cols="80" rows="3" type="text">{{text}}</textarea>
+            <td class="speech">
+              <textarea cols="80" rows="3" type="text"
+                placeHolder="{{i18n.i_speech}}">{{text}}</textarea>
             </td>
             <td>
-              <div class="remove"><a onclick="removeRow(this)" id="remove"> &nbsp;x&nbsp;</a></div><br/>
-              <div class="insert"><a onclick="insertRow(this)" id="insert"> &nbsp;+&nbsp; </a></div>
+              <a class="remove" href="#">x</a>
+              <a class="insert" href="#">+</a>
             </td>
           </tr>
           {{/speeches}}
         </table>
       </div>
       <div id="footer" class="menu">
-        <input type="button" onclick="save(function(){location.reload();})" 
-          value="{{i_add_row}}" />
-        <input type="button" onclick="save(function(){goTo('{{corpus}}/{{_id}}');})"
-          value="{{i_save}}" />
+        <button type="button" id="save">{{i18n.i_save}}</button>
+        <button type="button" id="done">{{i18n.i_done}}</button>
         <a href="http://cassandre-qda.sourceforge.net/about.html">Cassandre</a>
       </div>
     </form>
   </body>
-  {{/i18n}}
+  <script src="../script/jquery.js"></script>
+  <script>
+
+  function save(draft, toDoAfter) {
+    var data = {
+      highlights: {{{highlights}}},
+      speeches: []
+    };
+    if (draft) {
+      data.draft = true;
+    }
+    $('#attributes').children('input').each(function() {
+      data[$(this).attr('id')] = $(this).val();
+    })
+    $('.turn').each(function() {
+      var turn = {
+        text: $(this).find('textarea').val()
+      };
+      var actor = $(this).find('input').val();
+      if (actor) {
+        turn.actor = actor;
+      }
+      data.speeches.push(turn);
+    });
+    $.ajax({
+      type: "PUT",
+      url: "../{{_id}}",
+      contentType: "application/json",
+      data: JSON.stringify(data),
+      error: function(request) {
+        alert(
+          (JSON.parse(request.responseText).reason || request.responseText)
+          + '\nCode ' + request.status
+        );
+      },
+      success: toDoAfter
+    });
+  }
+
+  $('#corpus').on('click', function() {
+    self.location = '../text/{{corpus}}/?by=name';
+  });
+
+  $('#save').on('click', function() {
+    save(true, function() {
+      location.reload();
+    });
+  });
+
+  $('#done').on('click', function() {
+    save(false, function() {
+      self.location = '../text/{{corpus}}/{{_id}}';
+    });
+  });
+
+  $('#content')
+    .on('click', '.insert', function() {
+      var current = $(this).closest('.turn');
+      var next = current.clone()
+      next.find('input').val(current.prev().find('input').val());
+      next.find('textarea').val('');
+      current.after(next);
+    })
+    .on('click', '.remove', function() {
+      var current = $(this).closest('.turn');
+      if ($('.turn').length>1) {
+        current.remove();
+      } else {
+        current.find('input').val('');
+        current.find('textarea').val('');
+      }
+    });
+
+  </script>
 </html>

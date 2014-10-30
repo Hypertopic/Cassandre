@@ -6,7 +6,7 @@ function(o, req){
     i18n: localized(),
     highlights: "{}",
     attributes:[],
-    speeches: []
+    speeches: [{}]
   }
   for (var key in o) {
     switch (key) {
@@ -29,12 +29,5 @@ function(o, req){
         });
     }
   }
-  var n = data.speeches.length;
-
-  data.speeches.push({
-    actor: (n<2)? "..." : data.speeches[n-2].actor,
-    text: ""
-  });
-
   return Mustache.to_html(templates.editable_text, data);
 }

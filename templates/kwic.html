@@ -57,7 +57,9 @@
           type: "PUT",
           contentType: "application/json",
           data: JSON.stringify(text),
-          success: self.location = "../../kwic/{{corpus}}"
+          success: function() {
+            self.location = '../../kwic/{{corpus}}'
+          }
         });
       }
     });

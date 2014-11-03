@@ -2,22 +2,18 @@ function(o, req) {
   // !json templates.index
   // !code lib/mustache.js
   // !code l10n/l10n.js
-  if('Accept' in req.headers && req.headers['Accept'].indexOf('json')>0) {
+  provides('json', function() {
     return {
       body: JSON.stringify({
         service: 'Cassandre', 
         revision: '2.14.10.24',
         update_seq: req.info.update_seq
-      }), headers: { 
-        "Content-Type": "application/json",
-      }
+      })
     }
-  } else {
+  });
+  provides('html', function() {
     return {
-      body: Mustache.to_html(templates.index, {i18n: localized()}),
-      headers: { 
-        "Content-Type": "text/html",
-      }
+      body: Mustache.to_html(templates.index, {i18n: localized()})
     }
-  }
+  });
 }

@@ -8,11 +8,10 @@ feature 'Delete a corpus' do
   background do
     visit '/'
     click_on 'Analyse qualitative de textes'
-    click_on '+'
+    click_on 'Créer...'
     fill_in 'name', :with => $a_title
     fill_in 'corpus', :with => $a_corpus
     click_on 'Enregistrer les attributs'
-    page.should have_content 'Tour de parole'
     click_on 'Enregistrer'
   end
   
@@ -21,7 +20,7 @@ feature 'Delete a corpus' do
     click_on 'Supprimer...'
     check 'toggle'
     click_on 'Supprimer'
-    click_on 'Corpora'
+    click_on 'Corpus'
     page.should_not have_content $a_corpus
   end
 end

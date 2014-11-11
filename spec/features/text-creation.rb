@@ -8,14 +8,14 @@ feature 'Create a text' do
   background do
     visit '/'
     click_on 'Analyse qualitative de textes'
-    click_on '+'
+    click_on 'Créer...'
   end
   
   scenario 'filling (title and corpus) fields' do
     fill_in 'name', :with => $a_title
     fill_in 'corpus', :with => $a_corpus
     click_on 'Enregistrer les attributs'
-    page.should have_content 'Tour de parole'
+    page.should have_content 'Terminé'
   end
 
 end

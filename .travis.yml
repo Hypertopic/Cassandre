@@ -4,10 +4,9 @@ rvm: 2.1
 install:
 - curl -X PUT -d '"false"' localhost:5984/_config/httpd/secure_rewrites
 - curl -X PUT localhost:5984/cassandre
-- curl -O http://python-distribute.org/distribute_setup.py
-- sudo python distribute_setup.py
-- sudo easy_install couchapp
-- rm -f distribute-*.tar.gz
+- curl -O https://bootstrap.pypa.io/get-pip.py
+- python get-pip.py
+- sudo pip install couchapp
 - couchapp push . http://localhost:5984/cassandre
 - gem install capybara-webkit rspec
 script: xvfb-run rspec spec/features/*

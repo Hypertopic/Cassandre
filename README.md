@@ -16,9 +16,9 @@ Installation requirements
 -------------------------
 
 * Git client
-* Apache HTTP Server (or equivalent) with PHP and reverse proxy 
 * [CouchDB](http://couchdb.apache.org/)
 * [CouchApp](https://github.com/jchris/couchapp) 
+* [Node.js](http://nodejs.org/)
 
 Installation procedure
 ----------------------
@@ -31,10 +31,12 @@ Installation procedure
         cd Cassandre
         couchapp init
         couchapp push http://127.0.0.1:5984/cassandre
+        cd node
+        npm install express
+        npm install express-http-proxy
+        npm install async
 
-* In a Web folder:
+* Change settings in `app.js`.
+* Test the settings (`sudo` is required for port 80):
 
-        git clone https://github.com/christophe-lejeune/cassandre_2_php.git
-
-* Change ``RewriteBase`` in ``.htaccess`` if the web folder is not the Web root.
-
+        sudo node app.js

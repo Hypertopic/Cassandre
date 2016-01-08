@@ -108,6 +108,7 @@
       next.find('input').val(current.prev().find('input').val());
       next.find('textarea').val('');
       current.after(next);
+      return false;
     })
     .on('click', '.remove', function() {
       var current = $(this).closest('.turn');
@@ -117,6 +118,7 @@
         current.find('input').val('');
         current.find('textarea').val('');
       }
+      return false;
     });
 
   </script>

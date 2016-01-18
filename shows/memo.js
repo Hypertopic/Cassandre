@@ -12,9 +12,24 @@ function(o, req){
     name: o.name,
     date: o.date,
     user: o.user,
-    text: o.body,
+    body: [],
     groundings: [],
-    leaves: [],
+    leaves: []
+  }
+  if (o.body) {
+    var content = {
+      text: o.body
+    };
+    data.body.push(content);
+  } else {
+    for each (var s in o.speeches) {
+      var content = {
+        actor: s.actor,
+        timestamp: s.timestamp,
+        text: s.text
+      };
+      data.body.push(content);
+    }
   }
   for each (var g in o.groundings) {
     var grounding = {

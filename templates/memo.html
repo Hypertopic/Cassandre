@@ -28,7 +28,26 @@
             {{user}}<br/>{{date}}
             <button type="button" id="edit">{{i18n.i_edit}}</button>
           </p>
-          {{text}}
+          <div class="speeches">
+          {{#body}}
+          <div class="speeches-row">
+            <div class="actor">
+            {{#actor}}
+            {{actor}}
+            {{/actor}}
+            </div>
+            <div class="words">
+              {{#timestamp}}
+              <div class="timestamp">{{timestamp}}</div>
+              {{/timestamp}}
+              <div class="post">
+                {{#text}}{{text}}{{/text}}
+              </div>
+            </div>
+          </div>
+          {{/body}}
+          </div>
+
         </div>
         <div id="leaves">
           <ul id="branch">

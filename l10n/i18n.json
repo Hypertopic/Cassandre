@@ -29,7 +29,12 @@
     "i_occurrences": "Occurrences",
     "i_patterns": "Patterns",
     "i_new_pattern": "Save pattern",
-    "i_search": "Search in the corpus..."
+    "i_search": "Search in the corpus...",
+    "i_diaries": "Diaries",
+    "i_memos": "Memos",
+    "i_leaves": "Leaves memos",
+    "i_add_groundings": "Add grounds",
+    "i_groundings": "Grounds"
   },
   "fr": {
     "i_qda": "Analyse qualitative de textes",
@@ -61,6 +66,11 @@
     "i_occurrences": "Occurrences ",
     "i_patterns": "Marqueurs",
     "i_new_pattern": "Enregistrer comme marqueur",
-    "i_search": "Chercher dans le corpus..."
+    "i_search": "Chercher dans le corpus...",
+    "i_diaries": "Journaux de bord",
+    "i_memos": "Comptes-rendus",
+    "i_leaves": "Comptes-rendus feuilles",
+    "i_add_groundings": "Ajouter un ancrage",
+    "i_groundings": "Ancrages"
   }
 }

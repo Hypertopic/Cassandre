@@ -1,0 +1,119 @@
+<html>
+  <head>
+    <title>{{name}} ({{diary}})</title>
+    <link rel="icon" type="image/png" href="../../style/favicon.png" />
+    <link rel="stylesheet" type="text/css" href="../../style/main.css" />
+
+
+  </head>
+  <body>
+    <div id="container">
+      <div id="header" class="menu">
+        <button type="button" id="diary">{{diary}}</button>
+      </div>
+      <div id="memo">
+        <div id="groundings" >
+          <legend>{{i18n.i_groundings}}</legend>          
+          {{#groundings}}
+          <li id="{{.}}">
+            <h4 class="toggle">{{.}}</h4>
+            <div class="preview"></div>
+          </li>            
+          {{/groundings}}
+          <button type="button" id="add-grounding">{{i18n.i_add_groundings}}</button>
+        </div>
+        <div id="content">
+          <h1> <img src="../../style/{{type}}.png"/> {{name}} <button type="button" id="add">+</button> </h1>
+          <p>
+            {{user}}<br/>{{date}}
+            <button type="button" id="edit">{{i18n.i_edit}}</button>
+          </p>
+          {{text}}
+        </div>
+        <div id="leaves">
+          <ul id="branch">
+          </ul>
+        </div>
+      </div>
+      <div id="footer" class="menu">
+        <a href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
+      </div>
+    </div>
+    <div id="show-leaves"><div class="reverse">{{i18n.i_leaves}}</div></div>
+  </body>
+  <script src="../../script/jquery.js"></script>
+  <script>
+  $(document).ready(function() {
+    if ('{{type}}' == 'field') { $('#add').addClass('coding');} 
+    if ('{{type}}' == 'coding') { $('#add').addClass('theoretical');} 
+    if ('{{type}}' == 'theoretical') { $('#add').addClass('operational');}
+    if ('{{type}}' == 'operational') { $('#add').addClass('field');}
+
+    $.ajax({
+      url: "../../memo_attribute/{{diary}}",
+      type: "GET",
+      dataType: "json",
+      success: function(grounds) {
+        for (var i in grounds.rows) {
+          var r = grounds.rows[i];
+          var diary = r.key;
+          var id = '#' + r.value['id'];
+          var ground_href = r.value['id'];
+          var ground_type = r.value['type'];
+          var ground_label = r.value['name'];
+          var ground_date = r.value['date']; // unused
+          var ground_preview = r.value['preview'];      
+          $(id).addClass(ground_type);
+          $(id).find("h4").text(ground_label);
+          $(id).find("div").text(ground_preview);          
+          var link = document.createElement("a");
+          link.setAttribute('href', ground_href);
+          $(id).find("div").append(link);          
+          $(id).find("div").find("a").text('->');
+        }
+        $.ajax({
+          url: "../../leaves/{{_id}}",
+          type: "GET",
+          dataType: "json",
+          success: function(leaves) {
+            for (var i in leaves.rows) {
+              var r = leaves.rows[i];
+              var leaf_href = r.value['id'];
+              var leaf_type = r.value['type'];
+              var leaf_label = r.value['name'];
+              $("#leaves ul").append('<li class="'+leaf_type+'"><a href="'+leaf_href+'">'+leaf_label+'</a></li>');              
+            }
+            if (leaves.rows.length < 1) {
+              $("#show-leaves").remove();
+            }
+          }
+        });
+      }
+    });
+  });
+
+  $('#groundings').find('.toggle').click(function(){
+    $(this).next().slideToggle('fast');
+    $(".preview").not($(this).next()).slideUp('fast');
+  });
+
+  $("#show-leaves").click(function () {
+    var option = { direction: 'left' };
+    $('#leaves').toggle('fold');
+  });
+
+  $('#diary').on('click', function() {
+    self.location = '../{{diary}}/?by=name';
+  });
+
+  $('#edit').on('click', function() {
+    alert('todo');
+  });
+
+  $('#add-grounding').on('click', function() {
+    alert('todo');
+  });
+
+
+  </script>
+</html>

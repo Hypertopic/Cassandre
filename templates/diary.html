@@ -1,0 +1,44 @@
+<html>
+  <head>
+    <link rel="icon" type="image/png" href="../../style/favicon.png" />
+    <link rel="stylesheet" type="text/css" href="../../style/main.css" />
+  </head>
+  <body id="watermark">
+    <div id="container">
+      <header>
+        <div id="header" class="menu">
+          <button type="button" id="diaries">{{i18n.i_diaries}}</button>
+          {{i18n.i_sort}}
+          <select id="sort">
+            <option value="name">{{i18n.i_title}}</option>
+          </select>
+        </div>
+      </header>
+      <div id="content">
+        <h1>{{diary}}</h1>
+        <ul id="memos">
+          {{#memos}}
+          <li class="{{type}}">{{date}}&nbsp;– 
+            <a href='{{id}}' >{{name}}</a>
+          </li>
+          {{/memos}}
+        </ul>
+      </div>
+      <div id="footer" class="menu">
+        <a href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
+      </div>
+    </div>
+  </body>
+  <script src="../../script/jquery.js"></script>
+  <script>
+
+// TODO: Sort by date
+
+  $('#header')
+    .on('click', '#diaries', function() {
+      self.location = '..';
+    });
+
+  </script>
+</html>
+

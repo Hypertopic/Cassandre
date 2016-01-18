@@ -36,6 +36,18 @@
       "group": "true"
     }
   }, {
+    "from": "memo/", 
+    "to": "_list/diaries/diaries",
+    "query": {
+      "group": "true"
+    }
+  }, {
+    "from": "memo/:diary", 
+    "to": "_list/diary/memo_attribute",
+    "query": {
+      "key": [":diary"]
+    }
+  }, {
     "from": "text/:corpus/", 
     "to": "_list/corpus/attribute",
     "query": {
@@ -46,6 +58,9 @@
   }, {
     "from": "text/:corpus/:text", 
     "to": "_show/text/:text"
+  }, {
+    "from": "memo/:diary/:memo", 
+    "to": "_show/memo/:memo"
   }, {
     "from": "text_attributes/", 
     "to": "_list/text_attributes/attribute",
@@ -75,6 +90,29 @@
       "startkey": [":corpus"],
       "endkey": [":corpus", {}],
       "group": "true"
+    }
+  }, {
+    "from": "groundings/:id", 
+    "to": "_view/groundings",
+    "query": {
+      "startkey": [":id"],
+      "endkey": [":id", {}]
+    }
+  }, {
+    "from": "memo_attribute/:corpus", 
+    "to": "_view/memo_attribute",
+    "query": {
+      "startkey": [":corpus"],
+      "endkey": [":corpus", {}]
+    }
+  }, {
+    "from": "leaves/", 
+    "to": "_view/leaves"
+  }, {
+    "from": "leaves/:memo", 
+    "to": "_view/leaves",
+    "query": {
+      "key": [":memo"]
     }
   }, { 
     "from": "corpus_words/:corpus",

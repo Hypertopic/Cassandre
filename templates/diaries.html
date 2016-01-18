@@ -1,0 +1,34 @@
+<html>
+  <head>
+    <link rel="icon" type="image/png" href="../style/favicon.png" />
+    <link rel="stylesheet" type="text/css" href="../style/main.css" />
+  </head>
+  <body id="watermark">
+    <div id="container">
+      <div id="content">
+        <h1>{{i18n.i_diaries}}</h1>
+        <ul>
+          {{#diaries}}
+          <li>
+            <b>{{id}}</b>&nbsp;–
+            <a href='../memo/{{id}}/?by=name' >{{count}} {{i18n.i_memos}}</a>
+          </li>
+          {{/diaries}}
+        </ul>
+      </div>
+      <div id="footer" class="menu">
+        <button type="button" id="create">{{i18n.i_create}}</button>
+        <a href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
+      </div>
+    </div>
+  </body>
+  <script src="../script/jquery.js"></script>
+  <script>
+
+  $('#create').on('click', function() {
+    self.location = '../text_attributes/';
+  });
+
+  </script>
+</html>
+

@@ -17,18 +17,39 @@
         </ul>
       </div>
       <div id="footer" class="menu">
-        <button type="button" id="create">{{i18n.i_create}}</button>
+        <button type="button" id="create" class="theoretical"> + </button>
         <a href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
       </div>
     </div>
   </body>
   <script src="../script/jquery.js"></script>
   <script>
-
   $('#create').on('click', function() {
-    self.location = '../text_attributes/';
+    var type = $(this)[0].className;
+    var date = new Date().toJSON().substring(0,10);
+    var diary = prompt("Please enter the name of your new diary", "My diary");
+    var data = {
+      type: type,
+      date: date,
+      groundings: [],
+      name: diary,
+      diary: diary,
+      body: "My research question",
+      user: "unidentified.researcher"
+    };
+    if (diary) {
+      $.ajax({
+        url: "../",
+        type: "POST",
+        dataType: "json",
+        contentType: "application/json",
+        data: JSON.stringify(data),
+        success: function(data) {
+          location.replace('/editable_memo/'+data.id)
+        }
+      });
+    }
   });
-
   </script>
 </html>
 

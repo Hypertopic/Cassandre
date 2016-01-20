@@ -78,6 +78,9 @@
       "group_level": "2"
     }
   }, {
+    "from": "editable_memo/:memo", 
+    "to": "_show/editable_memo/:memo"
+  }, {
     "from": "editable_text/:text", 
     "to": "_show/editable_text/:text"
   }, {

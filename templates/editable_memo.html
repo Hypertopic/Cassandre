@@ -1,0 +1,122 @@
+<html>
+  <head>
+    <title>{{name}} ({{diary}})</title>
+    <link rel="icon" type="image/png" href="../style/favicon.png" />
+    <link rel="stylesheet" type="text/css" href="../style/main.css" />
+  </head>
+  <body>
+    <form id="container">
+      <header>
+        <div id="header" class="menu">
+          <button type="button" id="diary">{{diary}}</button>
+        </div>
+      </header>
+      <div id="memo">
+      <input id="_id" type="hidden" value="{{_id}}" />
+      <input id="_rev" type="hidden" value="{{_rev}}" />
+      <input id="diary" type="hidden" value="{{diary}}" />
+      <input id="date" type="hidden" value="{{date}}" />
+      <input id="user" type="hidden" value="{{user}}" />
+
+        <div id="groundings" >
+          <legend>{{i18n.i_groundings}}</legend>          
+          {{#groundings}}
+          <li id="{{.}}">
+            <h4 class="toggle">{{.}}</h4>
+            <div class="preview"></div>
+          </li>            
+          {{/groundings}}
+        </div>
+        <div id="content">
+          <h1> <img src="../style/{{type}}.png"/> <textarea id="name" type="text" cols="76" rows="1">{{name}}</textarea></h1>
+          <p>
+            {{user}}<br/>{{date}}
+          </p>
+          <p>
+            <textarea id="body" cols="80" rows="20" type="text" placeHolder="{{i18n.i_speech}}">{{body}}</textarea>
+          </p>
+        </div>
+      </div>
+      <div id="footer" class="menu">
+        <button type="button" id="done">{{i18n.i_done}}</button>
+        <a href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
+      </div>
+    </form>
+  </body>
+  <script src="../script/jquery.js"></script>
+  <script>
+  $(document).ready(function() {
+    $.ajax({
+      url: "../../memo_attribute/{{diary}}",
+      type: "GET",
+      dataType: "json",
+      success: function(grounds) {
+        for (var i in grounds.rows) {
+          var r = grounds.rows[i];
+          var diary = r.key;
+          var id = '#' + r.value['id'];
+          var ground_href = r.value['id'];
+          var ground_type = r.value['type'];
+          var ground_label = r.value['name'];
+          var ground_date = r.value['date']; // unused
+          var ground_preview = r.value['preview'];      
+          $(id).addClass(ground_type);
+          $(id).find("h4").text(ground_label);
+          $(id).find("div").text(ground_preview);          
+          var link = document.createElement("a");
+          link.setAttribute('href', ground_href);
+          $(id).find("div").append(link);          
+          $(id).find("div").find("a").text('->');
+        }
+        $('#groundings').find('.toggle').next().slideToggle('fast');
+      }
+    });
+  });
+
+  function save(draft, toDoAfter) {
+    var data = {
+      groundings: [],
+      _rev: "{{_rev}}",
+      body: $('#body').val(),
+      name: $('#name').val(),
+      type: "{{type}}",
+      date: "{{date}}",
+      user: "{{user}}",
+      diary: "{{diary}}"
+    };
+    $('#groundings').children('li').each(function() {
+      data.groundings.push($(this).attr('id'));
+    });
+    $.ajax({
+      type: "PUT",
+      url: "../{{_id}}",
+      contentType: "application/json",
+      data: JSON.stringify(data),
+      error: function(request) {
+        alert(
+          (JSON.parse(request.responseText).reason || request.responseText)
+          + '\nCode ' + request.status
+        );
+      },
+      success: toDoAfter
+    });
+  }
+
+  $('#diary').on('click', function() {
+    self.location = '../memo/{{diary}}/?by=name';
+  });
+
+  $('#groundings').find('.toggle').click(function(){
+    $(this).next().slideToggle('fast');
+    $(".preview").not($(this).next()).slideUp('fast');
+  });
+
+
+  $('#done').on('click', function() {
+    save(false, function() {
+      self.location = '../memo/{{diary}}/{{_id}}';
+    });
+  });
+
+  </script>
+</html>

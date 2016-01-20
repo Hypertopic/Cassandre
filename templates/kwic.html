@@ -15,7 +15,7 @@
         {{#occurrences}}
         <div class="occurrence" data-text="{{id}}">
           <div class="context">{{context}}</div>
-          <div>[<a href="../../text/{{corpus}}/{{id}}">{{title}}</a>]</div>
+          <div>[<a href="../../memo/{{corpus}}/{{id}}">{{title}}</a>]</div>
         </div>
         {{/occurrences}}
       </div>
@@ -29,7 +29,7 @@
   <script> 
 
   $('#corpus').on('click', function(){
-    self.location = '../../text/{{corpus}}/?by=name';
+    self.location = '../../memo/{{corpus}}/?by=name';
   });
 
   function getUUID() {

@@ -12,6 +12,7 @@
           <select id="sort">
             <option value="name">{{i18n.i_title}}</option>
           </select>
+          <button type="button" id="patterns">{{i18n.i_patterns}}</button>
         </div>
       </header>
       <div id="content">
@@ -37,6 +38,9 @@
   $('#header')
     .on('click', '#diaries', function() {
       self.location = '..';
+    })
+    .on('click', '#patterns', function() {
+      self.location = '../../kwic/{{diary}}';
     });
 
   </script>

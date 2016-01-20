@@ -13,7 +13,7 @@
       </div>
       <div id="memo">
         <div id="groundings" >
-          <legend>{{i18n.i_groundings}}</legend>          
+          <legend>{{i18n.i_groundings}}</legend>                   
           {{#groundings}}
           <li id="{{.}}">
             <h4 class="toggle">{{.}}</h4>
@@ -126,13 +126,12 @@
   });
 
   $('#edit').on('click', function() {
-    alert('todo');
+    if ('{{type}}' == 'field') { self.location = '../../editable_text/{{_id}}';} 
+    else { self.location = '../../editable_memo/{{_id}}';}
   });
 
   $('#add-grounding').on('click', function() {
     alert('todo');
   });
-
-
   </script>
 </html>

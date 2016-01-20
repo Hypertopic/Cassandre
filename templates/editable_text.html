@@ -15,6 +15,8 @@
           <input id="_id" type="hidden" value="{{_id}}" />
           <input id="_rev" type="hidden" value="{{_rev}}" />
           <input id="corpus" type="hidden" value="{{corpus}}" />
+          <input id="date" type="hidden" value="{{date}}" />
+          <input id="user" type="hidden" value="{{user}}" />
           {{#attributes}}
           <label for="{{key}}">{{key}}</label>
           <input id="{{key}}" type="text" value="{{value}}" />
@@ -52,6 +54,7 @@
   function save(draft, toDoAfter) {
     var data = {
       highlights: {{{highlights}}},
+      groundings: [],
       speeches: []
     };
     if (draft) {
@@ -60,6 +63,11 @@
     $('#attributes').children('input').each(function() {
       data[$(this).attr('id')] = $(this).val();
     })
+
+    {{#groundings}}
+    data.groundings.push("{{.}}");
+    {{/groundings}}
+
     $('.turn').each(function() {
       var turn = {
         text: $(this).find('textarea').val()
@@ -86,7 +94,7 @@
   }
 
   $('#corpus').on('click', function() {
-    self.location = '../text/{{corpus}}/?by=name';
+    self.location = '../memo/{{corpus}}/?by=name';
   });
 
   $('#save').on('click', function() {
@@ -97,7 +105,7 @@
 
   $('#done').on('click', function() {
     save(false, function() {
-      self.location = '../text/{{corpus}}/{{_id}}';
+      self.location = '../memo/{{corpus}}/{{_id}}';
     });
   });
 

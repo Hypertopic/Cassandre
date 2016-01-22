@@ -62,11 +62,7 @@
           var ground_preview = r.value['preview'];      
           $(id).addClass(ground_type);
           $(id).find("h4").text(ground_label);
-          $(id).find("div").text(ground_preview);          
-          var link = document.createElement("a");
-          link.setAttribute('href', ground_href);
-          $(id).find("div").append(link);          
-          $(id).find("div").find("a").text('->');
+          $(id).find("div").text(ground_preview);
         }
         $('#groundings').find('.toggle').next().slideToggle('fast');
       }

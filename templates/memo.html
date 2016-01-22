@@ -111,6 +111,41 @@
     });
   });
 
+  $('#add').on('click', function() {
+    var type = $(this)[0].className; 
+    var date = new Date().toJSON().substring(0,10);
+    var diary = "{{diary}}";
+    var data = {
+      date: date,
+      groundings: [],
+      name: "",
+      user: "unidentified.researcher"
+    };
+    if (type == 'field') { 
+      var destination = '/editable_text/';
+      data.corpus = diary,
+      data.speeches = [{actor:"",text:""}];
+    } else {
+      var destination = '/editable_memo/';
+      data.diary = diary,
+      data.body = "";
+      data.type = type;
+    } 
+    data.groundings.push("{{_id}}");
+    if (diary) {
+      $.ajax({
+        url: "../../",
+        type: "POST",
+        dataType: "json",
+        contentType: "application/json",
+        data: JSON.stringify(data),
+        success: function(data) {
+          location.replace(destination+data.id)
+        }
+      });
+    }
+  });
+
   $('#groundings').find('.toggle').click(function(){
     $(this).next().slideToggle('fast');
     $(".preview").not($(this).next()).slideUp('fast');

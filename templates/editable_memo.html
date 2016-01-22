@@ -33,7 +33,7 @@
             {{user}}<br/>{{date}}
           </p>
           <p>
-            <textarea id="body" cols="80" rows="20" type="text" placeHolder="{{i18n.i_speech}}">{{body}}</textarea>
+            <textarea id="body" cols="80" rows="20" type="text">{{body}}</textarea>
           </p>
         </div>
       </div>
@@ -65,6 +65,13 @@
           $(id).find("div").text(ground_preview);
         }
         $('#groundings').find('.toggle').next().slideToggle('fast');
+        var placeHolder = [];
+        placeHolder["field"] = {name : "{{i18n.i_name.field}}", content: "{{{i18n.i_content.field}}}"};
+        placeHolder["coding"] = {name : "{{i18n.i_name.coding}}", content: "{{{i18n.i_content.coding}}}"};
+        placeHolder["theoretical"] = {name : "{{i18n.i_name.theoretical}}", content: "{{{i18n.i_content.theoretical}}}"};
+        placeHolder["operational"] = {name : "{{i18n.i_name.operational}}", content: "{{i18n.i_content.operational}}}"};
+        $("#name").attr("placeHolder", placeHolder["{{type}}"]["name"]);
+        $("#body").attr("placeHolder", placeHolder["{{type}}"]["content"]);
       }
     });
   });
@@ -106,7 +113,6 @@
     $(this).next().slideToggle('fast');
     $(".preview").not($(this).next()).slideUp('fast');
   });
-
 
   $('#done').on('click', function() {
     save(false, function() {

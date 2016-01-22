@@ -17,11 +17,12 @@
           <input id="corpus" type="hidden" value="{{corpus}}" />
           <input id="date" type="hidden" value="{{date}}" />
           <input id="user" type="hidden" value="{{user}}" />
-          {{#attributes}}
-          <label for="{{key}}">{{key}}</label>
-          <input id="{{key}}" type="text" value="{{value}}" />
-          {{/attributes}}
         </fieldset>
+        <h1> <img src="../style/field.png"/> 
+          {{#attributes}}
+          <input id="{{key}}" type="text" placeHolder="{{i18n.i_name.field}}" value="{{value}}" />
+          {{/attributes}}
+        </h1>
         <table>
           {{#speeches}}
           <tr class="turn">
@@ -31,7 +32,7 @@
             </td>
             <td class="speech">
               <textarea cols="80" rows="3" type="text"
-                placeHolder="{{i18n.i_speech}}">{{text}}</textarea>
+                placeHolder="{{{i18n.i_content.field}}}">{{text}}</textarea>
             </td>
             <td>
               <a class="remove" href="#">x</a>
@@ -63,6 +64,8 @@
     $('#attributes').children('input').each(function() {
       data[$(this).attr('id')] = $(this).val();
     })
+
+    data.name = $('#name').val();
 
     {{#groundings}}
     data.groundings.push("{{.}}");

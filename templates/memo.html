@@ -20,7 +20,7 @@
             <div class="preview"></div>
           </li>            
           {{/groundings}}
-          <button type="button" id="add-grounding">{{i18n.i_add_groundings}}</button>
+          <div id="add-grounding">{{i18n.i_add_groundings}}</div>
         </div>
         <div id="content">
           <h1> <img src="../../style/{{type}}.png"/> {{name}} <button type="button" id="add">+</button> </h1>
@@ -69,46 +69,73 @@
     if ('{{type}}' == 'operational') { $('#add').addClass('field');}
 
     $.ajax({
-      url: "../../memo_attribute/{{diary}}",
+      url: "../../leaves/{{_id}}",
       type: "GET",
       dataType: "json",
-      success: function(grounds) {
-        for (var i in grounds.rows) {
-          var r = grounds.rows[i];
-          var diary = r.key;
-          var id = '#' + r.value['id'];
-          var ground_href = r.value['id'];
-          var ground_type = r.value['type'];
-          var ground_label = r.value['name'];
-          var ground_date = r.value['date']; // unused
-          var ground_preview = r.value['preview'];      
-          $(id).addClass(ground_type);
-          $(id).find("h4").text(ground_label);
-          $(id).find("div").text(ground_preview);          
-          var link = document.createElement("a");
-          link.setAttribute('href', ground_href);
-          $(id).find("div").append(link);          
-          $(id).find("div").find("a").text('->');
+      success: function(leaves) {
+        for (var i in leaves.rows) {
+          var r = leaves.rows[i];
+          var leaf_href = r.value['id'];
+          var leaf_type = r.value['type'];
+          var leaf_label = r.value['name'];
+          $("#leaves ul").append('<li class="'+leaf_type+'"><a href="'+leaf_href+'">'+leaf_label+'</a></li>');              
         }
-        $.ajax({
-          url: "../../leaves/{{_id}}",
-          type: "GET",
-          dataType: "json",
-          success: function(leaves) {
-            for (var i in leaves.rows) {
-              var r = leaves.rows[i];
-              var leaf_href = r.value['id'];
-              var leaf_type = r.value['type'];
-              var leaf_label = r.value['name'];
-              $("#leaves ul").append('<li class="'+leaf_type+'"><a href="'+leaf_href+'">'+leaf_label+'</a></li>');              
+        if (leaves.rows.length < 1) {
+          $("#show-leaves").remove();
+        }
+        if ($('#groundings li').length < 1) {
+          $("#groundings").find('legend').remove();
+          $("#groundings").css({
+             'position': 'absolute',
+             'height': '31px',
+             'line-height': '31px',
+             'top': '0px',
+             'padding-top': 'auto',
+             'padding-left': '5px',
+             'padding-right': '5px',
+             'width': '200px',
+             'height': 'auto',
+             'transform': 'rotate(90deg)',
+             'transform-origin': 'bottom left 0',
+          });
+          $("#add-grounding").css({
+             'bottom': 'auto',
+             'top': '0px',
+             'width': 'auto',
+             'transform': 'rotate(180deg)',
+             'transform-origin': 'center center 0',
+          });
+          $("#content").css({
+             'margin-left': '30px',
+          });
+        } else {
+          $.ajax({
+            url: "../../memo_attribute/{{diary}}",
+            type: "GET",
+            dataType: "json",
+            success: function(grounds) {
+              for (var i in grounds.rows) {
+                var r = grounds.rows[i];
+                var diary = r.key;
+                var id = '#' + r.value['id'];
+                var ground_href = r.value['id'];
+                var ground_type = r.value['type'];
+                var ground_label = r.value['name'];
+                var ground_date = r.value['date']; // unused
+                var ground_preview = r.value['preview'];      
+                $(id).addClass(ground_type);
+                $(id).find("h4").text(ground_label);
+                $(id).find("div").text(ground_preview);          
+                var link = document.createElement("a");
+                link.setAttribute('href', ground_href);
+                $(id).find("div").append(link);          
+                $(id).find("div").find("a").text('->');
+              }
             }
-            if (leaves.rows.length < 1) {
-              $("#show-leaves").remove();
-            }
-          }
-        });
+          }); 
+        }
       }
-    });
+    }); 
   });
 
   $('#add').on('click', function() {

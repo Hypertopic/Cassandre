@@ -31,18 +31,29 @@
     "i_new_pattern": "Save pattern",
     "i_search": "Search in the corpus...",
     "i_diaries": "Diaries",
+    "i_enter_diary_name": "Enter your new diary name",
+    "i_my_diary": "My diary",
+    "i_my_research_question": "My research question",
     "i_memos": "Memos",
     "i_leaves": "Leaves memos",
     "i_add_groundings": "Add grounds",
-    "i_groundings": "Grounds",
+    "i_groundings": "Grounded in",
     "i_field_name": "What happened ?",
     "i_field_content": "I have observed that",
     "i_operational_name": "What shall I do ?",
     "i_operational_content": "Things to remember to observe on the field",
-    "i_coding_name": "Property or dimenson",
-    "i_coding_content": "Things to remember to observe on the field",
-    "i_theoretical_name": "Category or relation to be sampled",
-    "i_theoretical_content": "Theoretical question raised by the coding of the material"
+    "i_name": {
+       "field": "Émotion ou vécu exprimé par les personnes rencontrées",
+       "coding": "Property or dimenson",
+       "theoretical": "Category or relation to be sampled",
+       "operational": "Planning next contact with the field"
+    },
+    "i_content": {
+      "field": "What am I observing ?",
+      "coding": "How is defined such an activity ? What process is at stake ?",
+      "operational": "Things not to forget to observe on the field",
+      "theoretical": "Theoretical question(s) raised when coding the material"
+    }
   },
   "fr": {
     "i_qda": "Analyse qualitative de textes",
@@ -76,6 +87,9 @@
     "i_new_pattern": "Enregistrer comme marqueur",
     "i_search": "Chercher dans le corpus...",
     "i_diaries": "Journaux de bord",
+    "i_enter_diary_name": "Donnez un nom à votre journal de bord",
+    "i_my_diary": "Mon journal de bord",
+    "i_my_research_question": "Ma question de recherche",
     "i_memos": "Comptes-rendus",
     "i_leaves": "Comptes-rendus feuilles",
     "i_add_groundings": "Ajouter un ancrage",
@@ -88,9 +102,9 @@
     },
     "i_content": {
       "field": "Qu'ai je observé ?",
-      "operational": "Que ne faut-il pas oublier de faire sur le terrain ? ",
       "coding": "Comment se définit tel processus, telle action ou telle activité ?",
-      "theoretical": "Nouvelles questions théoriques que suscite l'analyse du matériau..."
+      "operational": "Que ne faut-il pas oublier de faire sur le terrain ? ",
+      "theoretical": "Reformulation de la question de recherche, nouvelles questions théoriques que suscite l'analyse du matériau..."
     }
   }
 }

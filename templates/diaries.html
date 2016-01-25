@@ -27,14 +27,14 @@
   $('#create').on('click', function() {
     var type = $(this)[0].className;
     var date = new Date().toJSON().substring(0,10);
-    var diary = prompt("Please enter the name of your new diary", "My diary");
+    var diary = prompt("{{i18n.i_enter_diary_name}}", "{{i18n.i_my_diary}}");
     var data = {
       type: type,
       date: date,
       groundings: [],
-      name: diary,
+      name: "{{i18n.i_my_research_question}}",
       diary: diary,
-      body: "My research question",
+      body: "",
       user: "unidentified.researcher"
     };
     if (diary) {

@@ -4,7 +4,7 @@
     <link rel="icon" type="image/png" href="../style/favicon.png" />
     <link rel="stylesheet" type="text/css" href="../style/main.css" />
   </head>
-  <body>
+  <body id="watermark">
     <form id="container">
       <header>
         <div id="header" class="menu">
@@ -47,7 +47,7 @@
   <script>
   $(document).ready(function() {
     $.ajax({
-      url: "../../memo_attribute/{{diary}}",
+      url: "../../memo_attribute/{{{diary}}}",
       type: "GET",
       dataType: "json",
       success: function(grounds) {
@@ -85,7 +85,7 @@
       type: "{{type}}",
       date: "{{date}}",
       user: "{{user}}",
-      diary: "{{diary}}"
+      diary: "{{{diary}}}"
     };
     $('#groundings').children('li').each(function() {
       data.groundings.push($(this).attr('id'));
@@ -106,7 +106,8 @@
   }
 
   $('#diary').on('click', function() {
-    self.location = '../memo/{{diary}}/?by=name';
+    var diaryUrl = encodeURIComponent("{{{diary}}}");
+    self.location = '../memo/'+diaryUrl+'/?by=name';
   });
 
   $('#groundings').find('.toggle').click(function(){
@@ -116,7 +117,8 @@
 
   $('#done').on('click', function() {
     save(false, function() {
-      self.location = '../memo/{{diary}}/{{_id}}';
+      var diaryUrl = encodeURIComponent("{{{diary}}}");
+      self.location = '../memo/'+diaryUrl+'/{{_id}}';
     });
   });
 

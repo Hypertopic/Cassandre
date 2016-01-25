@@ -29,7 +29,8 @@
   <script> 
 
   $('#corpus').on('click', function(){
-    self.location = '../../memo/{{corpus}}/?by=name';
+    var corpusUrl = encodeURIComponent("{{{corus}}}");
+    self.location = '../../memo/'+corpusUrl+'/?by=name';
   });
 
   function getUUID() {

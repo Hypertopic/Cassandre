@@ -110,7 +110,7 @@
           });
         } else {
           $.ajax({
-            url: "../../memo_attribute/{{diary}}",
+            url: "../../memo_attribute/{{{diary}}}",
             type: "GET",
             dataType: "json",
             success: function(grounds) {
@@ -141,7 +141,7 @@
   $('#add').on('click', function() {
     var type = $(this)[0].className; 
     var date = new Date().toJSON().substring(0,10);
-    var diary = "{{diary}}";
+    var diary = "{{{diary}}}";
     var data = {
       date: date,
       groundings: [],
@@ -184,7 +184,8 @@
   });
 
   $('#diary').on('click', function() {
-    self.location = '../{{diary}}/?by=name';
+    var diaryUrl = encodeURIComponent("{{{diary}}}");
+    self.location = '../'+diaryUrl+'/?by=name';
   });
 
   $('#edit').on('click', function() {

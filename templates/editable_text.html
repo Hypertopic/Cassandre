@@ -97,7 +97,8 @@
   }
 
   $('#corpus').on('click', function() {
-    self.location = '../memo/{{corpus}}/?by=name';
+    var corpusUrl = encodeURIComponent("{{{corpus}}}");
+    self.location = '../memo/'+corpusUrl+'/?by=name';
   });
 
   $('#save').on('click', function() {
@@ -108,7 +109,8 @@
 
   $('#done').on('click', function() {
     save(false, function() {
-      self.location = '../memo/{{corpus}}/{{_id}}';
+      var corpusUrl = encodeURIComponent("{{{corpus}}}");
+      self.location = '../memo/'+corpusUrl+'/{{_id}}';
     });
   });
 

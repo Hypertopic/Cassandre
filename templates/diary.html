@@ -40,7 +40,8 @@
       self.location = '..';
     })
     .on('click', '#patterns', function() {
-      self.location = '../../kwic/{{diary}}';
+      var diaryUrl = encodeURIComponent("{{{diary}}}");
+      self.location = '../../kwic/'+diaryUrl;
     });
 
   </script>

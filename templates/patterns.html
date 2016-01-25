@@ -30,7 +30,8 @@
   resetUI();
 
   $('#corpus').on('click', function(){
-    self.location = '../text/{{corpus}}/?by=name';
+    var corpusUrl = encodeURIComponent("{{{corpus}}}");
+    self.location = '../memo/'+corpusUrl+'/?by=name';
   });
 
   $('#footer')
@@ -87,8 +88,9 @@
     });
 
   $('#kwic').on('keypress', function(key) {
+    var corpusUrl = encodeURIComponent("{{{corpus}}}");
     if (key.which == 13) {
-      self.location = '../kwic/{{corpus}}/' + $('#kwic').val().toLowerCase();
+      self.location = '../kwic/' +corpusUrl+ '/' + $('#kwic').val().toLowerCase();
     }
   });
 

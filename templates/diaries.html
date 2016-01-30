@@ -15,6 +15,9 @@
           </li>
           {{/diaries}}
         </ul>
+        <div id="dialog" title="{{i18n.i_enter_diary_name}}" hidden="hidden">
+          <input name="diary" placeholder="{{i18n.i_my_diary}}"></input>
+        </div>
       </div>
       <div id="footer" class="menu">
         <button type="button" id="create" class="theoretical"> + </button>
@@ -23,16 +26,45 @@
     </div>
   </body>
   <script src="../script/jquery.js"></script>
+  <script src="http://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
   <script>
   $('#create').on('click', function() {
-    var type = $(this)[0].className;
+    $("#dialog").dialog({
+      autoOpen:false,
+      modal:true,
+      width:'auto',
+      autoResize: true,
+      buttons:{
+        "ok":function(){
+          $(this).dialog("close");
+          var diary = $('#dialog').find('input[name="diary"]').val()
+          createDiary(diary);
+          return true;
+        },
+        "cancel":function(){
+          $(this).dialog("close");
+          return false;
+        }
+      },
+      open: function() {
+        $("#dialog").keypress(function(e) {
+          if (e.keyCode == $.ui.keyCode.ENTER) {
+            $(this).parent().find("button:eq(1)").trigger("click");
+          }
+        });
+      }
+    });
+    $("#dialog").dialog("open");
+  });
+  function createDiary(diary) {
+    var type = $('#create')[0].className;
     var date = new Date().toJSON().substring(0,10);
-    var diary = prompt("{{i18n.i_enter_diary_name}}", "{{i18n.i_my_diary}}");
     var data = {
       type: type,
       date: date,
       groundings: [],
-      name: "{{i18n.i_my_research_question}}",
+      name: "",
       diary: diary,
       body: "",
       user: "unidentified.researcher"
@@ -49,7 +81,7 @@
         }
       });
     }
-  });
+  };
   </script>
 </html>
 

@@ -7,6 +7,7 @@ function(o, req){
   var data = {
     i18n: localized(),
     _id: o._id,
+    _rev: o._rev,
     diary: diary,
     type: type,
     name: o.name,

@@ -1,6 +1,6 @@
 function(o) {
   if (o.diary) {
-    var diary = o.diary || o.corpus;
+    var diary = o.diary;
     emit([diary], {
       id: o._id,
       name: o.name,
@@ -10,12 +10,13 @@ function(o) {
     });
   } else if (o.name) {
     var diary = o.corpus;
+    var date = o.date || '';
     var preview = o.speeches[0].text.substr(0, 200) || '';
     emit([diary], {
       id: o._id,
       name: o.name,
       type: 'field',
-      date: o.date,
+      date: date,
       preview: preview
     });
   }

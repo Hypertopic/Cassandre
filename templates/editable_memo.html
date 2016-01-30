@@ -22,7 +22,7 @@
           <legend>{{i18n.i_groundings}}</legend>          
           {{#groundings}}
           <li id="{{.}}">
-            <h4 class="toggle">{{.}}</h4>
+            <h4 class="toggle"></h4>
             <div class="preview"></div>
           </li>            
           {{/groundings}}
@@ -116,10 +116,14 @@
   });
 
   $('#done').on('click', function() {
-    save(false, function() {
-      var diaryUrl = encodeURIComponent("{{{diary}}}");
-      self.location = '../memo/'+diaryUrl+'/{{_id}}';
-    });
+    if ($('#name').val().trim() == '') {
+      alert("{{i18n.i_enter_memo_name}}")
+    } else {
+      save(false, function() {
+        var diaryUrl = encodeURIComponent("{{{diary}}}");
+        self.location = '../memo/'+diaryUrl+'/{{_id}}';
+      });
+    }
   });
 
   </script>

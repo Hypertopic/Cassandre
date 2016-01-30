@@ -60,7 +60,7 @@
     </div>
     <div id="show-leaves"><div class="reverse">{{i18n.i_leaves}}</div></div>
     <div id="dialog" title="{{i18n.i_groundings}}" hidden="hidden">
-        <select onChange="save(this);"><select>
+        <select onChange="save(this);"><option>{{i18n.i_select_grounding}}</option><select>
     </div>
   </body>
   <script src="../../script/jquery.js"></script>
@@ -260,9 +260,5 @@
       }
     });
   }
-
-  function go(id) {
-    location.replace = id;
-  };
   </script>
 </html>

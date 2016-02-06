@@ -119,7 +119,7 @@ div.post {
 }
 
 .preview {
-  display: none;
+    display:none;
 }
 
 #memo>#content h1 {
@@ -130,7 +130,7 @@ div.post {
   padding:30px;
 }
 
-#add-grounding{
+#add-grounding, #select-type {
   width: 20%;
   position: absolute;
   text-align: center;
@@ -167,6 +167,10 @@ div.post {
 
 .field {
   background-image: url('field.png');
+}
+
+.diagram {
+  background-image: url('diagram.png');
 }
 
 .storyline {

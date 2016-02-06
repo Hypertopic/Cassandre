@@ -23,7 +23,9 @@
           <div id="add-grounding">{{i18n.i_add_groundings}}</div>
         </div>
         <div id="content">
-          <h1> <img src="../../style/{{type}}.png"/> {{name}} <button type="button" id="add">+</button> </h1>
+          <h1> <img src="../../style/{{type}}.png"/> {{name}} <button type="button" id="add">+</button>
+            <button id="create" class="diagram" type="button" hidden="hidden">+</button>
+          </h1>
           <p>
             {{user}}<br/>{{date}}
             <button type="button" id="edit">{{i18n.i_edit}}</button>
@@ -47,7 +49,6 @@
           </div>
           {{/body}}
           </div>
-
         </div>
         <div id="leaves">
           <ul id="branch">
@@ -60,7 +61,7 @@
     </div>
     <div id="show-leaves"><div class="reverse">{{i18n.i_leaves}}</div></div>
     <div id="dialog" title="{{i18n.i_groundings}}" hidden="hidden">
-        <select onChange="save(this);"><option>{{i18n.i_select_grounding}}</option><select>
+        <select onChange="save(this);"><option>{{i18n.i_select_grounding}}</option></select>
     </div>
   </body>
   <script src="../../script/jquery.js"></script>
@@ -68,10 +69,24 @@
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
   <script>
   $(document).ready(function() {
-    if ('{{type}}' == 'field') { $('#add').addClass('coding');} 
-    if ('{{type}}' == 'coding') { $('#add').addClass('theoretical');} 
-    if ('{{type}}' == 'theoretical') { $('#add').addClass('operational');}
-    if ('{{type}}' == 'operational') { $('#add').addClass('field');}
+    switch ('{{type}}') {
+      case ('field'):
+        $('#add').addClass('coding');
+        break;
+      case ('coding'):
+        $('#add').addClass('theoretical');
+        $('#create').show();
+        break;
+      case ('theoretical'):
+        $('#add').addClass('operational');
+        break;
+      case ('operational'):
+        $('#add').addClass('field');
+        break;
+      case ('diagram'):
+        $('#add').addClass('diagram');
+        break;
+    }
     $.ajax({
       url: "../../memo_attribute/{{{diary}}}",
       type: "GET",
@@ -83,6 +98,11 @@
           var id = '#' + r.value['id'];
           var ground_href = r.value['id'];
           var ground_type = r.value['type'];
+          if (ground_type == 'diagram') {
+            var ground_path = "../../diagram/{{{diary}}}/";
+          } else {
+            var ground_path = '';
+          }
           var ground_label = r.value['name'];
           var ground_date = r.value['date']; // unused
           var ground_preview = r.value['preview'];
@@ -96,7 +116,7 @@
             $(id).find("h4").text(ground_label);
             $(id).find("div").text(ground_preview);
             var link = document.createElement("a");
-            link.setAttribute('href', ground_href);
+            link.setAttribute('href', ground_path+ground_href);
             $(id).find("div").append(link);
             $(id).find("div").find("a").text('->');
           };
@@ -110,8 +130,12 @@
       success: function(leaves) {
         for (var i in leaves.rows) {
           var r = leaves.rows[i];
-          var leaf_href = r.value['id'];
           var leaf_type = r.value['type'];
+          if (leaf_type == 'diagram') {
+            var leaf_href = "../../diagram/{{{diary}}}/"+r.value['id']
+          } else {
+            var leaf_href = r.value['id'];
+          }
           var leaf_label = r.value['name'];
           $("#leaves ul").append('<li class="'+leaf_type+'"><a href="'+leaf_href+'">'+leaf_label+'</a></li>');              
         }
@@ -148,41 +172,6 @@
     }); 
   });
 
-  $('#add').on('click', function() {
-    var type = $(this)[0].className; 
-    var date = new Date().toJSON().substring(0,10);
-    var diary = "{{{diary}}}";
-    var data = {
-      date: date,
-      groundings: [],
-      name: "",
-      user: "unidentified.researcher"
-    };
-    if (type == 'field') { 
-      var destination = '/editable_text/';
-      data.corpus = diary,
-      data.speeches = [{actor:"",text:""}];
-    } else {
-      var destination = '/editable_memo/';
-      data.diary = diary,
-      data.body = "";
-      data.type = type;
-    }
-    data.groundings.push("{{_id}}");
-    if (diary) {
-      $.ajax({
-        url: "../../",
-        type: "POST",
-        dataType: "json",
-        contentType: "application/json",
-        data: JSON.stringify(data),
-        success: function(data) {
-          location.replace(destination+data.id)
-        }
-      });
-    }
-  });
-
   $('#groundings').find('.toggle').click(function(){
     $(this).next().slideToggle('fast');
     $(".preview").not($(this).next()).slideUp('fast');
@@ -201,6 +190,16 @@
   $('#edit').on('click', function() {
     if ('{{type}}' == 'field') { self.location = '../../editable_text/{{_id}}';} 
     else { self.location = '../../editable_memo/{{_id}}';}
+  });
+
+  $('#add').on('click', function() {
+    var type = $(this)[0].className;
+    create(type);
+  });
+
+  $('#create').on('click', function() {
+    var type = $(this)[0].className;
+    create(type);
   });
 
   $('#add-grounding').on('click', function() {
@@ -259,6 +258,49 @@
         location.replace("{{_id}}")
       }
     });
+  }
+
+  function create(type) {
+    var diary = "{{{diary}}}";
+    var data = {
+      date: new Date().toJSON().substring(0,10),
+      groundings: [],
+      user: "unidentified.researcher"
+    };
+    switch (type) {
+      case 'field':
+        var destination = '/editable_text/';
+        data.corpus = diary,
+        data.name = "",
+        data.speeches = [{actor:"",text:""}];
+        break;
+      case 'diagram':
+        var destination = "/diagram/{{{diary}}}/";
+        data.diary = diary;
+        data.link = 'pp';
+        data.name = "{{{name}}}";
+        data.type = type;
+        break;
+      default:
+        var destination = '/editable_memo/';
+        data.diary = diary,
+        data.body = "";
+        data.name = "",
+        data.type = type;
+    }
+    data.groundings.push("{{_id}}");
+    if (diary) {
+      $.ajax({
+        url: "../../",
+        type: "POST",
+        dataType: "json",
+        contentType: "application/json",
+        data: JSON.stringify(data),
+        success: function(data) {
+          location.replace(destination+data.id)
+        }
+      });
+    }
   }
   </script>
 </html>

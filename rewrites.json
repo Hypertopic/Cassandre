@@ -62,6 +62,9 @@
     "from": "memo/:diary/:memo", 
     "to": "_show/memo/:memo"
   }, {
+    "from": "diagram/:diary/:diagram",
+    "to": "_show/diagram/:diagram"
+  }, {
     "from": "text_attributes/", 
     "to": "_list/text_attributes/attribute",
     "query": {

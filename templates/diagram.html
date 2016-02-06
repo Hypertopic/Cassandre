@@ -1,0 +1,261 @@
+<html>
+  <head>
+    <title>{{name}} ({{diary}})</title>
+    <link rel="icon" type="image/png" href="../../style/favicon.png" />
+    <link rel="stylesheet" type="text/css" href="../../style/main.css" />
+    <link rel="stylesheet" type="text/css" href="../../style/diagram.css" />
+  </head>
+  <body>
+    <div id="container">
+      <div id="header" class="menu">
+        <button type="button" id="diary">{{diary}}</button>
+      </div>
+      <div id="memo">
+        <div id="groundings" >
+          <legend>{{i18n.i_groundings}}</legend>                   
+          {{#groundings}}
+          <li id="{{.}}">
+            <h4 class="toggle"></h4>
+            <div class="preview"></div>
+          </li>            
+          {{/groundings}}
+          <div id="add-grounding"></div>
+        </div>
+        <div id="content">
+          <h1> <img src="../../style/{{type}}.png"/> {{name}} <button type="button" class="theoretical" id="add">+</button> </h1>
+          <p>
+            {{user}}<br/>{{date}}
+          </p>
+          <div id="diagram" class="{{link}}">
+            <div class="layout-1"></div>
+            <div class="layout-2"></div>
+          </div>
+        </div>
+        <div id="leaves">
+          <ul id="branch">
+          </ul>
+        </div>
+      </div>
+      <div id="footer" class="menu">
+        <a href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
+      </div>
+    </div>
+    <div id="show-leaves"><div class="reverse">{{i18n.i_leaves}}</div></div>
+    <div id="dialog" hidden="hidden">
+        <select onChange="adapt(this);"></select>
+    </div>
+  </body>
+  <script src="../../script/jquery.js"></script>
+  <script src="http://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
+  <script>
+  $(document).ready(function() {
+    $.ajax({
+      url: "../../memo_attribute/{{{diary}}}",
+      type: "GET",
+      dataType: "json",
+        success: function(grounds) {
+        for (var i in grounds.rows) {
+          var r = grounds.rows[i];
+          var diary = r.key;
+          var id = '#' + r.value['id'];
+          var ground_href = r.value['id'];
+          var ground_type = r.value['type'];
+          var ground_path = '';
+          if (ground_type != 'diagram') {
+            var ground_path = "../../memo/{{{diary}}}/";
+          }
+          var ground_label = r.value['name'];
+          var ground_date = r.value['date']; // unused
+          var ground_preview = r.value['preview'];
+          if($('#groundings li').length < 2 && document.getElementById(ground_href) == null && ground_href != "{{_id}}" && ground_type == 'coding') {
+            $("#dialog").find('select').append($('<option>', {
+              id: ground_href,
+              value: ground_href,
+              text: ground_label
+            }));
+          } else {
+            $(id).addClass(ground_type);
+            $(id).find("h4").text(ground_label);
+            $(id).find("div").text(ground_preview);
+            var link = document.createElement("a");
+            link.setAttribute('href', ground_path+ground_href);
+            $(id).find("div").append(link);
+            $(id).find("div").find("a").text('->');
+          };
+        }
+        $('#groundings').children('li').each(function() {
+          var prop_href = ($(this).attr('id'));
+          var prop_href = ($(this).find("div").find("a").attr('href'));
+          var prop_label = ($(this).find('h4').html());
+          var prop_label = '<div class="polarity">+</div>'+($(this).find('h4').html())+'<div class="molarity">&ndash;</div>';
+          $('#diagram').append($('<a>', {
+            class: 'node',
+            href: prop_href,
+            html: prop_label
+          }));
+        });
+      }
+    });
+    if ($('#groundings li').length == 1) {
+      $('#add-grounding').html("{{i18n.i_add_groundings}}");
+      $("#dialog").attr("title","{{i18n.i_groundings}}");
+      $("#dialog").find('select').append($('<option>', {
+        text: "{{i18n.i_select_grounding}}"
+      }));
+    } else {
+      $('#add-grounding').html("{{i18n.i_diagram_type}}");
+      $("#dialog").attr("title","{{i18n.i_diagram_type}}");
+      $("#dialog").find('select').append($('<option>', { text: "{{i18n.i_link}}" }));
+      $("#dialog").find('select').append(
+        $('<option>', { value: 'pp', text: "{{i18n.i_link_properties}}" }),
+        $('<option>', { value: 'ipp', text: "{{i18n.i_inverse_link_between_properties}}" }),
+        $('<option>', { value: 'dd', text: "{{i18n.i_link_dimensions}}" }),
+        $('<option>', { value: 'idd', text: "{{i18n.i_inverse_link_between_dimensions}}" }),
+        $('<option>', { value: 'dp', text: "{{i18n.i_link_property_dimension}}" })
+      );
+    }    
+    $.ajax({
+      url: "../../leaves/{{_id}}",
+      type: "GET",
+      dataType: "json",
+      success: function(leaves) {
+        for (var i in leaves.rows) {
+          var r = leaves.rows[i];
+          var leaf_href = r.value['id'];
+          var leaf_type = r.value['type'];
+          var leaf_path = '';
+          if (leaf_type != 'diagram') {
+            var leaf_path = "../../memo/{{{diary}}}/";
+          }
+          var leaf_label = r.value['name'];
+          $("#leaves ul").append('<li class="'+leaf_type+'"><a href="'+leaf_path+leaf_href+'">'+leaf_label+'</a></li>');              
+        }
+        if (leaves.rows.length < 1) {
+          $("#show-leaves").remove();
+        }
+      }
+    }); 
+  });
+
+  $('#add').on('click', function() {
+    var type = $(this)[0].className; 
+    var data = {
+      date: new Date().toJSON().substring(0,10),
+      diary: "{{{diary}}}",
+      type: type,
+      groundings: [],
+      name: "",
+      user: "unidentified.researcher"
+    };
+    data.groundings.push("{{_id}}");
+    if (diary) {
+      $.ajax({
+        url: "../../",
+        type: "POST",
+        dataType: "json",
+        contentType: "application/json",
+        data: JSON.stringify(data),
+        success: function(data) {
+          location.replace('/editable_memo/'+data.id)
+        }
+      });
+    }
+  });
+
+  $('#groundings').find('.toggle').click(function(){
+    $(this).next().slideToggle('fast');
+    $(".preview").not($(this).next()).slideUp('fast');
+  });
+
+  $("#show-leaves").click(function () {
+    var option = { direction: 'left' };
+    $('#leaves').toggle('fold');
+  });
+
+  $('#diary').on('click', function() {
+    var diaryUrl = encodeURIComponent("{{{diary}}}");
+    self.location = '../../memo/'+diaryUrl+'/?by=name';
+  });
+
+  $('#add-grounding').on('click', function() {
+    $("#dialog").dialog({
+      autoOpen: true,
+      modal: true,
+      autoResize: true,
+      width:'auto'
+    });
+  });
+
+  function adapt(there) {
+    if (there.value.length == 32) {save(there);} else {draw(there);}
+  }
+
+  function draw(there) {
+    $("#dialog").dialog('close');
+   //TODO:  mutualiser avec save 
+    var data = {
+      groundings: [],
+      _rev: "{{_rev}}",
+      date: "{{date}}",
+      diary: "{{{diary}}}",
+      name: "{{{name}}}",
+      type: 'diagram',
+      link: there.value,
+      user: "{{user}}"
+    };
+    $('#groundings').children('li').each(function() {
+      data.groundings.push($(this).attr('id'));
+    });
+    $.ajax({
+      type: "PUT",
+      url: "../../{{_id}}",
+      contentType: "application/json",
+      data: JSON.stringify(data),
+      error: function(request) {
+        alert(
+          (JSON.parse(request.responseText).reason || request.responseText)
+          + '\nCode ' + request.status
+        );
+      },
+      success: function() {
+        location.replace("{{_id}}")
+      }
+    });
+  }
+
+  function save(there) {
+    var text = $('#'+there.value).text();
+    var name = '{{{name}}}'+' & '+ text;
+    var data = {
+      groundings: [],
+      _rev: "{{_rev}}",
+      date: "{{date}}",
+      diary: "{{{diary}}}",
+      name: name,
+      type: 'diagram',
+      link: 'pp',
+      user: "{{user}}"
+    };
+    $('#groundings').children('li').each(function() {
+      data.groundings.push($(this).attr('id'));
+    });
+    data.groundings.push(there.value);
+    $.ajax({
+      type: "PUT",
+      url: "../../{{_id}}",
+      contentType: "application/json",
+      data: JSON.stringify(data),
+      error: function(request) {
+        alert(
+          (JSON.parse(request.responseText).reason || request.responseText)
+          + '\nCode ' + request.status
+        );
+      },
+      success: function() {
+        location.replace("{{_id}}")
+      }
+    });
+  }
+  </script>
+</html>

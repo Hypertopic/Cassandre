@@ -1,6 +1,7 @@
 {
   "en": {
     "i_qda": "Texts Qualitative Analysis",
+    "i_diary": "Diary for Qualitative Analysis",
     "i_corpora": "Corpora",
     "i_create": "Create...",
     "i_new_corpus": "New text in a new corpus",
@@ -51,10 +52,18 @@
       "coding": "How is defined such an activity ? What process is at stake ?",
       "operational": "Things not to forget to observe on the field",
       "theoretical": "Theoretical question(s) raised when coding the material"
-    }
+    },
+    "i_diagram_type": "Select type of diagram",
+    "i_link": "Linking",
+    "i_link_properties": "Linking two properties",
+    "i_link_dimensions": "Linking two dimensions",
+    "i_inverse_link_between_properties": "Inverse link between two properties",
+    "i_inverse_link_between_dimensions": "Inverse link between two dimensions",
+    "i_link_property_dimension": "Linking a dimension and a property"
   },
   "fr": {
     "i_qda": "Analyse qualitative de textes",
+    "i_diary": "Journal pour l'analyse qualitative",
     "i_corpora": "Corpus",
     "i_create": "Créer...",
     "i_new_corpus": "Nouveau texte dans un nouveau corpus",
@@ -85,7 +94,7 @@
     "i_new_pattern": "Enregistrer comme marqueur",
     "i_search": "Chercher dans le corpus...",
     "i_diaries": "Journaux de bord",
-    "i_enter_diary_name": "Donnez un nom à votre journal de bord...",
+    "i_enter_diary_name": "Donnez un nom à votre journal...",
     "i_enter_memo_name": "Donnez un nom à ce compte-rendu",
     "i_my_diary": "Mon journal de bord",
     "i_my_research_question": "Ma question de recherche",
@@ -105,6 +114,13 @@
       "coding": "Comment se définit tel processus, telle action ou telle activité ?",
       "operational": "Que ne faut-il pas oublier de faire sur le terrain ?",
       "theoretical": "Reformulation de la question de recherche, nouvelles questions théoriques que suscite l'analyse du matériau, propriété ou articulation à approfondir."
-    }
+    },
+    "i_diagram_type": "Type de schématisation",
+    "i_link": "Articuler",
+    "i_link_properties": "- deux propriétés",
+    "i_link_dimensions": "- deux dimensions variant dans le même sens",
+    "i_inverse_link_between_properties": "- deux propriétés variant en sens contraire",
+    "i_inverse_link_between_dimensions": "- deux dimensions variant en sens contraire",
+    "i_link_property_dimension": "- une propriété et une dimension"
   }
 }

@@ -20,7 +20,7 @@
         <ul id="memos">
           {{#memos}}
           <li class="{{type}}">{{date}}&nbsp;– 
-            <a href='{{id}}' >{{name}}</a>
+            <a href="{{id}}">{{name}}</a>
           </li>
           {{/memos}}
         </ul>
@@ -32,7 +32,17 @@
   </body>
   <script src="../../script/jquery.js"></script>
   <script>
-
+  $(document).ready(function() {
+    $('#memos').children('li').each(function() {
+      var type = $(this).attr('class');
+      switch (type) {
+        case ('diagram'):
+        case ('graph'):
+          $(this).find('a').attr("href", '../../'+type+'/'+encodeURIComponent("{{{diary}}}")+'/'+$(this).find('a').attr("href"));
+          break;
+      }
+    });
+  });
 // TODO: Sort by date
 
   $('#header')

@@ -124,8 +124,14 @@
           var r = leaves.rows[i];
           var leaf_href = r.value['id'];
           var leaf_type = r.value['type'];
-          var leaf_path = '';
-          if (leaf_type != 'diagram') {
+          switch (leaf_type) {
+            case ('diagram'):
+            var leaf_path = '';
+            break;
+            case ('graph'):
+            var leaf_path = "../../graph/{{{diary}}}/";
+            break;
+            default:
             var leaf_path = "../../memo/{{{diary}}}/";
           }
           var leaf_label = r.value['name'];

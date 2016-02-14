@@ -46,8 +46,8 @@
     </div>
   </body>
   <script src="../../script/jquery.js"></script>
-  <script src="http://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
-  <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
+  <script src="../../script/jquery-ui.min.js"></script>
+  <link rel="stylesheet" href="../../script/jquery-ui.min.css" />
   <script>
   $(document).ready(function() {
     $.ajax({
@@ -163,7 +163,7 @@
         contentType: "application/json",
         data: JSON.stringify(data),
         success: function(data) {
-          location.replace('/editable_memo/'+data.id)
+          self.location = '/editable_memo/'+data.id;
         }
       });
     }

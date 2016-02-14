@@ -45,8 +45,8 @@
   </body>
   <script src="../../script/jquery.js"></script>
   <script src="../../script/jquery-ui.min.js"></script>
+  <link rel="stylesheet" href="../../script/jquery-ui.min.css" />
   <script type="text/javascript" src="../../script/vis.min.js"></script>
-  <link rel="stylesheet" href="../../script/jquery-ui.theme.min.css" />
   <script>
   $(document).ready(function() {
     $.ajax({
@@ -175,7 +175,7 @@
         contentType: "application/json",
         data: JSON.stringify(data),
         success: function(data) {
-          location.replace('/editable_memo/'+data.id)
+          self.location = '/editable_memo/'+data.id;
         }
       });
     }
@@ -217,22 +217,20 @@
         );
       },
       success: function(added) {
-        // CUT      
-    var nodes = [
-      {{#nodes}}
-      {id: "{{id}}", shape: "{{shape}}"},
-      {{/nodes}}
-    ]; 
-    var nodeids = [];
-      {{#nodes}}
-      nodeids.push("{{id}}");
-      {{/nodes}}
-    var edges = [
-      {{#edges}}
-      {id: "{{id}}",from: "{{from}}", to: "{{to}}", color:"{{color}}" },
-      {{/edges}}
-    ]; 
-//CUT
+        var nodes = [
+          {{#nodes}}
+          {id: "{{id}}", shape: "{{shape}}"},
+          {{/nodes}}
+        ];
+        var nodeids = [];
+          {{#nodes}}
+          nodeids.push("{{id}}");
+          {{/nodes}}
+        var edges = [
+          {{#edges}}
+          {id: "{{id}}",from: "{{from}}", to: "{{to}}", color:"{{color}}" },
+          {{/edges}}
+        ];
         switch (added.link) {
           case ('pp'):
           if($.inArray(added.groundings[0], nodeids) == -1) {nodes.push({id: added.groundings[0], shape: 'box'});}

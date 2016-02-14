@@ -65,6 +65,9 @@
     "from": "diagram/:diary/:diagram",
     "to": "_show/diagram/:diagram"
   }, {
+    "from": "graph/:diary/:graph",
+    "to": "_show/graph/:graph"
+  }, {
     "from": "text_attributes/", 
     "to": "_list/text_attributes/attribute",
     "query": {

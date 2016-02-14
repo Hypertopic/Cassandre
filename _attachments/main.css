@@ -173,6 +173,10 @@ div.post {
   background-image: url('diagram.png');
 }
 
+.graph {
+  background-image: url('graph.png');
+}
+
 .storyline {
   background-image: url('storyline.png');
 }

@@ -1,3 +1,10 @@
+#graph {
+  margin-left: 22%;
+  width: 600px;
+  height: 400px;
+  border: 1px solid lightgray;
+}
+
 .node {
   width: 170px;
   color: black;

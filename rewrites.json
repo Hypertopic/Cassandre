@@ -165,5 +165,8 @@
   }, {
     "from": "script/:file", 
     "to": ":file"
+  }, {
+    "from": "script/images/:file",
+    "to": "images/:file"
   }
 ]

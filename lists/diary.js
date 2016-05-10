@@ -15,6 +15,7 @@ function(head, req) {
       id: row.value.id,
       name: row.value.name,
       date: row.value.date,
+      groundings: row.value.groundings,
       type: row.value.type
     });
   }

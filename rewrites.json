@@ -45,7 +45,8 @@
     "from": "memo/:diary", 
     "to": "_list/diary/memo_attribute",
     "query": {
-      "key": [":diary"]
+      "startkey": [":diary"],
+      "endkey": [":diary", {}]
     }
   }, {
     "from": "text/:corpus/", 

@@ -65,6 +65,7 @@
     </div>
   </body>
   <script src="../../script/jquery.js"></script>
+  <script src="https://cdn.rawgit.com/showdownjs/showdown/1.3.0/dist/showdown.min.js"></script>
   <script src="../../script/jquery-ui.min.js"></script>
   <link rel="stylesheet" href="../../script/jquery-ui.min.css" />
   <script>
@@ -86,7 +87,14 @@
       case ('diagram'):
         $('#add').addClass('diagram');
         break;
+      case ('storyline'):
+        $('#add').addClass('storyline');
+        break;
     }
+    var converter = new showdown.Converter({tables: 'true'});
+    $('.post').html(function(i, text) {
+      return converter.makeHtml(text.trim());
+    });
     $.ajax({
       url: "../../memo_attribute/{{{diary}}}",
       type: "GET",
@@ -98,9 +106,14 @@
           var id = '#' + r.value['id'];
           var ground_href = r.value['id'];
           var ground_type = r.value['type'];
-          if (ground_type == 'diagram') {
+          switch (ground_type) {
+            case ('diagram'):
             var ground_path = "../../diagram/{{{diary}}}/";
-          } else {
+            break;
+            case ('graph'):
+            var ground_path = "../../graph/{{{diary}}}/";
+            break;
+            default:
             var ground_path = '';
           }
           var ground_label = r.value['name'];

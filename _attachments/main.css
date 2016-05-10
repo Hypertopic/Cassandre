@@ -181,6 +181,12 @@ div.post {
   background-image: url('storyline.png');
 }
 
+#network {
+  margin-left: 10px;
+  margin-right: 10px;
+  border: 1px solid lightgray;
+}
+
 #attributes>label {
 	text-transform:capitalize;
 	display: block;

@@ -2,6 +2,8 @@
   <head>
     <link rel="icon" type="image/png" href="../../style/favicon.png" />
     <link rel="stylesheet" type="text/css" href="../../style/main.css" />
+    <link rel="stylesheet" type="text/css" href="../../style/diagram.css" />
+    <link rel="stylesheet" type="text/css" href="../../style/vis.min.css" />
   </head>
   <body id="watermark">
     <div id="container">
@@ -17,13 +19,7 @@
       </header>
       <div id="content">
         <h1>{{diary}}</h1>
-        <ul id="memos">
-          {{#memos}}
-          <li class="{{type}}">{{date}}&nbsp;– 
-            <a href="{{id}}">{{name}}</a>
-          </li>
-          {{/memos}}
-        </ul>
+        <div id="network"></div>
       </div>
       <div id="footer" class="menu">
         <a href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
@@ -31,19 +27,79 @@
     </div>
   </body>
   <script src="../../script/jquery.js"></script>
+  <script type="text/javascript" src="../../script/vis.min.js"></script>
   <script>
   $(document).ready(function() {
-    $('#memos').children('li').each(function() {
-      var type = $(this).attr('class');
-      switch (type) {
-        case ('diagram'):
-        case ('graph'):
-          $(this).find('a').attr("href", '../../'+type+'/'+encodeURIComponent("{{{diary}}}")+'/'+$(this).find('a').attr("href"));
+    var nodes = [];
+    var edges = [];
+    var diagrams = [];
+    var graphs = [];
+    {{#memos}}
+      memo_id = "{{id}}";
+      memo_type = "{{type}}";
+      memo_name = "{{{name}}}";
+      memo_date = "{{date}}";
+      switch (memo_type) {
+        case "field":
+          node_level = '2';
           break;
+        case "coding":
+          node_level = '3';
+          break;
+        case "theoretical":
+          node_level = '0';
+          break;
+        case "diagram":
+          diagrams.push(memo_id);
+          node_level = '4';
+          break;
+        case "operational":
+          node_level = '1';
+          break;
+        case "graph":
+          graphs.push(memo_id);
+          node_level = '5';
+          break;
+        case "storyline":
+          node_level = '6';
+          break;
+      }
+      nodes.push({id: memo_id, shape: 'image', image: '../../style/'+memo_type+'.png', label: memo_date+"\n"+memo_name, y: memo_date, level:node_level });
+      {{#groundings}}
+        if (memo_type == "field") {
+           edges.push({from: memo_id, to: "{{.}}", arrows:'from'});
+        } else {
+           edges.push({from: "{{.}}", to: memo_id, arrows:'to'});
+        }
+      {{/groundings}}
+    {{/memos}}
+    var container = document.getElementById('network');
+    var data = {
+      nodes: nodes,
+      edges: edges
+    };
+    var options = {
+      layout: {
+        hierarchical: {
+          direction: "LR",
+          levelSeparation: 250
+        }
+      }
+    };
+    network = new vis.Network(container, data, options);
+    network.on('click', function (selected) {
+      if (selected.nodes[0].length == 32) {
+        if($.inArray(selected.nodes[0], diagrams) != -1) {
+          self.location = '../../diagram/'+encodeURIComponent("{{{diary}}}")+'/'+selected.nodes[0];
+        } else if($.inArray(selected.nodes[0], graphs) != -1) {
+          self.location = '../../graph/'+encodeURIComponent("{{{diary}}}")+'/'+selected.nodes[0];
+        } else {
+          self.location = selected.nodes[0];
+        }
       }
     });
   });
-// TODO: Sort by date
+
 
   $('#header')
     .on('click', '#diaries', function() {

@@ -239,7 +239,7 @@
           break;
           case ('ipp'):
           if($.inArray(added.groundings[0], nodeids) == -1) {nodes.push({id: added.groundings[0], shape: 'box'});}
-          if($.inArray(added.groundings[0], nodeids) == -1) {nodes.push({id: added.groundings[1], shape: 'box'});}
+          if($.inArray(added.groundings[1], nodeids) == -1) {nodes.push({id: added.groundings[1], shape: 'box'});}
           edges.push({id: there.value, from: added.groundings[0], to: added.groundings[1], color: 'red'});
           break;
           case ('dd'):

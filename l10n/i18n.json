@@ -45,13 +45,15 @@
        "field": "Émotion ou vécu exprimé par les personnes rencontrées",
        "coding": "Property or dimenson",
        "theoretical": "Category or relation to be sampled",
-       "operational": "Planning next contact with the field"
+       "operational": "Planning next contact with the field",
+       "storyline": "Conclusions for this study"
     },
     "i_content": {
       "field": "What am I observing ?",
       "coding": "How is defined such an activity ? What process is at stake ?",
       "operational": "Things not to forget to observe on the field",
-      "theoretical": "Theoretical question(s) raised when coding the material"
+      "theoretical": "Theoretical question(s) raised when coding the material",
+      "storyline": "Summarize what have learned, draw the storyline of the research project, write the draft of your next paper"
     },
     "i_diagram_type": "Select type of diagram",
     "i_link": "Linking",
@@ -107,13 +109,15 @@
        "field": "Émotion ou vécu exprimé par les personnes rencontrées",
        "coding": "Propriété ou dimension",
        "theoretical": "Question de recherche ou phénomène à échantillonner",
-       "operational": "Aide mémoire pour la suite"
+       "operational": "Aide-mémoire pour la suite",
+       "storyline": "Résultats intermédiaires"
     },
     "i_content": {
       "field": "Qu'ai je observé ?",
       "coding": "Comment se définit tel processus, telle action ou telle activité ?",
       "operational": "Que ne faut-il pas oublier de faire sur le terrain ?",
-      "theoretical": "Reformulation de la question de recherche, nouvelles questions théoriques que suscite l'analyse du matériau, propriété ou articulation à approfondir."
+      "theoretical": "Reformulation de la question de recherche, nouvelles questions théoriques que suscite l'analyse du matériau, propriété ou articulation à approfondir.",
+      "storyline": "Faire le point sur le déroulement de la recherche, prépaper une restitution à l'intention des acteurs de terrain ou rédiger ses premières conclusions..."
     },
     "i_diagram_type": "Type de schématisation",
     "i_link": "Articuler",

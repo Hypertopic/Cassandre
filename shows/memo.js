@@ -15,6 +15,7 @@ function(o, req){
     user: o.user,
     body: [],
     groundings: [],
+    comments: [],
     leaves: []
   }
   if (o.body) {
@@ -37,6 +38,13 @@ function(o, req){
       id: g.value
     };
     data.groundings.push(g);
+  }
+  for each (var c in o.comments) {
+    var comment = {
+      user: c.user,
+      text: c.text
+    };
+    data.comments.push(comment);
   }
   return Mustache.to_html(templates.memo, data);
 }

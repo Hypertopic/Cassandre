@@ -36,6 +36,14 @@
             <textarea id="body" cols="80" rows="20" type="text">{{body}}</textarea>
           </p>
         </div>
+        <div id="comments" hidden="hidden">
+          {{#comments}}
+          <li class="comment">
+            <div class="text">{{text}}</div>
+            <div class="user">({{user}})</div>
+          </li>
+          {{/comments}}
+        </div>
       </div>
       <div id="footer" class="menu">
         <button type="button" id="done">{{i18n.i_done}}</button>
@@ -78,31 +86,26 @@
   });
 
   function save(draft, toDoAfter) {
-    var data = {
-      groundings: [],
-      _rev: "{{_rev}}",
-      body: $('#body').val(),
-      name: $('#name').val(),
-      type: "{{type}}",
-      date: "{{date}}",
-      user: "{{user}}",
-      diary: "{{{diary}}}"
-    };
-    $('#groundings').children('li').each(function() {
-      data.groundings.push($(this).attr('id'));
-    });
     $.ajax({
-      type: "PUT",
       url: "../{{_id}}",
-      contentType: "application/json",
-      data: JSON.stringify(data),
-      error: function(request) {
-        alert(
-          (JSON.parse(request.responseText).reason || request.responseText)
-          + '\nCode ' + request.status
-        );
-      },
-      success: toDoAfter
+      type: "GET",
+      dataType: "json",
+      success: function(data) {
+        data.body = $('#body').val();
+        $.ajax({
+          type: "PUT",
+          url: "../{{_id}}",
+          contentType: "application/json",
+          data: JSON.stringify(data),
+          error: function(request) {
+            alert(
+              (JSON.parse(request.responseText).reason || request.responseText)
+              + '\nCode ' + request.status
+            );
+          },
+          success: toDoAfter
+        });
+      }
     });
   }
 

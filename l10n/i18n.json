@@ -41,6 +41,7 @@
     "i_add_groundings": "Add grounds",
     "i_select_grounding": "Select a ground",
     "i_groundings": "Grounded in",
+    "i_comment": "Comment",
     "i_name": {
        "field": "Émotion ou vécu exprimé par les personnes rencontrées",
        "coding": "Property or dimenson",
@@ -105,6 +106,7 @@
     "i_add_groundings": "Ajouter un ancrage",
     "i_select_grounding": "Choisissez un ancrage",
     "i_groundings": "Ancrages",
+    "i_comment": "Commenter",
     "i_name": {
        "field": "Émotion ou vécu exprimé par les personnes rencontrées",
        "coding": "Propriété ou dimension",

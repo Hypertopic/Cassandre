@@ -50,6 +50,14 @@
           {{/body}}
           </div>
         </div>
+        <div id="comments">
+          {{#comments}}
+          <div>{{text}} ({{user}})</div>
+          {{/comments}}
+          <button type="button" id="comment">{{i18n.i_comment}}</button>
+          <textarea hidden="hidden">...</textarea>
+          <button type="button" id="commented" hidden="hidden">{{i18n.i_done}}</button>
+        </div>
         <div id="leaves">
           <ul id="branch">
           </ul>
@@ -224,6 +232,22 @@
     });
   });
 
+  $("#comment").click(function () {
+    $("#comment").remove();
+    $("#comments").find('textarea').show();
+    $('#commented').show();
+  });
+
+  $("#commented").on('click', function() {
+    if ($('#comments').find('textarea').val().trim() == '') {
+      alert("{{i18n.i_enter_memo_name}}")
+    } else {
+      record(false, function() {
+        self.location = '{{_id}}';
+      });
+    }
+  });
+
   function save(there) {
     var data = {
       groundings: [],
@@ -256,6 +280,7 @@
       data.speeches = content;
     }
     data.groundings.push(there.value);
+
     $.ajax({
       type: "PUT",
       url: "../../{{_id}}",
@@ -315,5 +340,36 @@
       });
     }
   }
+
+  function record(draft, toDoAfter) {
+    $.ajax({
+      url: "../../{{_id}}",
+      type: "GET",
+      dataType: "json",
+      success: function(data) {
+        data.comments.push({
+          user: "unidentified.researcher",
+          text: $('#comments').find('textarea').val().trim()
+        });
+        $.ajax({
+          type: "PUT",
+          url: "../../{{_id}}",
+          contentType: "application/json",
+          data: JSON.stringify(data),
+          error: function(request) {
+            alert(
+              (JSON.parse(request.responseText).reason || request.responseText)
+              + '\nCode ' + request.status
+            );
+          },
+          success: toDoAfter
+        });
+      }
+    });
+  }
+
+
+
+
   </script>
 </html>

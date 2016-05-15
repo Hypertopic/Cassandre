@@ -49,14 +49,14 @@
           </div>
           {{/body}}
           </div>
-        </div>
-        <div id="comments">
-          {{#comments}}
-          <div>{{text}} ({{user}})</div>
-          {{/comments}}
-          <button type="button" id="comment">{{i18n.i_comment}}</button>
-          <textarea hidden="hidden">...</textarea>
-          <button type="button" id="commented" hidden="hidden">{{i18n.i_done}}</button>
+          <div id="comments">
+            {{#comments}}
+            <div class="comment">{{user}} ({{date}}): <br/>{{text}}</div>
+            {{/comments}}
+            <button type="button" id="comment">{{i18n.i_comment}}</button>
+            <textarea cols="80" rows="5" type="text" hidden="hidden"></textarea>
+            <button type="button" id="commented" hidden="hidden">{{i18n.i_done}}</button>
+          </div>
         </div>
         <div id="leaves">
           <ul id="branch">
@@ -166,11 +166,11 @@
         if ($('#groundings li').length < 1) {
           $("#groundings").find('legend').remove();
           $("#groundings").css({
-             'position': 'absolute',
-             'height': '31px',
-             'line-height': '31px',
+             'height': '36px',
+             'line-height': '36px',
+             'position': 'fixed',
              'top': '0px',
-             'padding-top': 'auto',
+             'padding-top': '36px',
              'padding-left': '5px',
              'padding-right': '5px',
              'width': '200px',
@@ -186,7 +186,10 @@
              'transform-origin': 'center center 0',
           });
           $("#content").css({
-             'margin-left': '30px',
+             'margin-left': '40px',
+          });
+          $("#comments").css({
+             'margin-left': '40px',
           });
         }
       }
@@ -240,7 +243,7 @@
 
   $("#commented").on('click', function() {
     if ($('#comments').find('textarea').val().trim() == '') {
-      alert("{{i18n.i_enter_memo_name}}")
+      alert("{{i18n.i_enter_comment}}")
     } else {
       record(false, function() {
         self.location = '{{_id}}';
@@ -347,8 +350,10 @@
       type: "GET",
       dataType: "json",
       success: function(data) {
+        data.comments = ( typeof data.comments != 'undefined' && data.comments instanceof Array ) ? data.comments : [];
         data.comments.push({
           user: "unidentified.researcher",
+          date: new Date().toJSON().substring(0,10),
           text: $('#comments').find('textarea').val().trim()
         });
         $.ajax({
@@ -367,9 +372,5 @@
       }
     });
   }
-
-
-
-
   </script>
 </html>

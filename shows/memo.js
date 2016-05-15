@@ -42,6 +42,7 @@ function(o, req){
   for each (var c in o.comments) {
     var comment = {
       user: c.user,
+      date: c.date,
       text: c.text
     };
     data.comments.push(comment);

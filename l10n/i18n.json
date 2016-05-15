@@ -42,8 +42,9 @@
     "i_select_grounding": "Select a ground",
     "i_groundings": "Grounded in",
     "i_comment": "Comment",
+    "i_enter_comment": "Enter your comment",
     "i_name": {
-       "field": "Émotion ou vécu exprimé par les personnes rencontrées",
+       "field": "Emotion or experience reported by informants ",
        "coding": "Property or dimenson",
        "theoretical": "Category or relation to be sampled",
        "operational": "Planning next contact with the field",
@@ -107,6 +108,7 @@
     "i_select_grounding": "Choisissez un ancrage",
     "i_groundings": "Ancrages",
     "i_comment": "Commenter",
+    "i_enter_comment": "Saisissez un commentaire",
     "i_name": {
        "field": "Émotion ou vécu exprimé par les personnes rencontrées",
        "coding": "Propriété ou dimension",

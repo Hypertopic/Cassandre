@@ -34,8 +34,13 @@ form {
   margin: 0px 2px;
 }
 
-#content {
-  padding: 30px;
+#container>#memo {
+  padding: 30px 0 0 0 ;
+}
+
+
+#memo>#content {
+  padding: 0 35px 0 0 ;
 }
 
 #content h1 {
@@ -82,16 +87,15 @@ div.post {
   width:20%;
   height:93%;
   float:left;
-  padding:5px;
-  padding-top: 30px;
+  padding: 5px 0 0 5px;
   background-repeat: no-repeat;
   cursor: pointer;
 }
 
 #show-leaves {
-  height: 31px;
-  line-height:  31px;
-  position:absolute;
+  height: 36px;
+  line-height:  36px;
+  position:fixed;
   top: 0px;
   right: 0px;
   background-color:#eeeeee;
@@ -107,10 +111,10 @@ div.post {
 }
 
 #leaves {
-  position:absolute;
+  position:fixed;
   background-color:#eeeeee;
   display:none;
-  top: 31px;
+  top: 36px;
   right: 0px;
   width: 30%;
   padding:5px;
@@ -126,8 +130,33 @@ div.post {
   font-size:150%;
 }
 
-#memo>#content {
-  padding:30px;
+#memo {
+  padding: 35px 0 0 0;
+}
+
+#memo>#content h1 {
+  padding: 5px 0 0 0;
+}
+
+#container>#content h1 {
+  padding: 35px 0 0 10px ;
+}
+
+#comments {
+  margin-left: 21%;
+  margin-bottom: 30px;
+  left: 0px;
+  right: 0px;
+}
+
+button.comment {
+  display: table;
+}
+
+.comment {
+  font-size: 80%;  
+  border-top: 1px solid lightgray;
+  padding-left:5px;
 }
 
 #add-grounding, #select-type {

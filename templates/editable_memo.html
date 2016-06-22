@@ -84,6 +84,7 @@
       dataType: "json",
       success: function(data) {
         data.body = $('#body').val();
+        data.name = $('#name').val();
         $.ajax({
           type: "PUT",
           url: "../{{_id}}",

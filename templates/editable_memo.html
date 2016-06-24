@@ -8,7 +8,7 @@
     <form id="container">
       <header>
         <div id="header" class="menu">
-          <button type="button" id="diary">{{diary}}</button>
+          <button type="button" id="diary">&nbsp;</button>
         </div>
       </header>
       <div id="memo">
@@ -47,7 +47,7 @@
   <script>
   $(document).ready(function() {
     $.ajax({
-      url: "../../memo_attribute/{{{diary}}}",
+      url: "../../memo_attribute/{{diary}}",
       type: "GET",
       dataType: "json",
       success: function(grounds) {
@@ -73,6 +73,14 @@
         placeHolder["storyline"] = {name : "{{i18n.i_name.storyline}}", content: "{{{i18n.i_content.storyline}}}"};
         $("#name").attr("placeHolder", placeHolder["{{type}}"]["name"]);
         $("#body").attr("placeHolder", placeHolder["{{type}}"]["content"]);
+      }
+    });
+    $.ajax({
+      url: "../../{{diary}}",
+      type: "GET",
+      dataType: "json",
+      success: function(d) {
+        $("#diary").html(d.diary_name);
       }
     });
   });
@@ -103,8 +111,7 @@
   }
 
   $('#diary').on('click', function() {
-    var diaryUrl = encodeURIComponent("{{{diary}}}");
-    self.location = '../memo/'+diaryUrl+'/?by=name';
+    self.location = '../memo/{{diary}}/?by=name';
   });
 
   $('#groundings').find('.toggle').click(function(){
@@ -117,8 +124,7 @@
       alert("{{i18n.i_enter_memo_name}}")
     } else {
       save(false, function() {
-        var diaryUrl = encodeURIComponent("{{{diary}}}");
-        self.location = '../memo/'+diaryUrl+'/{{_id}}';
+        self.location = '../memo/{{diary}}/{{_id}}';
       });
     }
   });

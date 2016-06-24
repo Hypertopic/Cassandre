@@ -9,7 +9,7 @@
   <body>
     <div id="container">
       <div id="header" class="menu">
-        <button type="button" id="diary">{{diary}}</button>
+        <button type="button" id="diary">&nbsp;</button>
       </div>
       <div id="memo">
         <div id="groundings" >
@@ -50,7 +50,7 @@
   <script>
   $(document).ready(function() {
     $.ajax({
-      url: "../../memo_attribute/{{{diary}}}",
+      url: "../../memo_attribute/{{diary}}",
       type: "GET",
       dataType: "json",
         success: function(grounds) {
@@ -63,10 +63,10 @@
           var ground_type = r.value['type'];
           switch (ground_type) {
             case ('memo'): 
-            var ground_path = "../../memo/{{{diary}}}/";
+            var ground_path = "../../memo/{{diary}}/";
             break;
             case ('diagram'): 
-            var ground_path = "../../diagram/{{{diary}}}/";
+            var ground_path = "../../diagram/{{diary}}/";
             break;
             default:
             var ground_path = '';
@@ -121,9 +121,9 @@
         var network = new vis.Network(container, data, options);
         network.on('click', function (selected) {
           if (typeof selected.nodes[0] === "undefined" && selected.edges[0].length == 32) {  
-            self.location = "../../diagram/{{{diary}}}/"+selected.edges[0];
+            self.location = "../../diagram/{{diary}}/"+selected.edges[0];
           } else if (selected.nodes[0].length == 32) {
-            self.location = "../../memo/{{{diary}}}/"+selected.nodes[0];
+            self.location = "../../memo/{{diary}}/"+selected.nodes[0];
           } else {}
         });
       }
@@ -133,6 +133,14 @@
     $("#dialog").find('select').append($('<option>', {
       text: "{{i18n.i_select_grounding}}"
     }));
+    $.ajax({
+      url: "../../{{diary}}",
+      type: "GET",
+      dataType: "json",
+      success: function(d) {
+        $("#diary").html(d.diary_name);
+      }
+    });
     $.ajax({
       url: "../../leaves/{{_id}}",
       type: "GET",
@@ -144,7 +152,7 @@
           var leaf_type = r.value['type'];
           var leaf_path = '';
           if (leaf_type != 'diagram') {
-            var leaf_path = "../../memo/{{{diary}}}/";
+            var leaf_path = "../../memo/{{diary}}/";
           }
           var leaf_label = r.value['name'];
           $("#leaves ul").append('<li class="'+leaf_type+'"><a href="'+leaf_path+leaf_href+'">'+leaf_label+'</a></li>');              
@@ -160,7 +168,7 @@
     var type = $(this)[0].className; 
     var data = {
       date: new Date().toJSON().substring(0,10),
-      diary: "{{{diary}}}",
+      diary: "{{diary}}",
       type: type,
       groundings: [],
       name: "",
@@ -192,7 +200,7 @@
   });
 
   $('#diary').on('click', function() {
-    var diaryUrl = encodeURIComponent("{{{diary}}}");
+    var diaryUrl = encodeURIComponent("{{diary}}");
     self.location = '../../memo/'+diaryUrl+'/?by=name';
   });
 
@@ -261,7 +269,7 @@
         var data = {
           _rev: "{{_rev}}",
           date: "{{date}}",
-          diary: "{{{diary}}}",
+          diary: "{{diary}}",
           name: "{{{name}}}",
           groundings: [],
           nodes: nodes,

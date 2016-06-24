@@ -1,7 +1,10 @@
 function(doc) {
-  if (doc.diary) {
-    emit(doc.diary);
+  var diaries = {};
+  if (doc.diary_name) {
+    emit(['name', doc._id, doc.diary_name]);
+  } else if (doc.diary) {
+    emit(['text', doc.diary]);
   } else if (doc.corpus) {
-    emit(doc.corpus);
+    emit(['text', doc.corpus]);
   }
 }

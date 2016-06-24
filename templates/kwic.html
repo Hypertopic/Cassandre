@@ -6,7 +6,7 @@
   <body id="watermark">
     <div id="container">
       <div id="header" class="menu">
-        <button type="button" id="corpus">{{corpus}}</button>
+        <button type="button" id="corpus">&nbsp;</button>
         <input id="kwic" type="search" placeholder="{{i18n.i_search}}" />
       </div>
       <div id="content">
@@ -27,10 +27,19 @@
   </body>
   <script src="../../script/jquery.js"></script>
   <script> 
+  $(document).ready(function() {
+    $.ajax({
+      url: "../../{{corpus}}",
+      type: "GET",
+      dataType: "json",
+      success: function(d) {
+        $("#corpus").html(d.diary_name);
+      }
+    });
+  });
 
   $('#corpus').on('click', function(){
-    var corpusUrl = encodeURIComponent("{{{corus}}}");
-    self.location = '../../memo/'+corpusUrl+'/?by=name';
+    self.location = '../../memo/{{corpus}}/?by=name';
   });
 
   function getUUID() {

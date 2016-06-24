@@ -3,13 +3,11 @@
     <title>{{name}} ({{diary}})</title>
     <link rel="icon" type="image/png" href="../../style/favicon.png" />
     <link rel="stylesheet" type="text/css" href="../../style/main.css" />
-
-
   </head>
   <body>
     <div id="container">
       <div id="header" class="menu">
-        <button type="button" id="diary">{{diary}}</button>
+        <button type="button" id="diary">&nbsp;</button>
       </div>
       <div id="memo">
         <div id="groundings" >
@@ -54,7 +52,7 @@
             <div class="comment">{{user}} ({{date}}): <br/>{{text}}</div>
             {{/comments}}
             <button type="button" id="comment">{{i18n.i_comment}}</button>
-            <textarea cols="80" rows="5" type="text" hidden="hidden"></textarea>
+            <textarea cols="80" rows="5" type="text" hidden="hidden" placeHolder="{{i18n.i_enter_comment}}"></textarea>
             <button type="button" id="commented" hidden="hidden">{{i18n.i_done}}</button>
           </div>
         </div>
@@ -104,7 +102,7 @@
       return converter.makeHtml(text.trim());
     });
     $.ajax({
-      url: "../../memo_attribute/{{{diary}}}",
+      url: "../../memo_attribute/{{diary}}",
       type: "GET",
       dataType: "json",
         success: function(grounds) {
@@ -116,10 +114,10 @@
           var ground_type = r.value['type'];
           switch (ground_type) {
             case ('diagram'):
-            var ground_path = "../../diagram/{{{diary}}}/";
+            var ground_path = "../../diagram/{{diary}}/";
             break;
             case ('graph'):
-            var ground_path = "../../graph/{{{diary}}}/";
+            var ground_path = "../../graph/{{diary}}/";
             break;
             default:
             var ground_path = '';
@@ -145,6 +143,14 @@
       }
     });
     $.ajax({
+      url: "../../{{diary}}",
+      type: "GET",
+      dataType: "json",
+      success: function(d) {
+        $("#diary").html(d.diary_name);
+      }
+    });
+    $.ajax({
       url: "../../leaves/{{_id}}",
       type: "GET",
       dataType: "json",
@@ -153,7 +159,7 @@
           var r = leaves.rows[i];
           var leaf_type = r.value['type'];
           if (leaf_type == 'diagram') {
-            var leaf_href = "../../diagram/{{{diary}}}/"+r.value['id']
+            var leaf_href = "../../diagram/{{diary}}/"+r.value['id']
           } else {
             var leaf_href = r.value['id'];
           }
@@ -207,7 +213,7 @@
   });
 
   $('#diary').on('click', function() {
-    var diaryUrl = encodeURIComponent("{{{diary}}}");
+    var diaryUrl = encodeURIComponent("{{diary}}");
     self.location = '../'+diaryUrl+'/?by=name';
   });
 
@@ -256,7 +262,7 @@
       groundings: [],
       _rev: "{{_rev}}",
       date: "{{date}}",
-      diary: "{{{diary}}}",
+      diary: "{{diary}}",
       name: "{{{name}}}",
       type: "{{type}}",
       user: "{{user}}"
@@ -302,7 +308,7 @@
   }
 
   function create(type) {
-    var diary = "{{{diary}}}";
+    var diary = "{{diary}}";
     var data = {
       date: new Date().toJSON().substring(0,10),
       groundings: [],
@@ -316,7 +322,7 @@
         data.speeches = [{actor:"",text:""}];
         break;
       case 'diagram':
-        var destination = "/diagram/{{{diary}}}/";
+        var destination = "/diagram/{{diary}}/";
         data.diary = diary;
         data.link = 'pp';
         data.name = "{{{name}}}";

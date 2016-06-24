@@ -8,7 +8,7 @@
   <body>
     <div id="container">
       <div id="header" class="menu">
-        <button type="button" id="diary">{{diary}}</button>
+        <button type="button" id="diary">&nbsp;</button>
       </div>
       <div id="memo">
         <div id="groundings" >
@@ -51,7 +51,7 @@
   <script>
   $(document).ready(function() {
     $.ajax({
-      url: "../../memo_attribute/{{{diary}}}",
+      url: "../../memo_attribute/{{diary}}",
       type: "GET",
       dataType: "json",
         success: function(grounds) {
@@ -63,7 +63,7 @@
           var ground_type = r.value['type'];
           var ground_path = '';
           if (ground_type != 'diagram') {
-            var ground_path = "../../memo/{{{diary}}}/";
+            var ground_path = "../../memo/{{diary}}/";
           }
           var ground_label = r.value['name'];
           var ground_date = r.value['date']; // unused
@@ -114,7 +114,15 @@
         $('<option>', { value: 'idd', text: "{{i18n.i_inverse_link_between_dimensions}}" }),
         $('<option>', { value: 'dp', text: "{{i18n.i_link_property_dimension}}" })
       );
-    }    
+    }
+    $.ajax({
+      url: "../../{{diary}}",
+      type: "GET",
+      dataType: "json",
+      success: function(d) {
+        $("#diary").html(d.diary_name);
+      }
+    });
     $.ajax({
       url: "../../leaves/{{_id}}",
       type: "GET",
@@ -129,10 +137,10 @@
             var leaf_path = '';
             break;
             case ('graph'):
-            var leaf_path = "../../graph/{{{diary}}}/";
+            var leaf_path = "../../graph/{{diary}}/";
             break;
             default:
-            var leaf_path = "../../memo/{{{diary}}}/";
+            var leaf_path = "../../memo/{{diary}}/";
           }
           var leaf_label = r.value['name'];
           $("#leaves ul").append('<li class="'+leaf_type+'"><a href="'+leaf_path+leaf_href+'">'+leaf_label+'</a></li>');              
@@ -148,7 +156,7 @@
     var type = $(this)[0].className; 
     var data = {
       date: new Date().toJSON().substring(0,10),
-      diary: "{{{diary}}}",
+      diary: "{{diary}}",
       type: type,
       groundings: [],
       name: "",
@@ -180,8 +188,7 @@
   });
 
   $('#diary').on('click', function() {
-    var diaryUrl = encodeURIComponent("{{{diary}}}");
-    self.location = '../../memo/'+diaryUrl+'/?by=name';
+    self.location = '../../memo/{{diary}}/?by=name';
   });
 
   $('#add-grounding').on('click', function() {
@@ -204,7 +211,7 @@
       groundings: [],
       _rev: "{{_rev}}",
       date: "{{date}}",
-      diary: "{{{diary}}}",
+      diary: "{{diary}}",
       name: "{{{name}}}",
       type: 'diagram',
       link: there.value,
@@ -237,7 +244,7 @@
       groundings: [],
       _rev: "{{_rev}}",
       date: "{{date}}",
-      diary: "{{{diary}}}",
+      diary: "{{diary}}",
       name: name,
       type: 'diagram',
       link: 'pp',

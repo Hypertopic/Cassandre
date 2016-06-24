@@ -10,7 +10,7 @@
         <ul>
           {{#diaries}}
           <li>
-            <b>{{id}}</b>&nbsp;–
+            <b>{{name}}</b>&nbsp;–
             <a href='../memo/{{id}}/?by=name' >{{count}} {{i18n.i_memos}}</a>
           </li>
           {{/diaries}}
@@ -29,6 +29,7 @@
   <script src="http://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
   <script>
+
   $('#create').on('click', function() {
     $("#dialog").dialog({
       autoOpen:false,
@@ -38,8 +39,8 @@
       buttons:{
         "ok":function(){
           $(this).dialog("close");
-          var diary = $('#dialog').find('input[name="diary"]').val()
-          createDiary(diary);
+          var diary_name = $('#dialog').find('input[name="diary"]').val()
+          createDiary(diary_name);
           return true;
         },
         "cancel":function(){
@@ -57,27 +58,39 @@
     });
     $("#dialog").dialog("open");
   });
-  function createDiary(diary) {
+  function createDiary(diary_name) {
     var type = $('#create')[0].className;
     var date = new Date().toJSON().substring(0,10);
+    var diary = {
+      diary_name: diary_name
+    };
     var data = {
       type: type,
       date: date,
       groundings: [],
       name: "",
-      diary: diary,
       body: "",
       user: "unidentified.researcher"
     };
-    if (diary) {
+    if (diary_name) {
       $.ajax({
         url: "../",
         type: "POST",
         dataType: "json",
         contentType: "application/json",
-        data: JSON.stringify(data),
-        success: function(data) {
-          location.replace('/editable_memo/'+data.id)
+        data: JSON.stringify(diary),
+        success: function(diary) {
+          data.diary = diary.id;
+          $.ajax({
+            url: "../",
+            type: "POST",
+            dataType: "json",
+            contentType: "application/json",
+            data: JSON.stringify(data),
+            success: function(data) {
+              location.replace('/editable_memo/'+data.id)
+            }
+          });
         }
       });
     }

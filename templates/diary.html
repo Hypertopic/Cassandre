@@ -18,7 +18,7 @@
         </div>
       </header>
       <div id="content">
-        <h1>{{diary}}</h1>
+        <h1> </h1>
         <div id="network"></div>
       </div>
       <div id="footer" class="menu">
@@ -30,6 +30,14 @@
   <script type="text/javascript" src="../../script/vis.min.js"></script>
   <script>
   $(document).ready(function() {
+    $.ajax({
+      url: "../../{{diary}}",
+      type: "GET",
+      dataType: "json",
+      success: function(d) {
+        $('h1').text(d.diary_name);
+      }
+    });
     var nodes = [];
     var edges = [];
     var diagrams = [];
@@ -90,9 +98,9 @@
     network.on('click', function (selected) {
       if (selected.nodes[0].length == 32) {
         if($.inArray(selected.nodes[0], diagrams) != -1) {
-          self.location = '../../diagram/'+encodeURIComponent("{{{diary}}}")+'/'+selected.nodes[0];
+          self.location = '../../diagram/{{diary}}/'+selected.nodes[0];
         } else if($.inArray(selected.nodes[0], graphs) != -1) {
-          self.location = '../../graph/'+encodeURIComponent("{{{diary}}}")+'/'+selected.nodes[0];
+          self.location = '../../graph/{{diary}}/'+selected.nodes[0];
         } else {
           self.location = selected.nodes[0];
         }
@@ -100,14 +108,12 @@
     });
   });
 
-
   $('#header')
     .on('click', '#diaries', function() {
       self.location = '..';
     })
     .on('click', '#patterns', function() {
-      var diaryUrl = encodeURIComponent("{{{diary}}}");
-      self.location = '../../kwic/'+diaryUrl;
+      self.location = '../../kwic/{{diary}}';
     });
 
   </script>

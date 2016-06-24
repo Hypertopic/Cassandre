@@ -7,7 +7,7 @@
     <div id="container">
       <header>
       <div id="header" class="menu">
-        <button type="button" id="corpus">{{corpus}}</button>
+        <button type="button" id="corpus">&nbsp;</button>
         <input id="kwic" type="search" placeholder="{{i18n.i_search}}" />
       </div>
       </header>
@@ -26,12 +26,21 @@
   </body>
   <script src="../script/jquery.js"></script>
   <script>
+  $(document).ready(function() {
+    $.ajax({
+      url: "../../{{corpus}}",
+      type: "GET",
+      dataType: "json",
+      success: function(d) {
+        $("#corpus").html(d.diary_name);
+      }
+    });
+  });
 
   resetUI();
 
   $('#corpus').on('click', function(){
-    var corpusUrl = encodeURIComponent("{{{corpus}}}");
-    self.location = '../memo/'+corpusUrl+'/?by=name';
+    self.location = '../memo/{{corpus}}/?by=name';
   });
 
   $('#footer')

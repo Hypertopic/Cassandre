@@ -7,7 +7,7 @@
     <form id="container">
       <header>
         <div id="header" class="menu">
-          <button type="button" id="corpus">{{corpus}}</button>
+          <button type="button" id="corpus">&nbsp;</button>
         </div>
       </header>
       <div id="content">
@@ -51,6 +51,16 @@
   </body>
   <script src="../script/jquery.js"></script>
   <script>
+  $(document).ready(function() {
+    $.ajax({
+      url: "../../{{corpus}}",
+      type: "GET",
+      dataType: "json",
+      success: function(d) {
+        $("#corpus").html(d.diary_name);
+      }
+    });
+  });
 
   function save(draft, toDoAfter) {
     var data = {
@@ -97,8 +107,7 @@
   }
 
   $('#corpus').on('click', function() {
-    var corpusUrl = encodeURIComponent("{{{corpus}}}");
-    self.location = '../memo/'+corpusUrl+'/?by=name';
+    self.location = '../memo/{{corpus}}/?by=name';
   });
 
   $('#save').on('click', function() {
@@ -109,8 +118,7 @@
 
   $('#done').on('click', function() {
     save(false, function() {
-      var corpusUrl = encodeURIComponent("{{{corpus}}}");
-      self.location = '../memo/'+corpusUrl+'/{{_id}}';
+      self.location = '../memo/{{corpus}}/{{_id}}';
     });
   });
 

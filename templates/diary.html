@@ -72,7 +72,7 @@
           node_level = '6';
           break;
       }
-      nodes.push({id: memo_id, shape: 'image', image: '../../style/'+memo_type+'.png', label: memo_date+"\n"+memo_name, y: memo_date, level:node_level });
+      nodes.push({id: memo_id, shape: 'image', image: '../../style/'+memo_type+'.png', label: memo_date.substring(0,10)+"\n"+memo_name, y: memo_date, level:node_level });
       {{#groundings}}
         if (memo_type == "field") {
            edges.push({from: memo_id, to: "{{.}}", arrows:'from'});

@@ -60,7 +60,7 @@
   });
   function createDiary(diary_name) {
     var type = $('#create')[0].className;
-    var date = new Date().toJSON().substring(0,10);
+    var date = new Date().toJSON();
     var diary = {
       diary_name: diary_name
     };

@@ -167,7 +167,7 @@
   $('#add').on('click', function() {
     var type = $(this)[0].className; 
     var data = {
-      date: new Date().toJSON().substring(0,10),
+      date: new Date().toJSON(),
       diary: "{{diary}}",
       type: type,
       groundings: [],
@@ -200,8 +200,7 @@
   });
 
   $('#diary').on('click', function() {
-    var diaryUrl = encodeURIComponent("{{diary}}");
-    self.location = '../../memo/'+diaryUrl+'/?by=name';
+    self.location = '../../memo/{{diary}}/?by=name';
   });
 
   $('#add-grounding').on('click', function() {

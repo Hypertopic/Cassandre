@@ -310,7 +310,7 @@
   function create(type) {
     var diary = "{{diary}}";
     var data = {
-      date: new Date().toJSON().substring(0,10),
+      date: new Date().toJSON(),
       groundings: [],
       user: "unidentified.researcher"
     };
@@ -359,7 +359,7 @@
         data.comments = ( typeof data.comments != 'undefined' && data.comments instanceof Array ) ? data.comments : [];
         data.comments.push({
           user: "unidentified.researcher",
-          date: new Date().toJSON().substring(0,10),
+          date: new Date().toJSON(),
           text: $('#comments').find('textarea').val().trim()
         });
         $.ajax({

@@ -22,7 +22,7 @@
           <div id="add-grounding"></div>
         </div>
         <div id="content">
-          <h1> <img src="../../style/{{type}}.png"/> {{name}} <button type="button" class="theoretical" id="add">+</button> </h1>
+          <h1> <img src="../../style/{{type}}.png"/> {{name}} <button type="button" class="theoretical" id="add">+</button> <button type="button" class="graph" id="create">+</button></h1>
           <p>
             {{user}}<br/>{{date}}
           </p>
@@ -143,7 +143,7 @@
             var leaf_path = "../../memo/{{diary}}/";
           }
           var leaf_label = r.value['name'];
-          $("#leaves ul").append('<li class="'+leaf_type+'"><a href="'+leaf_path+leaf_href+'">'+leaf_label+'</a></li>');              
+          $("#leaves ul").append('<li class="'+leaf_type+'"><a href="'+leaf_path+leaf_href+'">'+leaf_label+'</a></li>');
         }
         if (leaves.rows.length < 1) {
           $("#show-leaves").remove();
@@ -153,17 +153,69 @@
   });
 
   $('#add').on('click', function() {
-    var type = $(this)[0].className; 
+    var type = $(this)[0].className;
+    create(type);
+  });
+
+  $('#create').on('click', function() {
+    var type = $(this)[0].className;
+    create(type);
+  });
+
+  function create(type) {
     var data = {
-      date: new Date().toJSON().substring(0,10),
+      date: new Date().toJSON(),
       diary: "{{diary}}",
       type: type,
       groundings: [],
-      name: "",
       user: "unidentified.researcher"
     };
+    switch (type) {
+      case 'graph':
+        var destination = "/graph/{{diary}}/";
+        var nodes = [];
+        var edges = [];
+        var from = $('#groundings').children('li').first().attr('id');
+        var to = $('#groundings').children('li').last().attr('id');
+        switch ("{{link}}") {
+          case ('pp'):
+          nodes.push({id: from, shape: 'box'});
+          nodes.push({id: to, shape: 'box'});
+          edges.push({id: "{{_id}}", from: from, to: to, color: 'green'});
+          break;
+          case ('ipp'):
+          nodes.push({id: from, shape: 'box'});
+          nodes.push({id: to, shape: 'box'});
+          edges.push({id: "{{_id}}", from: from, to: to, color: 'red'});
+          break;
+          case ('dd'):
+          nodes.push({id: from, shape: 'diamond'});
+          nodes.push({id: to, shape: 'diamond'});
+          edges.push({id: "{{_id}}", from: from, to: to, color: 'green'});
+          break;
+          case ('idd'):
+          nodes.push({id: from, shape: 'diamond'});
+          nodes.push({id: to, shape: 'diamond'});
+          edges.push({id: "{{_id}}", from: from, to: to, color: 'red'});
+          break;
+          case ('dp'):
+          nodes.push({id: from, shape: 'box'});
+          nodes.push({id: to, shape: 'diamond'});
+          edges.push({id: "{{_id}}", from: from, to: to, color: 'green'});
+          break;
+        }
+        data.edges = edges;
+        data.nodes = nodes;
+        var diary_name = $("#diary").text();
+        data.name = prompt("{{i18n.i_enter_graph_name}}", diary_name);
+        break;
+      default:
+        var destination = '/editable_memo/';
+        data.name = "";
+        data.body = "";
+    }
     data.groundings.push("{{_id}}");
-    if (diary) {
+    if (type) {
       $.ajax({
         url: "../../",
         type: "POST",
@@ -171,11 +223,11 @@
         contentType: "application/json",
         data: JSON.stringify(data),
         success: function(data) {
-          self.location = '/editable_memo/'+data.id;
+          self.location = destination+data.id;
         }
       });
     }
-  });
+  }
 
   $('#groundings').find('.toggle').click(function(){
     $(this).next().slideToggle('fast');

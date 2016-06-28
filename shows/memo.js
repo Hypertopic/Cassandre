@@ -2,6 +2,9 @@ function(o, req){
   // !json templates.memo
   // !code lib/mustache.js
   // !code l10n/l10n.js
+  const ALPHA = /[a-zàâçéêèëïîôöüùû0æœ0-9]+|[^a-zàâçéêèëïîôöüùûæœ0-9]+/gi;
+  const SPACES = /^ +$/;
+
   var type = o.type || 'field';
   var diary = o.diary || o.corpus;
   var data = {
@@ -28,8 +31,14 @@ function(o, req){
       var content = {
         actor: s.actor,
         timestamp: s.timestamp,
-        text: s.text
+        words: []
       };
+      for each (var w in s.text.match(ALPHA)) {
+        if (w.match(SPACES) && content.words.length>0) {
+          w = content.words.pop() + w;
+        }
+        content.words.push(w);
+      }
       data.body.push(content);
     }
   }

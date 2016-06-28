@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>{{name}} ({{diary}})</title>
+    <title> - {{name}}</title>
     <link rel="icon" type="image/png" href="../../style/favicon.png" />
     <link rel="stylesheet" type="text/css" href="../../style/main.css" />
     <link rel="stylesheet" type="text/css" href="../../style/diagram.css" />
@@ -121,6 +121,7 @@
       dataType: "json",
       success: function(d) {
         $("#diary").html(d.diary_name);
+        $('title').prepend(d.diary_name);
       }
     });
     $.ajax({

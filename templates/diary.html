@@ -1,5 +1,6 @@
 <html>
   <head>
+    <title></title>
     <link rel="icon" type="image/png" href="../../style/favicon.png" />
     <link rel="stylesheet" type="text/css" href="../../style/main.css" />
     <link rel="stylesheet" type="text/css" href="../../style/diagram.css" />
@@ -18,7 +19,7 @@
         </div>
       </header>
       <div id="content">
-        <h1> </h1>
+        <h1>&nbsp;</h1>
         <div id="network"></div>
       </div>
       <div id="footer" class="menu">
@@ -36,6 +37,7 @@
       dataType: "json",
       success: function(d) {
         $('h1').text(d.diary_name);
+        $('title').text(d.diary_name);
       }
     });
     var nodes = [];

@@ -20,6 +20,7 @@
       </header>
       <div id="content">
         <h1>&nbsp;</h1>
+        <input id="diary_name" type="search" hidden="hidden" />
         <div id="network"></div>
       </div>
       <div id="footer" class="menu">
@@ -30,6 +31,7 @@
   <script src="../../script/jquery.js"></script>
   <script type="text/javascript" src="../../script/vis.min.js"></script>
   <script>
+  var rev = "";
   $(document).ready(function() {
     $.ajax({
       url: "../../{{diary}}",
@@ -37,7 +39,9 @@
       dataType: "json",
       success: function(d) {
         $('h1').text(d.diary_name);
+        $('#diary_name').val(d.diary_name);
         $('title').text(d.diary_name);
+        rev = d._rev;
       }
     });
     var nodes = [];
@@ -117,6 +121,36 @@
     .on('click', '#patterns', function() {
       self.location = '../../kwic/{{diary}}';
     });
+
+  $('h1').on('click', function() {
+    $(this).hide();
+    $('#diary_name').show();
+  });
+
+  $('#diary_name').on('keypress', function(key) {
+    if (key.which == 13) {
+      var data = {
+        _id: "{{diary}}",
+        _rev: rev,
+        diary_name: $('#diary_name').val().trim()
+      };
+      $.ajax({
+        type: "PUT",
+        url: "../../{{diary}}",
+        contentType: "application/json",
+        data: JSON.stringify(data),
+        error: function(request) {
+          alert(
+            (JSON.parse(request.responseText).reason || request.responseText)
+            + '\nCode ' + request.status
+          );
+        },
+        success: function() {
+          self.location = '.'
+        }
+      });
+    }
+  });
 
   </script>
 </html>

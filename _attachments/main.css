@@ -126,9 +126,6 @@ div.post {
     display:none;
 }
 
-#memo>#content h1 {
-  font-size:150%;
-}
 
 #memo {
   padding: 35px 0 0 0;
@@ -136,11 +133,18 @@ div.post {
 
 #memo>#content h1 {
   padding: 5px 0 0 0;
+  font-size:150%;
 }
 
 #container>#content h1 {
   padding: 35px 0 0 10px ;
 }
+
+#container>#content #diary_name {
+  font-size:150%;
+  margin: 40px 0 0 10px ;
+}
+
 
 #comments {
   margin-left: 21%;

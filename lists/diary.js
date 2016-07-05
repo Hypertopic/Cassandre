@@ -14,6 +14,7 @@ function(head, req) {
       diary: row.key,
       id: row.value.id,
       name: row.value.name,
+      rev: row.value.rev,
       date: row.value.date,
       groundings: row.value.groundings,
       type: row.value.type

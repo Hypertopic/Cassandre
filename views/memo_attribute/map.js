@@ -14,6 +14,7 @@ function(o) {
   }
   emit([diary,date], {
     id: o._id,
+    rev: o._rev,
     name: name,
     type: type,
     date: date,

@@ -22,6 +22,13 @@
         <h1>&nbsp;</h1>
         <input id="diary_name" type="search" hidden="hidden" />
         <div id="network"></div>
+        <ul id="memos" hidden="hidden">
+          {{#memos}}
+          <li class="{{type}}"> <input type="checkbox" id="{{id}}" name="{{rev}}" />{{date}}&nbsp;–
+            <a href="{{id}}" class="memo">{{name}}</a>
+          </li>
+          {{/memos}}
+        </ul>
       </div>
       <div id="footer" class="menu">
         <a href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
@@ -33,6 +40,7 @@
   <script>
   var rev = "";
   $(document).ready(function() {
+    resetUI();
     $.ajax({
       url: "../../{{diary}}",
       type: "GET",
@@ -121,6 +129,58 @@
     .on('click', '#patterns', function() {
       self.location = '../../kwic/{{diary}}';
     });
+
+  $('#footer')
+    .on('click', '#show_delete', function() {
+      $("#network").hide();
+      $("#memos").show();
+      $("#footer").html(
+        '<button id="cancel" type="button">{{i18n.i_cancel}}</button>'
+        + '<input id="toggle" type="checkbox">{{i18n.i_select}}</button>'
+        + '<button id="delete" type="button">{{i18n.i_delete}}</button>'
+      );
+    })
+
+    .on('click', '#cancel', function() {
+      resetUI();
+    })
+
+    .on('click', '#toggle', function() {
+      var checked = $("#toggle").is(":checked");
+      $("input[type='checkbox']").each(function() {
+        $(this).attr("checked", checked);
+      });
+    })
+
+    .on('click', '#delete', function() {
+      var checked = $("input:checked");
+      var countdown = checked.size();
+      if (!countdown) {
+        resetUI();
+      }
+      checked.each(function() {
+        var memo = $(this).closest(".memo");
+        $.ajax({
+          type: "DELETE",
+          url: "../../" + $(this).attr("id") + "?rev=" + $(this).attr("name"),
+          success: function() {
+            countdown--;
+            if (countdown<1) {
+              location.reload();
+            }
+          }
+        });
+      });
+    });
+
+  function resetUI() {
+    $("#memos").hide();
+    $("#network").show();
+    $("#footer").html(
+      '<button type="button" id="show_delete">{{i18n.i_delete}}...</button>'
+      + '<a href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>'
+    );
+  }
 
   $('h1').on('click', function() {
     $(this).hide();

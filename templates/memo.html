@@ -16,6 +16,19 @@
         <button type='button' id='repeated' disabled='disabled' hidden="hidden">
           {{i18n.i_phrases}}</button>
         <input id='kwic' type='search' placeholder='{{i18n.i_search}}' hidden="hidden"/>
+        <div id='logged'>
+        {{^logged}}
+          <form id="signin">
+            <input type="text" name="name" placeholder="username"/>
+            <input type="password" name="password" placeholder="password"/>
+            <button type="submit">{{i18n.i_sign-in}}</button>
+          </form>
+        {{/logged}}
+        {{#logged}}
+          {{logged}}
+          <button id="signout">{{i18n.i_sign-out}}</button>
+        {{/logged}}
+        </div>
       </div>
       <div id="memo">
         <div id="groundings" >
@@ -29,12 +42,21 @@
           <div id="add-grounding">{{i18n.i_add_groundings}}</div>
         </div>
         <div id="content">
+          {{^authorized}}
+          <h1>{{i18n.i_sign-in_required}}</h1>
+          {{/authorized}}
+          {{#authorized}}
           <h1> <img src="../../style/{{type}}.png"/> {{name}} <button type="button" id="add">+</button>
             <button id="create" class="diagram" type="button" hidden="hidden">+</button>
           </h1>
           <p>
-            {{user}}<br/>{{date}}
-            <button type="button" id="edit">{{i18n.i_edit}}</button>
+            {{i18n.i_contributors}} : {{contributors}}
+            <button type="button" id="contributors_add">+</button>
+            <input id="contributors_edit" type="search" hidden="hidden" /><br/>
+            {{i18n.i_readers}} : {{readers}}
+            <button type="button" id="readers_add">+</button>
+            <input id="readers_edit" type="search" hidden="hidden" /><br/>
+            {{date}}
           </p>
           <div class="speeches">
           {{#body}}
@@ -64,6 +86,7 @@
             <textarea cols="80" rows="5" type="text" hidden="hidden" placeHolder="{{i18n.i_enter_comment}}"></textarea>
             <button type="button" id="commented" hidden="hidden">{{i18n.i_done}}</button>
           </div>
+        {{/authorized}}
         </div>
         <div id="leaves">
           <ul id="branch">
@@ -71,12 +94,13 @@
         </div>
       </div>
       <div id="footer" class="menu">
+        <button type="button" id="edit">{{i18n.i_edit}}</button>
         <a href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
       </div>
     </div>
     <div id="show-leaves"><div class="reverse">{{i18n.i_leaves}}</div></div>
     <div id="dialog" title="{{i18n.i_groundings}}" hidden="hidden">
-        <select onChange="save(this);"><option>{{i18n.i_select_grounding}}</option></select>
+        <select onChange="record(false,this,reload);"><option>{{i18n.i_select_grounding}}</option></select>
     </div>
   </body>
   <script src="../../script/jquery.js"></script>
@@ -271,6 +295,45 @@
     }
   });
 
+  var reload = function() {
+    location.reload();
+  };
+
+  $('#signin').on('submit', function(e) {
+    e.preventDefault();
+    $.post('/_session', $(this).serialize(), reload);
+  });
+
+  $('#signout').on('click', function() {
+    $.ajax({
+      type: 'DELETE',
+      url: '/_session',
+      success: reload
+    });
+  });
+
+  $('#contributors_add').on('click', function() {
+    $('#contributors_add').hide();
+    $('#contributors_edit').show();
+  });
+
+  $('#contributors_edit').on('keypress', function(key) {
+    if (key.which == 13) {
+      record(false, 'contributors', reload);
+    }
+  });
+
+  $('#readers_add').on('click', function() {
+    $('#readers_add').hide();
+    $('#readers_edit').show();
+  });
+
+  $('#readers_edit').on('keypress', function(key) {
+    if (key.which == 13) {
+      record(false, 'readers', reload);
+    }
+  });
+
   $('#groundings').find('.toggle').click(function(){
     $(this).next().slideToggle('fast');
     $(".preview").not($(this).next()).slideUp('fast');
@@ -282,8 +345,7 @@
   });
 
   $('#diary').on('click', function() {
-    var diaryUrl = encodeURIComponent("{{diary}}");
-    self.location = '../'+diaryUrl+'/?by=name';
+    self.location = '../{{diary}}/?by=name';
   });
 
   $('#edit').on('click', function() {
@@ -320,69 +382,19 @@
     if ($('#comments').find('textarea').val().trim() == '') {
       alert("{{i18n.i_enter_comment}}")
     } else {
-      record(false, function() {
-        self.location = '{{_id}}';
-      });
+      record(false, 'comment', reload);
     }
   });
-
-  function save(there) {
-    var data = {
-      groundings: [],
-      _rev: "{{_rev}}",
-      date: "{{date}}",
-      diary: "{{diary}}",
-      name: "{{{name}}}",
-      type: "{{type}}",
-      user: "{{user}}"
-    };
-    $('#groundings').children('li').each(function() {
-      data.groundings.push($(this).attr('id'));
-    });
-    var content = [];
-    $('.speeches-row').each(function() {
-      var turn = {
-        text: $(this).find('.post').text().trim()
-      };
-      var actor = $(this).find('.actor').text().trim();
-      if (actor) {
-        turn.actor = actor;
-      }
-      content.push(turn);
-    });
-    if (content[0] == null){
-      data.body = '';
-    } else if (content[0].actor == null){
-      data.body = content[0].text;
-    } else {
-      data.speeches = content;
-    }
-    data.groundings.push(there.value);
-
-    $.ajax({
-      type: "PUT",
-      url: "../../{{_id}}",
-      contentType: "application/json",
-      data: JSON.stringify(data),
-      error: function(request) {
-        alert(
-          (JSON.parse(request.responseText).reason || request.responseText)
-          + '\nCode ' + request.status
-        );
-      },
-      success: function() {
-        location.replace("{{_id}}")
-      }
-    });
-  }
 
   function create(type) {
     var diary = "{{diary}}";
     var data = {
       date: new Date().toJSON(),
-      groundings: [],
-      user: "unidentified.researcher"
+      groundings: []
     };
+    if ("{{logged}}") {
+      data.contributors = ["{{logged}}"];
+    }
     switch (type) {
       case 'field':
         var destination = '/editable_text/';
@@ -419,18 +431,34 @@
     }
   }
 
-  function record(draft, toDoAfter) {
+  function record(draft, toAdd, toDoAfter) {
     $.ajax({
       url: "../../{{_id}}",
       type: "GET",
       dataType: "json",
       success: function(data) {
-        data.comments = ( typeof data.comments != 'undefined' && data.comments instanceof Array ) ? data.comments : [];
-        data.comments.push({
-          user: "unidentified.researcher",
-          date: new Date().toJSON(),
-          text: $('#comments').find('textarea').val().trim()
-        });
+        switch(toAdd) {
+          case ('comment'):
+            data.comments = ( typeof data.comments != 'undefined' && data.comments instanceof Array ) ? data.comments : [];
+            data.comments.push({
+              user: "{{logged}}",
+              date: new Date().toJSON(),
+              text: $('#comments').find('textarea').val().trim()
+            });
+          break;
+          case ('contributors'):
+            var newcontributor = $('#contributors_edit').val().trim();
+            if (!data.contributors) data.contributors = [];
+            data.contributors.push(newcontributor);
+          break;
+          case ('readers'):
+            var newreader = $('#readers_edit').val().trim();
+            if (!data.readers) data.readers = [];
+            data.readers.push(newreader);
+          break;
+          default:
+            data.groundings.push(toAdd.value);
+        }
         $.ajax({
           type: "PUT",
           url: "../../{{_id}}",

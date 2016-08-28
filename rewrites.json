@@ -60,6 +60,7 @@
     "from": "text/:corpus/:text", 
     "to": "_show/text/:text"
   }, {
+    "method": "GET",
     "from": "memo/:diary/:memo", 
     "to": "_show/memo/:memo"
   }, {

@@ -69,9 +69,11 @@
       date: date,
       groundings: [],
       name: "",
-      body: "",
-      user: "unidentified.researcher"
+      body: ""
     };
+    if ("{{logged}}") {
+      data.contributors = ["{{logged}}"];
+    }
     if (diary_name) {
       $.ajax({
         url: "../",

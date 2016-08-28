@@ -9,11 +9,16 @@ function(o, req){
     name: o.name,
     type: o.type,
     date: o.date,
-    user: o.user,
     diary: o.diary,
     body: o.body,
     comments:[],
     groundings:[]
+  }
+  if (o.contributors) {
+    data.contributors = [];
+    for each (var c in o.contributors) {
+      data.contributors.push(c);
+    }
   }
   for (var key in o.groundings) {
     data.groundings.push( o.groundings[key] );

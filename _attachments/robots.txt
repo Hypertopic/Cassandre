@@ -1,0 +1,6 @@
+User-agent: * 
+Disallow: /memo/ 
+Disallow: /kwic/ 
+Disallow: /diagram/ 
+Disallow: /graph/ 
+

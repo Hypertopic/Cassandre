@@ -11,15 +11,28 @@ function(o, req){
     i18n: localized(),
     _id: o._id,
     _rev: o._rev,
+    authorized: !o.readers || o.readers.indexOf(req.userCtx.name)>-1 || o.contributors.indexOf(req.userCtx.name)>-1,
+    logged: req.userCtx.name,
     diary: diary,
     type: type,
     name: o.name,
     date: o.date,
-    user: o.user,
     body: [],
     groundings: [],
     comments: [],
     leaves: []
+  }
+  if (o.contributors) {
+    data.contributors = [];
+    for each (var c in o.contributors) {
+      data.contributors.push(c);
+    }
+  }
+  if (o.readers) {
+    data.readers = [];
+    for each (var r in o.readers) {
+      data.readers.push(r);
+    }
   }
   if (o.body) {
     var content = {

@@ -16,7 +16,7 @@
       <input id="_rev" type="hidden" value="{{_rev}}" />
       <input id="diary" type="hidden" value="{{diary}}" />
       <input id="date" type="hidden" value="{{date}}" />
-      <input id="user" type="hidden" value="{{user}}" />
+      <input id="contributors" type="hidden" value="{{contributors}}" />
 
         <div id="groundings" >
           <legend>{{i18n.i_groundings}}</legend>          
@@ -30,7 +30,7 @@
         <div id="content">
           <h1> <img src="../style/{{type}}.png"/> <textarea id="name" type="text" cols="76" rows="1">{{name}}</textarea></h1>
           <p>
-            {{user}}<br/>{{date}}
+            {{contributors}}<br/>{{date}}
           </p>
           <p>
             <textarea id="body" cols="80" rows="20" type="text">{{body}}</textarea>

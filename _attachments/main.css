@@ -298,6 +298,13 @@ input.actor {
   margin: 0px 10px;
 }
 
+#logged {
+  font-size: small;
+  float: right;
+  margin: 0px 10px;
+}
+
+
 .occurrence{
   display: table-row;
 }

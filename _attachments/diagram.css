@@ -79,7 +79,7 @@
 
 .pp>.node, .dp>.node:nth-child(3) {
   padding-top: 140px;
-  padding-bottom: 140px;
+  height: 160px;
   border:2px solid black;
   float:left;
   text-align: center;
@@ -124,7 +124,7 @@
 
 .ipp>.node {
   padding-top: 140px;
-  padding-bottom: 140px;
+  height: 160px;
   border:2px solid black;
   float:left;
   text-align: center;
@@ -166,7 +166,7 @@
 .dd>.node {
   float:left;
   padding-top: 40px;
-  padding-bottom: 240px;
+  height: 260px;
   text-align: center;
 }
 
@@ -307,7 +307,7 @@
   width: 168px;
   margin-left: 0px;
   padding-top: 40px;
-  padding-bottom: 240px;
+  height: 260px;
   text-align: center;
   border-left: 2px solid black;
 }

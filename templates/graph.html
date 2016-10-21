@@ -10,8 +10,22 @@
     <div id="container">
       <div id="header" class="menu">
         <button type="button" id="diary">&nbsp;</button>
+        <div id='logged'>
+        {{^logged}}
+          <form id="signin">
+            <input type="text" name="name" placeholder="username"/>
+            <input type="password" name="password" placeholder="password"/>
+            <button type="submit">{{i18n.i_sign-in}}</button>
+          </form>
+        {{/logged}}
+        {{#logged}}
+          {{logged}}
+          <button id="signout">{{i18n.i_sign-out}}</button>
+        {{/logged}}
+        </div>
       </div>
       <div id="memo">
+        {{#authorized}}
         <div id="groundings" >
           <legend>{{i18n.i_groundings}}</legend>
           {{#groundings}}
@@ -22,12 +36,20 @@
           {{/groundings}}
           <div id="add-grounding"></div>
         </div>
+        {{/authorized}}
         <div id="content">
+          {{^authorized}}
+          <h1>{{i18n.i_sign-in_required}}</h1>
+          {{/authorized}}
+          {{#authorized}}
           <h1> <img src="../../style/{{type}}.png"/> {{name}} <button type="button" class="storyline" id="add">+</button> </h1>
           <p>
-            {{user}}<br/>{{date}}
+            {{i18n.i_contributors}} : <span id="contributors">{{contributors}}</span><br/>
+            {{i18n.i_readers}} : <span id="readers">{{readers}}</span><br/>
+            {{date}}
           </p>
           <div id="graph"></div>
+          {{/authorized}}
         </div>
         <div id="leaves">
           <ul id="branch">
@@ -172,9 +194,16 @@
       diary: "{{diary}}",
       type: type,
       groundings: [],
-      name: "",
-      user: "unidentified.researcher"
+      name: ""
     };
+    if ($('#contributors').text().length > 1) {
+      data.contributors = $('#contributors').text().split(',');
+    } else if ("{{logged}}") {
+      data.contributors = ["{{logged}}"];
+    }
+    if ($('#readers').text().length > 1) {
+      data.readers = $('#readers').text().split(',');
+    }
     data.groundings.push("{{_id}}");
     if (diary) {
       $.ajax({
@@ -184,7 +213,7 @@
         contentType: "application/json",
         data: JSON.stringify(data),
         success: function(data) {
-          self.location = '/editable_memo/'+data.id;
+          self.location = '../../editable_memo/'+data.id;
         }
       });
     }
@@ -266,34 +295,29 @@
           edges.push({id: there.value, from: added.groundings[0], to: added.groundings[1], color: 'green'});
           break;
         }
-        var data = {
-          _rev: "{{_rev}}",
-          date: "{{date}}",
-          diary: "{{diary}}",
-          name: "{{{name}}}",
-          groundings: [],
-          nodes: nodes,
-          edges: edges,
-          type: 'graph',
-          user: "{{user}}"
-        };
-        $('#groundings').children('li').each(function() {
-          data.groundings.push($(this).attr('id'));
-        });
-        data.groundings.push(there.value);
         $.ajax({
-          type: "PUT",
           url: "../../{{_id}}",
-          contentType: "application/json",
-          data: JSON.stringify(data),
-          error: function(request) {
-            alert(
-              (JSON.parse(request.responseText).reason || request.responseText)
-              + '\nCode ' + request.status
-            );
-          },
-          success: function() {
-            location.replace("{{_id}}")
+          type: "GET",
+          dataType: "json",
+          success: function(data) {
+            data.groundings.push(there.value);
+            data.nodes = nodes;
+            data.edges = edges;
+            $.ajax({
+              type: "PUT",
+              url: "../../{{_id}}",
+              contentType: "application/json",
+              data: JSON.stringify(data),
+              error: function(request) {
+                alert(
+                  (JSON.parse(request.responseText).reason || request.responseText)
+                  + '\nCode ' + request.status
+                );
+              },
+              success: function() {
+                location.replace("{{_id}}")
+              }
+            });
           }
         });
       }

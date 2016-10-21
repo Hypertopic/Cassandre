@@ -5,6 +5,21 @@
   </head>
   <body id="watermark">
     <div id="container">
+      <div id="header" class="menu">
+        <div id='logged'>
+        {{^logged}}
+          <form id="signin">
+            <input type="text" name="name" placeholder="username"/>
+            <input type="password" name="password" placeholder="password"/>
+            <button type="submit">{{i18n.i_sign-in}}</button>
+          </form>
+        {{/logged}}
+        {{#logged}}
+          {{logged}}
+          <button id="signout">{{i18n.i_sign-out}}</button>
+        {{/logged}}
+        </div>
+      </div>
       <div id="content">
         <h1>{{i18n.i_diaries}}</h1>
         <ul>
@@ -30,6 +45,23 @@
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
   <script>
 
+  var reload = function() {
+    location.reload();
+  };
+
+  $('#signin').on('submit', function(e) {
+    e.preventDefault();
+    $.post('/_session', $(this).serialize(), reload);
+  });
+
+  $('#signout').on('click', function() {
+    $.ajax({
+      type: 'DELETE',
+      url: '/_session',
+      success: reload
+    });
+  });
+
   $('#create').on('click', function() {
     $("#dialog").dialog({
       autoOpen:false,
@@ -39,7 +71,7 @@
       buttons:{
         "ok":function(){
           $(this).dialog("close");
-          var diary_name = $('#dialog').find('input[name="diary"]').val()
+          var diary_name = $('#dialog').find('input[name="diary"]').val().trim();
           createDiary(diary_name);
           return true;
         },
@@ -90,7 +122,7 @@
             contentType: "application/json",
             data: JSON.stringify(data),
             success: function(data) {
-              location.replace('/editable_memo/'+data.id)
+              location.replace('../editable_memo/'+data.id)
             }
           });
         }

@@ -9,8 +9,22 @@
     <div id="container">
       <div id="header" class="menu">
         <button type="button" id="diary">&nbsp;</button>
+        <div id='logged'>
+        {{^logged}}
+          <form id="signin">
+            <input type="text" name="name" placeholder="username"/>
+            <input type="password" name="password" placeholder="password"/>
+            <button type="submit">{{i18n.i_sign-in}}</button>
+          </form>
+        {{/logged}}
+        {{#logged}}
+          {{logged}}
+          <button id="signout">{{i18n.i_sign-out}}</button>
+        {{/logged}}
+        </div>
       </div>
       <div id="memo">
+        {{#authorized}}
         <div id="groundings" >
           <legend>{{i18n.i_groundings}}</legend>                   
           {{#groundings}}
@@ -21,15 +35,23 @@
           {{/groundings}}
           <div id="add-grounding"></div>
         </div>
+        {{/authorized}}
         <div id="content">
-          <h1> <img src="../../style/{{type}}.png"/> {{name}} <button type="button" class="theoretical" id="add">+</button> <button type="button" class="graph" id="create">+</button></h1>
+          {{^authorized}}
+          <h1>{{i18n.i_sign-in_required}}</h1>
+          {{/authorized}}
+          {{#authorized}}
+          <h1> <img src="../../style/{{type}}.png"/> <span id="name"> {{name}} </span> <button type="button" class="theoretical" id="add">+</button> <button type="button" class="graph" id="create" hidden="hidden">+</button></h1>
           <p>
-            {{user}}<br/>{{date}}
+            {{i18n.i_contributors}} : <span id="contributors">{{contributors}}</span><br/>
+            {{i18n.i_readers}} : <span id="readers">{{readers}}</span><br/>
+            {{date}}
           </p>
           <div id="diagram" class="{{link}}">
             <div class="layout-1"></div>
             <div class="layout-2"></div>
           </div>
+          {{/authorized}}
         </div>
         <div id="leaves">
           <ul id="branch">
@@ -104,6 +126,7 @@
         text: "{{i18n.i_select_grounding}}"
       }));
     } else {
+      $('#create').show();
       $('#add-grounding').html("{{i18n.i_diagram_type}}");
       $("#dialog").attr("title","{{i18n.i_diagram_type}}");
       $("#dialog").find('select').append($('<option>', { text: "{{i18n.i_link}}" }));
@@ -168,12 +191,19 @@
       date: new Date().toJSON(),
       diary: "{{diary}}",
       type: type,
-      groundings: [],
-      user: "unidentified.researcher"
+      groundings: []
     };
+    if ($('#contributors').text().length > 1) {
+      data.contributors = $('#contributors').text().split(',');
+    } else if ("{{logged}}") {
+      data.contributors = ["{{logged}}"];
+    }
+    if ($('#readers').text().length > 1) {
+      data.readers = $('#readers').text().split(',');
+    }
     switch (type) {
       case 'graph':
-        var destination = "/graph/{{diary}}/";
+        var destination = "../../graph/{{diary}}/";
         var nodes = [];
         var edges = [];
         var from = $('#groundings').children('li').first().attr('id');
@@ -211,7 +241,7 @@
         data.name = prompt("{{i18n.i_enter_graph_name}}", diary_name);
         break;
       default:
-        var destination = '/editable_memo/';
+        var destination = '../../editable_memo/';
         data.name = "";
         data.body = "";
     }
@@ -253,75 +283,53 @@
     });
   });
 
+  var reload = function() {
+    location.reload();
+  };
+
+  $('#signin').on('submit', function(e) {
+    e.preventDefault();
+    $.post('/_session', $(this).serialize(), reload);
+  });
+
+  $('#signout').on('click', function() {
+    $.ajax({
+      type: 'DELETE',
+      url: '/_session',
+      success: reload
+    });
+  });
+
   function adapt(there) {
-    if (there.value.length == 32) {save(there);} else {draw(there);}
-  }
-
-  function draw(there) {
-    $("#dialog").dialog('close');
-   //TODO:  mutualiser avec save 
-    var data = {
-      groundings: [],
-      _rev: "{{_rev}}",
-      date: "{{date}}",
-      diary: "{{diary}}",
-      name: "{{{name}}}",
-      type: 'diagram',
-      link: there.value,
-      user: "{{user}}"
-    };
-    $('#groundings').children('li').each(function() {
-      data.groundings.push($(this).attr('id'));
-    });
     $.ajax({
-      type: "PUT",
       url: "../../{{_id}}",
-      contentType: "application/json",
-      data: JSON.stringify(data),
-      error: function(request) {
-        alert(
-          (JSON.parse(request.responseText).reason || request.responseText)
-          + '\nCode ' + request.status
-        );
-      },
-      success: function() {
-        location.replace("{{_id}}")
+      type: "GET",
+      dataType: "json",
+      success: function(data) {
+        if (there.value.length == 32) {
+          var text = $('#'+there.value).text();
+          data.name = $('#name').text().trim() +' & '+ text;
+          data.groundings.push(there.value);
+        } else {
+          data.link = there.value,
+          $("#dialog").dialog('close');
+        }
+        $.ajax({
+          type: "PUT",
+          url: "../../{{_id}}",
+          contentType: "application/json",
+          data: JSON.stringify(data),
+          error: function(request) {
+            alert(
+              (JSON.parse(request.responseText).reason || request.responseText)
+              + '\nCode ' + request.status
+            );
+          },
+          success: reload
+        });
       }
     });
   }
 
-  function save(there) {
-    var text = $('#'+there.value).text();
-    var name = '{{{name}}}'+' & '+ text;
-    var data = {
-      groundings: [],
-      _rev: "{{_rev}}",
-      date: "{{date}}",
-      diary: "{{diary}}",
-      name: name,
-      type: 'diagram',
-      link: 'pp',
-      user: "{{user}}"
-    };
-    $('#groundings').children('li').each(function() {
-      data.groundings.push($(this).attr('id'));
-    });
-    data.groundings.push(there.value);
-    $.ajax({
-      type: "PUT",
-      url: "../../{{_id}}",
-      contentType: "application/json",
-      data: JSON.stringify(data),
-      error: function(request) {
-        alert(
-          (JSON.parse(request.responseText).reason || request.responseText)
-          + '\nCode ' + request.status
-        );
-      },
-      success: function() {
-        location.replace("{{_id}}")
-      }
-    });
-  }
   </script>
 </html>

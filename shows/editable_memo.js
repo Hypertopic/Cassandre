@@ -6,6 +6,7 @@ function(o, req){
     i18n: localized(),
     _id: o._id,
     _rev: o._rev,
+    authorized: !o.readers || o.readers.indexOf(req.userCtx.name)>-1 || o.contributors && o.contributors.indexOf(req.userCtx.name)>-1 || req.userCtx.roles.indexOf("_admin")>-1,
     name: o.name,
     type: o.type,
     date: o.date,

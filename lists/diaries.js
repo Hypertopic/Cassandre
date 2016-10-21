@@ -6,6 +6,7 @@ function(head, req) {
   var ledger = [[[]]];
   var data = {
     i18n: localized(),
+    logged: req.userCtx.name,
     diaries: []
   };
   while (row = getRow()) {

@@ -31,6 +31,7 @@
         </div>
       </div>
       <div id="memo">
+        {{#authorized}}
         <div id="groundings" >
           <legend>{{i18n.i_groundings}}</legend>                   
           {{#groundings}}
@@ -41,19 +42,20 @@
           {{/groundings}}
           <div id="add-grounding">{{i18n.i_add_groundings}}</div>
         </div>
+        {{/authorized}}
         <div id="content">
           {{^authorized}}
           <h1>{{i18n.i_sign-in_required}}</h1>
           {{/authorized}}
           {{#authorized}}
-          <h1> <img src="../../style/{{type}}.png"/> {{name}} <button type="button" id="add">+</button>
+          <h1> <img src="../../style/{{type}}.png"/> <span id="name"> {{name}} </span> <button type="button" id="add">+</button>
             <button id="create" class="diagram" type="button" hidden="hidden">+</button>
           </h1>
           <p>
-            {{i18n.i_contributors}} : {{contributors}}
+            {{i18n.i_contributors}} : <span id="contributors">{{contributors}}</span>
             <button type="button" id="contributors_add">+</button>
             <input id="contributors_edit" type="search" hidden="hidden" /><br/>
-            {{i18n.i_readers}} : {{readers}}
+            {{i18n.i_readers}} : <span id="readers">{{readers}}</span>
             <button type="button" id="readers_add">+</button>
             <input id="readers_edit" type="search" hidden="hidden" /><br/>
             {{date}}
@@ -94,17 +96,19 @@
         </div>
       </div>
       <div id="footer" class="menu">
+        {{#authorized}}
         <button type="button" id="edit">{{i18n.i_edit}}</button>
+        {{/authorized}}
         <a href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
       </div>
     </div>
     <div id="show-leaves"><div class="reverse">{{i18n.i_leaves}}</div></div>
     <div id="dialog" title="{{i18n.i_groundings}}" hidden="hidden">
-        <select onChange="record(false,this,reload);"><option>{{i18n.i_select_grounding}}</option></select>
+        <select onChange="record(this);"><option>{{i18n.i_select_grounding}}</option></select>
     </div>
   </body>
   <script src="../../script/jquery.js"></script>
-  <script src="https://cdn.rawgit.com/showdownjs/showdown/1.3.0/dist/showdown.min.js"></script>
+  <script src="https://cdn.rawgit.com/showdownjs/showdown/1.4.3/dist/showdown.min.js"></script>
   <script src="../../script/jquery-ui.min.js"></script>
   <link rel="stylesheet" href="../../script/jquery-ui.min.css" />
   <script>
@@ -139,7 +143,11 @@
         $('#add').addClass('storyline');
         break;
     }
-    var converter = new showdown.Converter({tables: 'true'});
+    var converter = new showdown.Converter({
+      tables: 'true',
+      tasklists: 'true',
+      strikethrough: 'true'
+    });
     $('.post').html(function(i, text) {
       return converter.makeHtml(text.trim());
     });
@@ -319,7 +327,7 @@
 
   $('#contributors_edit').on('keypress', function(key) {
     if (key.which == 13) {
-      record(false, 'contributors', reload);
+      record('contributors');
     }
   });
 
@@ -330,7 +338,7 @@
 
   $('#readers_edit').on('keypress', function(key) {
     if (key.which == 13) {
-      record(false, 'readers', reload);
+      record('readers');
     }
   });
 
@@ -382,7 +390,7 @@
     if ($('#comments').find('textarea').val().trim() == '') {
       alert("{{i18n.i_enter_comment}}")
     } else {
-      record(false, 'comment', reload);
+      record('comment');
     }
   });
 
@@ -392,25 +400,30 @@
       date: new Date().toJSON(),
       groundings: []
     };
-    if ("{{logged}}") {
+    if ($('#contributors').text().length > 1) {
+      data.contributors = $('#contributors').text().split(',');
+    } else if ("{{logged}}") {
       data.contributors = ["{{logged}}"];
+    }
+    if ($('#readers').text().length > 1) {
+      data.readers = $('#readers').text().split(',');
     }
     switch (type) {
       case 'field':
-        var destination = '/editable_text/';
+        var destination = '../../editable_text/';
         data.corpus = diary,
         data.name = "",
         data.speeches = [{actor:"",text:""}];
         break;
       case 'diagram':
-        var destination = "/diagram/{{diary}}/";
+        var destination = "../../diagram/{{diary}}/";
         data.diary = diary;
         data.link = 'pp';
-        data.name = "{{{name}}}";
+        data.name = $('#name').text();
         data.type = type;
         break;
       default:
-        var destination = '/editable_memo/';
+        var destination = '../../editable_memo/';
         data.diary = diary,
         data.body = "";
         data.name = "",
@@ -431,7 +444,7 @@
     }
   }
 
-  function record(draft, toAdd, toDoAfter) {
+  function record(toAdd) {
     $.ajax({
       url: "../../{{_id}}",
       type: "GET",
@@ -470,12 +483,11 @@
               + '\nCode ' + request.status
             );
           },
-          success: toDoAfter
+          success: reload
         });
       }
     });
   }
-
 
   function toColor(metrics) {
     var grayLevel = Math.floor(255*(1-metrics)).toString(16);

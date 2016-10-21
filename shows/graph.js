@@ -6,12 +6,13 @@ function(o, req){
     i18n: localized(),
     _id: o._id,
     _rev: o._rev,
+    authorized: !o.readers || o.readers.indexOf(req.userCtx.name)>-1 || o.contributors && o.contributors.indexOf(req.userCtx.name)>-1 || req.userCtx.roles.indexOf("_admin")>-1,
     diary: o.diary,
     link: o.link,
+    logged: req.userCtx.name,
     type: o.type,
     name: o.name,
     date: o.date,
-    user: o.user,
     groundings: [],
     edges: [],
     nodes: [],
@@ -21,6 +22,18 @@ function(o, req){
       id: g.value
     };
     data.groundings.push(g);
+  }
+  if (o.contributors) {
+    data.contributors = [];
+    for each (var c in o.contributors) {
+      data.contributors.push(c);
+    }
+  }
+  if (o.readers) {
+    data.readers = [];
+    for each (var r in o.readers) {
+      data.readers.push(r);
+    }
   }
   for each (var e in o.edges) {
     var edge = {

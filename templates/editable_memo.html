@@ -17,7 +17,7 @@
       <input id="diary" type="hidden" value="{{diary}}" />
       <input id="date" type="hidden" value="{{date}}" />
       <input id="contributors" type="hidden" value="{{contributors}}" />
-
+        {{#authorized}}
         <div id="groundings" >
           <legend>{{i18n.i_groundings}}</legend>          
           {{#groundings}}
@@ -27,7 +27,12 @@
           </li>            
           {{/groundings}}
         </div>
+        {{/authorized}}
         <div id="content">
+          {{^authorized}}
+          <h1>{{i18n.i_sign-in_required}}</h1>
+          {{/authorized}}
+          {{#authorized}}
           <h1> <img src="../style/{{type}}.png"/> <textarea id="name" type="text" cols="76" rows="1">{{name}}</textarea></h1>
           <p>
             {{contributors}}<br/>{{date}}
@@ -35,10 +40,13 @@
           <p>
             <textarea id="body" cols="80" rows="20" type="text">{{body}}</textarea>
           </p>
+          {{/authorized}}
         </div>
       </div>
       <div id="footer" class="menu">
+        {{#authorized}}
         <button type="button" id="done">{{i18n.i_done}}</button>
+        {{/authorized}}
         <a href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
       </div>
     </form>
@@ -47,7 +55,7 @@
   <script>
   $(document).ready(function() {
     $.ajax({
-      url: "../../memo_attribute/{{diary}}",
+      url: "../memo_attribute/{{diary}}",
       type: "GET",
       dataType: "json",
       success: function(grounds) {
@@ -76,7 +84,7 @@
       }
     });
     $.ajax({
-      url: "../../{{diary}}",
+      url: "../{{diary}}",
       type: "GET",
       dataType: "json",
       success: function(d) {

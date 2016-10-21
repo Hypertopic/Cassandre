@@ -6,6 +6,7 @@ function(head, req) {
   var data = {
     i18n: localized(),
     by: req.query.by,
+    logged: req.userCtx.name,
     diary: req.query.diary,
     memos: []
   };
@@ -13,7 +14,7 @@ function(head, req) {
     data.memos.push({
       diary: row.key,
       id: row.value.id,
-      name: row.value.name,
+      name: row.value.name.replace('"', '\\"'),
       rev: row.value.rev,
       date: row.value.date,
       groundings: row.value.groundings,

@@ -30,12 +30,6 @@
       "key": [":user"]
     }
   }, {
-    "from": "text/", 
-    "to": "_list/corpora/corpora",
-    "query": {
-      "group": "true"
-    }
-  }, {
     "from": "memo/", 
     "to": "_list/diaries/diaries",
     "query": {
@@ -48,17 +42,6 @@
       "startkey": [":diary"],
       "endkey": [":diary", {}]
     }
-  }, {
-    "from": "text/:corpus/", 
-    "to": "_list/corpus/attribute",
-    "query": {
-      "startkey": [":corpus", ":by"],
-      "endkey": [":corpus", ":by", {}],
-      "reduce": "false"
-    }
-  }, {
-    "from": "text/:corpus/:text", 
-    "to": "_show/text/:text"
   }, {
     "method": "GET",
     "from": "memo/:diary/:memo", 

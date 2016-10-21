@@ -3,6 +3,7 @@ function(o, req){
   // !code lib/mustache.js
   // !code l10n/l10n.js
   var data = {
+    authorized: !o.readers || o.readers.indexOf(req.userCtx.name)>-1 || o.contributors && o.contributors.indexOf(req.userCtx.name)>-1 || req.userCtx.roles.indexOf("_admin")>-1,
     i18n: localized(),
     highlights: "{}",
     attributes:[],
@@ -13,9 +14,13 @@ function(o, req){
     switch (key) {
       case '_id':
       case '_rev':
+      case 'contributors':
+      case 'comments':
       case 'corpus':
+      case 'diary':
       case 'user':
       case 'date':
+      case 'readers':
       case 'speeches':
         data[key] = o[key];
         break;

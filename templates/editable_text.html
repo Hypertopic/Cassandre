@@ -11,12 +11,15 @@
         </div>
       </header>
       <div id="content">
+        {{^authorized}}
+        <h1>{{i18n.i_sign-in_required}}</h1>
+        {{/authorized}}
+        {{#authorized}}
         <fieldset id="attributes">
           <input id="_id" type="hidden" value="{{_id}}" />
           <input id="_rev" type="hidden" value="{{_rev}}" />
           <input id="corpus" type="hidden" value="{{corpus}}" />
           <input id="date" type="hidden" value="{{date}}" />
-          <input id="user" type="hidden" value="{{user}}" />
         </fieldset>
         <h1> <img src="../style/field.png"/> 
           {{#attributes}}
@@ -41,10 +44,13 @@
           </tr>
           {{/speeches}}
         </table>
+        {{/authorized}}
       </div>
       <div id="footer" class="menu">
+        {{#authorized}}
         <button type="button" id="save">{{i18n.i_save}}</button>
         <button type="button" id="done">{{i18n.i_done}}</button>
+        {{/authorized}}
         <a href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
       </div>
     </form>
@@ -53,7 +59,7 @@
   <script>
   $(document).ready(function() {
     $.ajax({
-      url: "../../{{corpus}}",
+      url: "../{{corpus}}",
       type: "GET",
       dataType: "json",
       success: function(d) {
@@ -63,46 +69,45 @@
   });
 
   function save(draft, toDoAfter) {
-    var data = {
-      highlights: {{{highlights}}},
-      groundings: [],
-      speeches: []
-    };
-    if (draft) {
-      data.draft = true;
-    }
-    $('#attributes').children('input').each(function() {
-      data[$(this).attr('id')] = $(this).val();
-    })
-
-    data.name = $('#name').val();
-
-    {{#groundings}}
-    data.groundings.push("{{.}}");
-    {{/groundings}}
-
-    $('.turn').each(function() {
-      var turn = {
-        text: $(this).find('textarea').val()
-      };
-      var actor = $(this).find('input').val();
-      if (actor) {
-        turn.actor = actor;
-      }
-      data.speeches.push(turn);
-    });
     $.ajax({
-      type: "PUT",
       url: "../{{_id}}",
-      contentType: "application/json",
-      data: JSON.stringify(data),
-      error: function(request) {
-        alert(
-          (JSON.parse(request.responseText).reason || request.responseText)
-          + '\nCode ' + request.status
-        );
-      },
-      success: toDoAfter
+      type: "GET",
+      dataType: "json",
+      success: function(data) {
+        if (draft) {
+          data.draft = true;
+        } else {
+          data.draft = false;
+        }
+        $('#attributes').children('input').each(function() {
+          data[$(this).attr('id')] = $(this).val();
+        })
+        data.name = $('#name').val();
+        data.speeches = [];
+        $('.turn').each(function() {
+          var turn = {
+            text: $(this).find('textarea').val()
+          };
+          var actor = $(this).find('input').val();
+          if (actor) {
+            turn.actor = actor;
+          }
+          data.speeches.push(turn);
+        });
+        $.ajax({
+          type: "PUT",
+          url: "../{{_id}}",
+          contentType: "application/json",
+          data: JSON.stringify(data),
+          error: function(request) {
+            alert(
+              (JSON.parse(request.responseText).reason || request.responseText)
+              + '\nCode ' + request.status
+            );
+          },
+          success: toDoAfter
+        });
+      }
     });
   }
 

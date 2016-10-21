@@ -16,6 +16,19 @@
             <option value="name">{{i18n.i_title}}</option>
           </select>
           <button type="button" id="patterns">{{i18n.i_patterns}}</button>
+          <div id='logged'>
+          {{^logged}}
+            <form id="signin">
+              <input type="text" name="name" placeholder="username"/>
+              <input type="password" name="password" placeholder="password"/>
+              <button type="submit">{{i18n.i_sign-in}}</button>
+            </form>
+          {{/logged}}
+          {{#logged}}
+            {{logged}}
+            <button id="signout">{{i18n.i_sign-out}}</button>
+          {{/logged}}
+          </div>
         </div>
       </header>
       <div id="content">
@@ -182,6 +195,23 @@
     );
   }
 
+  var reload = function() {
+    location.reload();
+  };
+
+  $('#signin').on('submit', function(e) {
+    e.preventDefault();
+    $.post('/_session', $(this).serialize(), reload);
+  });
+
+  $('#signout').on('click', function() {
+    $.ajax({
+      type: 'DELETE',
+      url: '/_session',
+      success: reload
+    });
+  });
+
   $('h1').on('click', function() {
     $(this).hide();
     $('#diary_name').show();
@@ -189,24 +219,25 @@
 
   $('#diary_name').on('keypress', function(key) {
     if (key.which == 13) {
-      var data = {
-        _id: "{{diary}}",
-        _rev: rev,
-        diary_name: $('#diary_name').val().trim()
-      };
       $.ajax({
-        type: "PUT",
         url: "../../{{diary}}",
-        contentType: "application/json",
-        data: JSON.stringify(data),
-        error: function(request) {
-          alert(
-            (JSON.parse(request.responseText).reason || request.responseText)
-            + '\nCode ' + request.status
-          );
-        },
-        success: function() {
-          self.location = '.'
+        type: "GET",
+        dataType: "json",
+        success: function(data) {
+          data.diary_name = $('#diary_name').val().trim();
+          $.ajax({
+            type: "PUT",
+            url: "../../{{diary}}",
+            contentType: "application/json",
+            data: JSON.stringify(data),
+            error: function(request) {
+              alert(
+                (JSON.parse(request.responseText).reason || request.responseText)
+                + '\nCode ' + request.status
+              );
+            },
+            success: reload
+          });
         }
       });
     }

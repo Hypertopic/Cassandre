@@ -43,8 +43,8 @@
           {{#authorized}}
           <h1> <img src="../../style/{{type}}.png"/> <span id="name"> {{name}} </span> <button type="button" class="theoretical" id="add">+</button> <button type="button" class="graph" id="create" hidden="hidden">+</button></h1>
           <p id="authorization">
-            {{i18n.i_contributors}} : <span id="contributors">{{contributors}}</span><br/>
-            {{i18n.i_readers}} : <span id="readers">{{readers}}</span><br/>
+            {{i18n.i_contributors}} <span id="contributors">{{contributors}}</span><br/>
+            {{i18n.i_readers}} <span id="readers">{{readers}}</span><br/>
             {{date}}
           </p>
           <div id="diagram" class="{{link}}">
@@ -72,6 +72,12 @@
   <link rel="stylesheet" href="../../script/jquery-ui.min.css" />
   <script>
   $(document).ready(function() {
+    if ($('#contributors').text().length < 1) {
+      $('#contributors').before("{{i18n.i_everyone}}");
+    }
+    if ($('#readers').text().length < 1) {
+      $('#readers').before("{{i18n.i_everyone}}");
+    }
     $.ajax({
       url: "../../memo_attribute/{{diary}}",
       type: "GET",

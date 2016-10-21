@@ -52,11 +52,11 @@
             <button id="create" class="diagram" type="button" hidden="hidden">+</button>
           </h1>
           <p id="authorization">
-            {{i18n.i_contributors}} : <span id="contributors">{{contributors}}</span>
+            {{i18n.i_contributors}} <span id="contributors">{{contributors}}</span>
             <button type="button" id="contributors_add">+</button>
             <input id="contributors_edit" type="search" hidden="hidden" /><br/>
-            {{i18n.i_readers}} : <span id="readers">{{readers}}</span>
-            <button type="button" id="readers_add">+</button>
+            {{i18n.i_readers}} <span id="readers">{{readers}}</span>
+            <button type="button" id="readers_add">&mdash;</button>
             <input id="readers_edit" type="search" hidden="hidden" /><br/>
             {{date}}
           </p>
@@ -142,6 +142,12 @@
       case ('storyline'):
         $('#add').addClass('storyline');
         break;
+    }
+    if ($('#contributors').text().length < 1) {
+      $('#contributors').before("{{i18n.i_everyone}}");
+    }
+    if ($('#readers').text().length < 1) {
+      $('#readers').before("{{i18n.i_everyone}}");
     }
     var converter = new showdown.Converter({
       tables: 'true',

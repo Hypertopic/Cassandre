@@ -44,8 +44,8 @@
           {{#authorized}}
           <h1> <img src="../../style/{{type}}.png"/> {{name}} <button type="button" class="storyline" id="add">+</button> </h1>
           <p id="authorization">
-            {{i18n.i_contributors}} : <span id="contributors">{{contributors}}</span><br/>
-            {{i18n.i_readers}} : <span id="readers">{{readers}}</span><br/>
+            {{i18n.i_contributors}} <span id="contributors">{{contributors}}</span><br/>
+            {{i18n.i_readers}} <span id="readers">{{readers}}</span><br/>
             {{date}}
           </p>
           <div id="graph"></div>
@@ -71,6 +71,12 @@
   <script type="text/javascript" src="../../script/vis.min.js"></script>
   <script>
   $(document).ready(function() {
+    if ($('#contributors').text().length < 1) {
+      $('#contributors').before("{{i18n.i_everyone}}");
+    }
+    if ($('#readers').text().length < 1) {
+      $('#readers').before("{{i18n.i_everyone}}");
+    }
     $.ajax({
       url: "../../memo_attribute/{{diary}}",
       type: "GET",

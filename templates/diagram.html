@@ -42,7 +42,7 @@
           {{/authorized}}
           {{#authorized}}
           <h1> <img src="../../style/{{type}}.png"/> <span id="name"> {{name}} </span> <button type="button" class="theoretical" id="add">+</button> <button type="button" class="graph" id="create" hidden="hidden">+</button></h1>
-          <p>
+          <p id="authorization">
             {{i18n.i_contributors}} : <span id="contributors">{{contributors}}</span><br/>
             {{i18n.i_readers}} : <span id="readers">{{readers}}</span><br/>
             {{date}}

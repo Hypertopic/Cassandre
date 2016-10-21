@@ -3,6 +3,7 @@
     <title>{{name}} ({{diary}})</title>
     <link rel="icon" type="image/png" href="../style/favicon.png" />
     <link rel="stylesheet" type="text/css" href="../style/main.css" />
+    <link rel="stylesheet" href="../style/simplemde.min.css" />
   </head>
   <body id="watermark">
     <form id="container">
@@ -35,9 +36,6 @@
           {{#authorized}}
           <h1> <img src="../style/{{type}}.png"/> <textarea id="name" type="text" cols="76" rows="1">{{name}}</textarea></h1>
           <p>
-            {{contributors}}<br/>{{date}}
-          </p>
-          <p>
             <textarea id="body" cols="80" rows="20" type="text">{{body}}</textarea>
           </p>
           {{/authorized}}
@@ -52,7 +50,13 @@
     </form>
   </body>
   <script src="../script/jquery.js"></script>
+  <script src="../script/simplemde.min.js"></script>
   <script>
+  var simplemde = new SimpleMDE({
+    element: $("#body")[0],
+    showIcons: ["code", "table"],
+    spellChecker: false
+  });
   $(document).ready(function() {
     $.ajax({
       url: "../memo_attribute/{{diary}}",
@@ -99,7 +103,7 @@
       type: "GET",
       dataType: "json",
       success: function(data) {
-        data.body = $('#body').val();
+        data.body = simplemde.value();
         data.name = $('#name').val();
         $.ajax({
           type: "PUT",

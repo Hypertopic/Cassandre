@@ -1,13 +1,14 @@
 <html>
   <head>
-    <title> - {{name}}</title>
+    <title>{{diary_name}} - {{name}}</title>
     <link rel="icon" type="image/png" href="../../style/favicon.png" />
     <link rel="stylesheet" type="text/css" href="../../style/main.css" />
   </head>
   <body>
     <div id="container">
       <div id="header" class="menu">
-        <button type="button" id="diary">&nbsp;</button>
+        <button type="button" id="diary">{{diary_name}}</button>
+        {{#authorized}}
         <button type='button' id='clear_highlights' hidden="hidden">{{i18n.i_raw}}</button>
         <button type='button' id='specific' class='highlight_words'
           disabled='disabled' hidden="hidden">{{i18n.i_specific}}</button>
@@ -16,6 +17,7 @@
         <button type='button' id='repeated' disabled='disabled' hidden="hidden">
           {{i18n.i_phrases}}</button>
         <input id='kwic' type='search' placeholder='{{i18n.i_search}}' hidden="hidden"/>
+        {{/authorized}}
         <div id='logged'>
         {{^logged}}
           <form id="signin">
@@ -25,19 +27,19 @@
           </form>
         {{/logged}}
         {{#logged}}
-          {{logged}}
+          {{logged_fullname}}
           <button id="signout">{{i18n.i_sign-out}}</button>
         {{/logged}}
         </div>
       </div>
       <div id="memo">
         {{#authorized}}
-        <div id="groundings" >
+        <div id="groundings">
           <legend>{{i18n.i_groundings}}</legend>                   
           {{#groundings}}
-          <li id="{{.}}">
-            <h4 class="toggle"></h4>
-            <div class="preview"></div>
+          <li class="{{type}}" id="{{id}}">
+            <h4 class="toggle">{{name}}</h4>
+            <div class="preview">{{preview}} <a href="{{href}}">-></a></div>
           </li>            
           {{/groundings}}
           <div id="add-grounding">{{i18n.i_add_groundings}}</div>
@@ -48,17 +50,18 @@
           <h1>{{i18n.i_sign-in_required}}</h1>
           {{/authorized}}
           {{#authorized}}
-          <h1> <img src="../../style/{{type}}.png"/> <span id="name"> {{name}} </span> <button type="button" id="add">+</button>
+          <div id="add-leaves"><button type="button" id="add">+</button>
             <button id="create" class="diagram" type="button" hidden="hidden">+</button>
-          </h1>
+          </div>
+          <h1><img src="../../style/{{type}}.png"/><span id="name">{{name}}</span></h1>
           <p id="authorization">
-            {{i18n.i_contributors}} <span id="contributors">{{contributors}}</span>
+            {{i18n.i_created}} {{date}}<br/>
+            {{i18n.i_contributors}} <span id="contributors">{{contributors_fullnames}}</span>
             <button type="button" id="contributors_add">+</button>
             <input id="contributors_edit" type="search" hidden="hidden" /><br/>
-            {{i18n.i_readers}} <span id="readers">{{readers}}</span>
-            <button type="button" id="readers_add">&mdash;</button>
+            {{i18n.i_readers}} <span id="readers">{{readers_fullnames}}</span>
+            <button type="button" id="readers_add">...</button>
             <input id="readers_edit" type="search" hidden="hidden" /><br/>
-            {{date}}
           </p>
           <div class="speeches">
           {{#body}}
@@ -68,7 +71,7 @@
             {{actor}}
             {{/actor}}
             </div>
-            <div class="words">
+            <div class="writing">
               {{#timestamp}}
               <div class="timestamp">{{timestamp}}</div>
               {{/timestamp}}
@@ -82,7 +85,7 @@
           </div>
           <div id="comments">
             {{#comments}}
-            <div class="comment">{{user}} ({{date}}): <br/>{{text}}</div>
+            <div class="comment"><span class="meta">{{user}} ({{date}})</span>: <br/>{{text}}</div>
             {{/comments}}
             <button type="button" id="comment">{{i18n.i_comment}}</button>
             <textarea cols="80" rows="5" type="text" hidden="hidden" placeHolder="{{i18n.i_enter_comment}}"></textarea>
@@ -92,6 +95,9 @@
         </div>
         <div id="leaves">
           <ul id="branch">
+          {{#leaves}}
+            <li class="{{type}}"><a href="{{href}}">{{name}}</a></li>
+          {{/leaves}}
           </ul>
         </div>
       </div>
@@ -115,6 +121,8 @@
 
   var metrics = {};
   var trigrams = {};
+  var user = "{{peer}}";
+  if ("{{logged}}") user = "{{logged}}";
 
   $(document).ready(function() {
     switch ('{{type}}') {
@@ -125,6 +133,7 @@
         $('#rare').show();
         $('#repeated').show();
         $('#kwic').show();
+        $('.writing').removeClass('writing').addClass('words');
         break;
       case ('coding'):
         $('#add').addClass('theoretical');
@@ -157,106 +166,39 @@
     $('.post').html(function(i, text) {
       return converter.makeHtml(text.trim());
     });
-    $.ajax({
-      url: "../../memo_attribute/{{diary}}",
-      type: "GET",
-      dataType: "json",
-        success: function(grounds) {
-        for (var i in grounds.rows) {
-          var r = grounds.rows[i];
-          var diary = r.key;
-          var id = '#' + r.value['id'];
-          var ground_href = r.value['id'];
-          var ground_type = r.value['type'];
-          switch (ground_type) {
-            case ('diagram'):
-            var ground_path = "../../diagram/{{diary}}/";
-            break;
-            case ('graph'):
-            var ground_path = "../../graph/{{diary}}/";
-            break;
-            default:
-            var ground_path = '';
-          }
-          var ground_label = r.value['name'];
-          var ground_date = r.value['date']; // unused
-          var ground_preview = r.value['preview'];
-          if(document.getElementById(ground_href) == null && ground_href != "{{_id}}") {
-            $("#dialog").find('select').append($('<option>', {
-              value: ground_href,
-              text: ground_label
-            }));
-          } else {
-            $(id).addClass(ground_type);
-            $(id).find("h4").text(ground_label);
-            $(id).find("div").text(ground_preview);
-            var link = document.createElement("a");
-            link.setAttribute('href', ground_path+ground_href);
-            $(id).find("div").append(link);
-            $(id).find("div").find("a").text('->');
-          };
-        }
-      }
-    });
-    $.ajax({
-      url: "../../{{diary}}",
-      type: "GET",
-      dataType: "json",
-      success: function(d) {
-        $("#diary").html(d.diary_name);
-        $('title').prepend(d.diary_name);
-      }
-    });
-    $.ajax({
-      url: "../../leaves/{{_id}}",
-      type: "GET",
-      dataType: "json",
-      success: function(leaves) {
-        for (var i in leaves.rows) {
-          var r = leaves.rows[i];
-          var leaf_type = r.value['type'];
-          if (leaf_type == 'diagram') {
-            var leaf_href = "../../diagram/{{diary}}/"+r.value['id']
-          } else {
-            var leaf_href = r.value['id'];
-          }
-          var leaf_label = r.value['name'];
-          $("#leaves ul").append('<li class="'+leaf_type+'"><a href="'+leaf_href+'">'+leaf_label+'</a></li>');              
-        }
-        if (leaves.rows.length < 1) {
-          $("#show-leaves").remove();
-        }
-        if ($('#groundings li').length < 1) {
-          $("#groundings").find('legend').remove();
-          $("#groundings").css({
-             'height': '36px',
-             'line-height': '36px',
-             'position': 'fixed',
-             'top': '0px',
-             'padding-top': '36px',
-             'padding-left': '5px',
-             'padding-right': '5px',
-             'width': '200px',
-             'height': 'auto',
-             'transform': 'rotate(90deg)',
-             'transform-origin': 'bottom left 0',
-          });
-          $("#add-grounding").css({
-             'bottom': 'auto',
-             'top': '0px',
-             'width': 'auto',
-             'transform': 'rotate(180deg)',
-             'transform-origin': 'center center 0',
-          });
-          $("#content").css({
-             'margin-left': '40px',
-          });
-          $("#comments").css({
-             'margin-left': '40px',
-          });
-        }
-      }
-    }); 
+    if ($('#leaves li').length < 1) {
+      $("#show-leaves").remove();
+    }
+    if ($('#groundings li').length < 1) {
+      $("#groundings").find('legend').remove();
+      $("#groundings").css({
+         'height': '36px',
+         'line-height': '36px',
+         'position': 'fixed',
+         'top': '0px',
+         'padding-top': '36px',
+         'padding-left': '5px',
+         'padding-right': '5px',
+         'width': '200px',
+         'height': 'auto',
+         'transform': 'rotate(90deg)',
+         'transform-origin': 'bottom left 0',
+      });
+      $("#add-grounding").css({
+         'bottom': 'auto',
+         'top': '0px',
+         'width': 'auto',
+         'transform': 'rotate(180deg)',
+         'transform-origin': 'center center 0',
+      });
+
+      $("#content").css({
+         'padding-left': '40px'
+      });
+      $("#comments").css({
+         'margin-left': '40px',
+      });
+    }
     if ("{{type}}" === 'field') {
       $.ajax({
         url: "../../corpus_words/{{diary}}",
@@ -396,23 +338,29 @@
     if ($('#comments').find('textarea').val().trim() == '') {
       alert("{{i18n.i_enter_comment}}")
     } else {
-      record('comment');
+      comment();
     }
   });
 
   function create(type) {
     var diary = "{{diary}}";
+    var contributors = "{{contributors}}";
     var data = {
-      date: new Date().toJSON(),
-      groundings: []
+      groundings: [],
+      history : []
     };
-    if ($('#contributors').text().length > 1) {
-      data.contributors = $('#contributors').text().split(',');
+    data.history.push({
+      "user": user,
+      "date": new Date().toJSON()
+    });
+    if (contributors.length > 0) {
+      data.contributors = contributors.split(',');
     } else if ("{{logged}}") {
       data.contributors = ["{{logged}}"];
     }
-    if ($('#readers').text().length > 1) {
-      data.readers = $('#readers').text().split(',');
+    var readers = "{{readers}}";
+    if (readers.length > 0) {
+      data.readers = readers.split(',');
     }
     switch (type) {
       case 'field':
@@ -450,6 +398,28 @@
     }
   }
 
+  function comment() {
+    var data = {
+      commented: "{{_id}}",
+      user: user,
+      date: new Date().toJSON(),
+      text: $('#comments').find('textarea').val().trim()
+    };
+    $.ajax({
+      type: "POST",
+      url: "../../",
+      contentType: "application/json",
+      data: JSON.stringify(data),
+      error: function(request) {
+        alert(
+          (JSON.parse(request.responseText).reason || request.responseText)
+          + '\nCode ' + request.status
+        );
+      },
+      success: reload
+    });
+  }
+
   function record(toAdd) {
     $.ajax({
       url: "../../{{_id}}",
@@ -457,21 +427,13 @@
       dataType: "json",
       success: function(data) {
         switch(toAdd) {
-          case ('comment'):
-            data.comments = ( typeof data.comments != 'undefined' && data.comments instanceof Array ) ? data.comments : [];
-            data.comments.push({
-              user: "{{logged}}",
-              date: new Date().toJSON(),
-              text: $('#comments').find('textarea').val().trim()
-            });
-          break;
           case ('contributors'):
-            var newcontributor = $('#contributors_edit').val().trim();
+            var newcontributor = $('#contributors_edit').val().trim().toLowerCase();
             if (!data.contributors) data.contributors = [];
             data.contributors.push(newcontributor);
           break;
           case ('readers'):
-            var newreader = $('#readers_edit').val().trim();
+            var newreader = $('#readers_edit').val().trim().toLowerCase();
             if (!data.readers) data.readers = [];
             data.readers.push(newreader);
           break;

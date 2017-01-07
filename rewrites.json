@@ -44,8 +44,13 @@
     }
   }, {
     "method": "GET",
-    "from": "memo/:diary/:memo", 
-    "to": "_show/memo/:memo"
+    "from": "memo/:diary/:memo",
+    "to": "_list/memo/memo",
+    "query": {
+      "startkey": [":memo"],
+      "endkey": [":memo", {}],
+      "include_docs": "true"
+    }
   }, {
     "from": "diagram/:diary/:diagram",
     "to": "_show/diagram/:diagram"
@@ -69,10 +74,10 @@
       "group_level": "2"
     }
   }, {
-    "from": "editable_memo/:memo", 
+    "from": "editable_memo/:memo",
     "to": "_show/editable_memo/:memo"
   }, {
-    "from": "editable_text/:text", 
+    "from": "editable_text/:text",
     "to": "_show/editable_text/:text"
   }, {
     "from": "item/", 

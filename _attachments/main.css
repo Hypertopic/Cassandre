@@ -28,6 +28,7 @@ form {
 #header {
   margin-bottom: 0;
   padding: 4px;
+  z-index: +1;
 }
 
 #menu>* {
@@ -38,6 +39,9 @@ form {
   padding: 30px 0 0 0 ;
 }
 
+#content {
+  padding-bottom: 35px;
+}
 
 #memo>#content {
   padding: 0 35px 0 21% ;
@@ -49,6 +53,11 @@ form {
 
 #content p {
   padding: 0 5px 0 0;
+}
+
+.words .post p {
+  margin-top: 0px;
+  margin-bottom: 0px;
 }
 
 th {
@@ -90,6 +99,12 @@ div.post {
   padding: 5px 0 0 5px;
   background-repeat: no-repeat;
   cursor: pointer;
+}
+
+#add-leaves {
+  position:absolute;
+  right: 36px;
+  top: 36px;
 }
 
 #show-leaves {
@@ -145,6 +160,7 @@ div.post {
   margin: 40px 0 0 10px ;
 }
 
+.comment>.meta,
 #contributors_add,
 #readers_add,
 #authorization {

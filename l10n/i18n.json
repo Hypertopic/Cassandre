@@ -8,6 +8,7 @@
     "i_sign-in": "Sign in",
     "i_sign-out": "Sign out",
     "i_sign-in_required": "You shouldn't be there",
+    "i_created": "Created by",
     "i_contributors": "Modifiable by",
     "i_readers": "Readable by",
     "i_everyone": "everyone",
@@ -81,6 +82,7 @@
     "i_sign-in": "S'identifier",
     "i_sign-out": "Se déconnecter",
     "i_sign-in_required": "Accès refusé",
+    "i_created": "Créé par",
     "i_contributors": "Modifiable par",
     "i_readers": "Lisible par",
     "i_everyone": "tout le monde",
@@ -131,7 +133,7 @@
        "storyline": "Résultats intermédiaires"
     },
     "i_content": {
-      "field": "Qu'ai je observé ?",
+      "field": "Que m'a-t-on dit ? Qu'ai je observé ?",
       "coding": "Comment se définit tel processus, telle action ou telle activité ?",
       "operational": "Que ne faut-il pas oublier de faire sur le terrain ?",
       "theoretical": "Reformulation de la question de recherche, nouvelles questions théoriques que suscite l'analyse du matériau, propriété ou articulation à approfondir.",

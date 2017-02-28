@@ -8,6 +8,10 @@
       <header>
         <div id="header" class="menu">
           <button type="button" id="corpus">&nbsp;</button>
+          {{#logged}}
+            {{logged_fullname}}
+          <button id="signout">{{i18n.i_sign-out}}</button>
+          {{/logged}}
         </div>
       </header>
       <div id="content">
@@ -19,9 +23,8 @@
           <input id="_id" type="hidden" value="{{_id}}" />
           <input id="_rev" type="hidden" value="{{_rev}}" />
           <input id="corpus" type="hidden" value="{{corpus}}" />
-          <input id="date" type="hidden" value="{{date}}" />
         </fieldset>
-        <h1> <img src="../style/field.png"/> 
+        <h1> <img src="../style/field.png"/>
           {{#attributes}}
           <input id="{{key}}" type="text" placeHolder="{{i18n.i_name.field}}" value="{{value}}" />
           {{/attributes}}
@@ -94,6 +97,13 @@
           }
           data.speeches.push(turn);
         });
+        if (!data.history) data.history = [];
+        var user = "{{peer}}";
+        if ("{{logged}}") user = "{{logged}}";
+        data.history.push({
+          "user": user,
+          "date": new Date().toJSON()
+        });
         $.ajax({
           type: "PUT",
           url: "../{{_id}}",
@@ -116,15 +126,23 @@
   });
 
   $('#save').on('click', function() {
-    save(true, function() {
-      location.reload();
-    });
+    if ($('#name').val().trim() == '') {
+      alert("{{i18n.i_enter_memo_name}}")
+    } else {
+      save(true, function() {
+        location.reload();
+      });
+    }
   });
 
   $('#done').on('click', function() {
-    save(false, function() {
-      self.location = '../memo/{{corpus}}/{{_id}}';
-    });
+    if ($('#name').val().trim() == '') {
+      alert("{{i18n.i_enter_memo_name}}")
+    } else {
+      save(false, function() {
+        self.location = '../memo/{{corpus}}/{{_id}}';
+      });
+    }
   });
 
   $('#content')

@@ -44,9 +44,9 @@
           {{#authorized}}
           <h1> <img src="../../style/{{type}}.png"/> {{name}} <button type="button" class="storyline" id="add">+</button> </h1>
           <p id="authorization">
+            {{i18n.i_created-by}} {{date}}<br/>
             {{i18n.i_contributors}} <span id="contributors">{{contributors}}</span><br/>
-            {{i18n.i_readers}} <span id="readers">{{readers}}</span><br/>
-            {{date}}
+            {{i18n.i_readers}} <span id="readers">{{readers}}</span>
           </p>
           <div id="graph"></div>
           {{/authorized}}

@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title></title>
+    <title>{{diary_name}}</title>
     <link rel="icon" type="image/png" href="../../style/favicon.png" />
     <link rel="stylesheet" type="text/css" href="../../style/main.css" />
     <link rel="stylesheet" type="text/css" href="../../style/diagram.css" />
@@ -32,8 +32,43 @@
         </div>
       </header>
       <div id="content">
-        <h1>&nbsp;</h1>
-        <input id="diary_name" type="search" hidden="hidden" />
+        <h1>{{diary_name}}</h1>
+        <input id="diary_name" type="search" hidden="hidden" value="{{diary_name}}"/>
+        <div id="add-leaves"><img id="show-activity" src="../../style/clock.png" alt="{{i18n.i_activity}}"/></div>
+        <div id="activity" title="{{i18n.i_activity}}" hidden="hidden">
+        <fieldset>
+          <legend>{{i18n.i_filter}}</legend>
+          <button type="button" id="all-activity">{{i18n.i_all}}</button>
+          <button type="button" id="only-created">{{i18n.i_creations}}</button>
+          <button type="button" id="only-modified">{{i18n.i_modifications}}</button>
+          <button type="button" id="only-comments">{{i18n.i_comments}}</button>
+        </fieldset>
+        <ul>
+        {{#activity}}
+          <li class="{{comment}}{{created}}{{^created}}{{^comment}}modified{{/comment}}{{/created}}">{{date}}, {{user}}
+              {{#diary_label}}
+                {{#created}}{{i18n.i_created}} {{/created}}{{^created}}{{i18n.i_renamed}} {{/created}}
+                {{i18n.i_the-diary}}
+              {{/diary_label}}
+              {{#comment}}
+                {{i18n.i_commented}}
+                <a href="{{modified_id}}">{{modified_name}}</a>
+              {{/comment}}
+              {{#diagram}}
+                {{#created}}{{i18n.i_created}} {{/created}}{{^created}}{{i18n.i_modified}} {{/created}}
+                <a href="../../diagram/{{diary}}/{{modified_id}}">{{modified_name}}</a>
+              {{/diagram}}
+              {{#graph}}
+                {{#created}}{{i18n.i_created}} {{/created}}{{^created}}{{i18n.i_modified}} {{/created}}
+                <a href="../../graph/{{diary}}/{{modified_id}}">{{modified_name}}</a>
+              {{/graph}}
+              {{#memo}}
+                {{#created}}{{i18n.i_created}} {{/created}}{{^created}}{{i18n.i_modified}} {{/created}}
+                <a href="{{modified_id}}">{{modified_name}}</a>
+              {{/memo}}
+          </li>
+        {{/activity}}
+        </ul></div>
         <div id="network"></div>
         <ul id="memos" hidden="hidden">
           {{#memos}}
@@ -49,22 +84,12 @@
     </div>
   </body>
   <script src="../../script/jquery.js"></script>
+  <script src="http://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
   <script type="text/javascript" src="../../script/vis.min.js"></script>
   <script>
-  var rev = "";
   $(document).ready(function() {
     resetUI();
-    $.ajax({
-      url: "../../{{diary}}",
-      type: "GET",
-      dataType: "json",
-      success: function(d) {
-        $('h1').text(d.diary_name);
-        $('#diary_name').val(d.diary_name);
-        $('title').text(d.diary_name);
-        rev = d._rev;
-      }
-    });
     var nodes = [];
     var edges = [];
     var diagrams = [];
@@ -99,7 +124,7 @@
           node_level = '6';
           break;
       }
-      nodes.push({id: memo_id, shape: 'image', image: '../../style/'+memo_type+'.png', label: memo_date.substring(0,10)+"\n"+memo_name, y: memo_date, level:node_level });
+      nodes.push({id: memo_id, shape: 'image', image: '../../style/'+memo_type+'.png', label: memo_date+"\n"+memo_name, y: memo_date, level:node_level });
       {{#groundings}}
         if (memo_type == "field") {
            edges.push({from: memo_id, to: "{{.}}", arrows:'from'});
@@ -186,6 +211,47 @@
       });
     });
 
+  $('#show-activity').on('click', function() {
+    $("#activity").dialog({
+      autoOpen:false,
+      modal:true,
+      width:'auto',
+      autoResize: true,
+      open: function() {
+        $("#dialog").keypress(function(e) {
+          if (e.keyCode == $.ui.keyCode.ENTER) {
+            $(this).parent().find("button:eq(1)").trigger("click");
+          }
+        });
+      }
+    });
+    $("#activity").dialog("open");
+    if ($('ul .created').length < 1) $('#only-created').hide();
+    if ($('ul .modified').length < 1) $('#only-modified').hide();
+    if ($('ul .commented').length < 1) $('#only-comments').hide();
+  });
+
+  $('#all-activity').on('click', function() {
+    $(".created").show();
+    $(".modified").show();
+    $(".commented").show();
+  });
+  $('#only-created').on('click', function() {
+    $(".created").show();
+    $(".modified").hide();
+    $(".commented").hide();
+  });
+  $('#only-comments').on('click', function() {
+    $(".created").hide();
+    $(".modified").hide();
+    $(".commented").show();
+  });
+  $('#only-modified').on('click', function() {
+    $(".created").hide();
+    $(".commented").hide();
+    $(".modified").show();
+  });
+
   function resetUI() {
     $("#memos").hide();
     $("#network").show();
@@ -219,12 +285,35 @@
 
   $('#diary_name').on('keypress', function(key) {
     if (key.which == 13) {
+      var diary_name = $('#diary_name').val().trim();
+      var user = "{{peer}}";
+      if ("{{logged}}") user = "{{logged}}";
+      var history = {
+        "user": user,
+        "date": new Date().toJSON()
+      };
       $.ajax({
         url: "../../{{diary}}",
         type: "GET",
         dataType: "json",
+        error: function() {
+          $.ajax({
+            type: "PUT",
+            url: "../../{{diary}}",
+            dataType: "json",
+            contentType: "application/json",
+            data: JSON.stringify({
+              _id: "{{diary}}",
+              diary_name: diary_name,
+              history: [history]
+            }),
+            success: reload
+          });
+        },
         success: function(data) {
-          data.diary_name = $('#diary_name').val().trim();
+          data.diary_name = diary_name;
+          if (!data.history) data.history = [];
+          data.history.push(history);
           $.ajax({
             type: "PUT",
             url: "../../{{diary}}",

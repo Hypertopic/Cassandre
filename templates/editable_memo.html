@@ -10,6 +10,10 @@
       <header>
         <div id="header" class="menu">
           <button type="button" id="diary">&nbsp;</button>
+          {{#logged}}
+            {{logged_fullname}}
+          <button id="signout">{{i18n.i_sign-out}}</button>
+          {{/logged}}
         </div>
       </header>
       <div id="memo">
@@ -52,11 +56,22 @@
   <script src="../script/jquery.js"></script>
   <script src="../script/simplemde.min.js"></script>
   <script>
+  var placeHolder = [];
+  placeHolder["field"] = {name : "{{i18n.i_name.field}}", content: "{{{i18n.i_content.field}}}"};
+  placeHolder["coding"] = {name : "{{i18n.i_name.coding}}", content: "{{{i18n.i_content.coding}}}"};
+  placeHolder["theoretical"] = {name : "{{i18n.i_name.theoretical}}", content: "{{{i18n.i_content.theoretical}}}"};
+  placeHolder["operational"] = {name : "{{i18n.i_name.operational}}", content: "{{{i18n.i_content.operational}}}"};
+  placeHolder["storyline"] = {name : "{{i18n.i_name.storyline}}", content: "{{{i18n.i_content.storyline}}}"};
+  $("#name").attr("placeHolder", placeHolder["{{type}}"]["name"]);
+
   var simplemde = new SimpleMDE({
     element: $("#body")[0],
-    showIcons: ["code", "table"],
+    showIcons: ["table"],
+    hideIcons: ["quote"],
+    placeholder: placeHolder["{{type}}"]["content"],
     spellChecker: false
   });
+
   $(document).ready(function() {
     $.ajax({
       url: "../memo_attribute/{{diary}}",
@@ -77,16 +92,9 @@
           $(id).find("div").text(ground_preview);
         }
         $('#groundings').find('.toggle').next().slideToggle('fast');
-        var placeHolder = [];
-        placeHolder["field"] = {name : "{{i18n.i_name.field}}", content: "{{{i18n.i_content.field}}}"};
-        placeHolder["coding"] = {name : "{{i18n.i_name.coding}}", content: "{{{i18n.i_content.coding}}}"};
-        placeHolder["theoretical"] = {name : "{{i18n.i_name.theoretical}}", content: "{{{i18n.i_content.theoretical}}}"};
-        placeHolder["operational"] = {name : "{{i18n.i_name.operational}}", content: "{{{i18n.i_content.operational}}}"};
-        placeHolder["storyline"] = {name : "{{i18n.i_name.storyline}}", content: "{{{i18n.i_content.storyline}}}"};
-        $("#name").attr("placeHolder", placeHolder["{{type}}"]["name"]);
-        $("#body").attr("placeHolder", placeHolder["{{type}}"]["content"]);
       }
     });
+
     $.ajax({
       url: "../{{diary}}",
       type: "GET",
@@ -97,6 +105,7 @@
     });
   });
 
+
   function save(draft, toDoAfter) {
     $.ajax({
       url: "../{{_id}}",
@@ -105,6 +114,13 @@
       success: function(data) {
         data.body = simplemde.value();
         data.name = $('#name').val();
+        if (!data.history) data.history = [];
+        var user = "{{peer}}";
+        if ("{{logged}}") user = "{{logged}}";
+        data.history.push({
+          "user": user,
+          "date": new Date().toJSON()
+        });
         $.ajax({
           type: "PUT",
           url: "../{{_id}}",

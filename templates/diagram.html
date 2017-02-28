@@ -43,9 +43,9 @@
           {{#authorized}}
           <h1> <img src="../../style/{{type}}.png"/> <span id="name"> {{name}} </span> <button type="button" class="theoretical" id="add">+</button> <button type="button" class="graph" id="create" hidden="hidden">+</button></h1>
           <p id="authorization">
+            {{i18n.i_created-by}} {{date}}<br/>
             {{i18n.i_contributors}} <span id="contributors">{{contributors}}</span><br/>
-            {{i18n.i_readers}} <span id="readers">{{readers}}</span><br/>
-            {{date}}
+            {{i18n.i_readers}} <span id="readers">{{readers}}</span>
           </p>
           <div id="diagram" class="{{link}}">
             <div class="layout-1"></div>
@@ -71,6 +71,8 @@
   <script src="../../script/jquery-ui.min.js"></script>
   <link rel="stylesheet" href="../../script/jquery-ui.min.css" />
   <script>
+  var user = "{{peer}}";
+  if ("{{logged}}") user = "{{logged}}";
   $(document).ready(function() {
     if ($('#contributors').text().length < 1) {
       $('#contributors').before("{{i18n.i_everyone}}");
@@ -197,8 +199,13 @@
       date: new Date().toJSON(),
       diary: "{{diary}}",
       type: type,
-      groundings: []
+      groundings: [],
+      history: []
     };
+    data.history.push({
+      "user": user,
+      "date": new Date().toJSON()
+    });
     if ($('#contributors').text().length > 1) {
       data.contributors = $('#contributors').text().split(',');
     } else if ("{{logged}}") {

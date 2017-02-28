@@ -2,11 +2,15 @@ function(o, req){
   // !json templates.editable_text
   // !code lib/mustache.js
   // !code l10n/l10n.js
+  var username = req.userCtx.name;
   var data = {
-    authorized: !o.readers || o.readers.indexOf(req.userCtx.name)>-1 || o.contributors && o.contributors.indexOf(req.userCtx.name)>-1 || req.userCtx.roles.indexOf("_admin")>-1,
+    authorized: !o.readers || o.readers.indexOf(username)>-1 || o.contributors && o.contributors.indexOf(username)>-1 || req.userCtx.roles.indexOf("_admin")>-1,
     i18n: localized(),
     highlights: "{}",
     attributes:[],
+    logged: username,
+    logged_fullname: username,
+    logs:[],
     speeches: [{}],
     groundings:[]
   }
@@ -14,6 +18,7 @@ function(o, req){
     switch (key) {
       case '_id':
       case '_rev':
+      case 'history':
       case 'contributors':
       case 'comments':
       case 'corpus':

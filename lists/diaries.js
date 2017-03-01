@@ -7,15 +7,16 @@ function(head, req) {
   var data = {
     i18n: localized(),
     logged: req.userCtx.name,
-    diaries: []
+    diaries: [],
+    peer: req.peer
   };
   while (row = getRow()) {
     var index = row.key[1];
-    if (row.key[0] === 'name') {
-        ledger[index] = row.key[2];
-    } else {
+    if (row.key[2].length > 0) {
+      ledger[index] = row.key[2];
+    } else if (row.key[0] === req.userCtx.name) {
       data.diaries.push({
-        id: row.key[1],
+        id: index,
         name: ledger[index],
         count: row.value
       });

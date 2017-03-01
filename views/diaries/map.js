@@ -1,10 +1,18 @@
-function(doc) {
-  var diaries = {};
-  if (doc.diary_name) {
-    emit(['name', doc._id, doc.diary_name]);
-  } else if (doc.diary) {
-    emit(['text', doc.diary]);
-  } else if (doc.corpus) {
-    emit(['text', doc.corpus]);
+function(o) {
+  var diary = o.diary || o.corpus;
+  if (o.diary_name) {
+    emit([null, o._id, o.diary_name]);
+  } else {
+    if (o.contributors)
+      for (var id in o.contributors) {
+        emit([o.contributors[id], diary, {}]);
+      }
+    if (o.readers) {
+      for (var id in o.readers) {
+        emit([o.readers[id], diary, {}]);
+      }
+    } else if (!o.commented && !o.fullname ) {
+      emit([null, diary, {}]);
+    }
   }
 }

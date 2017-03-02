@@ -10,10 +10,12 @@
       <header>
         <div id="header" class="menu">
           <button type="button" id="diary">&nbsp;</button>
+          <div id='logged'>
           {{#logged}}
             {{logged_fullname}}
-          <button id="signout">{{i18n.i_sign-out}}</button>
+            <button id="signout">{{i18n.i_sign-out}}</button>
           {{/logged}}
+          </div>
         </div>
       </header>
       <div id="memo">

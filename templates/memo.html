@@ -16,7 +16,6 @@
           disabled='disabled' hidden="hidden">{{i18n.i_rare}}</button>
         <button type='button' id='repeated' disabled='disabled' hidden="hidden">
           {{i18n.i_phrases}}</button>
-        <input id='kwic' type='search' placeholder='{{i18n.i_search}}' hidden="hidden"/>
         {{/authorized}}
         <div id='logged'>
         {{^logged}}
@@ -31,6 +30,9 @@
           <button id="signout">{{i18n.i_sign-out}}</button>
         {{/logged}}
         </div>
+        {{#authorized}}
+        <input id='kwic' type='search' placeholder='{{i18n.i_search}}' hidden="hidden"/>
+        {{/authorized}}
       </div>
       <div id="memo">
         {{#authorized}}
@@ -50,12 +52,12 @@
           <h1>{{i18n.i_sign-in_required}}</h1>
           {{/authorized}}
           {{#authorized}}
-          <div id="add-leaves"><button type="button" id="add">+</button>
+          <div id="add-leaves"><button type="button" id="add" hidden="hidden">+</button>
             <button id="create" class="diagram" type="button" hidden="hidden">+</button>
           </div>
           <h1><img src="../../style/{{type}}.png"/><span id="name">{{name}}</span></h1>
           <p id="authorization">
-            {{i18n.i_created}} {{date}}<br/>
+            {{i18n.i_created-by}} {{date}}<br/>
             {{i18n.i_contributors}} <span id="contributors">{{contributors_fullnames}}</span>
             <button type="button" id="contributors_add">+</button>
             <input id="contributors_edit" type="search" hidden="hidden" /><br/>
@@ -85,9 +87,13 @@
           </div>
           <div id="comments">
             {{#comments}}
-            <div class="comment"><span class="meta">{{user}} ({{date}})</span>: <br/>{{text}}</div>
+            <div class="comment" id="{{id}}" name="{{rev}}">
+              <span class="meta"><span class="user">{{user}}</span> ({{date}})</span>: <br/>
+              <span class="comment_text">{{text}}</span>
+              <input size="80" height="50" type="text" hidden="hidden" class="comment_edit" value="{{text}}"/>
+            </div>
             {{/comments}}
-            <button type="button" id="comment">{{i18n.i_comment}}</button>
+            <button type="button" id="comment_create">{{i18n.i_comment}}</button>
             <textarea cols="80" rows="5" type="text" hidden="hidden" placeHolder="{{i18n.i_enter_comment}}"></textarea>
             <button type="button" id="commented" hidden="hidden">{{i18n.i_done}}</button>
           </div>
@@ -125,6 +131,7 @@
   if ("{{logged}}") user = "{{logged}}";
 
   $(document).ready(function() {
+    if ($('h1').text().length > 0) $('#add').show();
     switch ('{{type}}') {
       case ('field'):
         $('#add').addClass('coding');
@@ -320,16 +327,34 @@
   });
 
   $('#add-grounding').on('click', function() {
-    $("#dialog").dialog({
-      autoOpen: true,
-      modal: true,
-      autoResize: true,
-      width:'auto'
+    $.ajax({
+      url: "../../memo_attribute/{{diary}}",
+      type: "GET",
+      dataType: "json",
+      success: function(ground_candidates) {
+        for (var i in ground_candidates.rows) {
+          var r = ground_candidates.rows[i];
+          var id = r.value['id'];
+          var rid = '#' + id;
+          if(document.getElementById(rid) == null && id != "{{_id}}") {
+            $("#dialog").find('select').append($('<option>', {
+              value: id,
+              text: r.value['name']
+            }));
+          }
+        }
+        $("#dialog").dialog({
+          autoOpen: true,
+          modal: true,
+          autoResize: true,
+          width:'auto'
+        });
+      }
     });
   });
 
-  $("#comment").click(function () {
-    $("#comment").remove();
+  $("#comment_create").click(function () {
+    $("#comment_create").remove();
     $("#comments").find('textarea').show();
     $('#commented').show();
   });
@@ -339,6 +364,34 @@
       alert("{{i18n.i_enter_comment}}")
     } else {
       comment();
+    }
+  });
+
+  $(".comment").click(function () {
+    var user = $(this).find('.user').text();
+    if ("{{logged_fullname}}" == user) {
+      $(this).find('.comment_text').hide();
+      $(this).find('.comment_edit').show();
+      $("#comment_create").remove();
+    }
+  });
+
+  $(".comment_edit").on('keypress', function(key) {
+    if (key.which == 13) {
+      var data = {
+        commented: "{{_id}}",
+        diary: "{{diary}}",
+        user: user,
+        date: new Date().toJSON(),
+        text: $(this).val().trim()
+      };
+      $.ajax({
+        type: "PUT",
+        url: '../../'+ $(this).closest('.comment').attr('id') + "?rev=" + $(this).closest('.comment').attr('name'),
+        contentType: "application/json",
+        data: JSON.stringify(data),
+        success: reload
+      });
     }
   });
 
@@ -401,6 +454,7 @@
   function comment() {
     var data = {
       commented: "{{_id}}",
+      diary: "{{diary}}",
       user: user,
       date: new Date().toJSON(),
       text: $('#comments').find('textarea').val().trim()

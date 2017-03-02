@@ -36,7 +36,9 @@ function(head, req) {
         data.comments.push({
           user: user,
           date: row.value.date,
-          text: row.value.text
+          text: row.value.text,
+          id: row.value.id,
+          rev: row.value.rev
         });
       break;
       case ('H'):
@@ -48,7 +50,7 @@ function(head, req) {
       case ('G'):
         if (row.doc)  {
           if (row.doc.body) {
-            var preview = row.doc.body.substr(0, 200).replace("\s", ' ');
+            var preview = row.doc.body.substr(0, 200).replace(/\s/g, ' ');
           } else {
             if (row.doc.speeches) {
               var preview = row.doc.speeches[0].text.substr(0, 200) || ' ';
@@ -115,7 +117,7 @@ function(head, req) {
         leaves: [],
         logged: username,
         logged_fullname: username,
-        name: row.doc.name,
+        name: row.doc.name.replace(/\s/g, ' '),
         readers: [],
         readers_fullnames: [],
         roles: req.userCtx.roles,

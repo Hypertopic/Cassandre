@@ -25,6 +25,13 @@ form {
   position: fixed;
 }
 
+.menu button,
+.menu select,
+.menu input {
+  color: black;
+}
+
+
 #header {
   margin-bottom: 0;
   padding: 4px;
@@ -324,7 +331,6 @@ input.actor {
   float: right;
   margin: 0px 10px;
 }
-
 
 .occurrence{
   display: table-row;

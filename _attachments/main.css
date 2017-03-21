@@ -168,6 +168,7 @@ div.post {
 }
 
 .comment>.meta,
+#negative-case>.meta,
 #contributors_add,
 #readers_add,
 #authorization {
@@ -175,8 +176,14 @@ div.post {
   font-size:70%;
 }
 
+#negative-case {
+  position: static;
+}
+
+
 #comments {
-  margin-bottom: 30px;
+  position: static;
+  top: 0px;
   left: 0px;
   right: 0px;
 }
@@ -198,7 +205,7 @@ button.comment {
   bottom: 30px;
 }
 
-#groundings>li,#memos>li,#branch>li{
+#groundings>li,#memos>li,#selectable-memos>li,#branch>li{
   list-style-type: none;
   background-repeat: no-repeat;
   padding-left: 30px;

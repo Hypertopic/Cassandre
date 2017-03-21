@@ -42,7 +42,10 @@
           <h1>{{i18n.i_sign-in_required}}</h1>
           {{/authorized}}
           {{#authorized}}
-          <h1> <img src="../../style/{{type}}.png"/> {{name}} <button type="button" class="storyline" id="add">+</button> </h1>
+          <div id="add-leaves">
+            <button type="button" class="storyline" id="add">+</button>
+          </div>
+          <h1> <img src="../../style/{{type}}.png"/> {{name}} </h1>
           <p id="authorization">
             {{i18n.i_created-by}} {{date}}<br/>
             {{i18n.i_contributors}} <span id="contributors">{{contributors}}</span><br/>
@@ -60,7 +63,7 @@
         <a href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
       </div>
     </div>
-    <div id="show-leaves"><div class="reverse">{{i18n.i_leaves}}</div></div>
+    <div id="show-leaves" hidden="hidden"><div class="reverse">{{i18n.i_leaves}}</div></div>
     <div id="dialog" hidden="hidden">
         <select onChange="save(this);"></select>
     </div>
@@ -70,6 +73,8 @@
   <link rel="stylesheet" href="../../script/jquery-ui.min.css" />
   <script type="text/javascript" src="../../script/vis.min.js"></script>
   <script>
+  var user = "{{peer}}";
+  if ("{{logged}}") user = "{{logged}}";
   $(document).ready(function() {
     if ($('#contributors').text().length < 1) {
       $('#contributors').before("{{i18n.i_everyone}}");
@@ -127,7 +132,8 @@
         ]); 
         var edges = new vis.DataSet([
           {{#edges}}
-          {id: "{{id}}", from: "{{from}}", to: "{{to}}", color:"{{color}}" },
+            {{^dashes}}{id: "{{id}}", from: "{{from}}", to: "{{to}}", color:"{{color}}" },{{/dashes}}
+            {{#dashes}}{from: "{{from}}", to: "{{to}}", label:"{{label}}", dashes:true },{{/dashes}}
           {{/edges}}
         ]); 
         var data = {
@@ -186,29 +192,35 @@
           var leaf_label = r.value['name'];
           $("#leaves ul").append('<li class="'+leaf_type+'"><a href="'+leaf_path+leaf_href+'">'+leaf_label+'</a></li>');              
         }
-        if (leaves.rows.length < 1) {
-          $("#show-leaves").remove();
+        if (leaves.rows.length > 0) {
+          $("#show-leaves").show();
         }
       }
     }); 
   });
 
   $('#add').on('click', function() {
+    var contributors = "{{contributors}}";
+    var readers = "{{readers}}";
     var type = $(this)[0].className; 
     var data = {
-      date: new Date().toJSON(),
       diary: "{{diary}}",
       type: type,
       groundings: [],
-      name: ""
+      name: "",
+      history: []
     };
-    if ($('#contributors').text().length > 1) {
-      data.contributors = $('#contributors').text().split(',');
+    data.history.push({
+      "user": user,
+      "date": new Date().toJSON()
+    });
+    if (contributors.length > 0) {
+      data.contributors = contributors.split(',');
     } else if ("{{logged}}") {
       data.contributors = ["{{logged}}"];
     }
-    if ($('#readers').text().length > 1) {
-      data.readers = $('#readers').text().split(',');
+    if (readers.length > 0) {
+      data.readers = readers.split(',');
     }
     data.groundings.push("{{_id}}");
     if (diary) {
@@ -260,55 +272,46 @@
         );
       },
       success: function(added) {
-        var nodes = [
-          {{#nodes}}
-          {id: "{{id}}", shape: "{{shape}}"},
-          {{/nodes}}
-        ];
         var nodeids = [];
           {{#nodes}}
           nodeids.push("{{id}}");
           {{/nodes}}
-        var edges = [
-          {{#edges}}
-          {id: "{{id}}",from: "{{from}}", to: "{{to}}", color:"{{color}}" },
-          {{/edges}}
-        ];
-        switch (added.link) {
-          case ('pp'):
-          if($.inArray(added.groundings[0], nodeids) == -1) {nodes.push({id: added.groundings[0], shape: 'box'});}
-          if($.inArray(added.groundings[1], nodeids) == -1) {nodes.push({id: added.groundings[1], shape: 'box'});}
-          edges.push({id: there.value, from: added.groundings[0], to: added.groundings[1], color: 'green'});
-          break;
-          case ('ipp'):
-          if($.inArray(added.groundings[0], nodeids) == -1) {nodes.push({id: added.groundings[0], shape: 'box'});}
-          if($.inArray(added.groundings[1], nodeids) == -1) {nodes.push({id: added.groundings[1], shape: 'box'});}
-          edges.push({id: there.value, from: added.groundings[0], to: added.groundings[1], color: 'red'});
-          break;
-          case ('dd'):
-          if($.inArray(added.groundings[0], nodeids) == -1) {nodes.push({id: added.groundings[0], shape: 'diamond'});}
-          if($.inArray(added.groundings[1], nodeids) == -1) {nodes.push({id: added.groundings[1], shape: 'diamond'});}
-          edges.push({id: there.value, from: added.groundings[0], to: added.groundings[1], color: 'green'});
-          break;
-          case ('idd'):
-          if($.inArray(added.groundings[0], nodeids) == -1) {nodes.push({id: added.groundings[0], shape: 'diamond'});}
-          if($.inArray(added.groundings[1], nodeids) == -1) {nodes.push({id: added.groundings[1], shape: 'diamond'});}
-          edges.push({id: there.value, from: added.groundings[0], to: added.groundings[1], color: 'red'});
-          break;
-          case ('dp'):
-          if($.inArray(added.groundings[0], nodeids) == -1) {nodes.push({id: added.groundings[0], shape: 'box'});}
-          if($.inArray(added.groundings[1], nodeids) == -1) {nodes.push({id: added.groundings[1], shape: 'diamond'});}
-          edges.push({id: there.value, from: added.groundings[0], to: added.groundings[1], color: 'green'});
-          break;
-        }
         $.ajax({
           url: "../../{{_id}}",
           type: "GET",
           dataType: "json",
           success: function(data) {
             data.groundings.push(there.value);
-            data.nodes = nodes;
-            data.edges = edges;
+            switch (added.link) {
+              case ('pp'):
+                if($.inArray(added.groundings[0], nodeids) == -1) {data.nodes.push({id: added.groundings[0], shape: 'box'});}
+                if($.inArray(added.groundings[1], nodeids) == -1) {data.nodes.push({id: added.groundings[1], shape: 'box'});}
+                data.edges.push({id: there.value, from: added.groundings[0], to: added.groundings[1], color: 'green'});
+                break;
+              case ('ipp'):
+                if($.inArray(added.groundings[0], nodeids) == -1) {data.nodes.push({id: added.groundings[0], shape: 'box'});}
+                if($.inArray(added.groundings[1], nodeids) == -1) {data.nodes.push({id: added.groundings[1], shape: 'box'});}
+                data.edges.push({id: there.value, from: added.groundings[0], to: added.groundings[1], color: 'red'});
+                break;
+              case ('dd'):
+                if($.inArray(added.groundings[0], nodeids) == -1) {data.nodes.push({id: added.groundings[0], shape: 'diamond'});}
+                if($.inArray(added.groundings[1], nodeids) == -1) {data.nodes.push({id: added.groundings[1], shape: 'diamond'});}
+                data.edges.push({id: there.value, from: added.groundings[0], to: added.groundings[1], color: 'green'});
+                break;
+              case ('idd'):
+                if($.inArray(added.groundings[0], nodeids) == -1) {data.nodes.push({id: added.groundings[0], shape: 'diamond'});}
+                if($.inArray(added.groundings[1], nodeids) == -1) {data.nodes.push({id: added.groundings[1], shape: 'diamond'});}
+                data.edges.push({id: there.value, from: added.groundings[0], to: added.groundings[1], color: 'red'});
+                break;
+              case ('dp'):
+                if($.inArray(added.groundings[0], nodeids) == -1) {data.nodes.push({id: added.groundings[0], shape: 'box'});}
+                if($.inArray(added.groundings[1], nodeids) == -1) {data.nodes.push({id: added.groundings[1], shape: 'diamond'});}
+                data.edges.push({id: there.value, from: added.groundings[0], to: added.groundings[1], color: 'green'});
+                break;
+            }
+            if (added.negative) {
+              data.edges.push({from: added.groundings[1], to: added.groundings[0], dashes: true, label: added.negative });
+            }
             $.ajax({
               type: "PUT",
               url: "../../{{_id}}",

@@ -38,9 +38,14 @@ function(o, req){
   for each (var e in o.edges) {
     var edge = {
       from: e.from,
-      to: e.to,
-      color: e.color,
+      to: e.to
     };
+    if (!e.dashes) {
+      edge.color = e.color;
+    } else {
+      edge.label = e.label;
+      edge.dashes = true;
+    }
     data.edges.push(e);
   }
   for each (var n in o.nodes) {

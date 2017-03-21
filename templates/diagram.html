@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title> - {{name}}</title>
+    <title>{{diary_name}} - {{name}}</title>
     <link rel="icon" type="image/png" href="../../style/favicon.png" />
     <link rel="stylesheet" type="text/css" href="../../style/main.css" />
     <link rel="stylesheet" type="text/css" href="../../style/diagram.css" />
@@ -8,7 +8,7 @@
   <body>
     <div id="container">
       <div id="header" class="menu">
-        <button type="button" id="diary">&nbsp;</button>
+        <button type="button" id="diary">{{diary_name}}</button>
         <div id='logged'>
         {{^logged}}
           <form id="signin">
@@ -18,7 +18,7 @@
           </form>
         {{/logged}}
         {{#logged}}
-          {{logged}}
+          {{logged_fullname}}
           <button id="signout">{{i18n.i_sign-out}}</button>
         {{/logged}}
         </div>
@@ -28,9 +28,9 @@
         <div id="groundings" >
           <legend>{{i18n.i_groundings}}</legend>                   
           {{#groundings}}
-          <li id="{{.}}">
-            <h4 class="toggle"></h4>
-            <div class="preview"></div>
+          <li class="{{type}}" id="{{id}}">
+            <h4 class="toggle">{{name}}</h4>
+            <div class="preview">{{preview}} <a href="{{href}}">-></a></div>
           </li>            
           {{/groundings}}
           <div id="add-grounding"></div>
@@ -41,20 +41,47 @@
           <h1>{{i18n.i_sign-in_required}}</h1>
           {{/authorized}}
           {{#authorized}}
-          <h1> <img src="../../style/{{type}}.png"/> <span id="name"> {{name}} </span> <button type="button" class="theoretical" id="add">+</button> <button type="button" class="graph" id="create" hidden="hidden">+</button></h1>
+          <div id="add-leaves">
+            <button type="button" class="theoretical" id="add">+</button>
+            <button type="button" class="graph" id="create" hidden="hidden">+</button>
+          </div>
+          <h1> <img src="../../style/{{type}}.png"/> <span id="name"> {{name}} </span> </h1>
           <p id="authorization">
             {{i18n.i_created-by}} {{date}}<br/>
-            {{i18n.i_contributors}} <span id="contributors">{{contributors}}</span><br/>
-            {{i18n.i_readers}} <span id="readers">{{readers}}</span>
+            {{i18n.i_contributors}} <span id="contributors">{{contributors_fullnames}}</span><br/>
+            {{i18n.i_readers}} <span id="readers">{{readers_fullnames}}</span>
           </p>
           <div id="diagram" class="{{link}}">
             <div class="layout-1"></div>
             <div class="layout-2"></div>
           </div>
+          <br/>
+          <div id="negative-case">
+            <span class="meta">{{i18n.i_name.negative-case}}: </span><span class="negative_text">{{negative}}</span>
+            <button type="button" id="add_negative-case">+</button>
+            <input type="text" size="35" hidden="hidden" placeHolder="{{i18n.i_content.negative-case}}" value="{{negative}}"/>
+            <button type="button" id="negative-case_created" hidden="hidden">{{i18n.i_done}}</button>
+          </div>
+          <div id="comments">
+            {{#comments}}
+            <div class="comment" id="{{id}}" name="{{rev}}">
+              <span class="meta"><span class="user">{{user}}</span> ({{date}})</span>: <br/>
+              <span class="comment_text">{{text}}</span>
+              <input size="80" height="50" type="text" hidden="hidden" class="comment_edit" value="{{text}}"/>
+            </div>
+            {{/comments}}
+            <button type="button" id="comment_create">{{i18n.i_comment}}</button>
+            <textarea cols="80" rows="5" type="text" hidden="hidden" placeHolder="{{i18n.i_enter_comment}}"></textarea>
+            <button type="button" id="commented" hidden="hidden">{{i18n.i_done}}</button>
+          </div>
+          <p>&nbsp;</p>
           {{/authorized}}
         </div>
         <div id="leaves">
           <ul id="branch">
+          {{#leaves}}
+            <li class="{{type}}"><a href="{{href}}">{{name}}</a></li>
+          {{/leaves}}
           </ul>
         </div>
       </div>
@@ -62,7 +89,7 @@
         <a href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
       </div>
     </div>
-    <div id="show-leaves"><div class="reverse">{{i18n.i_leaves}}</div></div>
+    <div id="show-leaves" hidden="hidden"><div class="reverse">{{i18n.i_leaves}}</div></div>
     <div id="dialog" hidden="hidden">
         <select onChange="adapt(this);"></select>
     </div>
@@ -88,7 +115,7 @@
         for (var i in grounds.rows) {
           var r = grounds.rows[i];
           var diary = r.key;
-          var id = '#' + r.value['id'];
+          var id = r.value['id'];
           var ground_href = r.value['id'];
           var ground_type = r.value['type'];
           var ground_path = '';
@@ -98,20 +125,12 @@
           var ground_label = r.value['name'];
           var ground_date = r.value['date']; // unused
           var ground_preview = r.value['preview'];
-          if($('#groundings li').length < 2 && document.getElementById(ground_href) == null && ground_href != "{{_id}}" && ground_type == 'coding') {
+          if ($('#groundings li').length < 2 && document.getElementById(id) == null && ground_href != "{{_id}}" && ground_type == 'coding') {
             $("#dialog").find('select').append($('<option>', {
               id: ground_href,
               value: ground_href,
               text: ground_label
             }));
-          } else {
-            $(id).addClass(ground_type);
-            $(id).find("h4").text(ground_label);
-            $(id).find("div").text(ground_preview);
-            var link = document.createElement("a");
-            link.setAttribute('href', ground_path+ground_href);
-            $(id).find("div").append(link);
-            $(id).find("div").find("a").text('->');
           };
         }
         $('#groundings').children('li').each(function() {
@@ -146,42 +165,9 @@
         $('<option>', { value: 'dp', text: "{{i18n.i_link_property_dimension}}" })
       );
     }
-    $.ajax({
-      url: "../../{{diary}}",
-      type: "GET",
-      dataType: "json",
-      success: function(d) {
-        $("#diary").html(d.diary_name);
-        $('title').prepend(d.diary_name);
-      }
-    });
-    $.ajax({
-      url: "../../leaves/{{_id}}",
-      type: "GET",
-      dataType: "json",
-      success: function(leaves) {
-        for (var i in leaves.rows) {
-          var r = leaves.rows[i];
-          var leaf_href = r.value['id'];
-          var leaf_type = r.value['type'];
-          switch (leaf_type) {
-            case ('diagram'):
-            var leaf_path = '';
-            break;
-            case ('graph'):
-            var leaf_path = "../../graph/{{diary}}/";
-            break;
-            default:
-            var leaf_path = "../../memo/{{diary}}/";
-          }
-          var leaf_label = r.value['name'];
-          $("#leaves ul").append('<li class="'+leaf_type+'"><a href="'+leaf_path+leaf_href+'">'+leaf_label+'</a></li>');
-        }
-        if (leaves.rows.length < 1) {
-          $("#show-leaves").remove();
-        }
-      }
-    }); 
+    if ($('#leaves li').length > 0) {
+      $("#show-leaves").show();
+    }
   });
 
   $('#add').on('click', function() {
@@ -195,8 +181,9 @@
   });
 
   function create(type) {
+    var contributors = "{{contributors}}";
+    var readers = "{{readers}}";
     var data = {
-      date: new Date().toJSON(),
       diary: "{{diary}}",
       type: type,
       groundings: [],
@@ -206,13 +193,13 @@
       "user": user,
       "date": new Date().toJSON()
     });
-    if ($('#contributors').text().length > 1) {
-      data.contributors = $('#contributors').text().split(',');
+    if (contributors.length > 0) {
+      data.contributors = contributors.split(',');
     } else if ("{{logged}}") {
       data.contributors = ["{{logged}}"];
     }
-    if ($('#readers').text().length > 1) {
-      data.readers = $('#readers').text().split(',');
+    if (readers.length > 0) {
+      data.readers = readers.split(',');
     }
     switch (type) {
       case 'graph':
@@ -247,6 +234,9 @@
           nodes.push({id: to, shape: 'diamond'});
           edges.push({id: "{{_id}}", from: from, to: to, color: 'green'});
           break;
+        }
+        if ($(".negative_text").text().trim().length > 0) {
+          edges.push({from: to, to: from, dashes: true, label: $(".negative_text").text().trim() });
         }
         data.edges = edges;
         data.nodes = nodes;
@@ -319,13 +309,15 @@
       type: "GET",
       dataType: "json",
       success: function(data) {
-        if (there.value.length == 32) {
+        if (there.value && there.value.length == 32) {
           var text = $('#'+there.value).text();
           data.name = $('#name').text().trim() +' & '+ text;
           data.groundings.push(there.value);
-        } else {
-          data.link = there.value,
+        } else if (there.value && there.value.length < 4) {
+          data.link = there.value;
           $("#dialog").dialog('close');
+        } else {
+          data.negative = there;
         }
         $.ajax({
           type: "PUT",
@@ -341,6 +333,87 @@
           success: reload
         });
       }
+    });
+  }
+
+  $("#add_negative-case").click(function () {
+    $(".negative_text").remove();
+    $("#add_negative-case").remove();
+    $("#negative-case").find('input').show();
+    $('#negative-case_created').show();
+    $("#comment_create").remove();
+    $('html, body').scrollTop($(document).height());
+  });
+
+  $("#negative-case_created").click(function () {
+    var negative = $('#negative-case').find('input').val().trim();
+    if (negative.length != '') adapt(negative);
+  });
+
+  $("#comment_create").click(function () {
+    $("#comment_create").remove();
+    $("#comments").find('textarea').show();
+    $('#commented').show();
+    $('html, body').scrollTop($(document).height());
+  });
+
+  $("#commented").on('click', function() {
+    if ($('#comments').find('textarea').val().trim() == '') {
+      alert("{{i18n.i_enter_comment}}")
+    } else {
+      comment();
+    }
+  });
+
+  $(".comment").click(function () {
+    var user = $(this).find('.user').text();
+    if ("{{logged_fullname}}" == user) {
+      $(this).find('.comment_text').hide();
+      $(this).find('.comment_edit').show();
+      $("#comment_create").remove();
+      $('#commented').remove();
+    }
+  });
+
+  $(".comment_edit").on('keypress', function(key) {
+    if (key.which == 13) {
+      var data = {
+        commented: "{{_id}}",
+        diary: "{{diary}}",
+        user: user,
+        date: new Date().toJSON(),
+        text: $(this).val().trim()
+      };
+      $.ajax({
+        type: "PUT",
+        url: '../../'+ $(this).closest('.comment').attr('id') + "?rev=" + $(this).closest('.comment').attr('name'),
+        contentType: "application/json",
+        data: JSON.stringify(data),
+        success: reload
+      });
+    }
+  });
+
+  function comment() {
+    var data = {
+      commented: "{{_id}}",
+      diary: "{{diary}}",
+      user: user,
+      date: new Date().toJSON(),
+      text: $('#comments').find('textarea').val().trim()
+    };
+    $.ajax({
+      type: "POST",
+      url: "../../",
+      contentType: "application/json",
+      data: JSON.stringify(data),
+      error: function(request) {
+        alert(
+          (JSON.parse(request.responseText).reason || request.responseText)
+          + '\nCode ' + request.status
+        );
+      },
+      success: reload
     });
   }
 

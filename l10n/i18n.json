@@ -29,6 +29,8 @@
     "i_delete": "Delete",
     "i_select": "Select all",
     "i_cancel": "Cancel",
+    "i_list": "List",
+    "i_network": "Network",
     "i_sort": "Sort by",
     "i_filter":	"Filter by",
     "i_raw": "Raw text",
@@ -70,14 +72,16 @@
        "coding": "Property or dimenson",
        "theoretical": "Category or relation to be sampled",
        "operational": "Planning next contact with the field",
-       "storyline": "Conclusions for this study"
+       "storyline": "Conclusions for this study",
+       "negative-case": "Negative case"
     },
     "i_content": {
       "field": "What am I observing ?",
       "coding": "How is defined such an activity ? What process is at stake ?",
       "operational": "Things not to forget to observe on the field",
       "theoretical": "Theoretical question(s) raised when coding the material",
-      "storyline": "Summarize what have learned, draw the storyline of the research project, write the draft of your next paper"
+      "storyline": "Summarize what have learned, draw the storyline of the research project, write the draft of your next paper",
+      "negative-case": "Context making the opposite relation possible"
     },
     "i_diagram_type": "Select type of diagram",
     "i_link": "Linking",
@@ -114,6 +118,8 @@
     "i_delete": "Supprimer",
     "i_select": "Sélectionner tout",
     "i_cancel": "Annuler",
+    "i_list": "Liste",
+    "i_network": "Réseau",
     "i_sort":	"Trier par",
     "i_filter": "Montrer",
     "i_raw": "Texte brut",
@@ -155,14 +161,16 @@
        "coding": "Propriété ou dimension",
        "theoretical": "Question de recherche ou phénomène à échantillonner",
        "operational": "Aide-mémoire pour la suite",
-       "storyline": "Résultats intermédiaires"
+       "storyline": "Résultats intermédiaires",
+       "negative-case": "Cas négatif"
     },
     "i_content": {
       "field": "Que m'a-t-on dit ? Qu'ai je observé ?",
       "coding": "Comment se définit tel processus, telle action ou telle activité ?",
       "operational": "Que ne faut-il pas oublier de faire sur le terrain ?",
       "theoretical": "Reformulation de la question de recherche, nouvelles questions théoriques que suscite l'analyse du matériau, propriété ou articulation à approfondir.",
-      "storyline": "Faire le point sur le déroulement de la recherche, prépaper une restitution à l'intention des acteurs de terrain ou rédiger ses premières conclusions..."
+      "storyline": "Faire le point sur le déroulement de la recherche, prépaper une restitution à l'intention des acteurs de terrain ou rédiger ses premières conclusions...",
+       "negative-case": "Circonstances du renversement de l'articulation"
     },
     "i_diagram_type": "Type de schématisation",
     "i_link": "Articuler",

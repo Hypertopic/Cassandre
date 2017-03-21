@@ -70,7 +70,7 @@ function(head, req) {
             var ground_path = '';
           }
           data.groundings.push({
-            id: '#' + row.value._id,
+            id: row.value._id,
             href: ground_path + row.value._id,
             type: ground_type,
             preview: preview,

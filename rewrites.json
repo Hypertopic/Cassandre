@@ -55,7 +55,12 @@
     }
   }, {
     "from": "diagram/:diary/:diagram",
-    "to": "_show/diagram/:diagram"
+    "to": "_list/diagram/memo",
+    "query": {
+      "startkey": [":diagram"],
+      "endkey": [":diagram", {}],
+      "include_docs": "true"
+    }
   }, {
     "from": "graph/:diary/:graph",
     "to": "_show/graph/:graph"

@@ -92,14 +92,9 @@ function(head, req) {
         });
       break;
       default:
-//      if (row.doc.draft) {
-//        return {
-//          "code": 302,
-//          "headers":{ "Location": '../../editable_text/' + row.doc.corpus +'/'+ row.doc._id }
-//        };
-//      }
       var username = req.userCtx.name;
       var type = row.doc.type || 'field';
+      var draft = row.doc.draft || false;
       var diary = row.doc.diary || row.doc.corpus;
       var data = {
         i18n: localized(),
@@ -112,6 +107,7 @@ function(head, req) {
         comments: [],
         date: row.doc.date,
         diary: diary,
+        draft: draft,
         groundings: [],
         peer: req.peer,
         leaves: [],
@@ -125,7 +121,7 @@ function(head, req) {
       }
       if (row.doc.body) {
         var content = {
-          text: row.doc.body
+          text: row.doc.body.replace(/\n\n/g, "\n \n")
         };
         data.body.push(content);
       } else {

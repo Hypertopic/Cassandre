@@ -55,7 +55,7 @@
           <div id="add-leaves"><button type="button" id="add" hidden="hidden">+</button>
             <button id="create" class="diagram" type="button" hidden="hidden">+</button>
           </div>
-          <h1><img src="../../style/{{type}}.png"/><span id="name">{{name}}</span></h1>
+          <h1><img src="../../style/{{type}}.png"/> <span id="name">{{name}}</span></h1>
           <p id="authorization">
             {{i18n.i_created-by}} {{date}}<br/>
             {{i18n.i_contributors}} <span id="contributors">{{contributors_fullnames}}</span>
@@ -97,6 +97,7 @@
             <textarea cols="80" rows="5" type="text" hidden="hidden" placeHolder="{{i18n.i_enter_comment}}"></textarea>
             <button type="button" id="commented" hidden="hidden">{{i18n.i_done}}</button>
           </div>
+          <p>&nbsp;</p>
         {{/authorized}}
         </div>
         <div id="leaves">
@@ -114,7 +115,7 @@
         <a href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
       </div>
     </div>
-    <div id="show-leaves"><div class="reverse">{{i18n.i_leaves}}</div></div>
+    <div id="show-leaves" hidden="hidden"><div class="reverse">{{i18n.i_leaves}}</div></div>
     <div id="dialog" title="{{i18n.i_groundings}}" hidden="hidden">
         <select onChange="record(this);"><option>{{i18n.i_select_grounding}}</option></select>
     </div>
@@ -131,7 +132,7 @@
   if ("{{logged}}") user = "{{logged}}";
 
   $(document).ready(function() {
-    if ($('h1').text().length > 0) $('#add').show();
+    if ({{draft}}) self.location = "../../editable_text/{{_id}}";
     switch ('{{type}}') {
       case ('field'):
         $('#add').addClass('coding');
@@ -153,12 +154,16 @@
         $('#add').addClass('field');
         break;
       case ('diagram'):
-        $('#add').addClass('diagram');
+        self.location = "../../diagram/{{diary}}/{{_id}}";
+        break;
+      case ('graph'):
+        self.location = "../../graph/{{diary}}/{{_id}}";
         break;
       case ('storyline'):
         $('#add').addClass('storyline');
         break;
     }
+    if ($('h1').text().length > 0) $('#add').show();
     if ($('#contributors').text().length < 1) {
       $('#contributors').before("{{i18n.i_everyone}}");
     }
@@ -173,8 +178,8 @@
     $('.post').html(function(i, text) {
       return converter.makeHtml(text.trim());
     });
-    if ($('#leaves li').length < 1) {
-      $("#show-leaves").remove();
+    if ($('#leaves li').length > 0) {
+      $("#show-leaves").show();
     }
     if ($('#groundings li').length < 1) {
       $("#groundings").find('legend').remove();
@@ -335,8 +340,7 @@
         for (var i in ground_candidates.rows) {
           var r = ground_candidates.rows[i];
           var id = r.value['id'];
-          var rid = '#' + id;
-          if(document.getElementById(rid) == null && id != "{{_id}}") {
+          if(document.getElementById(id) == null && id != "{{_id}}") {
             $("#dialog").find('select').append($('<option>', {
               value: id,
               text: r.value['name']
@@ -357,6 +361,7 @@
     $("#comment_create").remove();
     $("#comments").find('textarea').show();
     $('#commented').show();
+    $('html, body').scrollTop($(document).height());
   });
 
   $("#commented").on('click', function() {
@@ -373,6 +378,7 @@
       $(this).find('.comment_text').hide();
       $(this).find('.comment_edit').show();
       $("#comment_create").remove();
+      $('#commented').remove();
     }
   });
 

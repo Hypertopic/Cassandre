@@ -105,7 +105,7 @@
             var ground_path = '';
           } 
           var ground_label = r.value['name'];
-          nodelabel[ground_href] = r.value['name'];
+          nodelabel[ground_href] = wrap(ground_label);
           var ground_date = r.value['date']; // unused
           var ground_preview = r.value['preview'];
           if(document.getElementById(ground_href) == null && ground_href != "{{_id}}" && ground_type == 'diagram') {
@@ -150,7 +150,11 @@
                 background: 'white'
               }
             }
-          }          
+          },
+          interaction: {
+            navigationButtons: true,
+            keyboard: true
+          }
         };
         var network = new vis.Network(container, data, options);
         network.on('click', function (selected) {
@@ -260,6 +264,11 @@
     });
   });
 
+  function wrap(t) {
+    t = t.trim();
+    return t.substring(0, 12)+t.substring(12, 30).replace(/\s/,"\n")+t.substring(30, 50).replace(/\s/,"\n");
+  }
+
   function save(there) {
     $.ajax({
       url: "../../"+there.value,
@@ -309,7 +318,7 @@
                 data.edges.push({id: there.value, from: added.groundings[0], to: added.groundings[1], color: 'green'});
                 break;
             }
-            if (added.negative) {
+            if (added.negative && added.negative.trim().length > 0) {
               data.edges.push({from: added.groundings[1], to: added.groundings[0], dashes: true, label: added.negative });
             }
             $.ajax({

@@ -309,15 +309,17 @@
       type: "GET",
       dataType: "json",
       success: function(data) {
+        data.name = $('#'+data.groundings[0]).find('h4').html().trim() +' & ';
         if (there.value && there.value.length == 32) {
-          var text = $('#'+there.value).text();
-          data.name = $('#name').text().trim() +' & '+ text;
           data.groundings.push(there.value);
+          data.name = data.name + $('#'+there.value).text();
         } else if (there.value && there.value.length < 4) {
           data.link = there.value;
+          data.name = data.name + $('#'+data.groundings[1]).find('h4').html().trim();
           $("#dialog").dialog('close');
         } else {
           data.negative = there;
+          data.name = data.name + $('#'+data.groundings[1]).find('h4').html().trim();
         }
         $.ajax({
           type: "PUT",
@@ -346,8 +348,7 @@
   });
 
   $("#negative-case_created").click(function () {
-    var negative = $('#negative-case').find('input').val().trim();
-    if (negative.length != '') adapt(negative);
+    adapt($('#negative-case').find('input').val().trim());
   });
 
   $("#comment_create").click(function () {

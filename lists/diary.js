@@ -18,7 +18,6 @@ function(head, req) {
       case ('M'):
         var name = row.value.name.replace(/"/g, '\\"').replace(/\s/g, ' ');
         memos[row.value.id] = row.value.name;
-        if (name.length > 25) {var name = name.substring(0, 25)+'...';}
         data.memos.push({
           diary: row.key,
           id: row.value.id,

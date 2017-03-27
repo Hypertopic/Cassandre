@@ -292,7 +292,8 @@
 
   $('#signin').on('submit', function(e) {
     e.preventDefault();
-    $.post('/_session', $(this).serialize().toLowerCase(), reload);
+    $(this).find('input').first().val($(this).find('input').first().val().toLowerCase());
+    $.post('/_session', $(this).serialize(), reload);
   });
 
   $('#signout').on('click', function() {

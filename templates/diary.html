@@ -21,7 +21,7 @@
           <div id='logged'>
           {{^logged}}
             <form id="signin">
-              <input type="text" name="name" placeholder="{{i18n.i_username"/>
+              <input type="text" name="name" placeholder="{{i18n.i_username}}"/>
               <input type="password" name="password" placeholder="{{i18n.i_password}}"/>
               <button type="submit">{{i18n.i_sign-in}}</button>
             </form>
@@ -304,7 +304,8 @@
 
   $('#signin').on('submit', function(e) {
     e.preventDefault();
-    $.post('/_session', $(this).serialize().toLowerCase(), reload);
+    $(this).find('input').first().val($(this).find('input').first().val().toLowerCase());
+    $.post('/_session', $(this).serialize(), reload);
   });
 
   $('#signout').on('click', function() {

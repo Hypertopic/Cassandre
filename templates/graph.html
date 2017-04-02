@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title> - {{name}}</title>
+    <title>{{diary_name}} - {{name}}</title>
     <link rel="icon" type="image/png" href="../../style/favicon.png" />
     <link rel="stylesheet" type="text/css" href="../../style/main.css" />
     <link rel="stylesheet" type="text/css" href="../../style/diagram.css" />
@@ -9,7 +9,7 @@
   <body>
     <div id="container">
       <div id="header" class="menu">
-        <button type="button" id="diary">&nbsp;</button>
+        <button type="button" id="diary">{{diary_name}}</button>
         <div id='logged'>
         {{^logged}}
           <form id="signin">
@@ -19,7 +19,7 @@
           </form>
         {{/logged}}
         {{#logged}}
-          {{logged}}
+          {{logged_fullname}}
           <button id="signout">{{i18n.i_sign-out}}</button>
         {{/logged}}
         </div>
@@ -29,9 +29,8 @@
         <div id="groundings">
           <legend>{{i18n.i_groundings}}</legend>
           {{#groundings}}
-          <li id="{{.}}">
-            <h4 class="toggle"></h4>
-            <div class="preview"></div>
+          <li class="{{type}}" id="{{id}}">
+            <h4><a href="{{href}}">{{name}}</a></h4>
           </li>
           {{/groundings}}
           <div id="add-grounding"></div>
@@ -48,14 +47,17 @@
           <h1> <img src="../../style/{{type}}.png"/> {{name}} </h1>
           <p id="authorization">
             {{i18n.i_created-by}} {{date}}<br/>
-            {{i18n.i_contributors}} <span id="contributors">{{contributors}}</span><br/>
-            {{i18n.i_readers}} <span id="readers">{{readers}}</span>
+            {{i18n.i_contributors}} <span id="contributors">{{contributors_fullnames}}</span><br/>
+            {{i18n.i_readers}} <span id="readers">{{readers_fullnames}}</span>
           </p>
           <div id="graph"></div>
           {{/authorized}}
         </div>
         <div id="leaves">
           <ul id="branch">
+          {{#leaves}}
+            <li class="{{type}}"><a href="{{href}}">{{name}}</a></li>
+          {{/leaves}}
           </ul>
         </div>
       </div>
@@ -82,125 +84,72 @@
     if ($('#readers').text().length < 1) {
       $('#readers').before("{{i18n.i_everyone}}");
     }
-    $.ajax({
-      url: "../../memo_attribute/{{diary}}",
-      type: "GET",
-      dataType: "json",
-        success: function(grounds) {
-        var nodelabel = [];
-        for (var i in grounds.rows) {
-          var r = grounds.rows[i];
-          var diary = r.key;
-          var id = '#' + r.value['id'];
-          var ground_href = r.value['id'];
-          var ground_type = r.value['type'];
-          switch (ground_type) {
-            case ('memo'): 
-            var ground_path = "../../memo/{{diary}}/";
-            break;
-            case ('diagram'): 
-            var ground_path = "../../diagram/{{diary}}/";
-            break;
-            default:
-            var ground_path = '';
-          } 
-          var ground_label = r.value['name'];
-          nodelabel[ground_href] = wrap(ground_label);
-          var ground_date = r.value['date']; // unused
-          var ground_preview = r.value['preview'];
-          if(document.getElementById(ground_href) == null && ground_href != "{{_id}}" && ground_type == 'diagram') {
-            $("#dialog").find('select').append($('<option>', {
-              id: ground_href,
-              value: ground_href,
-              text: ground_label
-            }));
-          } else {
-            $(id).addClass(ground_type);
-            $(id).find("h4").text(ground_label);
-            $(id).find("div").text(ground_preview);
-            var link = document.createElement("a");
-            link.setAttribute('href', ground_path+ground_href);
-            $(id).find("div").append(link);
-            $(id).find("div").find("a").text('->'); 
-          };
-        }
-        var container = document.getElementById('graph');
-        var nodes = new vis.DataSet([
-          {{#nodes}}
-          {id: "{{id}}", shape: "{{shape}}", label: nodelabel["{{id}}"] },
-          {{/nodes}}
-        ]); 
-        var edges = new vis.DataSet([
-          {{#edges}}
-            {{^dashes}}{id: "{{id}}", from: "{{from}}", to: "{{to}}", color:"{{color}}" },{{/dashes}}
-            {{#dashes}}{from: "{{from}}", to: "{{to}}", label:"{{label}}", dashes:true },{{/dashes}}
-          {{/edges}}
-        ]); 
-        var data = {
-          nodes: nodes,
-          edges: edges
-        };
-        var options = {
-          nodes: {
-            color: {
-              border: 'black',
-              background: 'white',
-              highlight:{
-                border: 'black',
-                background: 'white'
-              }
-            }
-          },
-          interaction: {
-            navigationButtons: true,
-            keyboard: true
-          }
-        };
-        var network = new vis.Network(container, data, options);
-        network.on('click', function (selected) {
-          if (typeof selected.nodes[0] === "undefined" && selected.edges[0].length == 32) {  
-            self.location = "../../diagram/{{diary}}/"+selected.edges[0];
-          } else if (selected.nodes[0].length == 32) {
-            self.location = "../../memo/{{diary}}/"+selected.nodes[0];
-          } else {}
+    if ($('#leaves li').length > 0) {
+      $("#show-leaves").show();
+    }
+    var container = document.getElementById('graph');
+    var nodes = [];
+    {{#nodes}}
+      var label = wrap("{{label}}");
+      nodes.push({
+        id: "{{id}}",
+        shape: "{{shape}}",
+        label: label
+      });
+    {{/nodes}}
+    var edges = [];
+    {{#edges}}
+      {{^dashes}}
+        edges.push({
+          id: "{{id}}",
+          from: "{{from}}",
+          to: "{{to}}",
+          color: "{{color}}"
         });
+      {{/dashes}}
+      {{#dashes}}
+        var label = wrap("{{label}}");
+        edges.push({
+          from: "{{from}}",
+          to: "{{to}}",
+          label: label,
+          dashes: true
+        });
+      {{/dashes}}
+    {{/edges}}
+    var data = {
+      nodes: nodes,
+      edges: edges
+    };
+    var options = {
+      nodes: {
+        color: {
+          border: 'black',
+          background: 'white',
+          highlight:{
+            border: 'black',
+            background: 'white'
+          }
+        }
+      },
+      interaction: {
+        navigationButtons: true,
+        keyboard: true
       }
+    };
+    var network = new vis.Network(container, data, options);
+    network.on('click', function (selected) {
+      if (typeof selected.nodes[0] === "undefined" && selected.edges[0].length == 32) {
+        self.location = "../../diagram/{{diary}}/"+selected.edges[0];
+      } else if (selected.nodes[0].length == 32) {
+        self.location = "../../memo/{{diary}}/"+selected.nodes[0];
+      } else {}
     });
     $('#add-grounding').html("{{i18n.i_add_groundings}}");
     $("#dialog").attr("title","{{i18n.i_groundings}}");
     $("#dialog").find('select').append($('<option>', {
       text: "{{i18n.i_select_grounding}}"
     }));
-    $.ajax({
-      url: "../../{{diary}}",
-      type: "GET",
-      dataType: "json",
-      success: function(d) {
-        $("#diary").html(d.diary_name);
-        $('title').prepend(d.diary_name);
-      }
-    });
-    $.ajax({
-      url: "../../leaves/{{_id}}",
-      type: "GET",
-      dataType: "json",
-      success: function(leaves) {
-        for (var i in leaves.rows) {
-          var r = leaves.rows[i];
-          var leaf_href = r.value['id'];
-          var leaf_type = r.value['type'];
-          var leaf_path = '';
-          if (leaf_type != 'diagram') {
-            var leaf_path = "../../memo/{{diary}}/";
-          }
-          var leaf_label = r.value['name'];
-          $("#leaves ul").append('<li class="'+leaf_type+'"><a href="'+leaf_path+leaf_href+'">'+leaf_label+'</a></li>');              
-        }
-        if (leaves.rows.length > 0) {
-          $("#show-leaves").show();
-        }
-      }
-    }); 
   });
 
   $('#add').on('click', function() {
@@ -256,6 +205,26 @@
   });
 
   $('#add-grounding').on('click', function() {
+    $.ajax({
+      url: "../../memo_attribute/{{diary}}",
+      type: "GET",
+      dataType: "json",
+        success: function(grounds) {
+        for (var i in grounds.rows) {
+          var r = grounds.rows[i];
+          var id = r.value['id'];
+          var ground_type = r.value['type'];
+          var ground_label = r.value['name'];
+          if(document.getElementById(id) == null && id != "{{_id}}" && ground_type == 'diagram') {
+            $("#dialog").find('select').append($('<option>', {
+              id: id,
+              value: id,
+              text: ground_label
+            }));
+          };
+        }
+      }
+    });
     $("#dialog").dialog({
       autoOpen: true,
       modal: true,
@@ -283,7 +252,7 @@
   });
 
   function wrap(t) {
-    t = t.trim();
+    t = t.trim().replace(/&#39;/g, '\'').replace(/&quot;/g, '"');
     return t.substring(0, 12)+t.substring(12, 30).replace(/\s/,"\n")+t.substring(30, 50).replace(/\s/,"\n");
   }
 
@@ -311,33 +280,19 @@
             data.groundings.push(there.value);
             switch (added.link) {
               case ('pp'):
-                if($.inArray(added.groundings[0], nodeids) == -1) {data.nodes.push({id: added.groundings[0], shape: 'box'});}
-                if($.inArray(added.groundings[1], nodeids) == -1) {data.nodes.push({id: added.groundings[1], shape: 'box'});}
-                data.edges.push({id: there.value, from: added.groundings[0], to: added.groundings[1], color: 'green'});
-                break;
               case ('ipp'):
                 if($.inArray(added.groundings[0], nodeids) == -1) {data.nodes.push({id: added.groundings[0], shape: 'box'});}
                 if($.inArray(added.groundings[1], nodeids) == -1) {data.nodes.push({id: added.groundings[1], shape: 'box'});}
-                data.edges.push({id: there.value, from: added.groundings[0], to: added.groundings[1], color: 'red'});
                 break;
               case ('dd'):
-                if($.inArray(added.groundings[0], nodeids) == -1) {data.nodes.push({id: added.groundings[0], shape: 'diamond'});}
-                if($.inArray(added.groundings[1], nodeids) == -1) {data.nodes.push({id: added.groundings[1], shape: 'diamond'});}
-                data.edges.push({id: there.value, from: added.groundings[0], to: added.groundings[1], color: 'green'});
-                break;
               case ('idd'):
                 if($.inArray(added.groundings[0], nodeids) == -1) {data.nodes.push({id: added.groundings[0], shape: 'diamond'});}
                 if($.inArray(added.groundings[1], nodeids) == -1) {data.nodes.push({id: added.groundings[1], shape: 'diamond'});}
-                data.edges.push({id: there.value, from: added.groundings[0], to: added.groundings[1], color: 'red'});
                 break;
               case ('dp'):
                 if($.inArray(added.groundings[0], nodeids) == -1) {data.nodes.push({id: added.groundings[0], shape: 'box'});}
                 if($.inArray(added.groundings[1], nodeids) == -1) {data.nodes.push({id: added.groundings[1], shape: 'diamond'});}
-                data.edges.push({id: there.value, from: added.groundings[0], to: added.groundings[1], color: 'green'});
                 break;
-            }
-            if (added.negative && added.negative.trim().length > 0) {
-              data.edges.push({from: added.groundings[1], to: added.groundings[0], dashes: true, label: added.negative });
             }
             $.ajax({
               type: "PUT",

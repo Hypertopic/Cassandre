@@ -25,7 +25,7 @@
       </div>
       <div id="memo">
         {{#authorized}}
-        <div id="groundings" >
+        <div id="groundings">
           <legend>{{i18n.i_groundings}}</legend>                   
           {{#groundings}}
           <li class="{{type}}" id="{{id}}">
@@ -55,8 +55,8 @@
             <div class="layout-1"></div>
             <div class="layout-2"></div>
           </div>
-          <br/>
-          <div id="negative-case">
+          <p>&nbsp;</p>
+          <div id="negative-case" hidden="hidden">
             <span class="meta">{{i18n.i_name.negative-case}}: </span><span class="negative_text">{{negative}}</span>
             <button type="button" id="add_negative-case">+</button>
             <input type="text" size="35" hidden="hidden" placeHolder="{{i18n.i_content.negative-case}}" value="{{negative}}"/>
@@ -154,6 +154,7 @@
       }));
     } else {
       $('#create').show();
+      $('#negative-case').show();
       $('#add-grounding').html("{{i18n.i_diagram_type}}");
       $("#dialog").attr("title","{{i18n.i_diagram_type}}");
       $("#dialog").find('select').append($('<option>', { text: "{{i18n.i_link}}" }));
@@ -205,40 +206,24 @@
       case 'graph':
         var destination = "../../graph/{{diary}}/";
         var nodes = [];
-        var edges = [];
         var from = $('#groundings').children('li').first().attr('id');
         var to = $('#groundings').children('li').last().attr('id');
         switch ("{{link}}") {
           case ('pp'):
-          nodes.push({id: from, shape: 'box'});
-          nodes.push({id: to, shape: 'box'});
-          edges.push({id: "{{_id}}", from: from, to: to, color: 'green'});
-          break;
           case ('ipp'):
-          nodes.push({id: from, shape: 'box'});
-          nodes.push({id: to, shape: 'box'});
-          edges.push({id: "{{_id}}", from: from, to: to, color: 'red'});
-          break;
+            nodes.push({id: from, shape: 'box'});
+            nodes.push({id: to, shape: 'box'});
+            break;
           case ('dd'):
-          nodes.push({id: from, shape: 'diamond'});
-          nodes.push({id: to, shape: 'diamond'});
-          edges.push({id: "{{_id}}", from: from, to: to, color: 'green'});
-          break;
           case ('idd'):
-          nodes.push({id: from, shape: 'diamond'});
-          nodes.push({id: to, shape: 'diamond'});
-          edges.push({id: "{{_id}}", from: from, to: to, color: 'red'});
-          break;
+            nodes.push({id: from, shape: 'diamond'});
+            nodes.push({id: to, shape: 'diamond'});
+            break;
           case ('dp'):
-          nodes.push({id: from, shape: 'box'});
-          nodes.push({id: to, shape: 'diamond'});
-          edges.push({id: "{{_id}}", from: from, to: to, color: 'green'});
-          break;
+            nodes.push({id: from, shape: 'box'});
+            nodes.push({id: to, shape: 'diamond'});
+            break;
         }
-        if ($(".negative_text").text().trim().length > 0) {
-          edges.push({from: to, to: from, dashes: true, label: $(".negative_text").text().trim() });
-        }
-        data.edges = edges;
         data.nodes = nodes;
         var diary_name = $("#diary").text();
         data.name = prompt("{{i18n.i_enter_graph_name}}", diary_name);
@@ -310,7 +295,9 @@
       type: "GET",
       dataType: "json",
       success: function(data) {
-        data.name = $('#'+data.groundings[0]).find('h4').html().trim() +' & ';
+        var first = 0
+        if (!document.getElementById(data.groundings[first])) first = 1;
+          data.name = $('#'+data.groundings[first]).find('h4').html().trim() +' & ';
         if (there.value && there.value.length == 32) {
           data.groundings.push(there.value);
           data.name = data.name + $('#'+there.value).text();

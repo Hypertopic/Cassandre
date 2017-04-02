@@ -63,7 +63,12 @@
     }
   }, {
     "from": "graph/:diary/:graph",
-    "to": "_show/graph/:graph"
+    "to": "_list/graph/memo",
+    "query": {
+      "startkey": [":graph"],
+      "endkey": [":graph", {}],
+      "include_docs": "true"
+    }
   }, {
     "from": "text_attributes/", 
     "to": "_list/text_attributes/attribute",

@@ -26,7 +26,7 @@
           {{#diaries}}
           <li>
             <b>{{name}}</b>&nbsp;–
-            <a href='../memo/{{id}}/?by=name' >{{count}} {{i18n.i_memos}}</a>
+            <a href='../memo/{{id}}/?by=date'>{{count}} {{i18n.i_memos}}</a>
           </li>
           {{/diaries}}
         </ul>
@@ -41,8 +41,8 @@
     </div>
   </body>
   <script src="../script/jquery.js"></script>
-  <script src="http://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
-  <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
+  <script src="../script/jquery-ui.min.js"></script>
+  <link rel="stylesheet" href="../script/jquery-ui.min.css" />
   <script>
   var reload = function() {
     location.reload();

@@ -10,28 +10,88 @@ function(head, req) {
     logged: req.userCtx.name,
     diary: req.query.diary,
     activity: [],
-    memos: [],
+    sections: [],
     peer: req.peer
   };
+  var section;
+  var sort_key;
+  var alphabetical = ("name"==req.query.by);
+  if (alphabetical) {
+    data.sections.push({
+      memos: []
+    });
+  }
   while (row = getRow()) {
     switch (row.key[1]) {
       case ('M'):
         var name = row.value.name.replace(/"/g, '\\"').replace(/\s/g, ' ');
         memos[row.value.id] = row.value.name;
-        data.memos.push({
+        switch (row.value.type) {
+          case "field":
+            var node_level = '2';
+            var color = 'grey';
+            break;
+          case "coding":
+            var node_level = '3';
+            var color = 'yellow';
+            break;
+          case "theoretical":
+            var node_level = '0';
+            var color = 'green';
+            break;
+          case "diagram":
+            var node_level = '4';
+            var color = 'purple';
+            break;
+          case "operational":
+            var node_level = '1';
+            var color = 'red';
+            break;
+          case "graph":
+            var node_level = '5';
+            var color = 'purple';
+            break;
+          case "storyline":
+            var node_level = '6';
+            var color = 'blue';
+            break;
+        }
+        switch (data.by) {
+          case 'name':
+            sort_key = row.value.name;
+            break;
+          case 'type':
+            sort_key = row.value.type;
+            break;
+          case 'date':
+            sort_key = row.value.date;
+            break;
+        }
+        if (!alphabetical && (!section || sort_key != section.value)) {
+          section = {
+            value: sort_key,
+            memos: []
+          };
+        } else {
+          section = data.sections.pop();
+        }
+        section.memos.push({
+          color: color,
           diary: row.key,
           id: row.value.id,
           name: name,
+          node_level: node_level,
           rev: row.value.rev,
           date: row.value.date.substring(0, 10),
           groundings: row.value.groundings,
           type: row.value.type
         });
+        data.sections.push(section);
       break;
       case ('D'):
         if (row.value) data.diary_name = row.value.diary_name;
       break;
-      case ('A'):
+      case ('Z'):
         var object = {
             user: row.value._id,
             date: row.key[2]
@@ -52,5 +112,8 @@ function(head, req) {
       break;
     }
   }
+  data.sections = data.sections.sort(function(a,b){return (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0);});
+  if (data.by == 'date') data.sections = data.sections.reverse();
+  data.activity = data.activity.reverse();
   return Mustache.to_html(templates.diary, data);
 }

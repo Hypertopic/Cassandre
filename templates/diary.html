@@ -13,9 +13,11 @@
           <button type="button" id="diaries">{{i18n.i_diaries}}</button>
           <button type="button" id="list">{{i18n.i_list}}</button>
           <button type="button" id="drawNetwork">{{i18n.i_network}}</button>
-          {{i18n.i_sort}}
           <select id="sort">
+            <option>{{i18n.i_sort}}</option>
             <option value="name">{{i18n.i_title}}</option>
+            <option value="date">{{i18n.i_date}}</option>
+            <option value="type">{{i18n.i_type}}</option>
           </select>
           <button type="button" id="patterns">{{i18n.i_patterns}}</button>
           <div id='logged'>
@@ -73,18 +75,22 @@
         </ul></div>
         <div id="network" hidden="hidden"></div>
         <ul id="memos" hidden="hidden">
+        {{#sections}}
           {{#memos}}
           <li class="{{type}}"> {{date}}&nbsp;–
             <a href="{{id}}">{{name}}</a>
           </li>
           {{/memos}}
+        {{/sections}}
         </ul>
         <ul id="selectable-memos" hidden="hidden">
+        {{#sections}}
           {{#memos}}
           <li class="{{type}}"> <input type="checkbox" id="{{id}}" name="{{rev}}" />{{date}}&nbsp;–
             <a class="memo">{{name}}</a>
           </li>
           {{/memos}}
+        {{/sections}}
         </ul>
       </div>
       <div id="footer" class="menu">
@@ -93,12 +99,16 @@
     </div>
   </body>
   <script src="../../script/jquery.js"></script>
-  <script src="http://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
-  <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
+  <script src="../../script/jquery-ui.min.js"></script>
+  <link rel="stylesheet" href="../../script/jquery-ui.min.css" />
   <script type="text/javascript" src="../../script/vis.min.js"></script>
   <script>
   $(document).ready(function() {
     resetUI();
+  });
+
+  $('#sort').on('change', function() {
+    self.location = '?by=' + $('#sort').val();
   });
 
   $('#header')
@@ -225,40 +235,23 @@
     var edges = [];
     var diagrams = [];
     var graphs = [];
+    {{#sections}}
     {{#memos}}
-      memo_id = "{{id}}";
-      memo_type = "{{type}}";
-      memo_name = "{{{name}}}";
-      memo_date = "{{date}}";
-      switch (memo_type) {
-        case "field":
-          node_level = '2';
-          break;
-        case "coding":
-          node_level = '3';
-          break;
-        case "theoretical":
-          node_level = '0';
-          break;
+      var memo_id = "{{id}}";
+      var memo_name = "{{{name}}}";
+      var memo_type = "{{type}}";
+      switch ("{{type}}") {
         case "diagram":
           diagrams.push(memo_id);
-          node_level = '4';
-          break;
-        case "operational":
-          node_level = '1';
           break;
         case "graph":
           graphs.push(memo_id);
-          node_level = '5';
-          break;
-        case "storyline":
-          node_level = '6';
           break;
       }
       if (memo_name.length > 25) {
         memo_name = memo_name.substring(0, 12)+memo_name.substring(12, 30).replace(/\s/,"\n")+'...';
       }
-      nodes.push({id: memo_id, shape: 'image', image: '../../style/'+memo_type+'.png', label: memo_name+"\n"+memo_date, y: memo_date, level:node_level });
+      nodes.push({id: memo_id, color: {border: "{{color}}", highlight: {border: '{{color}}'}}, label: memo_name, x: "{{date}}", level:"{{node_level}}" });
       {{#groundings}}
         if (memo_type == "field") {
            edges.push({from: memo_id, to: "{{.}}", arrows:'from'});
@@ -267,12 +260,25 @@
         }
       {{/groundings}}
     {{/memos}}
+    {{/sections}}
     var container = document.getElementById('network');
     var data = {
-      nodes: nodes.reverse(),
-      edges: edges.reverse()
+      nodes: nodes,
+      edges: edges
     };
     var options = {
+      nodes: {
+        shape: 'box',
+        color: {
+          background: 'white',
+          highlight: {
+            background: 'white'
+          }
+        }
+      },
+      edges: {
+        color: 'blue'
+      },
       layout: {
         hierarchical: {
         }

@@ -25,11 +25,11 @@ function(o) {
       } else if (o.name) {
         value.memo = type;
       }
-      emit([diary, 'A', o.history[id].date], value);
+      emit([diary, 'Z', o.history[id].date], value);
     }
   }
   if (o.commented) {
-    emit([diary, 'A', date], {
+    emit([diary, 'Z', date], {
       _id: o.user,
       comment: 1,
       modified_id: o.commented
@@ -52,7 +52,7 @@ function(o) {
       var preview = ' ';
       }
     }
-    emit([diary, 'M', date], {
+    emit([diary, 'M', name], {
       id: o._id,
       rev: o._rev,
       name: name,

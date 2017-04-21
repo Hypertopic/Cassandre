@@ -39,9 +39,8 @@
     "from": "memo/:diary", 
     "to": "_list/diary/memo_attribute",
     "query": {
-      "startkey": [":diary", {}],
-      "endkey": [":diary"],
-      "descending": "true",
+      "startkey": [":diary"],
+      "endkey": [":diary", {}],
       "include_docs": "true"
     }
   }, {
@@ -110,11 +109,11 @@
       "endkey": [":id", {}]
     }
   }, {
-    "from": "memo_attribute/:corpus", 
+    "from": "memo_attribute/:diary",
     "to": "_view/memo_attribute",
     "query": {
-      "startkey": [":corpus", "M"],
-      "endkey": [":corpus", "M", {}]
+      "startkey": [":diary", "M"],
+      "endkey": [":diary", "M", {}]
     }
   }, {
     "from": "leaves/", 

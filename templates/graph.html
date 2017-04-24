@@ -51,6 +51,19 @@
             {{i18n.i_readers}} <span id="readers">{{readers_fullnames}}</span>
           </p>
           <div id="graph"></div>
+          <div id="comments">
+            {{#comments}}
+            <div class="comment" id="{{id}}" name="{{rev}}">
+              <span class="meta"><span class="user">{{user}}</span> ({{date}})</span>: <br/>
+              <span class="comment_text">{{text}}</span>
+              <input size="80" height="50" type="text" hidden="hidden" class="comment_edit" value="{{text}}"/>
+            </div>
+            {{/comments}}
+            <button type="button" id="comment_create">{{i18n.i_comment}}</button>
+            <textarea cols="80" rows="5" type="text" hidden="hidden" placeHolder="{{i18n.i_enter_comment}}"></textarea>
+            <button type="button" id="commented" hidden="hidden">{{i18n.i_done}}</button>
+          </div>
+          <p>&nbsp;</p>
           {{/authorized}}
         </div>
         <div id="leaves">
@@ -270,6 +283,74 @@
     });
   });
 
+  $("#comment_create").click(function () {
+    $("#comment_create").remove();
+    $("#comments").find('textarea').show();
+    $('#commented').show();
+    var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    scroll(0, scrollTop+80);
+  });
+
+  $("#commented").on('click', function() {
+    if ($('#comments').find('textarea').val().trim() == '') {
+      alert("{{i18n.i_enter_comment}}")
+    } else {
+      comment();
+    }
+  });
+
+  $(".comment").click(function () {
+    var user = $(this).find('.user').text();
+    if ("{{logged_fullname}}" == user) {
+      $(this).find('.comment_text').hide();
+      $(this).find('.comment_edit').show();
+      $("#comment_create").remove();
+      $('#commented').remove();
+    }
+  });
+
+  $(".comment_edit").on('keypress', function(key) {
+    if (key.which == 13) {
+      var data = {
+        commented: "{{_id}}",
+        diary: "{{diary}}",
+        user: user,
+        date: new Date().toJSON(),
+        text: $(this).val().trim()
+      };
+      $.ajax({
+        type: "PUT",
+        url: '../../'+ $(this).closest('.comment').attr('id') + "?rev=" + $(this).closest('.comment').attr('name'),
+        contentType: "application/json",
+        data: JSON.stringify(data),
+        success: reload
+      });
+    }
+  });
+
+  function comment() {
+    var data = {
+      commented: "{{_id}}",
+      diary: "{{diary}}",
+      user: user,
+      date: new Date().toJSON(),
+      text: $('#comments').find('textarea').val().trim()
+    };
+    $.ajax({
+      type: "POST",
+      url: "../../",
+      contentType: "application/json",
+      data: JSON.stringify(data),
+      error: function(request) {
+        alert(
+          (JSON.parse(request.responseText).reason || request.responseText)
+          + '\nCode ' + request.status
+        );
+      },
+      success: reload
+    });
+  }
+
   function wrap(t) {
     t = t.trim().replace(/&#39;/g, '\'').replace(/&quot;/g, '"');
     return t.substring(0, 12)+t.substring(12, 30).replace(/\s/,"\n")+t.substring(30, 50).replace(/\s/,"\n");
@@ -313,6 +394,10 @@
                 if($.inArray(added.groundings[1], nodeids) == -1) {data.nodes.push({id: added.groundings[1], shape: 'diamond'});}
                 break;
             }
+            data.history.push({
+              "user": user,
+              "date": new Date().toJSON()
+            });
             $.ajax({
               type: "PUT",
               url: "../../{{_id}}",

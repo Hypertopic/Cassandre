@@ -3,7 +3,8 @@ function(head, req) {
   // !code lib/mustache.js
   // !code l10n/l10n.js
   start({"headers":{"Content-Type":"text/html;charset=utf-8"}});
-  var memos = [];
+  var memos_name = [];
+  var memos_path = [];
   var data = {
     i18n: localized(),
     by: req.query.by,
@@ -25,7 +26,8 @@ function(head, req) {
     switch (row.key[1]) {
       case ('M'):
         var name = row.value.name.replace(/"/g, '\\"').replace(/\s/g, ' ');
-        memos[row.value.id] = row.value.name;
+        memos_name[row.value.id] = row.value.name;
+        memos_path[row.value.id] = 'memo';
         switch (row.value.type) {
           case "field":
             var node_level = '2';
@@ -40,6 +42,7 @@ function(head, req) {
             var color = 'green';
             break;
           case "diagram":
+            memos_path[row.value.id] = 'diagram';
             var node_level = '4';
             var color = 'purple';
             break;
@@ -48,6 +51,7 @@ function(head, req) {
             var color = 'red';
             break;
           case "graph":
+            memos_path[row.value.id] = 'graph';
             var node_level = '5';
             var color = 'purple';
             break;
@@ -101,13 +105,12 @@ function(head, req) {
         }
         if (row.value.modified_name) object.modified_name = row.value.modified_name;
         if (row.value.modified_id)   object.modified_id = row.value.modified_id;
-        if (row.value.memo)          object.memo = 1;
-        if (row.value.diagram)       object.diagram = 1;
-        if (row.value.graph)         object.graph = 1;
         if (row.value.diary_label)   object.diary_label = 1;
         if (row.value.created)       object.created = 'created';
+        if (row.value.modified)      object.modified = 'modified';
         if (row.value.comment)       object.comment = 'commented';
-        object.modified_name = memos[object.modified_id];
+        object.modified_name = memos_name[object.modified_id];
+        object.modified_path = memos_path[object.modified_id];
         data.activity.push(object);
       break;
     }

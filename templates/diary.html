@@ -51,25 +51,22 @@
         {{#activity}}
           <li class="{{comment}}{{created}}{{^created}}{{^comment}}modified{{/comment}}{{/created}}">{{date}}, {{user}}
               {{#diary_label}}
-                {{#created}}{{i18n.i_created}} {{/created}}{{^created}}{{i18n.i_renamed}} {{/created}}
+                {{#created}}{{i18n.i_created}} {{/created}}
+                {{#modified}}{{i18n.i_renamed}} {{/modified}}
                 {{i18n.i_the-diary}}
               {{/diary_label}}
-              {{#comment}}
-                {{i18n.i_commented}}
-                <a href="{{modified_id}}">{{modified_name}}</a>
-              {{/comment}}
-              {{#diagram}}
-                {{#created}}{{i18n.i_created}} {{/created}}{{^created}}{{i18n.i_modified}} {{/created}}
-                <a href="../../diagram/{{diary}}/{{modified_id}}">{{modified_name}}</a>
-              {{/diagram}}
-              {{#graph}}
-                {{#created}}{{i18n.i_created}} {{/created}}{{^created}}{{i18n.i_modified}} {{/created}}
-                <a href="../../graph/{{diary}}/{{modified_id}}">{{modified_name}}</a>
-              {{/graph}}
-              {{#memo}}
-                {{#created}}{{i18n.i_created}} {{/created}}{{^created}}{{i18n.i_modified}} {{/created}}
-                <a href="{{modified_id}}">{{modified_name}}</a>
-              {{/memo}}
+              {{^diary_label}}
+                {{#comment}}
+                  {{i18n.i_commented}}
+                {{/comment}}
+                {{#created}}
+                  {{i18n.i_created}}
+                {{/created}}
+                {{#modified}}
+                  {{i18n.i_modified}}
+                {{/modified}}
+                <a href="../../{{modified_path}}/{{diary}}/{{modified_id}}">{{modified_name}}</a>
+              {{/diary_label}}
           </li>
         {{/activity}}
         </ul></div>

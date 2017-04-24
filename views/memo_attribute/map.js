@@ -9,21 +9,18 @@ function(o) {
       var value = {
         _id: o.history[id].user
       }
-      if (id < 1) value.created = 1;
+      if (id < 1) {
+        value.created = 1;
+      } else {
+        value.modified = 1;
+      }
       if (o.diary_name) {
         value.diary_label = o.diary_name;
       } else {
         value.modified_id = o._id;
-        value.modified_name = name;
       }
-      if (o.link) {
-        value.diagram = 1;
-      } else if (o.edges) {
-        value.graph = 1;
-      } else if (o.comment) {
+      if (o.comment) {
         value.comment = 1;
-      } else if (o.name) {
-        value.memo = type;
       }
       emit([diary, 'Z', o.history[id].date], value);
     }

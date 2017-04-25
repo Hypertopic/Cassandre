@@ -295,9 +295,10 @@
       type: "GET",
       dataType: "json",
       success: function(data) {
-        var first = 0
-        if (!document.getElementById(data.groundings[first])) first = 1;
-          data.name = $('#'+data.groundings[first]).find('h4').html().trim() +' & ';
+        for (var i in data.groundings) {
+          if (!document.getElementById(data.groundings[i])) data.groundings.splice(i, 1);
+        }
+        data.name = $('#'+data.groundings[0]).find('h4').html().trim() +' & ';
         if (there.value && there.value.length == 32) {
           data.groundings.push(there.value);
           data.name = data.name + $('#'+there.value).text();
@@ -309,6 +310,10 @@
           data.negative = there;
           data.name = data.name + $('#'+data.groundings[1]).find('h4').html().trim();
         }
+        data.history.push({
+          "user": user,
+          "date": new Date().toJSON()
+        });
         $.ajax({
           type: "PUT",
           url: "../../{{_id}}",

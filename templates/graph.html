@@ -45,6 +45,7 @@
             <button type="button" class="storyline" id="add">+</button>
           </div>
           <h1> <img src="../../style/{{type}}.png"/> {{name}} </h1>
+          <input id="name" type="search" hidden="hidden" value="{{name}}"/>
           <p id="authorization">
             {{i18n.i_created-by}} {{date}}<br/>
             {{i18n.i_contributors}} <span id="contributors">{{contributors_fullnames}}</span><br/>
@@ -281,6 +282,43 @@
       url: '/_session',
       success: reload
     });
+  });
+
+  $('h1').on('click', function() {
+    $(this).hide();
+    $('#name').show();
+  });
+
+  $('#name').on('keypress', function(key) {
+    if (key.which == 13) {
+      var name = $('#name').val().trim();
+      $.ajax({
+        url: "../../{{_id}}",
+        type: "GET",
+        dataType: "json",
+        success: function(data) {
+          data.name = name;
+          if (!data.history) data.history = [];
+          data.history.push({
+            "user": user,
+            "date": new Date().toJSON()
+          });
+          $.ajax({
+            type: "PUT",
+            url: "../../{{_id}}",
+            contentType: "application/json",
+            data: JSON.stringify(data),
+            error: function(request) {
+              alert(
+                (JSON.parse(request.responseText).reason || request.responseText)
+                + '\nCode ' + request.status
+              );
+            },
+            success: reload
+          });
+        }
+      });
+    }
   });
 
   $("#comment_create").click(function () {

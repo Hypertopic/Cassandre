@@ -167,6 +167,11 @@ div.post {
   margin: 40px 0 0 10px ;
 }
 
+#container>#memo>#content #name {
+  font-size:150%;
+  margin: 10px 0 0 10px ;
+}
+
 .comment>.meta,
 #negative-case>.meta,
 #contributors_add,

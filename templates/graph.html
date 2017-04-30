@@ -406,30 +406,27 @@
         );
       },
       success: function(added) {
-        var nodeids = [];
-          {{#nodes}}
-          nodeids.push("{{id}}");
-          {{/nodes}}
         $.ajax({
           url: "../../{{_id}}",
           type: "GET",
           dataType: "json",
           success: function(data) {
-            data.groundings.push(there.value);
+            var nodeids = data.nodes.map(function(a) {return a.id;});
+            if (data.groundings.indexOf(there.value) == -1) data.groundings.push(there.value);
             switch (added.link) {
               case ('pp'):
               case ('ipp'):
-                if($.inArray(added.groundings[0], nodeids) == -1) {data.nodes.push({id: added.groundings[0], shape: 'box'});}
-                if($.inArray(added.groundings[1], nodeids) == -1) {data.nodes.push({id: added.groundings[1], shape: 'box'});}
+                if(nodeids.indexOf(added.groundings[0]) == -1) data.nodes.push({id: added.groundings[0], shape: 'box'});
+                if(nodeids.indexOf(added.groundings[1]) == -1) data.nodes.push({id: added.groundings[1], shape: 'box'});
                 break;
               case ('dd'):
               case ('idd'):
-                if($.inArray(added.groundings[0], nodeids) == -1) {data.nodes.push({id: added.groundings[0], shape: 'diamond'});}
-                if($.inArray(added.groundings[1], nodeids) == -1) {data.nodes.push({id: added.groundings[1], shape: 'diamond'});}
+                if(nodeids.indexOf(added.groundings[0]) == -1) data.nodes.push({id: added.groundings[0], shape: 'diamond'});
+                if(nodeids.indexOf(added.groundings[1]) == -1) data.nodes.push({id: added.groundings[1], shape: 'diamond'});
                 break;
               case ('dp'):
-                if($.inArray(added.groundings[0], nodeids) == -1) {data.nodes.push({id: added.groundings[0], shape: 'box'});}
-                if($.inArray(added.groundings[1], nodeids) == -1) {data.nodes.push({id: added.groundings[1], shape: 'diamond'});}
+                if(nodeids.indexOf(added.groundings[0]) == -1) data.nodes.push({id: added.groundings[0], shape: 'box'});
+                if(nodeids.indexOf(added.groundings[1]) == -1) data.nodes.push({id: added.groundings[1], shape: 'diamond'});
                 break;
             }
             data.history.push({

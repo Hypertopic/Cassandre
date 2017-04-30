@@ -499,7 +499,7 @@
             data.readers.push(newreader);
           break;
           default:
-            data.groundings.push(toAdd.value);
+            if (data.groundings.indexOf(toAdd.value) == -1) data.groundings.push(toAdd.value);
         }
         $.ajax({
           type: "PUT",

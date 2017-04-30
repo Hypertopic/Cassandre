@@ -300,7 +300,7 @@
         }
         data.name = $('#'+data.groundings[0]).find('h4').html().trim() +' & ';
         if (there.value && there.value.length == 32) {
-          data.groundings.push(there.value);
+          if (data.groundings.indexOf(there.value) == -1) data.groundings.push(there.value);
           data.name = data.name + $('#'+there.value).text();
         } else if (there.value && there.value.length < 4) {
           data.link = there.value;

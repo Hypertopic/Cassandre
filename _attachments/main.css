@@ -1,3 +1,8 @@
+html {
+  min-height:100%;
+  position:relative;
+}
+
 body {
   height: 100%;
   margin: 0; 
@@ -88,6 +93,7 @@ div.post {
 
 #footer {
   bottom: 0;
+  z-index: +1;
 }
 
 #footer a {
@@ -99,13 +105,18 @@ div.post {
 }
 
 #groundings {
-  background-color:#eeeeee;
-  width:20%;
-  height:93%;
+  background-color: #eeeeee;
+  width: 20%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right:0;
   float:left;
-  padding: 5px 0 0 5px;
   background-repeat: no-repeat;
   cursor: pointer;
+  padding: 35px 0 135px 5px;
+  overflow-y: auto;
 }
 
 #add-leaves {
@@ -133,15 +144,28 @@ div.post {
 }
 
 #leaves {
-  position:fixed;
-  background-color:#eeeeee;
-  display:none;
+  position: fixed;
+  display: none;
+  background-color: transparent;
   top: 36px;
   right: 0px;
   width: 30%;
   padding:5px;
+  padding-top:0px;
   padding-right:30px;
   padding-left:0px;
+  direction: rtl;
+  overflow-y: auto;
+  bottom: 28px;
+}
+
+#leaves>ul {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  padding-top: 16px;
+  padding-bottom: 16px;
+  direction: ltr;
+  background-color: #eeeeee;
 }
 
 .preview {
@@ -204,9 +228,14 @@ button.comment {
 
 #add-grounding, #select-type {
   width: 20%;
-  position: absolute;
+  position: fixed;
   text-align: center;
-  bottom: 30px;
+  bottom: 20px;
+  padding-bottom:15px;
+  zmargin-left:-5px;
+  zmargin-right:5px;
+  background-color:#eeeeee;
+  z-index: +1;
 }
 
 #groundings>li,#memos>li,#selectable-memos>li,#branch>li{

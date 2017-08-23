@@ -44,7 +44,7 @@
             <div class="preview">{{preview}} <a href="{{href}}">-></a></div>
           </li>            
           {{/groundings}}
-          <div id="add-grounding">{{i18n.i_add_groundings}}</div>
+          <div id="add-grounding"><span>{{i18n.i_add_groundings}}</span></div>
         </div>
         {{/authorized}}
         <div id="content">
@@ -145,7 +145,7 @@
         break;
       case ('coding'):
         $('#add').addClass('theoretical');
-        $('#create').show();
+        if ($('h1 #name').text().length > 0) $('#create').show();
         break;
       case ('theoretical'):
         $('#add').addClass('operational');
@@ -163,7 +163,7 @@
         $('#add').addClass('storyline');
         break;
     }
-    if ($('h1').text().length > 0) $('#add').show();
+    if ($('h1 #name').text().length > 0) $('#add').show();
     if ($('#contributors').text().length < 1) {
       $('#contributors').before("{{i18n.i_everyone}}");
     }
@@ -182,28 +182,29 @@
       $("#show-leaves").show();
     }
     if ($('#groundings li').length < 1) {
-      $("#groundings").find('legend').remove();
       $("#groundings").css({
-         'height': '36px',
-         'line-height': '36px',
-         'position': 'fixed',
-         'top': '0px',
-         'padding-top': '36px',
-         'padding-left': '5px',
-         'padding-right': '5px',
-         'width': '200px',
-         'height': 'auto',
-         'transform': 'rotate(90deg)',
-         'transform-origin': 'bottom left 0',
+        'visibility': 'hidden'
       });
       $("#add-grounding").css({
-         'bottom': 'auto',
-         'top': '0px',
-         'width': 'auto',
-         'transform': 'rotate(180deg)',
-         'transform-origin': 'center center 0',
+        'visibility': 'visible'
       });
-
+      $("#add-grounding").css({
+        'height': '36px',
+        'line-height': '36px',
+        'position':'fixed',
+        'top': '2px',
+        'left': '0px',
+        'padding-bottom':'0px',
+        'transform': 'rotate(90deg)',
+        'transform-origin': 'left bottom 0'
+      });
+      $("#add-grounding span").css({
+        'position':'absolute',
+        'left':'0',
+        'right':'0',
+        'transform': 'rotate(180deg)',
+        'transform-origin': 'center center 0'
+      });
       $("#content").css({
          'padding-left': '40px'
       });

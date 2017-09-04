@@ -5,13 +5,18 @@ function(head, req) {
   start({"headers":{"Content-Type":"text/html;charset=utf-8"}});
   var memos_name = [];
   var memos_path = [];
+  var nodes = [];
+  var edges = [];
   var data = {
     i18n: localized(),
     by: req.query.by,
     logged: req.userCtx.name,
     diary: req.query.diary,
     activity: [],
+    diagrams: [],
+    graphs: [],
     sections: [],
+    network: {},
     peer: req.peer
   };
   var section;
@@ -42,6 +47,7 @@ function(head, req) {
             var color = 'green';
             break;
           case "diagram":
+            data.diagrams.push(row.value.id);
             memos_path[row.value.id] = 'diagram';
             var node_level = '4';
             var color = 'purple';
@@ -51,6 +57,7 @@ function(head, req) {
             var color = 'red';
             break;
           case "graph":
+            data.graphs.push(row.value.id);
             memos_path[row.value.id] = 'graph';
             var node_level = '5';
             var color = 'purple';
@@ -78,6 +85,30 @@ function(head, req) {
           };
         } else {
           section = data.sections.pop();
+        }
+        if (name.length > 25) {
+          var node_name = name.substring(0, 12)+name.substring(12, 30).replace(/\s/,"\n")+'...';
+        } else {
+          var node_name = name;
+        }
+        nodes.push({
+          id: row.value.id,
+          color: {
+            border: color,
+            highlight: {
+              border: color
+            }
+          },
+          label: node_name,
+          level: node_level,
+          x: row.value.date.substring(0, 10)
+        });
+        for (var g in row.value.groundings) {
+          if (row.value.type == 'theoretical') {
+             edges.push({from: row.value.id, to: row.value.groundings[g], arrows: "from"});
+          } else {
+             edges.push({from: row.value.groundings[g], to: row.value.id, arrows: "to"});
+          }
         }
         section.memos.push({
           color: color,
@@ -115,6 +146,11 @@ function(head, req) {
       break;
     }
   }
+  data.network = {
+    nodes: nodes,
+    edges: edges
+  };
+  data.network = JSON.stringify(data.network);
   data.sections = data.sections.sort(function(a,b){return (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0);});
   if (data.by == 'date') data.sections = data.sections.reverse();
   data.activity = data.activity.reverse();

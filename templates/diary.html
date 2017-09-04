@@ -11,7 +11,6 @@
       <header>
         <div id="header" class="menu">
           <button type="button" id="diaries">{{i18n.i_diaries}}</button>
-          <button type="button" id="list">{{i18n.i_list}}</button>
           <button type="button" id="drawNetwork">{{i18n.i_network}}</button>
           <select id="sort">
             <option>{{i18n.i_sort}}</option>
@@ -47,9 +46,10 @@
           <button type="button" id="only-modified">{{i18n.i_modifications}}</button>
           <button type="button" id="only-comments">{{i18n.i_comments}}</button>
         </fieldset>
+        <div id="contributors"></div>
         <ul>
         {{#activity}}
-          <li class="{{comment}}{{created}}{{^created}}{{^comment}}modified{{/comment}}{{/created}}">{{date}}, {{user}}
+          <li class="{{comment}}{{created}}{{^created}}{{^comment}}modified{{/comment}}{{/created}}">{{date}}, <span class="{{user}}">{{user}}</span>
               {{#diary_label}}
                 {{#created}}{{i18n.i_created}} {{/created}}
                 {{#modified}}{{i18n.i_renamed}} {{/modified}}
@@ -184,28 +184,52 @@
     if ($('ul .created').length < 1) $('#only-created').hide();
     if ($('ul .modified').length < 1) $('#only-modified').hide();
     if ($('ul .commented').length < 1) $('#only-comments').hide();
+    showContributions();
   });
-
   $('#all-activity').on('click', function() {
     $(".created").show();
     $(".modified").show();
     $(".commented").show();
+    showContributions();
   });
   $('#only-created').on('click', function() {
     $(".created").show();
     $(".modified").hide();
     $(".commented").hide();
+    showContributions();
   });
   $('#only-comments').on('click', function() {
     $(".created").hide();
     $(".modified").hide();
     $(".commented").show();
+    showContributions();
   });
   $('#only-modified').on('click', function() {
     $(".created").hide();
     $(".commented").hide();
     $(".modified").show();
+    showContributions();
   });
+
+  function showContributions() {
+    var contributorlist = new Object ();
+    var contributors = $('ul li span:visible');
+    contributors.each(function() {
+      var contributor = $(this).attr('class');
+      if (contributorlist[contributor]) {
+         contributorlist[contributor] = contributorlist[contributor] + 1;
+      } else {
+        contributorlist[contributor] = 1;
+      }
+    });
+    var n = '';
+    for (var c in contributorlist) {
+      if (contributorlist.hasOwnProperty(c)) {
+        n += ' '+c+' ('+contributorlist[c]+')';
+      }
+    }
+    document.getElementById("contributors").innerHTML = n;
+  }
 
   function resetUI() {
     var listed = $("#memos>li");
@@ -228,41 +252,12 @@
   }
 
   function drawNetwork() {
-    var nodes = [];
-    var edges = [];
-    var diagrams = [];
-    var graphs = [];
-    {{#sections}}
-    {{#memos}}
-      var memo_id = "{{id}}";
-      var memo_name = "{{{name}}}";
-      var memo_type = "{{type}}";
-      switch ("{{type}}") {
-        case "diagram":
-          diagrams.push(memo_id);
-          break;
-        case "graph":
-          graphs.push(memo_id);
-          break;
-      }
-      if (memo_name.length > 25) {
-        memo_name = memo_name.substring(0, 12)+memo_name.substring(12, 30).replace(/\s/,"\n")+'...';
-      }
-      nodes.push({id: memo_id, color: {border: "{{color}}", highlight: {border: '{{color}}'}}, label: memo_name, x: "{{date}}", level:"{{node_level}}" });
-      {{#groundings}}
-        if (memo_type == "field") {
-           edges.push({from: memo_id, to: "{{.}}", arrows:'from'});
-        } else {
-           edges.push({from: "{{.}}", to: memo_id, arrows:'to'});
-        }
-      {{/groundings}}
-    {{/memos}}
-    {{/sections}}
+    var diagrams = "{{{diagrams}}}";
+    diagrams = diagrams.split(',');
+    var graphs = "{{{graphs}}}";
+    graphs = graphs.split(',');
     var container = document.getElementById('network');
-    var data = {
-      nodes: nodes,
-      edges: edges
-    };
+    var data = {{{network}}};
     var options = {
       nodes: {
         shape: 'box',
@@ -278,6 +273,7 @@
       },
       layout: {
         hierarchical: {
+          sortMethod: 'directed'
         }
       },
       interaction: {

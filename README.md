@@ -1,5 +1,5 @@
-CASSANDRE - Texts archive for qualitative analysis
-==================================================
+CASSANDRE - Diary for qualitative analysis
+==========================================
 
 License: [GNU Affero General Public License](http://www.gnu.org/licenses/agpl.html)
 

@@ -5,6 +5,7 @@ function(head, req) {
   start({"headers":{"Content-Type":"text/html;charset=utf-8"}});
   var memos_name = [];
   var memos_path = [];
+  var items = [];
   var nodes = [];
   var edges = [];
   var data = {
@@ -91,6 +92,13 @@ function(head, req) {
         } else {
           var node_name = name;
         }
+        items.push({
+          id: row.value.id,
+          content: node_name,
+          group: node_level,
+          className: color,
+          start: row.value.date.substring(0, 10)
+        });
         nodes.push({
           id: row.value.id,
           color: {
@@ -150,7 +158,9 @@ function(head, req) {
     nodes: nodes,
     edges: edges
   };
+  data.timeline = items;
   data.network = JSON.stringify(data.network);
+  data.timeline = JSON.stringify(data.timeline);
   data.sections = data.sections.sort(function(a,b){return (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0);});
   if (data.by == 'date') data.sections = data.sections.reverse();
   data.activity = data.activity.reverse();

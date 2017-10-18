@@ -14,6 +14,31 @@
 
 }
 
+.vis-item.grey {
+  background-color: white;
+  border-color: grey;
+}
+.vis-item.yellow {
+  background-color: white;
+  border-color: yellow;
+}
+.vis-item.green {
+  background-color: white;
+  border-color: green;
+}
+.vis-item.purple {
+  background-color: white;
+  border-color: purple;
+}
+.vis-item.red {
+  background-color: white;
+  border-color: red;
+}
+.vis-item.blue {
+  background-color: white;
+  border-color: blue;
+}
+
 .node {
   width: 170px;
   color: black;

@@ -12,6 +12,7 @@
         <div id="header" class="menu">
           <button type="button" id="diaries">{{i18n.i_diaries}}</button>
           <button type="button" id="drawNetwork">{{i18n.i_network}}</button>
+          <button type="button" id="drawTimeline">{{i18n.i_timeline}}</button>
           <select id="sort">
             <option>{{i18n.i_sort}}</option>
             <option value="name">{{i18n.i_title}}</option>
@@ -66,7 +67,7 @@
                   {{i18n.i_modified}}
                 {{/modified}}
                 <a href="../../{{modified_path}}/{{diary}}/{{modified_id}}">{{modified_name}}</a>
-              {{/diary_label}}
+              {{/diary_label}} 
           </li>
         {{/activity}}
         </ul></div>
@@ -117,6 +118,9 @@
     })
     .on('click', '#drawNetwork', function() {
       drawNetwork();
+    })
+    .on('click', '#drawTimeline', function() {
+      drawTimeline();
     })
     .on('click', '#patterns', function() {
       self.location = '../../kwic/{{diary}}';
@@ -249,6 +253,35 @@
       '<button type="button" id="show_delete">{{i18n.i_delete}}...</button>'
       + '<a href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>'
     );
+  }
+
+  function drawTimeline() {
+    $(".vis-network").hide();
+    var container = document.getElementById('network');
+    var data = {{{timeline}}};
+    var options = {locale: 'fr'};
+    var groups = new vis.DataSet([
+      {id: 0, content: '<img src="../../style/theoretical.png" />', value: 0},
+      {id: 1, content: '<img src="../../style/operational.png" />', value: 1},
+      {id: 2, content: '<img src="../../style/field.png" />', value: 2},
+      {id: 3, content: '<img src="../../style/coding.png" />', value: 3},
+      {id: 4, content: '<img src="../../style/diagram.png" />', value: 4},
+      {id: 5, content: '<img src="../../style/graph.png" />', value: 5},
+      {id: 6, content: '<img src="../../style/storyline.png" />', value: 6}
+    ]);
+    timeline = new vis.Timeline(container, data, options);
+    timeline.setGroups(groups);
+    timeline.on('click', function (selected) {
+      if (selected.group == 4) {
+        self.location = '../../diagram/{{diary}}/'+selected.item;
+      } else if (selected.group == 5) {
+        self.location = '../../graph/{{diary}}/'+selected.item;
+      } else if (selected.item !== null) {
+        self.location = selected.item;
+      }
+    });
+    $("#memos").hide();
+    $("#network").show();
   }
 
   function drawNetwork() {

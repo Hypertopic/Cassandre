@@ -126,6 +126,10 @@ function(head, req) {
       }
       data.locale = data.locale.split(',');
       data.locale = data.locale[0].substring(0,2);
+      if (data.peer == '127.0.0.1' && req.headers['X-Forwarded-For'] ) {
+        data.peer = req.headers['X-Forwarded-For'].split(',');
+        data.peer = data.peer[0];
+      }
       if (row.doc.link) {
         data.link = row.doc.link;
         if (row.doc.negative) {

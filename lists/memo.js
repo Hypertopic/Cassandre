@@ -121,6 +121,10 @@ function(head, req) {
         roles: req.userCtx.roles,
         type: type
       }
+      if (data.peer == '127.0.0.1' && req.headers['X-Forwarded-For'] ) {
+        data.peer = req.headers['X-Forwarded-For'].split(',');
+        data.peer = data.peer[0];
+      }
       data.locale = data.locale.split(',');
       data.locale = data.locale[0].substring(0,2);
       if (row.doc.body) {

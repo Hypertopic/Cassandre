@@ -42,7 +42,8 @@ function(head, req) {
         var user = row.value._id;
         if (row.doc && !fullnames[user]) fullnames[user] = row.doc.fullname;
         if (row.doc) user = row.doc.fullname;
-        data.date = user+', '+row.value.date;
+        data.creator = user;
+        data.date = row.value.date;
       break;
       case ('N'):
         if (row.doc && row.doc.name) data.nodes.push({
@@ -120,6 +121,7 @@ function(head, req) {
         groundings: [],
         nodes: [],
         peer: req.peer,
+        locale: req.headers["Accept-Language"],
         leaves: [],
         logged: username,
         logged_fullname: username,
@@ -129,6 +131,8 @@ function(head, req) {
         roles: req.userCtx.roles,
         type: type
       }
+      data.locale = data.locale.split(',');
+      data.locale = data.locale[0].substring(0,2);
       if (row.doc.link) {
         data.link = row.doc.link;
         if (row.doc.negative) {

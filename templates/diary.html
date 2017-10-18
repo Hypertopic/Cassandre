@@ -50,7 +50,8 @@
         <div id="contributors"></div>
         <ul>
         {{#activity}}
-          <li class="{{comment}}{{created}}{{^created}}{{^comment}}modified{{/comment}}{{/created}}">{{date}}, <span class="{{user}}">{{user}}</span>
+          <li class="{{comment}}{{created}}{{^created}}{{^comment}}modified{{/comment}}{{/created}}">
+              <span class="moment">{{date}}</span>, <span class="{{user}}">{{user}}</span>
               {{#diary_label}}
                 {{#created}}{{i18n.i_created}} {{/created}}
                 {{#modified}}{{i18n.i_renamed}} {{/modified}}
@@ -100,8 +101,27 @@
   <script src="../../script/jquery-ui.min.js"></script>
   <link rel="stylesheet" href="../../script/jquery-ui.min.css" />
   <script type="text/javascript" src="../../script/vis.min.js"></script>
+  <script type="text/javascript" src="../../script/moment.min.js"></script>
   <script>
   $(document).ready(function() {
+    moment.locale('{{locale}}');
+    var moments = $('.moment');
+    moments.each(function() {
+      var now = moment();
+      var jstime = $(this).text();
+      var mmtime = moment(jstime);
+      if(now.diff(mmtime, 'days') <= 2) {
+        $(this).text(mmtime.fromNow());
+      } else if(now.diff(mmtime, 'years') <= 1) {
+        $(this).text("{{i18n.i_on-a-date}}"+' '+mmtime.format("Do MMMM"));
+      } else {
+        $(this).text("{{i18n.i_on-a-date}}"+' '+mmtime.format("Do MMMM YYYY"));
+      }
+    });
+    var contributions = $('ul li .moment');
+    contributions.each(function() {
+      $(this).text($(this).text().replace(/./, function(x) { return x.toUpperCase(); }));
+    });
     resetUI();
   });
 
@@ -220,10 +240,12 @@
     var contributors = $('ul li span:visible');
     contributors.each(function() {
       var contributor = $(this).attr('class');
-      if (contributorlist[contributor]) {
-         contributorlist[contributor] = contributorlist[contributor] + 1;
-      } else {
-        contributorlist[contributor] = 1;
+      if (contributor != 'moment') {
+        if (contributorlist[contributor]) {
+          contributorlist[contributor] = contributorlist[contributor] + 1;
+        } else {
+          contributorlist[contributor] = 1;
+        }
       }
     });
     var n = '';
@@ -259,7 +281,7 @@
     $(".vis-network").hide();
     var container = document.getElementById('network');
     var data = {{{timeline}}};
-    var options = {locale: 'fr'};
+    var options = {locale: '{{locale}}'};
     var groups = new vis.DataSet([
       {id: 0, content: '<img src="../../style/theoretical.png" />', value: 0},
       {id: 1, content: '<img src="../../style/operational.png" />', value: 1},

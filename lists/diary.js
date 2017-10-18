@@ -18,8 +18,11 @@ function(head, req) {
     graphs: [],
     sections: [],
     network: {},
+    locale: req.headers["Accept-Language"],
     peer: req.peer
   };
+  data.locale = data.locale.split(',');
+  data.locale = data.locale[0].substring(0,2);
   var section;
   var sort_key;
   var alphabetical = ("name"==req.query.by);

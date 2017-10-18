@@ -47,7 +47,7 @@
           <h1> <img src="../../style/{{type}}.png"/> {{name}} </h1>
           <input id="name" type="search" hidden="hidden" value="{{name}}"/>
           <p id="authorization">
-            {{i18n.i_created-by}} {{date}}<br/>
+            {{i18n.i_created-by}} {{creator}} <span class="moment">{{date}}</span><br/>
             {{i18n.i_contributors}} <span id="contributors">{{contributors_fullnames}}</span><br/>
             {{i18n.i_readers}} <span id="readers">{{readers_fullnames}}</span>
           </p>
@@ -55,7 +55,7 @@
           <div id="comments">
             {{#comments}}
             <div class="comment" id="{{id}}" name="{{rev}}">
-              <span class="meta"><span class="user">{{user}}</span> ({{date}})</span>: <br/>
+              <span class="meta"><span class="user">{{user}}</span> (<span class="moment">{{date}}</span>)</span>: <br/>
               <span class="comment_text">{{text}}</span>
               <input size="80" height="50" type="text" hidden="hidden" class="comment_edit" value="{{text}}"/>
             </div>
@@ -86,6 +86,7 @@
   </body>
   <script src="../../script/jquery.js"></script>
   <script src="../../script/jquery-ui.min.js"></script>
+  <script src="../../script/moment.min.js"></script>
   <link rel="stylesheet" href="../../script/jquery-ui.min.css" />
   <script type="text/javascript" src="../../script/vis.min.js"></script>
   <script>
@@ -101,6 +102,20 @@
     if ($('#leaves li').length > 0) {
       $("#show-leaves").show();
     }
+    moment.locale('{{locale}}');
+    var moments = $('.moment');
+    moments.each(function() {
+      var now = moment();
+      var jstime = $(this).text();
+      var mmtime = moment(jstime);
+      if(now.diff(mmtime, 'days') <= 2) {
+        $(this).text(mmtime.fromNow());
+      } else if(now.diff(mmtime, 'years') <= 1) {
+        $(this).text("{{i18n.i_on-a-date}}"+' '+mmtime.format("Do MMMM"));
+      } else {
+        $(this).text("{{i18n.i_on-a-date}}"+' '+mmtime.format("Do MMMM YYYY"));
+      }
+    });
     var container = document.getElementById('graph');
     var nodes = [];
     {{#nodes}}
@@ -168,6 +183,11 @@
       interaction: {
         navigationButtons: true,
         keyboard: true
+      },
+      physics: {
+        repulsion: {
+          nodeDistance: 1000
+        }
       }
     };
     var network = new vis.Network(container, data, options);

@@ -514,6 +514,7 @@
             data.readers.push(newreader);
           break;
           default:
+            if (!data.groundings) data.groundings = [];
             if (data.groundings.indexOf(toAdd.value) == -1) data.groundings.push(toAdd.value);
         }
         $.ajax({

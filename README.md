@@ -3,7 +3,7 @@ CASSANDRE - Diary for qualitative analysis
 
 License: [GNU Affero General Public License](http://www.gnu.org/licenses/agpl.html)
 
-Contact: <christophe.lejeune@ulg.ac.be>
+Contact: <christophe.lejeune@uliege.be>
 
 Home page: <https://github.com/Hypertopic/Cassandre>
 

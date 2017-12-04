@@ -122,8 +122,10 @@ function(head, req) {
         type: type
       }
       if (data.peer == '127.0.0.1' && req.headers['X-Forwarded-For'] ) {
-        data.peer = req.headers['X-Forwarded-For'].split(',');
-        data.peer = data.peer[0];
+        var ips = req.headers['X-Forwarded-For'].split(',');
+        for (var n in ips) {
+          if (ips[n].trim() != '127.0.0.1') data.peer = ips[n].trim();
+        }
       }
       data.locale = data.locale.split(',');
       data.locale = data.locale[0].substring(0,2);

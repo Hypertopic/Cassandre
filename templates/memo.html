@@ -54,6 +54,7 @@
           {{#authorized}}
           <div id="add-leaves"><button type="button" id="add" hidden="hidden">+</button>
             <button id="create" class="diagram" type="button" hidden="hidden">+</button>
+            <button id="create-table" class="table" type="button" hidden="hidden">+</button>
           </div>
           <h1><img src="../../style/{{type}}.png"/> <span id="name">{{name}}</span></h1>
           <p id="authorization">
@@ -159,7 +160,10 @@
         break;
       case ('coding'):
         $('#add').addClass('theoretical');
-        if ($('h1 #name').text().length > 0) $('#create').show();
+        if ($('h1 #name').text().length > 0) {
+          $('#create').show();
+          $('#create-table').show();
+        }
         break;
       case ('theoretical'):
         $('#add').addClass('operational');
@@ -347,6 +351,11 @@
     create(type);
   });
 
+  $('#create-table').on('click', function() {
+    var type = $(this)[0].className;
+    create(type);
+  });
+
   $('#add-grounding').on('click', function() {
     $.ajax({
       url: "../../memo_attribute/{{diary}}",
@@ -443,6 +452,13 @@
         data.corpus = diary,
         data.name = "",
         data.speeches = [{actor:"",text:""}];
+        break;
+      case 'table':
+        var destination = "../../table/{{diary}}/";
+        data.cells = [{'...':[{"{{_id}}":'...'}]}];
+        data.diary = diary;
+        data.name = "";
+        data.type = type;
         break;
       case 'diagram':
         var destination = "../../diagram/{{diary}}/";

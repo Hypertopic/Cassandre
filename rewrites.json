@@ -53,6 +53,14 @@
       "include_docs": "true"
     }
   }, {
+    "from": "table/:diary/:table",
+    "to": "_list/table/memo",
+    "query": {
+      "startkey": [":table"],
+      "endkey": [":table", {}],
+      "include_docs": "true"
+    }
+  }, {
     "from": "diagram/:diary/:diagram",
     "to": "_list/diagram/memo",
     "query": {

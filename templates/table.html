@@ -1,0 +1,532 @@
+<html>
+  <head>
+    <title>{{diary_name}} - {{name}}</title>
+    <link rel="icon" type="image/png" href="../../style/favicon.png" />
+    <link rel="stylesheet" type="text/css" href="../../style/main.css" />
+    <link rel="stylesheet" type="text/css" href="../../style/diagram.css" />
+  </head>
+  <body>
+    <div id="container">
+      <div id="header" class="menu">
+        <button type="button" id="diary">{{diary_name}}</button>
+        <div id='logged'>
+        {{^logged}}
+          <form id="signin">
+            <input type="text" name="name" placeholder="{{i18n.i_username}}"/>
+            <input type="password" name="password" placeholder="{{i18n.i_password}}"/>
+            <button type="submit">{{i18n.i_sign-in}}</button>
+          </form>
+        {{/logged}}
+        {{#logged}}
+          {{logged_fullname}}
+          <button id="signout">{{i18n.i_sign-out}}</button>
+        {{/logged}}
+        </div>
+      </div>
+      <div id="memo">
+        {{#authorized}}
+        <div id="groundings">
+          <legend>{{i18n.i_groundings}}</legend>
+          {{#groundings}}
+          <li class="{{type}}" id="{{id}}">
+            <h4 class="toggle">{{name}}</h4>
+            <div class="preview">{{preview}} <a href="{{href}}">-></a></div>
+          </li>
+          {{/groundings}}
+          <div id="add-grounding"><span>{{i18n.i_add_groundings}}</span></div>
+        </div>
+        {{/authorized}}
+        <div id="content">
+          {{^authorized}}
+          <h1>{{i18n.i_sign-in_required}}</h1>
+          {{/authorized}}
+          {{#authorized}}
+          <div id="add-leaves">
+            <button type="button" class="theoretical" id="add">+</button>
+          </div>
+          <h1> <img src="../../style/{{type}}.png"/> {{name}} </h1>
+          <input id="name" type="search" hidden="hidden" value="{{name}}"/>
+          <p id="authorization">
+            {{i18n.i_created-by}} {{creator}} <span class="moment">{{date}}</span><br/>
+            {{i18n.i_contributors}} <span id="contributors">{{contributors_fullnames}}</span><br/>
+            {{i18n.i_readers}} <span id="readers">{{readers_fullnames}}</span>
+          </p>
+          <table id="table">
+            <thead><tr><td></td></tr></thead>
+          </table>
+          <button type="button" id="add_row" hidden="hidden">+</button>
+          <p>&nbsp;</p>
+          <div id="comments">
+            {{#comments}}
+            <div class="comment" id="{{id}}" name="{{rev}}">
+              <span class="meta"><span class="user">{{user}}</span> (<span class="moment">{{date}}</span>)</span>: <br/>
+              <span class="comment_text">{{text}}</span>
+              <input size="80" height="50" type="text" hidden="hidden" class="comment_edit" value="{{text}}"/>
+            </div>
+            {{/comments}}
+            <button type="button" id="comment_create">{{i18n.i_comment}}</button>
+            <textarea cols="80" rows="5" type="text" hidden="hidden" placeHolder="{{i18n.i_enter_comment}}"></textarea>
+            <button type="button" id="commented" hidden="hidden">{{i18n.i_done}}</button>
+          </div>
+          <p>&nbsp;</p>
+          {{/authorized}}
+        </div>
+        <div id="leaves">
+          <ul id="branch">
+          {{#leaves}}
+            <li class="{{type}}"><a href="{{href}}">{{name}}</a></li>
+          {{/leaves}}
+          </ul>
+        </div>
+      </div>
+      <div id="footer" class="menu">
+        <a href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
+      </div>
+    </div>
+    <div id="show-leaves" hidden="hidden"><div class="reverse">{{i18n.i_leaves}}</div></div>
+    <div id="dialog" title="{{i18n.i_groundings}}" hidden="hidden">
+      <select onChange="record('grounding',this.value);"><option>{{i18n.i_select_grounding}}</option></select>
+    </div>
+    <div id="dialog-cells" hidden="hidden">
+      <select id='color'>
+      </select>
+    </div>
+    </div>
+  </body>
+  <script src="../../script/jquery.js"></script>
+  <script src="../../script/jquery-ui.min.js"></script>
+  <script src="../../script/moment.min.js"></script>
+  <link rel="stylesheet" href="../../script/jquery-ui.min.css" />
+  <script>
+  var user = "{{peer}}";
+  if ("{{logged}}") user = "{{logged}}";
+  $(document).ready(function() {
+    if ($('#contributors').text().length < 1) {
+      $('#contributors').before("{{i18n.i_everyone}}");
+    }
+    if ($('#readers').text().length < 1) {
+      $('#readers').before("{{i18n.i_everyone}}");
+    }
+    moment.locale('{{locale}}');
+    var moments = $('.moment');
+    moments.each(function() {
+      var now = moment();
+      var jstime = $(this).text();
+      var mmtime = moment(jstime);
+      if(now.diff(mmtime, 'days') <= 2) {
+        $(this).text(mmtime.fromNow());
+      } else if(now.diff(mmtime, 'years') <= 1) {
+        $(this).text("{{i18n.i_on-a-date}}"+' '+mmtime.format("Do MMMM"));
+      } else {
+        $(this).text("{{i18n.i_on-a-date}}"+' '+mmtime.format("Do MMMM YYYY"));
+      }
+    });
+    var cells = {{{cells}}};
+    var tbl_body = document.getElementById("table");
+    var tbl_header = tbl_body.tHead.children[0];
+    var created_headers = ["x"];
+    var hcell = tbl_header.insertCell(0);
+
+    $.each(cells, function() {
+        var tbl_row = tbl_body.insertRow();
+        $.each(this, function(k , v) {
+            var cell = tbl_row.insertCell(0);
+            cell.appendChild(document.createTextNode(k.toString()));
+            cell.className = 'situations';
+            $.each(this, function(k , v) {
+              $.each(this, function(k , v) {
+                if (created_headers.indexOf(k) < 0) {
+                  created_headers.push(k);
+                  var hcell = tbl_header.insertCell(created_headers.indexOf(k));
+                  hcell.id = 'head'+k;
+                  hcell.innerHTML = $('#'+k).find('h4').html();
+                  hcell.innerHTML += '<button type="button" class="create diagram" >+</button>';
+                }
+                while (tbl_row.cells.length < created_headers.indexOf(k)) {
+                  var cell = tbl_row.insertCell(tbl_row.cells.length);
+                  cell.appendChild(document.createTextNode(' '));
+                }
+                if (!tbl_row.cells[created_headers.indexOf(k)]) {
+                  var cell = tbl_row.insertCell(created_headers.indexOf(k));
+                } else {
+                  var cell = tbl_row.cells[created_headers.indexOf(k)];
+                }
+                switch(v) {
+                  case true:
+                  cell.style.backgroundColor = 'green';
+                  break;
+                  case false:
+                  cell.style.backgroundColor = 'red';
+                  break;
+                }
+              })
+            })
+        })
+    })
+    var table = document.getElementById("table");
+    for (var i = 1, row; row = table.rows[i]; i++) {
+      while (row.cells.length < created_headers.length) row.insertCell();
+      for (var j = 1, cell; cell = row.cells[j]; j++) {
+        if (!cell.id ){
+          cell.className = 'cells';
+          cell.id = [table.rows[i].cells[0].innerHTML,created_headers[j]];
+        }
+      }
+    }
+    if (table.rows[table.rows.length-1].cells[0].innerHTML != '...') $('#add_row').show();
+    if ($('#leaves li').length > 0) {
+      $("#show-leaves").show();
+    }
+  });
+
+  $('h1').on('click', function() {
+    $(this).hide();
+    $('#name').show();
+  });
+
+  $('#name').on('keypress', function(key) {
+    if (key.which == 13) {
+      record('name', $('#name').val().trim());
+    }
+  });
+
+  $('table')
+    .on('click', '.create', function() {
+      create(
+        $(this)[0].className.split(' ')[1] ,
+        $(this).parent().attr("id").substr(4) ,
+        $(this).parent().html().split('<')[0]
+      );
+    })
+    .on('click', '.situations', function() {
+      var inp = $(this).html($('<input>', {
+        id: this.id,
+        type: "text",
+        placeHolder: "{{i18n.i_situation}}",
+        value: this.innerHTML,
+        name: this.innerHTML
+      }));
+      $('.situations').click(false);
+      $('.cells').click(false);
+    })
+    .on('keypress', '.situations input', function(key) {
+      if (key.which == 13) {
+        var n = this.parentNode.parentNode.rowIndex-1;
+        var former = this.name;
+        var future = this.value;
+        if (former != future  && this.value.trim().length > 0) record ('situation',this);
+      }
+    })
+    .on('click', '.cells', function() {
+      var sel = document.getElementById('color');
+      sel.innerHTML = '';
+      sel.className = this.style.backgroundColor;
+      this.appendChild(sel);
+      var selected_cell = this.id +',';
+      var selected_color = this.style.backgroundColor;
+      var colors = [
+        {'color':'green', 'value': true, 'text': "{{i18n.i_true}}" },
+        {'color':'red', 'value': false, 'text': "{{i18n.i_false}}" },
+        {'color':'', 'value': '...', 'text': "{{i18n.i_undef}}" }
+      ];
+      for (i in colors) {
+        var selected = false;
+        if (selected_color == colors[i].color) selected = true ;
+        $(this).find('select').append(
+          $('<option>', { value: selected_cell+colors[i].value, text: colors[i].text, class:colors[i].color, selected: selected })
+        );
+      }
+  });
+
+  $('#color').on('change', function() {
+    record('cell',this.value);
+  })
+
+  $('#add_row').on('click', function() {
+    var table = document.getElementById("table");
+    record('add-row', table.rows[table.rows.length-1].cells[0].innerHTML);
+  });
+
+  $('#add').on('click', function() {
+    create($(this)[0].className, null, null);
+  });
+
+  function create(type, prop_id, prop_name) {
+    var contributors = "{{contributors}}";
+    var readers = "{{readers}}";
+    var data = {
+      diary: "{{diary}}",
+      type: type,
+      groundings: [],
+      history: []
+    };
+    data.history.push({
+      "user": user,
+      "date": new Date().toJSON()
+    });
+    if (contributors.length > 0) {
+      data.contributors = contributors.split(',');
+    } else if ("{{logged}}") {
+      data.contributors = ["{{logged}}"];
+    }
+    if (readers.length > 0) {
+      data.readers = readers.split(',');
+    }
+    switch (type) {
+      case 'diagram':
+        var destination = "../../diagram/{{diary}}/";
+        data.link = 'pp';
+        data.name = prop_name;
+        data.groundings.push(prop_id);
+        break;
+      default:
+        var destination = '../../editable_memo/';
+        data.name = "";
+        data.body = "";
+        data.groundings.push("{{_id}}");
+    }
+    if (type) {
+      $.ajax({
+        url: "../../",
+        type: "POST",
+        dataType: "json",
+        contentType: "application/json",
+        data: JSON.stringify(data),
+        success: function(data) {
+          self.location = destination+data.id;
+        }
+      });
+    }
+  }
+
+  $('#groundings').find('.toggle').click(function(){
+    $(this).next().slideToggle('fast');
+    $(".preview").not($(this).next()).slideUp('fast');
+  });
+
+  $("#show-leaves").click(function () {
+    var option = { direction: 'left' };
+    $('#leaves').toggle('fold');
+  });
+
+  $('#diary').on('click', function() {
+    self.location = '../../memo/{{diary}}/?by=date';
+  });
+
+  $('#add-grounding').on('click', function() {
+    $.ajax({
+      url: "../../memo_attribute/{{diary}}",
+      type: "GET",
+      dataType: "json",
+      success: function(ground_candidates) {
+        for (var i in ground_candidates.rows) {
+          var r = ground_candidates.rows[i];
+          var id = r.value['id'];
+          var ground_type = r.value['type'];
+          if(document.getElementById(id) == null && id != "{{_id}}" && ground_type == 'coding') {
+            $("#dialog").find('select').append($('<option>', {
+              value: id,
+              text: r.value['name']
+            }));
+          }
+        }
+        $("#dialog").dialog({
+          autoOpen: true,
+          modal: true,
+          autoResize: true,
+          width:'auto'
+        });
+      }
+    });
+  });
+
+  var reload = function() {
+    location.reload();
+  };
+
+  $('#signin').on('submit', function(e) {
+    e.preventDefault();
+    $(this).find('input').first().val($(this).find('input').first().val().toLowerCase());
+    $.post('/_session', $(this).serialize(), reload);
+  });
+
+  $('#signout').on('click', function() {
+    $.ajax({
+      type: 'DELETE',
+      url: '/_session',
+      success: reload
+    });
+  });
+
+  function record(type,value) {
+    $.ajax({
+      url: "../../{{_id}}",
+      type: "GET",
+      dataType: "json",
+      success: function(data) {
+        var condition = true;
+        var keep_trace = true;
+        for (var i in data.groundings) {
+          if (!document.getElementById(data.groundings[i])) data.groundings.splice(i, 1);
+        }
+        switch(type) {
+          case 'grounding':
+            var done = true;
+            if (data.groundings.indexOf(value) == -1) data.groundings.push(value);
+            var obj = {};
+            obj[value] = '...';
+            $.each(data.cells[0], function(k , v) {
+              $.each(v, function(k , v) {
+                $.each(v, function(k , v) {
+                  if (k == value) done = false;
+                });
+              });
+              if (done) v.push(obj);
+            });
+            $("#dialog").dialog('close');
+            break;
+          case 'cell':
+            console.log(value);
+            var coord = value.split(',');
+            var adding = false;
+            var obj = {}
+            switch (coord[2]){
+              case 'true':
+              obj[coord[1]] = true;
+              break;
+              case 'false':
+              obj[coord[1]] = false;
+              break;
+              default:
+              obj[coord[1]] = '...';
+              break;
+            }
+            var n = 0;
+            var row = coord[0];
+            $.each(data.cells, function(k , v) {
+              $.each(v, function(k , v) {
+                if (k == coord[0]) {
+                  $.each(v, function(k1 , v1) {
+                    $.each(v1, function(k2 , v2) {
+                      if (k2 == coord[1]) {
+                        adding = n;
+                      }
+                      n++;
+                    });
+                  });
+                  if (adding === false) {
+                    v.push(obj);
+                  } else {
+                    v[adding] = obj;
+                  }
+                }
+              });
+            });
+            break;
+          case 'name':
+            data.name = value;
+            break;
+          case 'add-row':
+            data.cells.push({'...': []});
+            break;
+          case 'situation':
+            var n = value.parentNode.parentNode.rowIndex-1;
+            var former = value.name;
+            var future = value.value;
+            $.each(data.cells[n], function(k , v) {
+              var obj = {};
+              obj[future] = v;
+              if (k == former) data.cells.splice(n, 1, obj) // else reload;
+            });
+            break;
+        }
+        if (keep_trace) data.history.push({
+          "user": user,
+          "date": new Date().toJSON()
+        });
+        if (condition) $.ajax({
+          type: "PUT",
+          url: "../../{{_id}}",
+          contentType: "application/json",
+          data: JSON.stringify(data),
+          error: function(request) {
+            alert(
+              (JSON.parse(request.responseText).reason || request.responseText)
+              + '\nCode ' + request.status
+            );
+          },
+          success: reload
+        });
+      }
+    });
+  }
+
+  $("#comment_create").click(function () {
+    $("#comment_create").remove();
+    $("#comments").find('textarea').show();
+    $('#commented').show();
+    $('html, body').scrollTop($(document).height());
+  });
+
+  $("#commented").on('click', function() {
+    if ($('#comments').find('textarea').val().trim() == '') {
+      alert("{{i18n.i_enter_comment}}")
+    } else {
+      comment();
+    }
+  });
+
+  $(".comment").click(function () {
+    var user = $(this).find('.user').text();
+    if ("{{logged_fullname}}" == user) {
+      $(this).find('.comment_text').hide();
+      $(this).find('.comment_edit').show();
+      $("#comment_create").remove();
+      $('#commented').remove();
+    }
+  });
+
+  $(".comment_edit").on('keypress', function(key) {
+    if (key.which == 13) {
+      var data = {
+        commented: "{{_id}}",
+        diary: "{{diary}}",
+        user: user,
+        date: new Date().toJSON(),
+        text: $(this).val().trim()
+      };
+      $.ajax({
+        type: "PUT",
+        url: '../../'+ $(this).closest('.comment').attr('id') + "?rev=" + $(this).closest('.comment').attr('name'),
+        contentType: "application/json",
+        data: JSON.stringify(data),
+        success: reload
+      });
+    }
+  });
+
+  function comment() {
+    var data = {
+      commented: "{{_id}}",
+      diary: "{{diary}}",
+      user: user,
+      date: new Date().toJSON(),
+      text: $('#comments').find('textarea').val().trim()
+    };
+    $.ajax({
+      type: "POST",
+      url: "../../",
+      contentType: "application/json",
+      data: JSON.stringify(data),
+      error: function(request) {
+        alert(
+          (JSON.parse(request.responseText).reason || request.responseText)
+          + '\nCode ' + request.status
+        );
+      },
+      success: reload
+    });
+  }
+
+  </script>
+</html>

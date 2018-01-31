@@ -5,7 +5,7 @@ html {
 
 body {
   height: 100%;
-  margin: 0; 
+  margin: 0;
 }
 
 form {
@@ -13,9 +13,9 @@ form {
 }
 
 #watermark {
-  background-image: url(cassandre_background.png); 
+  background-image: url(cassandre_background.png);
   background-position: 100% 0%;
-  background-repeat: no-repeat; 
+  background-repeat: no-repeat;
 }
 
 #container {
@@ -221,7 +221,7 @@ button.comment {
 }
 
 .comment {
-  font-size: 80%;  
+  font-size: 80%;
   border-top: 1px solid lightgray;
   padding-left:5px;
 }
@@ -245,13 +245,23 @@ button.comment {
   padding-bottom: 5px;
 }
 
-#create,#add {
+.create,#create,#create-table,#add {
   background-color:transparent;
   background-repeat: no-repeat;
   background-origin: content-box;
   text-shadow:none;border:none;box-shadow:none;
   height: 30px;
   width: 30px;
+}
+
+.green {
+  width: 100%;
+  background-color:green;
+}
+
+.red {
+  width: 100%;
+  background-color:red;
 }
 
 .operational {
@@ -268,6 +278,10 @@ button.comment {
 
 .field {
   background-image: url('field.png');
+}
+
+.table {
+  background-image: url('table.png');
 }
 
 .diagram {

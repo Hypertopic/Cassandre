@@ -19,7 +19,8 @@ function(head, req) {
     sections: [],
     network: {},
     locale: req.headers["Accept-Language"],
-    peer: req.peer
+    peer: req.peer,
+    tables: []
   };
   data.locale = data.locale.split(',');
   data.locale = data.locale[0].substring(0,2);
@@ -46,34 +47,48 @@ function(head, req) {
         switch (row.value.type) {
           case "field":
             var node_level = '2';
+            var group = '2';
             var color = 'grey';
             break;
           case "coding":
             var node_level = '3';
+            var group = '3';
             var color = 'yellow';
             break;
           case "theoretical":
             var node_level = '0';
+            var group = '0';
             var color = 'green';
             break;
           case "diagram":
             data.diagrams.push(row.value.id);
             memos_path[row.value.id] = 'diagram';
             var node_level = '4';
+            var group = '4';
+            var color = 'purple';
+            break;
+          case "table":
+            data.tables.push(row.value.id);
+            memos_path[row.value.id] = 'table';
+            var node_level = '4';
+            var group = '8';
             var color = 'purple';
             break;
           case "operational":
             var node_level = '1';
+            var group = '1';
             var color = 'red';
             break;
           case "graph":
             data.graphs.push(row.value.id);
             memos_path[row.value.id] = 'graph';
             var node_level = '5';
+            var group = '5';
             var color = 'purple';
             break;
           case "storyline":
             var node_level = '6';
+            var group = '6';
             var color = 'blue';
             break;
         }
@@ -104,7 +119,7 @@ function(head, req) {
         items.push({
           id: row.value.id,
           content: node_name,
-          group: node_level,
+          group: group,
           className: color,
           start: row.value.date.substring(0, 10)
         });

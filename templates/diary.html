@@ -263,6 +263,7 @@
       var type = $(this).attr('class');
       switch(type){
         case "graph":
+        case "table":
         case "diagram":
           $(this).find('a').attr('href', '../../'+type+'/{{diary}}/'+$(this).find('a').attr('href'));
           break;
@@ -289,13 +290,16 @@
       {id: 3, content: '<img src="../../style/coding.png" />', value: 3},
       {id: 4, content: '<img src="../../style/diagram.png" />', value: 4},
       {id: 5, content: '<img src="../../style/graph.png" />', value: 5},
-      {id: 6, content: '<img src="../../style/storyline.png" />', value: 6}
+      {id: 6, content: '<img src="../../style/storyline.png" />', value: 6},
+      {id: 8, content: '<img src="../../style/table.png" />', value: 8}
     ]);
     timeline = new vis.Timeline(container, data, options);
     timeline.setGroups(groups);
     timeline.on('click', function (selected) {
       if (selected.group == 4) {
         self.location = '../../diagram/{{diary}}/'+selected.item;
+      } else if (selected.group == 8) {
+        self.location = '../../table/{{diary}}/'+selected.item;
       } else if (selected.group == 5) {
         self.location = '../../graph/{{diary}}/'+selected.item;
       } else if (selected.item !== null) {
@@ -311,6 +315,8 @@
     diagrams = diagrams.split(',');
     var graphs = "{{{graphs}}}";
     graphs = graphs.split(',');
+    var tables = "{{{tables}}}";
+    tables = tables.split(',');
     var container = document.getElementById('network');
     var data = {{{network}}};
     var options = {
@@ -341,6 +347,8 @@
       if (selected.nodes[0].length == 32) {
         if($.inArray(selected.nodes[0], diagrams) != -1) {
           self.location = '../../diagram/{{diary}}/'+selected.nodes[0];
+        } else if($.inArray(selected.nodes[0], tables) != -1) {
+          self.location = '../../table/{{diary}}/'+selected.nodes[0];
         } else if($.inArray(selected.nodes[0], graphs) != -1) {
           self.location = '../../graph/{{diary}}/'+selected.nodes[0];
         } else {

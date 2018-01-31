@@ -1,13 +1,10 @@
 function(head, req) {
-  // !json templates.memo
+  // !json templates.table
   // !code lib/mustache.js
   // !code l10n/l10n.js
+
   start({"headers":{"Content-Type":"text/html;charset=utf-8"}});
-
-  const ALPHA = /[a-zàâçéêèëïîôöüùû0æœ0-9]+|[^a-zàâçéêèëïîôöüùûæœ0-9]+/gi;
-  const SPACES = /^ +$/;
   var fullnames = [];
-
   while (row = getRow()) {
     switch (row.key[1]) {
       case ('C'):
@@ -62,16 +59,13 @@ function(head, req) {
           var ground_type = row.doc.type || 'field';
           switch (ground_type) {
             case ('diagram'):
-            var ground_path = '../../diagram/'+diary+'/';
-            break;
-            case ('table'):
-            var ground_path = '../../table/'+diary+'/';
+            var ground_path = '';
             break;
             case ('graph'):
             var ground_path = '../../graph/'+diary+'/';
             break;
             default:
-            var ground_path = '';
+            var ground_path = '../../memo/'+diary+'/';
           }
           data.groundings.push({
             id: row.value._id,
@@ -87,7 +81,15 @@ function(head, req) {
         var id = row.doc._id;
         var href = row.doc._id;
         var name = row.doc.name || '...';
-        if (type === 'diagram' || type === 'table') href = '../../'+type+'/'+diary+'/'+href;
+        switch (type) {
+          case ('diagram'):
+            break;
+          case ('graph'):
+            var href = '../../graph/'+diary+'/'+href;
+            break;
+          default:
+            var href = '../../memo/'+diary+'/'+href;
+        }
         data.leaves.push({
           href: href,
           id: id,
@@ -97,21 +99,20 @@ function(head, req) {
       break;
       default:
       var username = req.userCtx.name;
-      var type = row.doc.type || 'field';
-      var draft = row.doc.draft || false;
-      var diary = row.doc.diary || row.doc.corpus;
+      var type = row.doc.type;
+      var diary = row.doc.diary;
       var data = {
         i18n: localized(),
         _id: row.doc._id,
         _rev: row.doc._rev,
         authorized: !row.doc.readers || row.doc.readers.indexOf(username)>-1 || row.doc.contributors && row.doc.contributors.indexOf(username)>-1 || req.userCtx.roles.indexOf("_admin")>-1,
         body: [],
+        cells: row.doc.cells,
         contributors: [],
         contributors_fullnames: [],
         comments: [],
         date: row.doc.date,
         diary: diary,
-        draft: draft,
         groundings: [],
         peer: req.peer,
         locale: req.headers["Accept-Language"],
@@ -124,38 +125,24 @@ function(head, req) {
         roles: req.userCtx.roles,
         type: type
       }
+      data.cells = JSON.stringify(data.cells);
+      data.locale = data.locale.split(',');
+      data.locale = data.locale[0].substring(0,2);
       if (data.peer == '127.0.0.1' && req.headers['X-Forwarded-For'] ) {
         var ips = req.headers['X-Forwarded-For'].split(',');
         for (var n in ips) {
           if (ips[n].trim() != '127.0.0.1') data.peer = ips[n].trim();
         }
       }
-      data.locale = data.locale.split(',');
-      data.locale = data.locale[0].substring(0,2);
-      if (row.doc.body) {
-        var content = {
-          text: row.doc.body.replace(/\n\n/g, "\n \n")
-        };
-        data.body.push(content);
-      } else {
-        for each (var s in row.doc.speeches) {
-          var content = {
-            actor: s.actor,
-            timestamp: s.timestamp,
-            words: []
-          };
-          for each (var w in s.text.match(ALPHA)) {
-            if (w.match(SPACES) && content.words.length>0) {
-              w = content.words.pop() + w;
-            }
-            content.words.push(w);
-          }
-          data.body.push(content);
+      if (row.doc.link) {
+        data.link = row.doc.link;
+        if (row.doc.negative) {
+          data.negative = row.doc.negative;
         }
       }
       break;
       }
     if (fullnames[username]) data.logged_fullname = fullnames[username];
   }
-  return Mustache.to_html(templates.memo, data);
+  return Mustache.to_html(templates.table, data);
 }

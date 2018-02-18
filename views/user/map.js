@@ -1,5 +1,17 @@
 function(o) {
-  for each (var u in o.users) {
-    emit([u], {corpus:{id:o._id, name:o.corpus_name}});
+  var diary = o.diary || o.corpus;
+  if (o.fullname)
+    emit([o._id, null, 'N'], {'fullname': o.fullname});
+  if (o.commented) {
+    emit([o.user, o.date, 'M'], {'diary': diary, '_id': o.commented, 'text': o.text});
+  } else {
+    for (var key in o.history) {
+      if (key == 0) {var operation = 'C';} else {var operation = 'E';}
+      if (o.diary_name) {
+        emit([o.history[key].user, o.history[key].date, operation], {'diary': o._id, '_id': '?by=name', 'name': o.diary_name, 'type': 'diary'});
+      } else {
+        emit([o.history[key].user, o.history[key].date, operation], {'diary': diary, '_id': o._id , 'name': o.name, 'type': o.type});
+      }
+    }
   }
 }

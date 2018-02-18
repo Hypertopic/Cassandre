@@ -25,9 +25,12 @@
        }
    }, {
     "from": "user/:user",
-    "to": "_view/user",
+    "to": "_list/user/user",
     "query": {
-      "key": [":user"]
+      "startkey": [":user", {}],
+      "endkey": [":user"],
+      "descending": "true",
+      "include_docs": "true"
     }
   }, {
     "from": "memo/", 

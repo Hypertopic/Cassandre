@@ -101,6 +101,7 @@
   var user = "{{peer}}";
   if ("{{logged}}") user = "{{logged}}";
   $(document).ready(function() {
+    stickToHeader();
     if ($('#contributors').text().length < 1) {
       $('#contributors').before("{{i18n.i_everyone}}");
     }
@@ -250,6 +251,19 @@
   $('#add').on('click', function() {
     create($(this)[0].className, null, null);
   });
+
+  $(window).resize(function() {
+    stickToHeader();
+  });
+
+  function stickToHeader() {
+    var h = document.getElementById("header").offsetHeight;
+    $("#container>#memo").css({'padding-top': h});
+    $("#groundings").css({'padding-top': h});
+    $("#add-leaves").css({'top': h+5});
+    if (h > 36) $("#show-leaves").css({'top': h-36});
+    $("#leaves").css({'top': h});
+  }
 
   function create(type, prop_id, prop_name) {
     var contributors = "{{contributors}}";

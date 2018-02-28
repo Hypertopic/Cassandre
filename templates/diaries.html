@@ -35,7 +35,9 @@
         </div>
       </div>
       <div id="footer" class="menu">
+        {{#logged}}
         <button type="button" id="create" class="theoretical"> + </button>
+        {{/logged}}
         <a href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
       </div>
     </div>
@@ -44,6 +46,14 @@
   <script src="../script/jquery-ui.min.js"></script>
   <link rel="stylesheet" href="../script/jquery-ui.min.css" />
   <script>
+  $(document).ready(function() {
+    stickToHeader();
+  });
+
+  $(window).resize(function() {
+    stickToHeader();
+  });
+
   var reload = function() {
     location.reload();
   };
@@ -90,6 +100,12 @@
     });
     $("#dialog").dialog("open");
   });
+
+  function stickToHeader() {
+    var h = document.getElementById("header").offsetHeight;
+    $("#container>#content h1").css({'padding-top': h});
+  }
+
   function createDiary(diary_name) {
     var type = $('#create')[0].className;
     var date = new Date().toJSON();
@@ -103,6 +119,8 @@
       }]
     };
     var data = {
+      contributors: [],
+      readers: [],
       type: type,
       groundings: [],
       history: [{
@@ -113,7 +131,7 @@
       body: ""
     };
     if ("{{logged}}") {
-      data.contributors = ["{{logged}}"];
+      data.contributors.push("{{logged}}");
     }
     if (diary_name) {
       $.ajax({

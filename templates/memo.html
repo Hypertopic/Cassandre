@@ -131,7 +131,6 @@
   var trigrams = {};
   var user = "{{peer}}";
   if ("{{logged}}") user = "{{logged}}";
-
   $(document).ready(function() {
     if ({{draft}}) self.location = "../../editable_text/{{_id}}";
     moment.locale('{{locale}}');
@@ -181,6 +180,7 @@
         $('#add').addClass('storyline');
         break;
     }
+    stickToHeader();
     if ($('h1 #name').text().length > 0) $('#add').show();
     if ($('#contributors').text().length < 1) {
       $('#contributors').before("{{i18n.i_everyone}}");
@@ -281,6 +281,19 @@
       });
     }
   });
+
+  $(window).resize(function() {
+    stickToHeader();
+  });
+
+  function stickToHeader() {
+    var h = document.getElementById("header").offsetHeight;
+    $("#container>#memo").css({'padding-top': h});
+    $("#groundings").css({'padding-top': h});
+    $("#add-leaves").css({'top': h+5});
+    if (h > 36) $("#show-leaves").css({'top': h-36});
+    $("#leaves").css({'top': h});
+  }
 
   var reload = function() {
     location.reload();

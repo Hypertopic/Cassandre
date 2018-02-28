@@ -61,6 +61,7 @@
   <script src="../script/jquery.js"></script>
   <script>
   $(document).ready(function() {
+    stickToHeader();
     $.ajax({
       url: "../{{corpus}}",
       type: "GET",
@@ -70,6 +71,11 @@
       }
     });
   });
+
+  function stickToHeader() {
+    var h = document.getElementById("header").offsetHeight;
+    $("#container>#content").css({'padding-top': h});
+  }
 
   function save(draft, toDoAfter) {
     $.ajax({
@@ -120,6 +126,10 @@
       }
     });
   }
+
+  $(window).resize(function() {
+    stickToHeader();
+  });
 
   $('#corpus').on('click', function() {
     self.location = '../memo/{{corpus}}/?by=date';

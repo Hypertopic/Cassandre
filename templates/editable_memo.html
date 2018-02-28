@@ -40,7 +40,7 @@
           <h1>{{i18n.i_sign-in_required}}</h1>
           {{/authorized}}
           {{#authorized}}
-          <h1> <img src="../style/{{type}}.png"/> <textarea id="name" type="text" cols="76" rows="1">{{name}}</textarea></h1>
+          <h1> <img src="../style/{{type}}.png"/> <textarea id="name" type="text" cols="50" rows="1">{{name}}</textarea></h1>
           <p>
             <textarea id="body" cols="80" rows="20" type="text">{{body}}</textarea>
           </p>
@@ -75,6 +75,7 @@
   });
 
   $(document).ready(function() {
+    stickToHeader();
     $.ajax({
       url: "../memo_attribute/{{diary}}",
       type: "GET",
@@ -96,7 +97,6 @@
         $('#groundings').find('.toggle').next().slideToggle('fast');
       }
     });
-
     $.ajax({
       url: "../{{diary}}",
       type: "GET",
@@ -107,6 +107,15 @@
     });
   });
 
+  $(window).resize(function() {
+    stickToHeader();
+  });
+
+  function stickToHeader() {
+    var h = document.getElementById("header").offsetHeight;
+    $("#container>#memo").css({'padding-top': h});
+    $("#groundings").css({'padding-top': h});
+  }
 
   function save(draft, toDoAfter) {
     $.ajax({

@@ -77,7 +77,8 @@
         {{#sections}}
           {{#memos}}
           <li class="{{type}}"> {{date}}&nbsp;–
-            <a href="{{id}}">{{name}}</a>
+            <a href="{{id}}" class="tooltip">{{name}}
+            {{#preview}}<span class="preview">{{preview}}</span>{{/preview}}</a>
           </li>
           {{/memos}}
         {{/sections}}
@@ -99,12 +100,14 @@
   </body>
   <script src="../../script/jquery.js"></script>
   <script src="../../script/jquery-ui.min.js"></script>
+  <script src="../../script/showdown.min.js"></script>
   <link rel="stylesheet" href="../../script/jquery-ui.min.css" />
   <script type="text/javascript" src="../../script/vis.min.js"></script>
   <script type="text/javascript" src="../../script/moment.min.js"></script>
   <script>
   $(document).ready(function() {
     moment.locale('{{locale}}');
+    stickToHeader();
     var moments = $('.moment');
     moments.each(function() {
       var now = moment();
@@ -123,6 +126,14 @@
       $(this).text($(this).text().replace(/./, function(x) { return x.toUpperCase(); }));
     });
     resetUI();
+    var converter = new showdown.Converter({
+      tables: 'true',
+      tasklists: 'true',
+      strikethrough: 'true'
+    });
+    $('.preview').html(function(i, text) {
+      return converter.makeHtml(text.trim());
+    });
   });
 
   $('#sort').on('change', function() {
@@ -276,6 +287,17 @@
       '<button type="button" id="show_delete">{{i18n.i_delete}}...</button>'
       + '<a href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>'
     );
+  }
+
+  $(window).resize(function() {
+    stickToHeader();
+  });
+
+  function stickToHeader() {
+    var h = document.getElementById("header").offsetHeight;
+    $("#container>#content h1").css({'padding-top': h+5});
+    $("#container>#content #diary_name").css({'margin-top': h+5});
+    $("#add-leaves").css({'top': h+5});
   }
 
   function drawTimeline() {

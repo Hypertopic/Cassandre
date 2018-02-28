@@ -39,6 +39,7 @@ function(head, req) {
     });
   }
   while (row = getRow()) {
+    var preview = '';
     switch (row.key[1]) {
       case ('M'):
         var name = row.value.name.replace(/"/g, '\\"').replace(/\s/g, ' ');
@@ -142,8 +143,22 @@ function(head, req) {
              edges.push({from: row.value.groundings[g], to: row.value.id, arrows: "to"});
           }
         }
+        var authorized = [];
+        var authorized = authorized.concat(row.doc.contributors,row.doc.readers);
+        if (authorized.indexOf(req.userCtx.name) != -1) {
+          if (row.doc.body) preview = row.doc.body.replace(/\n\n/g, '\n \n');
+          if (row.doc.speeches) {
+            preview = row.doc.speeches.map(function(a) {
+              var turn = a.text;
+              if (a.actor) turn = '**'+a.actor.trim()+'** '+turn;
+              return turn;
+            });
+            var preview = preview.join('\n \n');
+          }
+        }
         section.memos.push({
           color: color,
+          preview: preview,
           diary: row.key,
           id: row.value.id,
           name: name,

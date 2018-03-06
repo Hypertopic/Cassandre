@@ -80,12 +80,18 @@
         </div>
       </div>
       <div id="footer" class="menu">
+        {{#authorized}}
+        <button type="button" id="remove_grounding" hidden="hidden">{{i18n.i_remove_grounding}}</button>
+        {{/authorized}}
         <a href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
       </div>
     </div>
     <div id="show-leaves" hidden="hidden"><div class="reverse">{{i18n.i_leaves}}</div></div>
     <div id="dialog" title="{{i18n.i_groundings}}" hidden="hidden">
-      <select onChange="record('grounding',this.value);"><option>{{i18n.i_select_grounding}}</option></select>
+      <select onChange="record('add-grounding',this.value);"><option>{{i18n.i_select_grounding}}</option></select>
+    </div>
+    <div id="removable" title="{{i18n.i_groundings}}" hidden="hidden">
+      <select onChange="record('remove-grounding',this.value);"><option>{{i18n.i_select_grounding}}</option></select>
     </div>
     <div id="dialog-cells" hidden="hidden">
       <select id='color'>
@@ -170,7 +176,7 @@
       for (var j = 1, cell; cell = row.cells[j]; j++) {
         if (!cell.id ){
           cell.className = 'cells';
-          cell.id = [table.rows[i].cells[0].innerHTML,created_headers[j]];
+          cell.id = table.rows[i].cells[0].innerHTML+'{}'+created_headers[j];
         }
       }
     }
@@ -178,6 +184,7 @@
     if ($('#leaves li').length > 0) {
       $("#show-leaves").show();
     }
+    if ($('#groundings li').length > 1) $('#remove_grounding').show();
   });
 
   $('h1').on('click', function() {
@@ -223,7 +230,7 @@
       sel.innerHTML = '';
       sel.className = this.style.backgroundColor;
       this.appendChild(sel);
-      var selected_cell = this.id +',';
+      var selected_cell = this.id +'{}';
       var selected_color = this.style.backgroundColor;
       var colors = [
         {'color':'green', 'value': true, 'text': "{{i18n.i_true}}" },
@@ -240,12 +247,27 @@
   });
 
   $('#color').on('change', function() {
-    record('cell',this.value);
+    record('cell', this.value);
   })
 
   $('#add_row').on('click', function() {
     var table = document.getElementById("table");
     record('add-row', table.rows[table.rows.length-1].cells[0].innerHTML);
+  });
+
+  $('#remove_grounding').on('click', function() {
+    $('#groundings').children('li').each(function() {
+      $("#removable").find('select').append($('<option>', {
+        value: ($(this).attr('id')),
+        text: ($(this).find('h4').html())
+      }));
+    });
+    $("#removable").dialog({
+      autoOpen: true,
+      modal: true,
+      autoResize: true,
+      width:'auto'
+    });
   });
 
   $('#add').on('click', function() {
@@ -384,7 +406,7 @@
           if (!document.getElementById(data.groundings[i])) data.groundings.splice(i, 1);
         }
         switch(type) {
-          case 'grounding':
+          case 'add-grounding':
             var done = true;
             if (data.groundings.indexOf(value) == -1) data.groundings.push(value);
             var obj = {};
@@ -401,7 +423,7 @@
             break;
           case 'cell':
             console.log(value);
-            var coord = value.split(',');
+            var coord = value.split('{}');
             var adding = false;
             var obj = {}
             switch (coord[2]){
@@ -443,6 +465,20 @@
           case 'add-row':
             data.cells.push({'...': []});
             break;
+          case 'remove-grounding':
+            $.each(data.cells, function(k , row) {
+              $.each(row, function(k , cells) {
+                var action = false;
+                $.each(cells, function(k , cell) {
+                  if (value in cell) action = k;
+                });
+                if (action !== false) cells.splice(action, 1);
+              });
+            });
+            var i = data.groundings.indexOf(value);
+            if (i > -1) data.groundings.splice(i, 1);
+            keep_trace = false;
+            break;
           case 'situation':
             var n = value.parentNode.parentNode.rowIndex-1;
             var former = value.name;
@@ -450,7 +486,7 @@
             $.each(data.cells[n], function(k , v) {
               var obj = {};
               obj[future] = v;
-              if (k == former) data.cells.splice(n, 1, obj) // else reload;
+              if (k == former) data.cells.splice(n, 1, obj); // else reload
             });
             break;
         }

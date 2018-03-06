@@ -47,10 +47,10 @@ function(head, req) {
       break;
       case ('N'):
         if (row.doc && row.doc.name) data.nodes.push({
-            id: row.value._id,
-            shape: row.value.shape,
-            label: row.doc.name.replace(/\s/g, ' ')
-          });
+          id: row.value._id,
+          shape: row.value.shape,
+          label: row.doc.name.replace(/\s/g, ' ')
+        });
       break;
       case ('G'):
         if (row.doc)  {
@@ -69,6 +69,7 @@ function(head, req) {
               to: row.doc.groundings[1],
               color: color
             });
+            data.connected_nodes.push(row.doc.groundings[0],row.doc.groundings[1]);
           }
           if (row.doc.negative && row.doc.negative.trim().length > 0) {
             data.edges.push({
@@ -112,6 +113,7 @@ function(head, req) {
         _rev: row.doc._rev,
         authorized: !row.doc.readers || row.doc.readers.indexOf(username)>-1 || row.doc.contributors && row.doc.contributors.indexOf(username)>-1 || req.userCtx.roles.indexOf("_admin")>-1,
         body: [],
+        connected_nodes: [],
         contributors: [],
         contributors_fullnames: [],
         comments: [],

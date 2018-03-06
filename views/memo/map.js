@@ -17,6 +17,6 @@ function(o) {
   for (var key in o.readers)
     emit([o._id, 'R'], {'_id': o.readers[key]});
   for (var key in o.nodes)
-    emit([o._id, 'N'], {'_id': o.nodes[key].id, 'shape': o.nodes[key].shape,});
+    emit([o._id, 'N'], {'_id': o.nodes[key].id, 'shape': o.nodes[key].shape});
 }
 

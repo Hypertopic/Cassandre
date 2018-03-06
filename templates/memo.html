@@ -111,6 +111,7 @@
       </div>
       <div id="footer" class="menu">
         {{#authorized}}
+        <button type="button" id="remove_grounding" hidden="hidden">{{i18n.i_remove_grounding}}</button>
         <button type="button" id="edit">{{i18n.i_edit}}</button>
         {{/authorized}}
         <a href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
@@ -118,7 +119,10 @@
     </div>
     <div id="show-leaves" hidden="hidden"><div class="reverse">{{i18n.i_leaves}}</div></div>
     <div id="dialog" title="{{i18n.i_groundings}}" hidden="hidden">
-        <select onChange="record(this);"><option>{{i18n.i_select_grounding}}</option></select>
+      <select onChange="record('+',this.value);"><option>{{i18n.i_select_grounding}}</option></select>
+    </div>
+    <div id="removable" title="{{i18n.i_groundings}}" hidden="hidden">
+      <select onChange="record('-',this.value);"><option>{{i18n.i_select_grounding}}</option></select>
     </div>
   </body>
   <script src="../../script/jquery.js"></script>
@@ -199,6 +203,7 @@
     if ($('#leaves li').length > 0) {
       $("#show-leaves").show();
     }
+    if ($('#groundings li').length > 1) $('#remove_grounding').show();
     if ($('#groundings li').length < 1) {
       $("#groundings").css({
         'visibility': 'hidden'
@@ -320,7 +325,7 @@
 
   $('#contributors_edit').on('keypress', function(key) {
     if (key.which == 13) {
-      record('contributors');
+      record('+','contributors');
     }
   });
 
@@ -331,7 +336,7 @@
 
   $('#readers_edit').on('keypress', function(key) {
     if (key.which == 13) {
-      record('readers');
+      record('+','readers');
     }
   });
 
@@ -352,6 +357,21 @@
   $('#edit').on('click', function() {
     if ('{{type}}' == 'field') { self.location = '../../editable_text/{{_id}}';} 
     else { self.location = '../../editable_memo/{{_id}}';}
+  });
+
+  $('#remove_grounding').on('click', function() {
+    $('#groundings').children('li').each(function() {
+      $("#removable").find('select').append($('<option>', {
+        value: ($(this).attr('id')),
+        text: ($(this).find('h4').html())
+      }));
+    });
+    $("#removable").dialog({
+      autoOpen: true,
+      modal: true,
+      autoResize: true,
+      width:'auto'
+    });
   });
 
   $('#add').on('click', function() {
@@ -525,13 +545,13 @@
     });
   }
 
-  function record(toAdd) {
+  function record(action, what) {
     $.ajax({
       url: "../../{{_id}}",
       type: "GET",
       dataType: "json",
       success: function(data) {
-        switch(toAdd) {
+        switch(what) {
           case ('contributors'):
             var newcontributor = $('#contributors_edit').val().trim().toLowerCase();
             if (!data.contributors) data.contributors = [];
@@ -543,8 +563,13 @@
             data.readers.push(newreader);
           break;
           default:
-            if (!data.groundings) data.groundings = [];
-            if (data.groundings.indexOf(toAdd.value) == -1) data.groundings.push(toAdd.value);
+            if (action == '+') {
+              if (!data.groundings) data.groundings = [];
+              if (data.groundings.indexOf(what) == -1) data.groundings.push(what);
+            } else {
+              var i = data.groundings.indexOf(what);
+              if (i > -1) data.groundings.splice(i, 1);
+            }
         }
         $.ajax({
           type: "PUT",

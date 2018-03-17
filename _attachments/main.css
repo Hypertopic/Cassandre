@@ -269,6 +269,18 @@ button.comment {
   padding-left:5px;
 }
 
+.comment > .checkbox {
+  position: absolute;
+  right: 36px;
+  display: inline-block;
+  vertical-align: 20px;
+}
+
+.checked {
+  background-color: lightgray;
+  color: gray;
+}
+
 #add-grounding, #select-type {
   width: 20%;
   position: fixed;

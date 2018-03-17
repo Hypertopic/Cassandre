@@ -37,6 +37,7 @@ function(head, req) {
           user: user,
           date: row.value.date,
           text: row.value.text,
+          checked: row.value.checked,
           id: row.value.id,
           rev: row.value.rev
         });

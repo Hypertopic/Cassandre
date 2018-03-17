@@ -88,8 +88,9 @@
           </div>
           <div id="comments">
             {{#comments}}
-            <div class="comment" id="{{id}}" name="{{rev}}">
-              <span class="meta"><span class="user">{{user}}</span> (<span class="moment">{{date}}</span>)</span>: <br/>
+            <div class="comment {{checked}}" id="{{id}}" name="{{rev}}">
+              <span class="meta"><span class="user">{{user}}</span> (<span class="moment">{{date}}</span>)</span>:
+              <div class="checkbox"><input type="checkbox" class="comment_check" {{checked}}></div><br/>
               <span class="comment_text">{{text}}</span>
               <input size="80" height="50" type="text" hidden="hidden" class="comment_edit" value="{{text}}"/>
             </div>
@@ -430,14 +431,38 @@
     }
   });
 
-  $(".comment").click(function () {
+  $(".comment").click(function(event) {
     var user = $(this).find('.user').text();
-    if ("{{logged_fullname}}" == user) {
+    if ("{{logged_fullname}}" == user && !$(event.target).is('input')) {
       $(this).find('.comment_text').hide();
       $(this).find('.comment_edit').show();
       $("#comment_create").remove();
       $('#commented').remove();
     }
+  });
+
+  $(".comment_check").click(function() {
+    var comment_id = $(this).closest('.comment').attr('id'),
+        comment_rev = $(this).closest('.comment').attr('name');
+    $.ajax({
+      url: '../../'+ comment_id,
+      type: "GET",
+      dataType: "json",
+      success: function(data) {
+        if (!data.checked || data.checked == '') {
+          data.checked = 'checked';
+        } else {
+          data.checked = '';
+        }
+        $.ajax({
+          type: "PUT",
+          url: '../../'+ comment_id + '?rev=' + comment_rev,
+          contentType: "application/json",
+          data: JSON.stringify(data),
+          success: reload
+        });
+      }
+    });
   });
 
   $(".comment_edit").on('keypress', function(key) {

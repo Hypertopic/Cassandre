@@ -60,7 +60,7 @@
             {{#comments}}
             <div class="comment {{checked}}" id="{{id}}" name="{{rev}}">
               <span class="meta"><span class="user">{{user}}</span> (<span class="moment">{{date}}</span>)</span>:
-              <div class="checkbox"><input type="checkbox" class="comment_check" {{checked}}></div><br/>
+              {{#logged}}<div class="checkbox"><input type="checkbox" class="comment_check" {{checked}}></div>{{/logged}}<br/>
               <span class="comment_text">{{text}}</span>
               <input size="80" height="50" type="text" hidden="hidden" class="comment_edit" value="{{text}}"/>
             </div>

@@ -1,0 +1,28 @@
+<h2 id='unchecked-todo'>{{i18n.i_todo}}</h2>
+  <ul>
+  {{#todo}}
+    <li class='unchecked-todo'>
+      <span class="moment">{{date}}</span>&nbsp;–
+      <a href='../../{{type}}/{{diary}}/{{id}}'>{{name}}</a>
+    </li>
+  {{/todo}}
+  </ul>
+<h2 id='unchecked-comment'>{{i18n.i_unchecked-comment}}</h2>
+  <ul>
+  {{#comment}}
+    <li class='unchecked-comment'>
+      <span class="moment">{{date}}</span>&nbsp;–
+      <a href='../../{{type}}/{{diary}}/{{id}}'>{{name}}</a>
+    </li>
+  {{/comment}}
+  </ul>
+<h2 id='draft'>{{i18n.i_to-be-transcribed}}</h2>
+  <ul>
+  {{#draft}}
+    <li class='draft'>
+      <span class="moment">{{date}}</span>&nbsp;–
+      <a href='../../{{type}}/{{diary}}/{{id}}'>{{name}}</a>
+    </li>
+  {{/draft}}
+  </ul>
+

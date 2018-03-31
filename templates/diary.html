@@ -38,7 +38,10 @@
       <div id="content">
         <h1>{{diary_name}}</h1>
         <input id="diary_name" type="search" hidden="hidden" value="{{diary_name}}"/>
-        <div id="add-leaves"><img id="show-activity" src="../../style/clock.png" alt="{{i18n.i_activity}}"/></div>
+        <div id="add-leaves">
+          <img id="sticky" src="../../style/checklist.png" hidden="hidden" alt="{{i18n.i_todo}}"/>
+          <img id="show-activity" src="../../style/clock.png" alt="{{i18n.i_activity}}"/>
+        </div>
         <div id="activity" title="{{i18n.i_activity}}" hidden="hidden">
         <fieldset>
           <legend>{{i18n.i_filter}}</legend>
@@ -72,6 +75,7 @@
           </li>
         {{/activity}}
         </ul></div>
+        <div id="todo" hidden="hidden"></div>
         <div id="network" hidden="hidden"></div>
         <ul id="memos" hidden="hidden">
         {{#sections}}
@@ -108,23 +112,7 @@
   $(document).ready(function() {
     moment.locale('{{locale}}');
     stickToHeader();
-    var moments = $('.moment');
-    moments.each(function() {
-      var now = moment();
-      var jstime = $(this).text();
-      var mmtime = moment(jstime);
-      if(now.diff(mmtime, 'days') <= 2) {
-        $(this).text(mmtime.fromNow());
-      } else if(now.diff(mmtime, 'years') <= 1) {
-        $(this).text("{{i18n.i_on-a-date}}"+' '+mmtime.format("Do MMMM"));
-      } else {
-        $(this).text("{{i18n.i_on-a-date}}"+' '+mmtime.format("Do MMMM YYYY"));
-      }
-    });
-    var contributions = $('ul li .moment');
-    contributions.each(function() {
-      $(this).text($(this).text().replace(/./, function(x) { return x.toUpperCase(); }));
-    });
+    momentRelative('#activity');
     resetUI();
     var converter = new showdown.Converter({
       tables: 'true',
@@ -133,6 +121,15 @@
     });
     $('.preview').html(function(i, text) {
       return converter.makeHtml(text.trim());
+    });
+    $.ajax({
+      url: "../../todo/{{diary}}",
+      type: "GET",
+      dataType: "html",
+      success: function(todo) {
+        if (todo.length > 197) $('#sticky').show();
+        $('#todo').html(todo);
+      }
     });
   });
 
@@ -200,6 +197,18 @@
         });
       });
     });
+
+  $('#sticky').on('click', function() {
+    $('h1').html('');
+    if ($('.unchecked-todo').length < 1) $('#unchecked-todo').hide();
+    if ($('.unchecked-comment').length < 1) $('#unchecked-comment').hide();
+    if ($('.draft').length < 1) $('#draft').hide();
+    momentRelative('#todo');
+    $('#memos').hide();
+    $("#network").hide();
+    $('#sticky').hide();
+    $('#todo').show();
+  });
 
   $('#show-activity').on('click', function() {
     $("#activity").dialog({
@@ -293,6 +302,26 @@
     stickToHeader();
   });
 
+  function momentRelative(what) {
+    var moments = $(what+' .moment');
+    moments.each(function() {
+      var now = moment();
+      var jstime = $(this).text();
+      var mmtime = moment(jstime);
+      if(now.diff(mmtime, 'days') <= 2) {
+        $(this).text(mmtime.fromNow());
+      } else if(now.diff(mmtime, 'years') <= 1) {
+        $(this).text("{{i18n.i_on-a-date}}"+' '+mmtime.format("Do MMMM"));
+      } else {
+        $(this).text("{{i18n.i_on-a-date}}"+' '+mmtime.format("Do MMMM YYYY"));
+      }
+    });
+    var contributions = $('ul li .moment');
+    contributions.each(function() {
+      $(this).text($(this).text().replace(/./, function(x) { return x.toUpperCase(); }));
+    });
+  }
+
   function stickToHeader() {
     var h = document.getElementById("header").offsetHeight;
     $("#container>#content h1").css({'padding-top': h+5});
@@ -328,6 +357,7 @@
         self.location = selected.item;
       }
     });
+    $("#todo").hide();
     $("#memos").hide();
     $("#network").show();
   }
@@ -378,6 +408,7 @@
         }
       }
     });
+    $("#todo").hide();
     $("#memos").hide();
     $("#network").show();
   }

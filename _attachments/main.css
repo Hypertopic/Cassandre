@@ -225,8 +225,9 @@ div.post {
   font-size:150%;
 }
 
-#container>#content h1 {
-  padding: 35px 0 0 10px;
+#container>#content h1,
+#container>#content h2 {
+  padding: 0px 0 0 10px;
 }
 
 #container>#content #diary_name {

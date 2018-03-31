@@ -152,6 +152,14 @@
       "reduce": "false"
     }
   }, {
+    "from": "todo/:diary",
+    "to": "_list/todo/todo",
+    "query": {
+      "startkey": [":diary"],
+      "endkey": [":diary", {}],
+      "include_docs": "true"
+    }
+  }, {
     "from": "kwic",
     "to": "_list/kwic/kwic"
   }, {

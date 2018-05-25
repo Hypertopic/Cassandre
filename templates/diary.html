@@ -127,7 +127,7 @@
       type: "GET",
       dataType: "html",
       success: function(todo) {
-        if (todo.length > 197) $('#sticky').show();
+        if (todo.length > 349) $('#sticky').show();
         $('#todo').html(todo);
       }
     });
@@ -203,6 +203,9 @@
     if ($('.unchecked-todo').length < 1) $('#unchecked-todo').hide();
     if ($('.unchecked-comment').length < 1) $('#unchecked-comment').hide();
     if ($('.draft').length < 1) $('#draft').hide();
+    if ($('.unarticulated').length < 1) $('#unarticulated').hide();
+    if ($('.unnamed').length < 1) $('#unnamed').hide();
+    if ($('.ungrounded').length < 1) $('#ungrounded').hide();
     momentRelative('#todo');
     $('#memos').hide();
     $("#network").hide();

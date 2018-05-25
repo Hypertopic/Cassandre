@@ -6,15 +6,18 @@ function(head, req) {
   start({"headers":{"Content-Type":"text/html;charset=utf-8"}});
   var data = {
     comment: [],
+    diagram: [],
     draft: [],
-    todo: [],
     i18n: localized(),
     locale: req.headers["Accept-Language"],
-    logged: req.userCtx.name
+    logged: req.userCtx.name,
+    todo: [],
+    ungrounded: [],
+    unnamed: []
   };
   while (r = getRow()) {
     var type = 'memo';
-    if(r.doc) switch (r.doc.type) {
+    if (r.doc) switch (r.doc.type) {
       case ('graph'):
       case ('table'):
       case ('diagram'):
@@ -22,15 +25,24 @@ function(head, req) {
         break;
     }
     var obj = {
-      id: r.value._id,
+      id: r.value.id,
       diary: r.key[0],
       date: r.key[1],
       name: r.value.name,
       type: type
     };
     switch(r.key[2]) {
+      case ('G'):
+        if (!r.doc) data.ungrounded.push(obj);
+      break;
+      case ('N'):
+        data.unnamed.push(obj);
+      break;
       case ('D'):
         data.draft.push(obj);
+      break;
+      case ('A'):
+        data.diagram.push(obj);
       break;
       case ('O'):
         data.todo.push(obj);
@@ -40,6 +52,7 @@ function(head, req) {
       break;
     }
   }
+  data.ungrounded.shift();
   return Mustache.to_html(templates.todo, data);
 }
 

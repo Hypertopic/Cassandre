@@ -225,7 +225,10 @@ div.post {
   font-size:150%;
 }
 
-#container>#content h1,
+#container>#content h1 {
+  padding: 42px 0 0 10px;
+}
+
 #container>#content h2 {
   padding: 0px 0 0 10px;
 }

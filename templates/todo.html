@@ -25,4 +25,32 @@
     </li>
   {{/draft}}
   </ul>
+<h2 id='unarticulated'>{{i18n.i_to-be-articulated}}</h2>
+  <ul>
+  {{#diagram}}
+    <li class='unarticulated'>
+      <span class="moment">{{date}}</span>&nbsp;–
+      <a href='../../{{type}}/{{diary}}/{{id}}'>{{name}}</a>
+    </li>
+  {{/diagram}}
+  </ul>
+
+<h2 id='unnamed'>{{i18n.i_unnamed}}</h2>
+  <ul>
+  {{#unnamed}}
+    <li class='unnamed'>
+      <span class="moment">{{date}}</span>&nbsp;–
+      <a href='../../{{type}}/{{diary}}/{{id}}'>{{name}}</a>
+    </li>
+  {{/unnamed}}
+  </ul>
+<h2 id='ungrounded'>{{i18n.i_ungrounded}}</h2>
+  <ul>
+  {{#ungrounded}}
+    <li class='ungrounded'>
+      <span class="moment">{{date}}</span>&nbsp;–
+      <a href='../../{{type}}/{{diary}}/{{id}}'>{{name}}</a>
+    </li>
+  {{/ungrounded}}
+  </ul>
 

@@ -27,7 +27,7 @@ Installation procedure
 
 * In any folder:
 
-        git clone https://github.com/Hypertopic/Cassandre.git
+        git clone https://github.com/Hypertopic/Cassandre.git --branch v2
         cd Cassandre
         couchapp init
         couchapp push http://127.0.0.1:5984/cassandre

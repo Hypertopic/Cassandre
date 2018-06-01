@@ -172,12 +172,16 @@
     "from": "", 
     "to": "../../",
     "method": "POST"
-  }, { 
+  }, {
     "from": "", 
     "to": "_show/index",
     "method": "GET"
+  }, {
+    "from": ":object",
+    "to": "_show/object/:object",
+    "method": "GET"
   }, { 
-    "from": ":object", 
+    "from": ":object",
     "to": "../../:object"
   }, { 
     "from": "style/:file", 

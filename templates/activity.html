@@ -1,0 +1,241 @@
+<html>
+  <head>
+    <title>{{diary_name}} - {{i18n.i_activity}}</title>
+    <link rel="icon" type="image/png" href="../../style/favicon.png" />
+    <link rel="stylesheet" type="text/css" href="../../style/main.css" />
+    <link rel="stylesheet" type="text/css" href="../../style/diagram.css" />
+    <link rel="stylesheet" type="text/css" href="../../style/vis.min.css" />
+    <link rel="stylesheet" href="../../style/cal-heatmap.css" />
+  </head>
+  <body id="watermark">
+    <div id="container">
+      <header>
+        <div id="header" class="menu">
+          <button type="button" id="diary">{{diary_name}}</button>
+          {{i18n.i_filter}}
+          <button type="button" id="all-activity">{{i18n.i_all}}</button>
+          <button type="button" id="only-created">{{i18n.i_creations}}</button>
+          <button type="button" id="only-modified">{{i18n.i_modifications}}</button>
+          <button type="button" id="only-comments">{{i18n.i_comments}}</button>
+          <div id='logged'>
+          {{^logged}}
+            <form id="signin">
+              <input type="text" name="name" placeholder="{{i18n.i_username}}"/>
+              <input type="password" name="password" placeholder="{{i18n.i_password}}"/>
+              <button type="submit">{{i18n.i_sign-in}}</button>
+            </form>
+          {{/logged}}
+          {{#logged}}
+            {{logged}}
+            <button id="signout">{{i18n.i_sign-out}}</button>
+          {{/logged}}
+          </div>
+        </div>
+      </header>
+      <div id="content">
+        <h1>{{i18n.i_activity}}</h1>
+        <div id="cal-heatmap"></div>
+        <div id="activity" title="{{i18n.i_activity}}">
+        <div id="contributors"></div>
+        <ul>
+        {{#activity}}
+          <li class="{{comment}}{{created}}{{^created}}{{^comment}}modified{{/comment}}{{/created}}">
+              <span id="{{date}}" class="moment">{{date}}</span>, <span class="{{user}}">{{user}}</span>
+              {{#diary_label}}
+                {{#created}}{{i18n.i_created}} {{/created}}
+                {{#modified}}{{i18n.i_renamed}} {{/modified}}
+                {{i18n.i_the-diary}}
+              {{/diary_label}}
+              {{^diary_label}}
+                {{#comment}}
+                  {{i18n.i_commented}}
+                {{/comment}}
+                {{#created}}
+                  {{i18n.i_created}}
+                {{/created}}
+                {{#modified}}
+                  {{i18n.i_modified}}
+                {{/modified}}
+                <a href="../../{{modified_path}}/{{diary}}/{{modified_id}}">{{modified_name}}</a>
+              {{/diary_label}} 
+          </li>
+        {{/activity}}
+        </ul></div>
+      </div>
+      <div id="footer" class="menu">
+        <a href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
+      </div>
+    </div>
+  </body>
+  <script src="../../script/jquery.js"></script>
+  <script src="../../script/jquery-ui.min.js"></script>
+  <script src="../../script/showdown.min.js"></script>
+  <link rel="stylesheet" href="../../script/jquery-ui.min.css" />
+  <script type="text/javascript" src="../../script/moment.min.js"></script>
+  <script type="text/javascript" src="../../script/d3.min.js"></script>
+  <script type="text/javascript" src="../../script/cal-heatmap.min.js"></script>
+  <script>
+  var cal = new CalHeatMap();
+  $(document).ready(function() {
+    moment.locale('{{locale}}');
+    stickToHeader();
+    momentRelative('#activity');
+    if ($('ul .created').length < 1) $('#only-created').hide();
+    if ($('ul .modified').length < 1) $('#only-modified').hide();
+    if ($('ul .commented').length < 1) $('#only-comments').hide();
+    showContributions();
+    resetUI();
+  });
+
+  $('#sort').on('change', function() {
+    self.location = '?by=' + $('#sort').val();
+  });
+
+  $('#diary').on('click', function() {
+    self.location = '../../memo/{{diary}}/?by=date';
+  });
+
+  $('#header')
+    .on('click', '#diaries', function() {
+      self.location = '../../memo/';
+    });
+
+  function drawChart(data) {
+    cal.init({
+      domain: "week",
+      subDomain: "day",
+      data: data,
+      range: 53,
+      start: new Date(new Date().setFullYear(new Date().getFullYear() - 1)),
+      end: new Date(),
+      itemName: ["contribution", "contributions"],
+      domainLabelFormat: ""
+    });
+  }
+
+  $('#all-activity').on('click', function() {
+    $(".created").show();
+    $(".modified").show();
+    $(".commented").show();
+    showContributions();
+  });
+  $('#only-created').on('click', function() {
+    $(".created").show();
+    $(".modified").hide();
+    $(".commented").hide();
+    showContributions();
+  });
+  $('#only-comments').on('click', function() {
+    $(".created").hide();
+    $(".modified").hide();
+    $(".commented").show();
+    showContributions();
+  });
+  $('#only-modified').on('click', function() {
+    $(".created").hide();
+    $(".commented").hide();
+    $(".modified").show();
+    showContributions();
+  });
+
+  function showContributions() {
+    var times = {};
+    var contributorlist = new Object ();
+    var contributors = $('ul li span:visible');
+    contributors.each(function() {
+      var contributor = $(this).attr('class');
+      if (contributor != 'moment') {
+        if (contributorlist[contributor]) {
+          contributorlist[contributor] = contributorlist[contributor] + 1;
+        } else {
+          contributorlist[contributor] = 1;
+        }
+      } else {
+        var unixstamp = moment(this.id).format('X');
+        console.log(this.id);
+        times[unixstamp] = 1;
+      }
+    });
+    cal.update(times);
+    var n = '';
+    for (var c in contributorlist) {
+      if (contributorlist.hasOwnProperty(c)) {
+        n += ' '+c+' ('+contributorlist[c]+')';
+      }
+    }
+    document.getElementById("contributors").innerHTML = n;
+  }
+
+  function resetUI() {
+    var listed = $("#memos>li");
+    listed.each(function() {
+      var type = $(this).attr('class');
+      switch(type){
+        case "graph":
+        case "table":
+        case "diagram":
+          $(this).find('a').attr('href', '../../'+type+'/{{diary}}/'+$(this).find('a').attr('href'));
+          break;
+      }
+    });
+  }
+
+  $(window).resize(function() {
+    stickToHeader();
+  });
+
+  function momentRelative(what) {
+    var moments = $(what+' .moment');
+    var times = {};
+    moments.each(function() {
+      var now = moment();
+      var jstime = $(this).text();
+
+      var unixstamp = moment(jstime).format('X');
+      times[unixstamp] = 1;
+
+      var mmtime = moment(jstime);
+      if(now.diff(mmtime, 'days') <= 2) {
+        $(this).text(mmtime.fromNow());
+      } else if(now.diff(mmtime, 'years') <= 1) {
+        $(this).text("{{i18n.i_on-a-date}}"+' '+mmtime.format("Do MMMM"));
+      } else {
+        $(this).text("{{i18n.i_on-a-date}}"+' '+mmtime.format("Do MMMM YYYY"));
+      }
+    });
+    drawChart(times);
+
+    var contributions = $('ul li .moment');
+    contributions.each(function() {
+      $(this).text($(this).text().replace(/./, function(x) { return x.toUpperCase(); }));
+    });
+  }
+
+  function stickToHeader() {
+    var h = document.getElementById("header").offsetHeight;
+    $("#container>#content h1").css({'padding-top': h+5});
+    $("#container>#content #diary_name").css({'margin-top': h+5});
+    $("#add-leaves").css({'top': h+5});
+  }
+
+
+  var reload = function() {
+    location.reload();
+  };
+
+  $('#signin').on('submit', function(e) {
+    e.preventDefault();
+    $(this).find('input').first().val($(this).find('input').first().val().toLowerCase());
+    $.post('/_session', $(this).serialize(), reload);
+  });
+
+  $('#signout').on('click', function() {
+    $.ajax({
+      type: 'DELETE',
+      url: '/_session',
+      success: reload
+    });
+  });
+  </script>
+</html>
+

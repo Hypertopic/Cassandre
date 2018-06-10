@@ -47,6 +47,14 @@
       "include_docs": "true"
     }
   }, {
+    "from": "activity/:diary",
+    "to": "_list/activity/memo_attribute",
+    "query": {
+      "startkey": [":diary"],
+      "endkey": [":diary", {}],
+      "include_docs": "true"
+    }
+  }, {
     "method": "GET",
     "from": "memo/:diary/:memo",
     "to": "_list/memo/memo",

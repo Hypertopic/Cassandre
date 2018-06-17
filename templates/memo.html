@@ -286,6 +286,12 @@
         }
       });
     }
+    $.ajax({
+      url: "../../changes/memo/{{_id}}/{{update_seq}}",
+      type: "GET",
+      dataType: "json",
+      success: reload
+    });
   });
 
   $(window).resize(function() {

@@ -123,7 +123,8 @@ function(head, req) {
         readers: [],
         readers_fullnames: [],
         roles: req.userCtx.roles,
-        type: type
+        type: type,
+        update_seq: req.info.update_seq
       }
       if (data.peer == '127.0.0.1' && req.headers['X-Forwarded-For'] ) {
         var ips = req.headers['X-Forwarded-For'].split(',');

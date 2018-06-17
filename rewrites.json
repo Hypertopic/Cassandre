@@ -176,6 +176,15 @@
     "query": {
       "key": ":corpus"
     }
+  }, {
+    "from": "changes/memo/:id/:update_seq",
+    "to": "../../_changes",
+    "query": {
+      "filter": "cassandre/memo",
+      "id": ":id",
+      "feed": "longpoll",
+      "since": ":update_seq"
+    }
   }, { 
     "from": "", 
     "to": "../../",

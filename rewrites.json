@@ -55,6 +55,13 @@
       "include_docs": "true"
     }
   }, {
+    "from": "todo/:diary",
+    "to": "_view/todo",
+    "query": {
+      "startkey": [":diary"],
+      "endkey": [":diary", {}]
+    }
+  }, {
     "method": "GET",
     "from": "memo/:diary/:memo",
     "to": "_list/memo/memo",
@@ -160,7 +167,7 @@
       "reduce": "false"
     }
   }, {
-    "from": "todo/:diary",
+    "from": "tasklist/:diary",
     "to": "_list/todo/todo",
     "query": {
       "startkey": [":diary"],

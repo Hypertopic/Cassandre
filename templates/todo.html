@@ -1,56 +1,161 @@
-<h2 id='unchecked-todo'>{{i18n.i_todo}}</h2>
-  <ul>
-  {{#todo}}
-    <li class='unchecked-todo'>
-      <span class="moment">{{date}}</span>&nbsp;–
-      <a href='../../{{type}}/{{diary}}/{{id}}'>{{name}}</a>
-    </li>
-  {{/todo}}
-  </ul>
-<h2 id='unchecked-comment'>{{i18n.i_unchecked-comment}}</h2>
-  <ul>
-  {{#comment}}
-    <li class='unchecked-comment'>
-      <span class="moment">{{date}}</span>&nbsp;–
-      <a href='../../{{type}}/{{diary}}/{{id}}'>{{name}}</a>
-    </li>
-  {{/comment}}
-  </ul>
-<h2 id='draft'>{{i18n.i_to-be-transcribed}}</h2>
-  <ul>
-  {{#draft}}
-    <li class='draft'>
-      <span class="moment">{{date}}</span>&nbsp;–
-      <a href='../../{{type}}/{{diary}}/{{id}}'>{{name}}</a>
-    </li>
-  {{/draft}}
-  </ul>
-<h2 id='unarticulated'>{{i18n.i_to-be-articulated}}</h2>
-  <ul>
-  {{#diagram}}
-    <li class='unarticulated'>
-      <span class="moment">{{date}}</span>&nbsp;–
-      <a href='../../{{type}}/{{diary}}/{{id}}'>{{name}}</a>
-    </li>
-  {{/diagram}}
-  </ul>
+<html>
+  <head>
+    <title>{{diary_name}} - {{i18n.i_todo}}</title>
+    <link rel="icon" type="image/png" href="../../style/favicon.png" />
+    <link rel="stylesheet" type="text/css" href="../../style/main.css" />
+  </head>
+  <body id="watermark">
+    <div id="container">
+      <header>
+        <div id="header" class="menu">
+          <button type="button" id="diary">{{diary_name}}</button>
+          <div id='logged'>
+          {{^logged}}
+            <form id="signin">
+              <input type="text" name="name" placeholder="{{i18n.i_username}}"/>
+              <input type="password" name="password" placeholder="{{i18n.i_password}}"/>
+              <button type="submit">{{i18n.i_sign-in}}</button>
+            </form>
+          {{/logged}}
+          {{#logged}}
+            {{logged}}
+            <button id="signout">{{i18n.i_sign-out}}</button>
+          {{/logged}}
+          </div>
+        </div>
+      </header>
+      <div id="content">
+        <h1>{{i18n.i_todo}}</h1>
+        <div id="todo">
+          <h2 id='unchecked-todo' hidden="hidden">{{i18n.i_todo}}</h2>
+          <ul>
+          {{#todo}}
+            <li class='unchecked-todo'>
+              <span class="moment">{{date}}</span>&nbsp;–
+              <a href='../../{{type}}/{{diary}}/{{id}}'>{{name}}</a>
+            </li>
+          {{/todo}}
+          </ul>
+          {{#comment}}<h2 id='unchecked-comment' hidden="hidden">{{i18n.i_unchecked-comment}}</h2>{{/comment}}
+          <ul>
+          {{#comment}}
+            <li class='unchecked-comment'>
+              <span class="moment">{{date}}</span>&nbsp;–
+              <a href='../../{{type}}/{{diary}}/{{id}}'>{{name}}</a>
+            </li>
+          {{/comment}}
+          </ul>
+          <h2 id='draft' hidden="hidden">{{i18n.i_to-be-transcribed}}</h2>
+          <ul>
+          {{#draft}}
+            <li class='draft'>
+              <span class="moment">{{date}}</span>&nbsp;–
+              <a href='../../{{type}}/{{diary}}/{{id}}'>{{name}}</a>
+            </li>
+          {{/draft}}
+          </ul>
+          <h2 id='unarticulated' hidden="hidden">{{i18n.i_to-be-articulated}}</h2>
+          <ul>
+          {{#diagram}}
+            <li class='unarticulated'>
+              <span class="moment">{{date}}</span>&nbsp;–
+              <a href='../../{{type}}/{{diary}}/{{id}}'>{{name}}</a>
+            </li>
+          {{/diagram}}
+          </ul>
+          <h2 id='unnamed' hidden="hidden">{{i18n.i_unnamed}}</h2>
+          <ul>
+          {{#unnamed}}
+            <li class='unnamed'>
+              <span class="moment">{{date}}</span>&nbsp;–
+              <a href='../../{{type}}/{{diary}}/{{id}}'>{{name}}</a>
+            </li>
+          {{/unnamed}}
+          </ul>
+          <h2 id='ungrounded' hidden="hidden">{{i18n.i_ungrounded}}</h2>
+          <ul>
+          {{#ungrounded}}
+            <li class='ungrounded'>
+              <span class="moment">{{date}}</span>&nbsp;–
+              <a href='../../{{type}}/{{diary}}/{{id}}'>{{name}}</a>
+            </li>
+          {{/ungrounded}}
+          </ul>
+        </div>
+      </div>
+      <div id="footer" class="menu">
+        <a href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
+      </div>
+    </div>
+  </body>
+  <script src="../../script/jquery.js"></script>
+  <script src="../../script/jquery-ui.min.js"></script>
+  <link rel="stylesheet" href="../../script/jquery-ui.min.css" />
+  <script type="text/javascript" src="../../script/moment.min.js"></script>
+  <script>
+  $(document).ready(function() {
+    moment.locale('{{locale}}');
+    stickToHeader();
+    momentRelative('#todo');
+    if ($('.unchecked-todo').length > 0) $('#unchecked-todo').show();
+    if ($('.unchecked-comment').length > 0) $('#unchecked-comment').show();
+    if ($('.draft').length > 0) $('#draft').show();
+    if ($('.unarticulated').length > 0) $('#unarticulated').show();
+    if ($('.unnamed').length > 0) $('#unnamed').show();
+    if ($('.ungrounded').length > 0) $('#ungrounded').show();
+  });
 
-<h2 id='unnamed'>{{i18n.i_unnamed}}</h2>
-  <ul>
-  {{#unnamed}}
-    <li class='unnamed'>
-      <span class="moment">{{date}}</span>&nbsp;–
-      <a href='../../{{type}}/{{diary}}/{{id}}'>{{name}}</a>
-    </li>
-  {{/unnamed}}
-  </ul>
-<h2 id='ungrounded'>{{i18n.i_ungrounded}}</h2>
-  <ul>
-  {{#ungrounded}}
-    <li class='ungrounded'>
-      <span class="moment">{{date}}</span>&nbsp;–
-      <a href='../../{{type}}/{{diary}}/{{id}}'>{{name}}</a>
-    </li>
-  {{/ungrounded}}
-  </ul>
+  $('#diary').on('click', function() {
+    self.location = '../../memo/{{diary}}/?by=date';
+  });
 
+  $(window).resize(function() {
+    stickToHeader();
+  });
+
+  function momentRelative(what) {
+    var moments = $(what+' .moment');
+    moments.each(function() {
+      var now = moment();
+      var jstime = $(this).text();
+      var mmtime = moment(jstime);
+      if(now.diff(mmtime, 'days') <= 2) {
+        $(this).text(mmtime.fromNow());
+      } else if(now.diff(mmtime, 'years') <= 1) {
+        $(this).text("{{i18n.i_on-a-date}}"+' '+mmtime.format("Do MMMM"));
+      } else {
+        $(this).text("{{i18n.i_on-a-date}}"+' '+mmtime.format("Do MMMM YYYY"));
+      }
+    });
+    var contributions = $('ul li .moment');
+    contributions.each(function() {
+      $(this).text($(this).text().replace(/./, function(x) { return x.toUpperCase(); }));
+    });
+  }
+
+  function stickToHeader() {
+    var h = document.getElementById("header").offsetHeight;
+    $("#container>#content h1").css({'padding-top': h+5});
+    $("#container>#content #diary_name").css({'margin-top': h+5});
+    $("#add-leaves").css({'top': h+5});
+  }
+
+  var reload = function() {
+    location.reload();
+  };
+
+  $('#signin').on('submit', function(e) {
+    e.preventDefault();
+    $(this).find('input').first().val($(this).find('input').first().val().toLowerCase());
+    $.post('/_session', $(this).serialize(), reload);
+  });
+
+  $('#signout').on('click', function() {
+    $.ajax({
+      type: 'DELETE',
+      url: '/_session',
+      success: reload
+    });
+  });
+  </script>
+</html>

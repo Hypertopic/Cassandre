@@ -1,5 +1,7 @@
 function(o) {
   var diary = o.diary || o.corpus;
+  if (o.diary_name)
+    emit([o._id, null, 'dn'], {diary_name: o.diary_name});
   if (o.name == '' || o.name == '...')
     emit([diary, o.history[o.history.length -1].date, 'N'], {'id': o._id, 'name': '...'});
   if (o.draft == true)

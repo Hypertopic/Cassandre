@@ -32,6 +32,10 @@ function(head, req) {
       type: type
     };
     switch(r.key[2]) {
+      case ('dn'):
+        data.diary = r.key[0];
+        data.diary_name = r.value.diary_name;
+      break;
       case ('G'):
         if (!r.doc) data.ungrounded.push(obj);
       break;
@@ -53,7 +57,15 @@ function(head, req) {
     }
   }
   data.ungrounded.shift();
-  return Mustache.to_html(templates.todo, data);
+  provides("html", function() {
+    return Mustache.to_html(templates.todo, data);
+  });
+  provides("json", function() {
+    var number = data.ungrounded.length + data.unnamed.length + data.draft.length + data.diagram.length + data.todo.length + data.comment.length;
+    send(toJSON(
+      {pending: number}
+    ));
+  });
 }
 
 

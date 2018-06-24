@@ -56,7 +56,7 @@
     }
   }, {
     "from": "todo/:diary",
-    "to": "_view/todo",
+    "to": "_view/tasklist",
     "query": {
       "startkey": [":diary"],
       "endkey": [":diary", {}]
@@ -168,7 +168,7 @@
     }
   }, {
     "from": "tasklist/:diary",
-    "to": "_list/todo/todo",
+    "to": "_list/tasklist/tasklist",
     "query": {
       "startkey": [":diary"],
       "endkey": [":diary", {}],

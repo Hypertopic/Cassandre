@@ -3,8 +3,10 @@ function(o) {
   var type = o.type || 'field';
   var name = o.name || '...';
   var date = o.date;
+  var update = o.date;
   if (o.history) {
     date = o.history[0].date;
+    update = o.history[o.history.length-1].date;
     for (var id in o.history) {
       var value = {
         _id: o.history[id].user
@@ -55,6 +57,7 @@ function(o) {
       name: name,
       type: type,
       date: date,
+      update: update,
       groundings: groundings,
       preview: preview
     });

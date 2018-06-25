@@ -17,6 +17,7 @@
             <option>{{i18n.i_sort}}</option>
             <option value="name">{{i18n.i_title}}</option>
             <option value="date">{{i18n.i_date}}</option>
+            <option value="update">{{i18n.i_update}}</option>
             <option value="type">{{i18n.i_type}}</option>
           </select>
           <button type="button" id="patterns">{{i18n.i_patterns}}</button>
@@ -47,7 +48,8 @@
         <ul id="memos">
         {{#sections}}
           {{#memos}}
-          <li class="{{type}}"><input type="checkbox" id="{{id}}" name="{{rev}}" hidden="hidden" /> {{date}}&nbsp;–
+          <li class="{{type}}"><input type="checkbox" id="{{id}}" name="{{rev}}" hidden="hidden" />
+            <span id="{{date}}" class="moment">{{date}}</span>&nbsp;–
             <a href="../../{{path}}/{{diary}}/{{id}}" class="tooltip">{{name}}
             {{#preview}}<span class="preview">{{preview}}</span>{{/preview}}</a>
           </li>
@@ -69,6 +71,7 @@
   <script>
   $(document).ready(function() {
     moment.locale('{{locale}}');
+    momentRelative('#memos');
     stickToHeader();
     resetUI();
     var converter = new showdown.Converter({

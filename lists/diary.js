@@ -13,7 +13,6 @@ function(head, req) {
     by: req.query.by,
     logged: req.userCtx.name,
     diary: req.query.diary,
-    activity: [],
     diagrams: [],
     graphs: [],
     sections: [],
@@ -43,6 +42,7 @@ function(head, req) {
     switch (row.key[1]) {
       case ('M'):
         var name = row.value.name.replace(/"/g, '\\"').replace(/\s/g, ' ');
+        var date = row.value.date;
         var path = 'memo'
         memos_name[row.value.id] = row.value.name;
         memos_path[row.value.id] = 'memo';
@@ -107,6 +107,10 @@ function(head, req) {
           case 'date':
             sort_key = row.value.date;
             break;
+          case 'update':
+            sort_key = row.value.update;
+            date = row.value.update;
+            break;
         }
         if (!alphabetical && (!section || sort_key != section.value)) {
           section = {
@@ -168,7 +172,7 @@ function(head, req) {
           name: name,
           node_level: node_level,
           rev: row.value.rev,
-          date: row.value.date.substring(0, 10),
+          date: date,
           groundings: row.value.groundings,
           path: path,
           type: row.value.type
@@ -177,24 +181,6 @@ function(head, req) {
       break;
       case ('D'):
         if (row.value) data.diary_name = row.value.diary_name;
-      break;
-      case ('Z'):
-        var object = {
-            user: row.value._id,
-            date: row.key[2]
-        };
-        if (row.doc && row.doc.fullname) {
-          object.user = row.doc.fullname;
-        }
-        if (row.value.modified_name) object.modified_name = row.value.modified_name;
-        if (row.value.modified_id)   object.modified_id = row.value.modified_id;
-        if (row.value.diary_label)   object.diary_label = 1;
-        if (row.value.created)       object.created = 'created';
-        if (row.value.modified)      object.modified = 'modified';
-        if (row.value.comment)       object.comment = 'commented';
-        object.modified_name = memos_name[object.modified_id];
-        object.modified_path = memos_path[object.modified_id];
-        data.activity.push(object);
       break;
     }
   }
@@ -206,7 +192,6 @@ function(head, req) {
   data.network = JSON.stringify(data.network);
   data.timeline = JSON.stringify(data.timeline);
   data.sections = data.sections.sort(function(a,b){return (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0);});
-  if (data.by == 'date') data.sections = data.sections.reverse();
-  data.activity = data.activity.reverse();
+  if (['date','update'].indexOf(data.by) >= 0) data.sections = data.sections.reverse();
   return Mustache.to_html(templates.diary, data);
 }

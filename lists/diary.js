@@ -43,6 +43,7 @@ function(head, req) {
     switch (row.key[1]) {
       case ('M'):
         var name = row.value.name.replace(/"/g, '\\"').replace(/\s/g, ' ');
+        var path = 'memo'
         memos_name[row.value.id] = row.value.name;
         memos_path[row.value.id] = 'memo';
         switch (row.value.type) {
@@ -63,6 +64,7 @@ function(head, req) {
             break;
           case "diagram":
             data.diagrams.push(row.value.id);
+            path = 'diagram';
             memos_path[row.value.id] = 'diagram';
             var node_level = '4';
             var group = '4';
@@ -70,6 +72,7 @@ function(head, req) {
             break;
           case "table":
             data.tables.push(row.value.id);
+            path = 'table';
             memos_path[row.value.id] = 'table';
             var node_level = '4';
             var group = '8';
@@ -82,6 +85,7 @@ function(head, req) {
             break;
           case "graph":
             data.graphs.push(row.value.id);
+            path = 'graph';
             memos_path[row.value.id] = 'graph';
             var node_level = '5';
             var group = '5';
@@ -159,13 +163,14 @@ function(head, req) {
         section.memos.push({
           color: color,
           preview: preview,
-          diary: row.key,
+          diary: row.key[0],
           id: row.value.id,
           name: name,
           node_level: node_level,
           rev: row.value.rev,
           date: row.value.date.substring(0, 10),
           groundings: row.value.groundings,
+          path: path,
           type: row.value.type
         });
         data.sections.push(section);

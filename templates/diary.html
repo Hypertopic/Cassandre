@@ -44,21 +44,12 @@
         </div>
         <div id="todo" hidden="hidden"></div>
         <div id="network" hidden="hidden"></div>
-        <ul id="memos" hidden="hidden">
+        <ul id="memos">
         {{#sections}}
           {{#memos}}
-          <li class="{{type}}"> {{date}}&nbsp;–
-            <a href="{{id}}" class="tooltip">{{name}}
+          <li class="{{type}}"><input type="checkbox" id="{{id}}" name="{{rev}}" hidden="hidden" /> {{date}}&nbsp;–
+            <a href="../../{{path}}/{{diary}}/{{id}}" class="tooltip">{{name}}
             {{#preview}}<span class="preview">{{preview}}</span>{{/preview}}</a>
-          </li>
-          {{/memos}}
-        {{/sections}}
-        </ul>
-        <ul id="selectable-memos" hidden="hidden">
-        {{#sections}}
-          {{#memos}}
-          <li class="{{type}}"> <input type="checkbox" id="{{id}}" name="{{rev}}" />{{date}}&nbsp;–
-            <a class="memo">{{name}}</a>
           </li>
           {{/memos}}
         {{/sections}}
@@ -124,8 +115,7 @@
   $('#footer')
     .on('click', '#show_delete', function() {
       $("#network").hide();
-      $("#memos").hide();
-      $("#selectable-memos").show();
+      $("#memos>li>input").show();
       $("#footer").html(
         '<button id="cancel" type="button">{{i18n.i_cancel}}</button>'
         + '<input id="toggle" type="checkbox">{{i18n.i_select}}</button>'
@@ -220,19 +210,7 @@
   }
 
   function resetUI() {
-    var listed = $("#memos>li");
-    listed.each(function() {
-      var type = $(this).attr('class');
-      switch(type){
-        case "graph":
-        case "table":
-        case "diagram":
-          $(this).find('a').attr('href', '../../'+type+'/{{diary}}/'+$(this).find('a').attr('href'));
-          break;
-      }
-    });
-    $("#memos").show();
-    $("#selectable-memos").hide();
+    $("#memos>li>input").hide();
     $("#network").hide();
     $("#footer").html(
       '<button type="button" id="show_delete">{{i18n.i_delete}}...</button>'

@@ -71,9 +71,10 @@
   <script>
   $(document).ready(function() {
     moment.locale('{{locale}}');
-    momentRelative('#memos');
     stickToHeader();
     resetUI();
+    {{#list}}
+    momentRelative('#memos');
     var converter = new showdown.Converter({
       tables: 'true',
       tasklists: 'true',
@@ -83,7 +84,13 @@
     $('.preview').html(function(i, text) {
       return converter.makeHtml(text.trim());
     });
-
+    {{/list}}
+    {{#network}}
+      drawNetwork();
+    {{/network}}
+    {{#timeline}}
+      drawTimeline();
+    {{/timeline}}
     $.ajax({
       url: "../../tasklist/{{diary}}",
       type: "GET",
@@ -94,22 +101,18 @@
     });
   });
 
-  $('#sort').on('change', function() {
-    self.location = '?by=' + $('#sort').val();
-  });
-
   $('#header')
     .on('click', '#diaries', function() {
       self.location = '..';
     })
-    .on('click', '#list', function() {
-      resetUI();
+    .on('change', '#sort', function() {
+      self.location = '?by=' + $('#sort').val();
     })
     .on('click', '#drawNetwork', function() {
-      drawNetwork();
+      self.location = '?by=network';
     })
     .on('click', '#drawTimeline', function() {
-      drawTimeline();
+      self.location = '?by=timeline';
     })
     .on('click', '#patterns', function() {
       self.location = '../../kwic/{{diary}}';
@@ -165,56 +168,9 @@
   $('#show-activity').on('click', function() {
     self.location = "../../activity/{{diary}}/";
   });
-  $('#all-activity').on('click', function() {
-    $(".created").show();
-    $(".modified").show();
-    $(".commented").show();
-    showContributions();
-  });
-  $('#only-created').on('click', function() {
-    $(".created").show();
-    $(".modified").hide();
-    $(".commented").hide();
-    showContributions();
-  });
-  $('#only-comments').on('click', function() {
-    $(".created").hide();
-    $(".modified").hide();
-    $(".commented").show();
-    showContributions();
-  });
-  $('#only-modified').on('click', function() {
-    $(".created").hide();
-    $(".commented").hide();
-    $(".modified").show();
-    showContributions();
-  });
-
-  function showContributions() {
-    var contributorlist = new Object ();
-    var contributors = $('ul li span:visible');
-    contributors.each(function() {
-      var contributor = $(this).attr('class');
-      if (contributor != 'moment') {
-        if (contributorlist[contributor]) {
-          contributorlist[contributor] = contributorlist[contributor] + 1;
-        } else {
-          contributorlist[contributor] = 1;
-        }
-      }
-    });
-    var n = '';
-    for (var c in contributorlist) {
-      if (contributorlist.hasOwnProperty(c)) {
-        n += ' '+c+' ('+contributorlist[c]+')';
-      }
-    }
-    document.getElementById("contributors").innerHTML = n;
-  }
 
   function resetUI() {
     $("#memos>li>input").hide();
-    $("#network").hide();
     $("#footer").html(
       '<button type="button" id="show_delete">{{i18n.i_delete}}...</button>'
       + '<a href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>'
@@ -225,6 +181,7 @@
     stickToHeader();
   });
 
+  {{#list}}
   function momentRelative(what) {
     var moments = $(what+' .moment');
     moments.each(function() {
@@ -244,6 +201,7 @@
       $(this).text($(this).text().replace(/./, function(x) { return x.toUpperCase(); }));
     });
   }
+  {{/list}}
 
   function stickToHeader() {
     var h = document.getElementById("header").offsetHeight;
@@ -252,7 +210,9 @@
     $("#add-leaves").css({'top': h+5});
   }
 
+  {{#timeline}}
   function drawTimeline() {
+    $("#show_delete").hide();
     $(".vis-network").hide();
     var container = document.getElementById('network');
     var data = {{{timeline}}};
@@ -284,8 +244,11 @@
     $("#memos").hide();
     $("#network").show();
   }
+  {{/timeline}}
 
+  {{#network}}
   function drawNetwork() {
+    $("#show_delete").hide();
     var diagrams = "{{{diagrams}}}";
     diagrams = diagrams.split(',');
     var graphs = "{{{graphs}}}";
@@ -335,6 +298,7 @@
     $("#memos").hide();
     $("#network").show();
   }
+  {{/network}}
 
   var reload = function() {
     location.reload();

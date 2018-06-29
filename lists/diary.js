@@ -16,7 +16,6 @@ function(head, req) {
     diagrams: [],
     graphs: [],
     sections: [],
-    network: {},
     locale: req.headers["Accept-Language"],
     peer: req.peer,
     tables: []
@@ -120,78 +119,89 @@ function(head, req) {
         } else {
           section = data.sections.pop();
         }
-        if (name.length > 25) {
-          var node_name = name.substring(0, 12)+name.substring(12, 30).replace(/\s/,"\n")+'...';
-        } else {
-          var node_name = name;
-        }
-        items.push({
-          id: row.value.id,
-          content: node_name,
-          group: group,
-          className: color,
-          start: row.value.date.substring(0, 10)
-        });
-        nodes.push({
-          id: row.value.id,
-          color: {
-            border: color,
-            highlight: {
-              border: color
-            }
-          },
-          label: node_name,
-          level: node_level,
-          x: row.value.date.substring(0, 10)
-        });
-        for (var g in row.value.groundings) {
-          if (row.value.type == 'theoretical') {
-             edges.push({from: row.value.id, to: row.value.groundings[g], arrows: "from"});
+        if (['network','timeline'].indexOf(data.by) >= 0) {
+          if (name.length > 25) {
+            var node_name = name.substring(0, 12)+name.substring(12, 30).replace(/\s/,"\n")+'...';
           } else {
-             edges.push({from: row.value.groundings[g], to: row.value.id, arrows: "to"});
+            var node_name = name;
           }
-        }
-        var authorized = [];
-        var authorized = authorized.concat(row.doc.contributors,row.doc.readers);
-        if (authorized.indexOf(req.userCtx.name) != -1) {
-          if (row.doc.body) preview = row.doc.body.replace(/\n\n/g, '\n \n');
-          if (row.doc.speeches) {
-            preview = row.doc.speeches.map(function(a) {
-              var turn = a.text;
-              if (a.actor) turn = '**'+a.actor.trim()+'** '+turn;
-              return turn;
-            });
-            var preview = preview.join('\n \n');
+          items.push({
+            id: row.value.id,
+            content: node_name,
+            group: group,
+            className: color,
+            start: row.value.date.substring(0, 10)
+          });
+          nodes.push({
+            id: row.value.id,
+            color: {
+              border: color,
+              highlight: {
+                border: color
+              }
+            },
+            label: node_name,
+            level: node_level,
+            x: row.value.date.substring(0, 10)
+          });
+          for (var g in row.value.groundings) {
+            if (row.value.type == 'theoretical') {
+              edges.push({from: row.value.id, to: row.value.groundings[g], arrows: "from"});
+            } else {
+              edges.push({from: row.value.groundings[g], to: row.value.id, arrows: "to"});
+            }
           }
+        } else {
+          var authorized = [];
+          var authorized = authorized.concat(row.doc.contributors,row.doc.readers);
+          if (authorized.indexOf(req.userCtx.name) != -1) {
+            if (row.doc.body) preview = row.doc.body.replace(/\n\n/g, '\n \n');
+            if (row.doc.speeches) {
+              preview = row.doc.speeches.map(function(a) {
+                var turn = a.text;
+                if (a.actor) turn = '**'+a.actor.trim()+'** '+turn;
+                return turn;
+              });
+              var preview = preview.join('\n \n');
+            }
+          }
+          section.memos.push({
+            color: color,
+            preview: preview,
+            diary: row.key[0],
+            id: row.value.id,
+            name: name,
+            node_level: node_level,
+            rev: row.value.rev,
+            date: date,
+            groundings: row.value.groundings,
+            path: path,
+            type: row.value.type
+          });
+          data.sections.push(section);
         }
-        section.memos.push({
-          color: color,
-          preview: preview,
-          diary: row.key[0],
-          id: row.value.id,
-          name: name,
-          node_level: node_level,
-          rev: row.value.rev,
-          date: date,
-          groundings: row.value.groundings,
-          path: path,
-          type: row.value.type
-        });
-        data.sections.push(section);
       break;
       case ('D'):
         if (row.value) data.diary_name = row.value.diary_name;
       break;
     }
   }
-  data.network = {
-    nodes: nodes,
-    edges: edges
-  };
-  data.timeline = items;
-  data.network = JSON.stringify(data.network);
-  data.timeline = JSON.stringify(data.timeline);
-  data.sections = data.sections.sort(function(a,b){return (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0);});
-  if (['date','update'].indexOf(data.by) >= 0) data.sections = data.sections.reverse();
+  switch(data.by) {
+    case 'network':
+      data.network = {
+        nodes: nodes,
+        edges: edges
+      };
+      data.network = JSON.stringify(data.network);
+      break;
+    case 'timeline':
+      data.timeline = JSON.stringify(items);
+      break;
+    default:
+      data.list = true;
+      data.sections = data.sections.sort(function(a,b){return (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0);});
+      if (['date','update'].indexOf(data.by) >= 0) data.sections = data.sections.reverse();
+      break;
+  }
   return Mustache.to_html(templates.diary, data);
 }

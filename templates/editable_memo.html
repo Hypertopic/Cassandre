@@ -40,7 +40,7 @@
           <h1>{{i18n.i_sign-in_required}}</h1>
           {{/authorized}}
           {{#authorized}}
-          <h1> <img src="../style/{{type}}.png"/> <textarea id="name" type="text" cols="50" rows="1">{{name}}</textarea></h1>
+          <h1> <img src="../style/{{type}}.png"/> {{name}}</h1>
           <p>
             <textarea id="body" cols="80" rows="20" type="text">{{body}}</textarea>
           </p>
@@ -88,7 +88,6 @@
           var ground_href = r.value['id'];
           var ground_type = r.value['type'];
           var ground_label = r.value['name'];
-          var ground_date = r.value['date']; // unused
           var ground_preview = r.value['preview'];      
           $(id).addClass(ground_type);
           $(id).find("h4").text(ground_label);
@@ -124,7 +123,6 @@
       dataType: "json",
       success: function(data) {
         data.body = simplemde.value();
-        data.name = $('#name').val();
         if (!data.history) data.history = [];
         var user = "{{peer}}";
         if ("{{logged}}") user = "{{logged}}";
@@ -159,13 +157,9 @@
   });
 
   $('#done').on('click', function() {
-    if ($('#name').val().trim() == '') {
-      alert("{{i18n.i_enter_memo_name}}")
-    } else {
-      save(false, function() {
-        self.location = '../memo/{{diary}}/{{_id}}';
-      });
-    }
+    save(false, function() {
+      self.location = '../memo/{{diary}}/{{_id}}';
+    });
   });
 
   </script>

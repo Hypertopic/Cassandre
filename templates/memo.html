@@ -52,11 +52,14 @@
           <h1>{{i18n.i_sign-in_required}}</h1>
           {{/authorized}}
           {{#authorized}}
-          <div id="add-leaves"><button type="button" id="add" hidden="hidden">+</button>
+          <div id="add-leaves">
+            <input id="leave-name" type="search" placeholder="" hidden="hidden" />
+            <button type="button" id="add" hidden="hidden">+</button>
             <button id="create" class="diagram" type="button" hidden="hidden">+</button>
             <button id="create-table" class="table" type="button" hidden="hidden">+</button>
           </div>
-          <h1><img src="../../style/{{type}}.png"/> <span id="name">{{name}}</span></h1>
+          <h1><img src="../../style/{{type}}.png"/> {{name}}</h1>
+          <input id="name" type="search" hidden="hidden" value="{{name}}"/>
           <p id="authorization">
             {{i18n.i_created-by}} {{creator}} <span class="moment">{{date}}</span><br/>
             {{i18n.i_contributors}} <span id="contributors">{{contributors_fullnames}}</span>
@@ -154,7 +157,9 @@
     });
     switch ('{{type}}') {
       case ('field'):
+        $("#name").attr("placeHolder", "{{i18n.i_name.field}}");
         $('#add').addClass('coding');
+        $("#leave-name").attr("placeHolder", "{{i18n.i_name.coding}}");
         $('#clear_highlights').show();
         $('#specific').show();
         $('#rare').show();
@@ -163,17 +168,23 @@
         $('.writing').removeClass('writing').addClass('words');
         break;
       case ('coding'):
+        $("#name").attr("placeHolder", "{{i18n.i_name.coding}}");
         $('#add').addClass('theoretical');
-        if ($('h1 #name').text().length > 0) {
+        $("#leave-name").attr("placeHolder", "{{i18n.i_name.theoretical}}");
+        if ($('#name').val().length > 0) {
           $('#create').show();
           $('#create-table').show();
         }
         break;
       case ('theoretical'):
+        $("#name").attr("placeHolder", "{{i18n.i_name.theoretical}}");
         $('#add').addClass('operational');
+        $("#leave-name").attr("placeHolder", "{{i18n.i_name.operational}}");
         break;
       case ('operational'):
+        $("#name").attr("placeHolder", "{{i18n.i_name.operational}}");
         $('#add').addClass('field');
+        $("#leave-name").attr("placeHolder", "{{i18n.i_name.field}}");
         break;
       case ('diagram'):
         self.location = "../../diagram/{{diary}}/{{_id}}";
@@ -182,11 +193,16 @@
         self.location = "../../graph/{{diary}}/{{_id}}";
         break;
       case ('storyline'):
+        $("#name").attr("placeHolder", "{{i18n.i_name.storyline}}");
         $('#add').addClass('storyline');
+        $("#leave-name").attr("placeHolder", "{{i18n.i_name.storyline}}");
         break;
     }
     stickToHeader();
-    if ($('h1 #name').text().length > 0) $('#add').show();
+    if ($('#name').val().length > 0) {
+      $('#add').show();
+      $('#leave-name').show();
+    }
     if ($('#contributors').text().length < 1) {
       $('#contributors').before("{{i18n.i_everyone}}");
     }
@@ -336,6 +352,13 @@
     }
   });
 
+  $('#leave-name').on('keypress', function(key) {
+    if ("{{type}}" != 'coding' && key.which == 13) {
+      var type = $(this)[0].nextElementSibling.className;
+      create(type);
+    }
+  });
+
   $('#readers_add').on('click', function() {
     $('#readers_add').hide();
     $('#readers_edit').show();
@@ -364,6 +387,22 @@
   $('#edit').on('click', function() {
     if ('{{type}}' == 'field') { self.location = '../../editable_text/{{_id}}';} 
     else { self.location = '../../editable_memo/{{_id}}';}
+  });
+
+  $('h1').on('click', function() {
+    $(this).hide();
+    $('#leave-name').hide();
+    $('#name').show();
+  });
+
+  $('#name').on('keypress', function(key) {
+    if (key.which == 13) {
+      if ($('#name').val().trim() == '') {
+        alert("{{i18n.i_enter_memo_name}}")
+      } else {
+        record('...','name');
+      }
+    }
   });
 
   $('#remove_grounding').on('click', function() {
@@ -491,65 +530,69 @@
   });
 
   function create(type) {
-    var diary = "{{diary}}";
-    var contributors = "{{contributors}}";
-    var data = {
-      groundings: [],
-      history : []
-    };
-    data.history.push({
-      "user": user,
-      "date": new Date().toJSON()
-    });
-    if (contributors.length > 0) {
-      data.contributors = contributors.split(',');
-    } else if ("{{logged}}") {
-      data.contributors = ["{{logged}}"];
-    }
-    var readers = "{{readers}}";
-    if (readers.length > 0) {
-      data.readers = readers.split(',');
-    }
-    switch (type) {
-      case 'field':
-        var destination = '../../editable_text/';
-        data.corpus = diary,
-        data.name = "",
-        data.speeches = [{actor:"",text:""}];
-        break;
-      case 'table':
-        var destination = "../../table/{{diary}}/";
-        data.cells = [{'...':[{"{{_id}}":'...'}]}];
-        data.diary = diary;
-        data.name = "";
-        data.type = type;
-        break;
-      case 'diagram':
-        var destination = "../../diagram/{{diary}}/";
-        data.diary = diary;
-        data.link = 'pp';
-        data.name = $('#name').text();
-        data.type = type;
-        break;
-      default:
-        var destination = '../../editable_memo/';
-        data.diary = diary,
-        data.body = "";
-        data.name = "",
-        data.type = type;
-    }
-    data.groundings.push("{{_id}}");
-    if (diary) {
-      $.ajax({
-        url: "../../",
-        type: "POST",
-        dataType: "json",
-        contentType: "application/json",
-        data: JSON.stringify(data),
-        success: function(data) {
-          self.location = destination+data.id;
-        }
+    if ($('#leave-name').val().trim() == '' && type != 'diagram') {
+      alert("{{i18n.i_enter_memo_name}}")
+    } else {
+      var diary = "{{diary}}";
+      var contributors = "{{contributors}}";
+      var data = {
+        groundings: [],
+        history : []
+      };
+      data.history.push({
+        "user": user,
+        "date": new Date().toJSON()
       });
+      if (contributors.length > 0) {
+        data.contributors = contributors.split(',');
+      } else if ("{{logged}}") {
+        data.contributors = ["{{logged}}"];
+      }
+      var readers = "{{readers}}";
+      if (readers.length > 0) {
+        data.readers = readers.split(',');
+      }
+      switch (type) {
+        case 'field':
+          var destination = '../../editable_text/';
+          data.corpus = diary,
+          data.name = $('#leave-name').val().trim(),
+          data.speeches = [{actor:"",text:""}];
+        break;
+        case 'table':
+          var destination = "../../table/{{diary}}/";
+          data.cells = [{'...':[{"{{_id}}":'...'}]}];
+          data.diary = diary;
+          data.name = $('#leave-name').val().trim(),
+          data.type = type;
+        break;
+        case 'diagram':
+          var destination = "../../diagram/{{diary}}/";
+          data.diary = diary;
+          data.link = 'pp';
+          data.name = $('#name').val();
+          data.type = type;
+        break;
+        default:
+          var destination = '../../editable_memo/';
+          data.diary = diary,
+          data.body = "";
+          data.name = $('#leave-name').val().trim(),
+          data.type = type;
+      }
+      data.groundings.push("{{_id}}");
+      if (diary) {
+        $.ajax({
+          url: "../../",
+          type: "POST",
+          dataType: "json",
+          contentType: "application/json",
+          data: JSON.stringify(data),
+          success: function(data) {
+            self.location = destination+data.id;
+          }
+        });
+      }
     }
   }
 
@@ -576,6 +619,28 @@
     });
   }
 
+  function renameDiagram(id,name) {
+    $.ajax({
+      url: '../../'+id,
+      type: "GET",
+      dataType: "json",
+      success: function(diagram) {
+        var properties = diagram.name.split('&');
+        if (diagram.groundings[0] == "{{_id}}") {
+          diagram.name = name+' & '+ properties[1].trim();
+        } else {
+          diagram.name = properties[0].trim() +' & '+name;
+        }
+        $.ajax({
+          type: "PUT",
+          url: '../../'+id,
+          contentType: "application/json",
+          data: JSON.stringify(diagram)
+        });
+      }
+    });
+  }
+
   function record(action, what) {
     $.ajax({
       url: "../../{{_id}}",
@@ -592,6 +657,22 @@
             var newreader = $('#readers_edit').val().trim().toLowerCase();
             if (!data.readers) data.readers = [];
             data.readers.push(newreader);
+          break;
+          case ('name'):
+            data.name = $('#name').val().trim();
+            var history = {
+              "user": user,
+              "date": new Date().toJSON()
+            };
+            if (!data.history) data.history = [];
+            data.history.push(history);
+            if ("{{type}}" == 'coding') {
+              {{#leaves}}
+              if ("{{type}}" == 'diagram') {
+                renameDiagram("{{href}}".substr(47),data.name);
+              }
+              {{/leaves}}
+            }
           break;
           default:
             if (action == '+') {
@@ -612,8 +693,7 @@
               (JSON.parse(request.responseText).reason || request.responseText)
               + '\nCode ' + request.status
             );
-          },
-          success: reload
+          }
         });
       }
     });

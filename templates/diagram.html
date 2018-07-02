@@ -100,6 +100,7 @@
   <script src="../../script/moment.min.js"></script>
   <link rel="stylesheet" href="../../script/jquery-ui.min.css" />
   <script>
+  var refresh = true;
   var user = "{{peer}}";
   if ("{{logged}}") user = "{{logged}}";
   $(document).ready(function() {
@@ -186,6 +187,12 @@
     if ($('#leaves li').length > 0) {
       $("#show-leaves").show();
     }
+    $.ajax({
+      url: "../../changes/memo/{{_id}}/{{update_seq}}",
+      type: "GET",
+      dataType: "json",
+      success: reload
+    });
   });
 
   $('#add').on('click', function() {
@@ -302,7 +309,7 @@
   });
 
   var reload = function() {
-    location.reload();
+    if (refresh) location.reload();
   };
 
   $('#signin').on('submit', function(e) {
@@ -320,6 +327,7 @@
   });
 
   function adapt(there) {
+    refresh = true;
     $.ajax({
       url: "../../{{_id}}",
       type: "GET",
@@ -362,6 +370,7 @@
   }
 
   $("#add_negative-case").click(function () {
+    refresh = false;
     $(".negative_text").remove();
     $("#add_negative-case").remove();
     $("#negative-case").find('input').show();
@@ -375,6 +384,7 @@
   });
 
   $("#comment_create").click(function () {
+    refresh = false;
     $("#comment_create").remove();
     $("#comments").find('textarea').show();
     $('#commented').show();
@@ -443,6 +453,7 @@
   });
 
   function comment() {
+    refresh = true;
     var data = {
       commented: "{{_id}}",
       diary: "{{diary}}",

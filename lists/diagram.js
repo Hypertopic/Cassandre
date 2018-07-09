@@ -2,6 +2,7 @@ function(head, req) {
   // !json templates.diagram
   // !code lib/mustache.js
   // !code l10n/l10n.js
+  // !code lib/shared.js
 
   start({"headers":{"Content-Type":"text/html;charset=utf-8"}});
   var fullnames = [];
@@ -144,5 +145,5 @@ function(head, req) {
       }
     if (fullnames[username]) data.logged_fullname = fullnames[username];
   }
-  return Mustache.to_html(templates.diagram, data);
+  return Mustache.to_html(templates.diagram, data, shared);
 }

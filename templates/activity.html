@@ -1,10 +1,7 @@
 <html>
   <head>
     <title>{{diary_name}} - {{i18n.i_activity}}</title>
-    <link rel="icon" type="image/png" href="../../style/favicon.png" />
-    <link rel="stylesheet" type="text/css" href="../../style/main.css" />
-    <link rel="stylesheet" type="text/css" href="../../style/diagram.css" />
-    <link rel="stylesheet" type="text/css" href="../../style/vis.min.css" />
+    {{>links}}
     <link rel="stylesheet" href="../../style/cal-heatmap.css" />
   </head>
   <body id="watermark">
@@ -17,19 +14,7 @@
           <button type="button" id="only-created">{{i18n.i_creations}}</button>
           <button type="button" id="only-modified">{{i18n.i_modifications}}</button>
           <button type="button" id="only-comments">{{i18n.i_comments}}</button>
-          <div id='logged'>
-          {{^logged}}
-            <form id="signin">
-              <input type="text" name="name" placeholder="{{i18n.i_username}}"/>
-              <input type="password" name="password" placeholder="{{i18n.i_password}}"/>
-              <button type="submit">{{i18n.i_sign-in}}</button>
-            </form>
-          {{/logged}}
-          {{#logged}}
-            {{logged}}
-            <button id="signout">{{i18n.i_sign-out}}</button>
-          {{/logged}}
-          </div>
+          {{>log}}
         </div>
       </header>
       <div id="content">
@@ -67,14 +52,11 @@
       </div>
     </div>
   </body>
-  <script src="../../script/jquery.js"></script>
-  <script src="../../script/jquery-ui.min.js"></script>
-  <script src="../../script/showdown.min.js"></script>
-  <link rel="stylesheet" href="../../script/jquery-ui.min.css" />
-  <script type="text/javascript" src="../../script/moment.min.js"></script>
+  {{>script}}
   <script type="text/javascript" src="../../script/d3.min.js"></script>
   <script type="text/javascript" src="../../script/cal-heatmap.min.js"></script>
   <script>
+  var refresh = true;
   var cal = new CalHeatMap();
   $(document).ready(function() {
     moment.locale('{{locale}}');
@@ -94,11 +76,6 @@
   $('#diary').on('click', function() {
     self.location = '../../memo/{{diary}}/?by=date';
   });
-
-  $('#header')
-    .on('click', '#diaries', function() {
-      self.location = '../../memo/';
-    });
 
   function drawChart(data) {
     cal.init({
@@ -179,10 +156,6 @@
     });
   }
 
-  $(window).resize(function() {
-    stickToHeader();
-  });
-
   function momentRelative(what) {
     var moments = $(what+' .moment');
     var times = {};
@@ -210,31 +183,8 @@
     });
   }
 
-  function stickToHeader() {
-    var h = document.getElementById("header").offsetHeight;
-    $("#container>#content h1").css({'padding-top': h+5});
-    $("#container>#content #diary_name").css({'margin-top': h+5});
-    $("#add-leaves").css({'top': h+5});
-  }
-
-
-  var reload = function() {
-    location.reload();
-  };
-
-  $('#signin').on('submit', function(e) {
-    e.preventDefault();
-    $(this).find('input').first().val($(this).find('input').first().val().toLowerCase());
-    $.post('/_session', $(this).serialize(), reload);
-  });
-
-  $('#signout').on('click', function() {
-    $.ajax({
-      type: 'DELETE',
-      url: '/_session',
-      success: reload
-    });
-  });
+  {{>layoutscript}}
+  {{>logscript}}
   </script>
 </html>
 

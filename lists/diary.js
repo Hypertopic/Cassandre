@@ -2,6 +2,7 @@ function(head, req) {
   // !json templates.diary
   // !code lib/mustache.js
   // !code l10n/l10n.js
+  // !code lib/shared.js
   start({"headers":{"Content-Type":"text/html;charset=utf-8"}});
   var memos_name = [];
   var memos_path = [];
@@ -203,5 +204,5 @@ function(head, req) {
       if (['date','update'].indexOf(data.by) >= 0) data.sections = data.sections.reverse();
       break;
   }
-  return Mustache.to_html(templates.diary, data);
+  return Mustache.to_html(templates.diary, data, shared);
 }

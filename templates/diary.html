@@ -1,10 +1,10 @@
 <html>
   <head>
     <title>{{diary_name}}</title>
-    <link rel="icon" type="image/png" href="../../style/favicon.png" />
-    <link rel="stylesheet" type="text/css" href="../../style/main.css" />
-    <link rel="stylesheet" type="text/css" href="../../style/diagram.css" />
-    <link rel="stylesheet" type="text/css" href="../../style/vis.min.css" />
+    {{>links}}
+    {{^list}}
+      {{>viscss}}
+    {{/list}}
   </head>
   <body id="watermark">
     <div id="container">
@@ -21,19 +21,7 @@
             <option value="type">{{i18n.i_type}}</option>
           </select>
           <button type="button" id="patterns">{{i18n.i_patterns}}</button>
-          <div id='logged'>
-          {{^logged}}
-            <form id="signin">
-              <input type="text" name="name" placeholder="{{i18n.i_username}}"/>
-              <input type="password" name="password" placeholder="{{i18n.i_password}}"/>
-              <button type="submit">{{i18n.i_sign-in}}</button>
-            </form>
-          {{/logged}}
-          {{#logged}}
-            {{logged}}
-            <button id="signout">{{i18n.i_sign-out}}</button>
-          {{/logged}}
-          </div>
+          {{>log}}
         </div>
       </header>
       <div id="content">
@@ -43,7 +31,6 @@
           <img id="sticky" src="../../style/checklist.png" hidden="hidden" alt="{{i18n.i_todo}}"/>
           <img id="show-activity" src="../../style/clock.png" alt="{{i18n.i_activity}}"/>
         </div>
-        <div id="todo" hidden="hidden"></div>
         <div id="network" hidden="hidden"></div>
         <ul id="memos">
         {{#sections}}
@@ -62,13 +49,11 @@
       </div>
     </div>
   </body>
-  <script src="../../script/jquery.js"></script>
-  <script src="../../script/jquery-ui.min.js"></script>
-  <script src="../../script/showdown.min.js"></script>
-  <link rel="stylesheet" href="../../script/jquery-ui.min.css" />
-  <script type="text/javascript" src="../../script/vis.min.js"></script>
-  <script type="text/javascript" src="../../script/moment.min.js"></script>
+  {{>script}}
+  {{#list}}<script src="../../script/showdown.min.js"></script>{{/list}}
+  {{^list}}<script src="../../script/vis.min.js"></script>{{/list}}
   <script>
+  var refresh = true;
   $(document).ready(function() {
     moment.locale('{{locale}}');
     stickToHeader();
@@ -177,10 +162,6 @@
     );
   }
 
-  $(window).resize(function() {
-    stickToHeader();
-  });
-
   {{#list}}
   function momentRelative(what) {
     var moments = $(what+' .moment');
@@ -190,7 +171,7 @@
       var mmtime = moment(jstime);
       if(now.diff(mmtime, 'days') <= 2) {
         $(this).text(mmtime.fromNow());
-      } else if(now.diff(mmtime, 'years') <= 1) {
+      } else if(now.diff(mmtime, 'years') < 1) {
         $(this).text("{{i18n.i_on-a-date}}"+' '+mmtime.format("Do MMMM"));
       } else {
         $(this).text("{{i18n.i_on-a-date}}"+' '+mmtime.format("Do MMMM YYYY"));
@@ -203,12 +184,7 @@
   }
   {{/list}}
 
-  function stickToHeader() {
-    var h = document.getElementById("header").offsetHeight;
-    $("#container>#content h1").css({'padding-top': h+5});
-    $("#container>#content #diary_name").css({'margin-top': h+5});
-    $("#add-leaves").css({'top': h+5});
-  }
+  {{>layoutscript}}
 
   {{#timeline}}
   function drawTimeline() {
@@ -240,7 +216,6 @@
         self.location = selected.item;
       }
     });
-    $("#todo").hide();
     $("#memos").hide();
     $("#network").show();
   }
@@ -294,29 +269,12 @@
         }
       }
     });
-    $("#todo").hide();
     $("#memos").hide();
     $("#network").show();
   }
   {{/network}}
 
-  var reload = function() {
-    location.reload();
-  };
-
-  $('#signin').on('submit', function(e) {
-    e.preventDefault();
-    $(this).find('input').first().val($(this).find('input').first().val().toLowerCase());
-    $.post('/_session', $(this).serialize(), reload);
-  });
-
-  $('#signout').on('click', function() {
-    $.ajax({
-      type: 'DELETE',
-      url: '/_session',
-      success: reload
-    });
-  });
+  {{>logscript}}
 
   $('h1').on('click', function() {
     $(this).hide();
@@ -371,7 +329,6 @@
       });
     }
   });
-
   </script>
 </html>
 

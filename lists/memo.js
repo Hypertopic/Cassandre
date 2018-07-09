@@ -2,6 +2,7 @@ function(head, req) {
   // !json templates.memo
   // !code lib/mustache.js
   // !code l10n/l10n.js
+  // !code lib/shared.js
   start({"headers":{"Content-Type":"text/html;charset=utf-8"}});
 
   const ALPHA = /[a-zàâçéêèëïîôöüùû0æœ0-9]+|[^a-zàâçéêèëïîôöüùûæœ0-9]+/gi;
@@ -159,5 +160,5 @@ function(head, req) {
       }
     if (fullnames[username]) data.logged_fullname = fullnames[username];
   }
-  return Mustache.to_html(templates.memo, data);
+  return Mustache.to_html(templates.memo, data, shared);
 }

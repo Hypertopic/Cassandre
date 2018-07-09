@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="120.20813"
+   height="122.32946"
+   id="svg2"
+   sodipodi:version="0.32"
+   inkscape:version="0.92.1 r15371"
+   sodipodi:docname="favicon_cassandre.svg"
+   version="1.0"
+   inkscape:export-filename="/documents/cassandre/logo/cassandre_logo.png"
+   inkscape:export-xdpi="150"
+   inkscape:export-ydpi="150"
+   viewBox="0 0 112.69512 114.68387">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.4142136"
+     inkscape:cx="99.437413"
+     inkscape:cy="6.2041281"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     inkscape:window-width="1262"
+     inkscape:window-height="679"
+     inkscape:window-x="99"
+     inkscape:window-y="27"
+     width="350px"
+     height="330px"
+     showgrid="false"
+     inkscape:window-maximized="0" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:groupmode="layer"
+     id="layer4"
+     inkscape:label="ombre-fond"
+     style="display:inline"
+     transform="translate(-16.572826,-12.464881)" />
+  <g
+     inkscape:label="Calque 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     style="display:inline;opacity:1"
+     transform="translate(-16.572826,-12.464881)">
+    <g
+       id="g3836"
+       transform="matrix(0.537754,0,0,0.537754,146.02738,124.31322)"
+       style="display:inline;opacity:1;fill:#b52302;fill-opacity:0.94117647;stroke:#b52302;stroke-width:1.00068986;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.94117647"
+       inkscape:export-filename="/home/expe/documents/institut/mytic-cicles-copyleft.png"
+       inkscape:export-xdpi="150.10347"
+       inkscape:export-ydpi="150.10347">
+      <ellipse
+         ry="79"
+         rx="78"
+         cy="212"
+         cx="574"
+         style="opacity:1;fill:#5f5958;fill-opacity:1;fill-rule:nonzero;stroke:#5f5958;stroke-width:0.80225718;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="path10950"
+         transform="matrix(1.247343,0,0,1.247343,-853.1564,-367.6452)" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path3827"
+         d="m -136.5677,-170.85641 c -33.26186,0 -61.13085,22.45012 -68.35734,52.56174 h 33.54056 c 6.05171,-12.77198 19.3727,-21.64306 34.81678,-21.64306 21.13415,0 38.286524,16.62188 38.286524,37.10239 -1.1e-5,20.480527 -17.152364,37.102386 -38.286524,37.102386 -15.44409,0 -28.76507,-8.871057 -34.81678,-21.643053 h -33.54056 c 7.22648,30.111598 35.09547,52.561682 68.35734,52.561682 38.745964,0 70.191974,-30.4734 70.191987,-68.021015 0,-37.54762 -31.446035,-68.02107 -70.191987,-68.02107 z"
+         style="opacity:1;fill:#c1c1c1;fill-opacity:1;stroke:#6c6c6c;stroke-width:1.00068986;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.43137255" />
+    </g>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="transparence"
+     style="display:inline;opacity:1"
+     transform="translate(-16.572826,-12.464881)">
+    <rect
+       style="fill:none;stroke-width:0.53812498;stroke-miterlimit:4;stroke-dasharray:none"
+       id="rect4695"
+       width="112.69512"
+       height="114.68387"
+       x="16.572826"
+       y="12.464881"
+       rx="23.201904"
+       ry="3.3145595" />
+    <rect
+       style="fill:none;stroke-width:0.9375"
+       id="rect4697"
+       width="25.85359"
+       height="114.02096"
+       x="156.44737"
+       y="84.059425"
+       rx="23.201904"
+       ry="3.3145595" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer3"
+     inkscape:label="copyleft"
+     style="display:inline"
+     transform="translate(-16.572826,-12.464881)" />
+</svg>

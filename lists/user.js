@@ -2,9 +2,11 @@ function(head, req) {
   // !json templates.user
   // !code lib/mustache.js
   // !code l10n/l10n.js
+  // !code lib/shared.js
   start({"headers":{"Content-Type":"text/html;charset=utf-8"}});
   var data = {
     activity: [],
+    flat: true,
     i18n: localized(),
     locale: req.headers["Accept-Language"],
     logged: req.userCtx.name
@@ -63,5 +65,5 @@ function(head, req) {
         break;
     }
   }
-  return Mustache.to_html(templates.user, data);
+  return Mustache.to_html(templates.user, data, shared);
 }

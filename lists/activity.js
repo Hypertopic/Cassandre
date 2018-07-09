@@ -2,6 +2,7 @@ function(head, req) {
   // !json templates.activity
   // !code lib/mustache.js
   // !code l10n/l10n.js
+  // !code lib/shared.js
   start({"headers":{"Content-Type":"text/html;charset=utf-8"}});
   var memos_name = [];
   var memos_path = [];
@@ -13,6 +14,7 @@ function(head, req) {
     activity: [],
     diagrams: [],
     graphs: [],
+    list: true,
     sections: [],
     network: {},
     locale: req.headers["Accept-Language"],
@@ -66,5 +68,5 @@ function(head, req) {
     }
   }
   data.activity = data.activity.reverse();
-  return Mustache.to_html(templates.activity, data);
+  return Mustache.to_html(templates.activity, data, shared);
 }

@@ -1,27 +1,14 @@
 <html>
   <head>
     <title>{{diary_name}} - {{name}}</title>
-    <link rel="icon" type="image/png" href="../../style/favicon.png" />
-    <link rel="stylesheet" type="text/css" href="../../style/main.css" />
-    <link rel="stylesheet" type="text/css" href="../../style/diagram.css" />
+    {{>links}}
+    {{>diagramcss}}
   </head>
   <body>
     <div id="container">
       <div id="header" class="menu">
         <button type="button" id="diary">{{diary_name}}</button>
-        <div id='logged'>
-        {{^logged}}
-          <form id="signin">
-            <input type="text" name="name" placeholder="{{i18n.i_username}}"/>
-            <input type="password" name="password" placeholder="{{i18n.i_password}}"/>
-            <button type="submit">{{i18n.i_sign-in}}</button>
-          </form>
-        {{/logged}}
-        {{#logged}}
-          {{logged_fullname}}
-          <button id="signout">{{i18n.i_sign-out}}</button>
-        {{/logged}}
-        </div>
+        {{>log}}
       </div>
       <div id="memo">
         {{#authorized}}
@@ -100,11 +87,9 @@
     </div>
     </div>
   </body>
-  <script src="../../script/jquery.js"></script>
-  <script src="../../script/jquery-ui.min.js"></script>
-  <script src="../../script/moment.min.js"></script>
-  <link rel="stylesheet" href="../../script/jquery-ui.min.css" />
+  {{>script}}
   <script>
+  var refresh = true;
   var user = "{{peer}}";
   if ("{{logged}}") user = "{{logged}}";
   $(document).ready(function() {
@@ -275,19 +260,6 @@
     create($(this)[0].className, null, null);
   });
 
-  $(window).resize(function() {
-    stickToHeader();
-  });
-
-  function stickToHeader() {
-    var h = document.getElementById("header").offsetHeight;
-    $("#container>#memo").css({'padding-top': h});
-    $("#groundings").css({'padding-top': h});
-    $("#add-leaves").css({'top': h+5});
-    if (h > 36) $("#show-leaves").css({'top': h-36});
-    $("#leaves").css({'top': h});
-  }
-
   function create(type, prop_id, prop_name) {
     var contributors = "{{contributors}}";
     var readers = "{{readers}}";
@@ -374,24 +346,6 @@
           width:'auto'
         });
       }
-    });
-  });
-
-  var reload = function() {
-    location.reload();
-  };
-
-  $('#signin').on('submit', function(e) {
-    e.preventDefault();
-    $(this).find('input').first().val($(this).find('input').first().val().toLowerCase());
-    $.post('/_session', $(this).serialize(), reload);
-  });
-
-  $('#signout').on('click', function() {
-    $.ajax({
-      type: 'DELETE',
-      url: '/_session',
-      success: reload
     });
   });
 
@@ -512,96 +466,8 @@
     });
   }
 
-  $("#comment_create").click(function () {
-    $("#comment_create").remove();
-    $("#comments").find('textarea').show();
-    $('#commented').show();
-    $('html, body').scrollTop($(document).height());
-  });
-
-  $("#commented").on('click', function() {
-    if ($('#comments').find('textarea').val().trim() == '') {
-      alert("{{i18n.i_enter_comment}}")
-    } else {
-      comment();
-    }
-  });
-
-  $(".comment").click(function(event) {
-    var user = $(this).find('.user').text();
-    if ("{{logged_fullname}}" == user && !$(event.target).is('input')) {
-      $(this).find('.comment_text').hide();
-      $(this).find('.comment_edit').show();
-      $("#comment_create").remove();
-      $('#commented').remove();
-    }
-  });
-
-  $(".comment_check").click(function() {
-    var comment_id = $(this).closest('.comment').attr('id'),
-        comment_rev = $(this).closest('.comment').attr('name');
-    $.ajax({
-      url: '../../'+ comment_id,
-      type: "GET",
-      dataType: "json",
-      success: function(data) {
-        if (!data.checked || data.checked == '') {
-          data.checked = 'checked';
-        } else {
-          data.checked = '';
-        }
-        $.ajax({
-          type: "PUT",
-          url: '../../'+ comment_id + '?rev=' + comment_rev,
-          contentType: "application/json",
-          data: JSON.stringify(data),
-          success: reload
-        });
-      }
-    });
-  });
-
-  $(".comment_edit").on('keypress', function(key) {
-    if (key.which == 13) {
-      var data = {
-        commented: "{{_id}}",
-        diary: "{{diary}}",
-        user: user,
-        date: new Date().toJSON(),
-        text: $(this).val().trim()
-      };
-      $.ajax({
-        type: "PUT",
-        url: '../../'+ $(this).closest('.comment').attr('id') + "?rev=" + $(this).closest('.comment').attr('name'),
-        contentType: "application/json",
-        data: JSON.stringify(data),
-        success: reload
-      });
-    }
-  });
-
-  function comment() {
-    var data = {
-      commented: "{{_id}}",
-      diary: "{{diary}}",
-      user: user,
-      date: new Date().toJSON(),
-      text: $('#comments').find('textarea').val().trim()
-    };
-    $.ajax({
-      type: "POST",
-      url: "../../",
-      contentType: "application/json",
-      data: JSON.stringify(data),
-      error: function(request) {
-        alert(
-          (JSON.parse(request.responseText).reason || request.responseText)
-          + '\nCode ' + request.status
-        );
-      },
-      success: reload
-    });
-  }
-
+  {{>commentsscript}}
+  {{>layoutscript}}
+  {{>logscript}}
   </script>
 </html>

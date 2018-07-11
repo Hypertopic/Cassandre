@@ -168,7 +168,7 @@ function(head, req) {
           }
           section.memos.push({
             color: color,
-            preview: preview,
+            preview: preview.substr(0,3000),
             diary: row.key[0],
             id: row.value.id,
             name: name,

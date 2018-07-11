@@ -217,7 +217,7 @@
     "from": "style/img/network/:file",
     "to": ":file"
   }, {
-    "from": "script/images/:file",
+    "from": "style/images/:file",
     "to": "images/:file"
   }
 ]

@@ -88,10 +88,7 @@
       </div>
     </div>
   </body>
-  <script src="../../script/jquery.js"></script>
-  <script src="../../script/jquery-ui.min.js"></script>
-  <link rel="stylesheet" href="../../script/jquery-ui.min.css" />
-  <script type="text/javascript" src="../../script/moment.min.js"></script>
+  {{>script}}
   <script>
   $(document).ready(function() {
     moment.locale('{{locale}}');
@@ -103,14 +100,6 @@
     if ($('.unarticulated').length > 0) $('#unarticulated').show();
     if ($('.unnamed').length > 0) $('#unnamed').show();
     if ($('.ungrounded').length > 0) $('#ungrounded').show();
-  });
-
-  $('#diary').on('click', function() {
-    self.location = '../../memo/{{diary}}/?by=date';
-  });
-
-  $(window).resize(function() {
-    stickToHeader();
   });
 
   function momentRelative(what) {
@@ -133,29 +122,7 @@
     });
   }
 
-  function stickToHeader() {
-    var h = document.getElementById("header").offsetHeight;
-    $("#container>#content h1").css({'padding-top': h+5});
-    $("#container>#content #diary_name").css({'margin-top': h+5});
-    $("#add-leaves").css({'top': h+5});
-  }
-
-  var reload = function() {
-    location.reload();
-  };
-
-  $('#signin').on('submit', function(e) {
-    e.preventDefault();
-    $(this).find('input').first().val($(this).find('input').first().val().toLowerCase());
-    $.post('/_session', $(this).serialize(), reload);
-  });
-
-  $('#signout').on('click', function() {
-    $.ajax({
-      type: 'DELETE',
-      url: '/_session',
-      success: reload
-    });
-  });
+  {{>layoutscript}}
+  {{>logscript}}
   </script>
 </html>

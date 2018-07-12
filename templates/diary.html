@@ -26,7 +26,7 @@
       </header>
       <div id="content">
         <h1>{{diary_name}}</h1>
-        <input id="diary_name" type="search" hidden="hidden" value="{{diary_name}}"/>
+        <input id="name" type="search" hidden="hidden" value="{{diary_name}}"/>
         <div id="add-leaves">
           <img id="sticky" src="../../style/checklist.png" hidden="hidden" alt="{{i18n.i_todo}}"/>
           <img id="show-activity" src="../../style/clock.png" alt="{{i18n.i_activity}}"/>
@@ -184,8 +184,6 @@
   }
   {{/list}}
 
-  {{>layoutscript}}
-
   {{#timeline}}
   function drawTimeline() {
     $("#show_delete").hide();
@@ -274,61 +272,9 @@
   }
   {{/network}}
 
+  {{>layoutscript}}
   {{>logscript}}
-
-  $('h1').on('click', function() {
-    $(this).hide();
-    $('#diary_name').show();
-  });
-
-  $('#diary_name').on('keypress', function(key) {
-    if (key.which == 13) {
-      var diary_name = $('#diary_name').val().trim();
-      var user = "{{peer}}";
-      if ("{{logged}}") user = "{{logged}}";
-      var history = {
-        "user": user,
-        "date": new Date().toJSON()
-      };
-      $.ajax({
-        url: "../../{{diary}}",
-        type: "GET",
-        dataType: "json",
-        error: function() {
-          $.ajax({
-            type: "PUT",
-            url: "../../{{diary}}",
-            dataType: "json",
-            contentType: "application/json",
-            data: JSON.stringify({
-              _id: "{{diary}}",
-              diary_name: diary_name,
-              history: [history]
-            }),
-            success: reload
-          });
-        },
-        success: function(data) {
-          data.diary_name = diary_name;
-          if (!data.history) data.history = [];
-          data.history.push(history);
-          $.ajax({
-            type: "PUT",
-            url: "../../{{diary}}",
-            contentType: "application/json",
-            data: JSON.stringify(data),
-            error: function(request) {
-              alert(
-                (JSON.parse(request.responseText).reason || request.responseText)
-                + '\nCode ' + request.status
-              );
-            },
-            success: reload
-          });
-        }
-      });
-    }
-  });
+  {{>editname}}
   </script>
 </html>
 

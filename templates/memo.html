@@ -119,13 +119,11 @@
   {{>script}}
   <script src="../../script/showdown.min.js"></script>
   <script>
-  var refresh = true;
   var metrics = {};
   var trigrams = {};
-  var user = "{{peer}}";
-  if ("{{logged}}") user = "{{logged}}";
   $(document).ready(function() {
     if ({{draft}}) self.location = "../../editable_text/{{_id}}";
+    {{>render}}
     moment.locale('{{locale}}');
     var moments = $('.moment');
     moments.each(function() {
@@ -183,17 +181,6 @@
         $("#leave-name").attr("placeHolder", "{{i18n.i_name.storyline}}");
         break;
     }
-    stickToHeader();
-    if ($('#name').val().length > 0) {
-      $('#add').show();
-      $('#leave-name').show();
-    }
-    if ($('#contributors').text().length < 1) {
-      $('#contributors').before("{{i18n.i_everyone}}");
-    }
-    if ($('#readers').text().length < 1) {
-      $('#readers').before("{{i18n.i_everyone}}");
-    }
     var converter = new showdown.Converter({
       tables: 'true',
       tasklists: 'true',
@@ -202,10 +189,6 @@
     $('.post').html(function(i, text) {
       return converter.makeHtml(text.trim());
     });
-    if ($('#leaves li').length > 0) {
-      $("#show-leaves").show();
-    }
-    if ($('#groundings li').length > 1) $('#remove_grounding').show();
     if ($('#groundings li').length < 1) {
       $("#groundings").css({
         'visibility': 'hidden'
@@ -306,13 +289,6 @@
     }
   });
 
-  $('#leave-name').on('keypress', function(key) {
-    if ("{{type}}" != 'coding' && key.which == 13) {
-      var type = $(this)[0].nextElementSibling.className;
-      create(type);
-    }
-  });
-
   $('#readers_add').on('click', function() {
     $('#readers_add').hide();
     $('#readers_edit').show();
@@ -324,39 +300,9 @@
     }
   });
 
-  $('#groundings').find('.toggle').click(function(){
-    $(this).next().slideToggle('fast');
-    $(".preview").not($(this).next()).slideUp('fast');
-  });
-
-  $("#show-leaves").click(function () {
-    var option = { direction: 'left' };
-    $('#leaves').toggle('fold');
-  });
-
-  $('#diary').on('click', function() {
-    self.location = '../{{diary}}/?by=date';
-  });
-
   $('#edit').on('click', function() {
     if ('{{type}}' == 'field') { self.location = '../../editable_text/{{_id}}';} 
     else { self.location = '../../editable_memo/{{_id}}';}
-  });
-
-  $('h1').on('click', function() {
-    $(this).hide();
-    $('#leave-name').hide();
-    $('#name').show();
-  });
-
-  $('#name').on('keypress', function(key) {
-    if (key.which == 13) {
-      if ($('#name').val().trim() == '') {
-        alert("{{i18n.i_enter_memo_name}}")
-      } else {
-        record('...','name');
-      }
-    }
   });
 
   $('#remove_grounding').on('click', function() {
@@ -375,18 +321,15 @@
   });
 
   $('#add').on('click', function() {
-    var type = $(this)[0].className;
-    create(type);
+    create($(this)[0].className, '{{_id}}', $('#leave-name').val().trim());
   });
 
   $('#create').on('click', function() {
-    var type = $(this)[0].className;
-    create(type);
+    create($(this)[0].className, '{{_id}}', $('#leave-name').val().trim());
   });
 
   $('#create-table').on('click', function() {
-    var type = $(this)[0].className;
-    create(type);
+    create($(this)[0].className, '{{_id}}', $('#leave-name').val().trim());
   });
 
   $('#add-grounding').on('click', function() {
@@ -414,73 +357,6 @@
       }
     });
   });
-
-  function create(type) {
-    if ($('#leave-name').val().trim() == '' && type != 'diagram') {
-      alert("{{i18n.i_enter_memo_name}}")
-    } else {
-      var diary = "{{diary}}";
-      var contributors = "{{contributors}}";
-      var data = {
-        groundings: [],
-        history : []
-      };
-      data.history.push({
-        "user": user,
-        "date": new Date().toJSON()
-      });
-      if (contributors.length > 0) {
-        data.contributors = contributors.split(',');
-      } else if ("{{logged}}") {
-        data.contributors = ["{{logged}}"];
-      }
-      var readers = "{{readers}}";
-      if (readers.length > 0) {
-        data.readers = readers.split(',');
-      }
-      switch (type) {
-        case 'field':
-          var destination = '../../editable_text/';
-          data.corpus = diary,
-          data.name = $('#leave-name').val().trim(),
-          data.speeches = [{actor:"",text:""}];
-        break;
-        case 'table':
-          var destination = "../../table/{{diary}}/";
-          data.cells = [{'...':[{"{{_id}}":'...'}]}];
-          data.diary = diary;
-          data.name = $('#leave-name').val().trim(),
-          data.type = type;
-        break;
-        case 'diagram':
-          var destination = "../../diagram/{{diary}}/";
-          data.diary = diary;
-          data.link = 'pp';
-          data.name = $('#name').val();
-          data.type = type;
-        break;
-        default:
-          var destination = '../../editable_memo/';
-          data.diary = diary,
-          data.body = "";
-          data.name = $('#leave-name').val().trim(),
-          data.type = type;
-      }
-      data.groundings.push("{{_id}}");
-      if (diary) {
-        $.ajax({
-          url: "../../",
-          type: "POST",
-          dataType: "json",
-          contentType: "application/json",
-          data: JSON.stringify(data),
-          success: function(data) {
-            self.location = destination+data.id;
-          }
-        });
-      }
-    }
-  }
 
   function renameDiagram(id,name) {
     $.ajax({
@@ -520,22 +396,6 @@
             var newreader = $('#readers_edit').val().trim().toLowerCase();
             if (!data.readers) data.readers = [];
             data.readers.push(newreader);
-          break;
-          case ('name'):
-            data.name = $('#name').val().trim();
-            var history = {
-              "user": user,
-              "date": new Date().toJSON()
-            };
-            if (!data.history) data.history = [];
-            data.history.push(history);
-            if ("{{type}}" == 'coding') {
-              {{#leaves}}
-              if ("{{type}}" == 'diagram') {
-                renameDiagram("{{href}}".split('/').pop(),data.name);
-              }
-              {{/leaves}}
-            }
           break;
           default:
             if (action == '+') {
@@ -625,5 +485,6 @@
   {{>commentsscript}}
   {{>layoutscript}}
   {{>logscript}}
+  {{>editname}}
   </script>
 </html>

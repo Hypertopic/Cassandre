@@ -82,22 +82,9 @@
   {{>script}}
   <script src="../../script/vis.min.js"></script>
   <script>
-  var refresh = true;
-  var user = "{{peer}}";
   var connected_nodes = "{{connected_nodes}}".split(',');
-  if ("{{logged}}") user = "{{logged}}";
   $(document).ready(function() {
-    stickToHeader();
-    if ($('#contributors').text().length < 1) {
-      $('#contributors').before("{{i18n.i_everyone}}");
-    }
-    if ($('#readers').text().length < 1) {
-      $('#readers').before("{{i18n.i_everyone}}");
-    }
-    if ($('#leaves li').length > 0) {
-      $("#show-leaves").show();
-    }
-    if ($('#groundings li').length > 1) $('#remove_grounding').show();
+    {{>render}}
     moment.locale('{{locale}}');
     var moments = $('.moment');
     moments.each(function() {
@@ -204,55 +191,7 @@
   });
 
   $('#add').on('click', function() {
-    var contributors = "{{contributors}}";
-    var readers = "{{readers}}";
-    var type = $(this)[0].className; 
-    var data = {
-      diary: "{{diary}}",
-      type: type,
-      groundings: [],
-      name: $('#leave-name').val().trim(),
-      history: []
-    };
-    data.history.push({
-      "user": user,
-      "date": new Date().toJSON()
-    });
-    if (contributors.length > 0) {
-      data.contributors = contributors.split(',');
-    } else if ("{{logged}}") {
-      data.contributors = ["{{logged}}"];
-    }
-    if (readers.length > 0) {
-      data.readers = readers.split(',');
-    }
-    data.groundings.push("{{_id}}");
-    if (diary) {
-      $.ajax({
-        url: "../../",
-        type: "POST",
-        dataType: "json",
-        contentType: "application/json",
-        data: JSON.stringify(data),
-        success: function(data) {
-          self.location = '../../editable_memo/'+data.id;
-        }
-      });
-    }
-  });
-
-  $('#groundings').find('.toggle').click(function(){
-    $(this).next().slideToggle('fast');
-    $(".preview").not($(this).next()).slideUp('fast');
-  });
-
-  $("#show-leaves").click(function () {
-    var option = { direction: 'left' };
-    $('#leaves').toggle('fold');
-  });
-
-  $('#diary').on('click', function() {
-    self.location = '../../memo/{{diary}}/?by=date';
+    create($(this)[0].className, '{{_id}}', $('#leave-name').val().trim());
   });
 
   $('#add-grounding').on('click', function() {
@@ -297,43 +236,6 @@
       autoResize: true,
       width:'auto'
     });
-  });
-
-  $('h1').on('click', function() {
-    $(this).hide();
-    $('#name').show();
-  });
-
-  $('#name').on('keypress', function(key) {
-    if (key.which == 13) {
-      var name = $('#name').val().trim();
-      $.ajax({
-        url: "../../{{_id}}",
-        type: "GET",
-        dataType: "json",
-        success: function(data) {
-          data.name = name;
-          if (!data.history) data.history = [];
-          data.history.push({
-            "user": user,
-            "date": new Date().toJSON()
-          });
-          $.ajax({
-            type: "PUT",
-            url: "../../{{_id}}",
-            contentType: "application/json",
-            data: JSON.stringify(data),
-            error: function(request) {
-              alert(
-                (JSON.parse(request.responseText).reason || request.responseText)
-                + '\nCode ' + request.status
-              );
-            },
-            success: reload
-          });
-        }
-      });
-    }
   });
 
   function wrap(t) {
@@ -413,5 +315,6 @@
   {{>commentsscript}}
   {{>layoutscript}}
   {{>logscript}}
+  {{>editname}}
   </script>
 </html>

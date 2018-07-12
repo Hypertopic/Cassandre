@@ -199,6 +199,7 @@ function(head, req) {
       data.timeline = JSON.stringify(items);
       break;
     default:
+      data._id = data.diary;
       data.list = true;
       data.sections = data.sections.sort(function(a,b){return (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0);});
       if (['date','update'].indexOf(data.by) >= 0) data.sections = data.sections.reverse();

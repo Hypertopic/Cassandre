@@ -233,9 +233,9 @@ div.post {
   padding: 0px 0 0 10px;
 }
 
-#container>#content #diary_name {
+#container>#content #name {
   font-size:150%;
-  margin: 40px 0 0 10px;
+  margin: 50px 0 0 10px;
 }
 
 #container>#memo>#content #name {

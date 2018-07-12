@@ -2,6 +2,7 @@ function(o, req){
   // !json templates.editable_memo
   // !code lib/mustache.js
   // !code l10n/l10n.js
+  // !code lib/shared.js
   var username = req.userCtx.name;
   var data = {
     i18n: localized(),
@@ -14,6 +15,7 @@ function(o, req){
     peer: req.peer,
     type: o.type,
     date: o.date,
+    flat: true,
     diary: o.diary,
     body: o.body,
     comments:[],
@@ -35,5 +37,5 @@ function(o, req){
     };
     data.comments.push(comment);
   }
-  return Mustache.to_html(templates.editable_memo, data);
+  return Mustache.to_html(templates.editable_memo, data, shared);
 }

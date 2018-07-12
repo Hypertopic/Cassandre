@@ -1,8 +1,7 @@
 <html>
   <head>
     <title>{{name}} ({{diary}})</title>
-    <link rel="icon" type="image/png" href="../style/favicon.png" />
-    <link rel="stylesheet" type="text/css" href="../style/main.css" />
+    {{>links}}
     <link rel="stylesheet" href="../style/simplemde.min.css" />
   </head>
   <body id="watermark">
@@ -10,12 +9,7 @@
       <header>
         <div id="header" class="menu">
           <button type="button" id="diary">&nbsp;</button>
-          <div id='logged'>
-          {{#logged}}
-            {{logged_fullname}}
-            <button id="signout">{{i18n.i_sign-out}}</button>
-          {{/logged}}
-          </div>
+          {{>log}}
         </div>
       </header>
       <div id="memo">
@@ -106,16 +100,6 @@
     });
   });
 
-  $(window).resize(function() {
-    stickToHeader();
-  });
-
-  function stickToHeader() {
-    var h = document.getElementById("header").offsetHeight;
-    $("#container>#memo").css({'padding-top': h});
-    $("#groundings").css({'padding-top': h});
-  }
-
   function save(draft, toDoAfter) {
     $.ajax({
       url: "../{{_id}}",
@@ -147,20 +131,13 @@
     });
   }
 
-  $('#diary').on('click', function() {
-    self.location = '../memo/{{diary}}/?by=date';
-  });
-
-  $('#groundings').find('.toggle').click(function(){
-    $(this).next().slideToggle('fast');
-    $(".preview").not($(this).next()).slideUp('fast');
-  });
-
   $('#done').on('click', function() {
     save(false, function() {
       self.location = '../memo/{{diary}}/{{_id}}';
     });
   });
 
+  {{>layoutscript}}
+  {{>logscript}}
   </script>
 </html>

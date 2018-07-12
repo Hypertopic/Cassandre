@@ -72,17 +72,8 @@
   </body>
   {{>script}}
   <script>
-  var refresh = true;
-  var user = "{{peer}}";
-  if ("{{logged}}") user = "{{logged}}";
   $(document).ready(function() {
-    stickToHeader();
-    if ($('#contributors').text().length < 1) {
-      $('#contributors').before("{{i18n.i_everyone}}");
-    }
-    if ($('#readers').text().length < 1) {
-      $('#readers').before("{{i18n.i_everyone}}");
-    }
+    {{>render}}
     moment.locale('{{locale}}');
     var moments = $('.moment');
     moments.each(function() {
@@ -156,9 +147,6 @@
         $('<option>', { value: 'dp', text: "{{i18n.i_link_property_dimension}}" })
       );
     }
-    if ($('#leaves li').length > 0) {
-      $("#show-leaves").show();
-    }
     $.ajax({
       url: "../../changes/memo/{{_id}}/{{update_seq}}",
       type: "GET",
@@ -168,96 +156,11 @@
   });
 
   $('#add').on('click', function() {
-    var type = $(this)[0].className;
-    create(type);
+    create($(this)[0].className, '{{_id}}', $('#leave-name').val().trim());
   });
 
   $('#create').on('click', function() {
-    var type = $(this)[0].className;
-    create(type);
-  });
-
-  {{>layoutscript}}
-
-  function create(type) {
-    var contributors = "{{contributors}}";
-    var readers = "{{readers}}";
-    var data = {
-      diary: "{{diary}}",
-      type: type,
-      groundings: [],
-      history: []
-    };
-    data.history.push({
-      "user": user,
-      "date": new Date().toJSON()
-    });
-    if (contributors.length > 0) {
-      data.contributors = contributors.split(',');
-    } else if ("{{logged}}") {
-      data.contributors = ["{{logged}}"];
-    }
-    if (readers.length > 0) {
-      data.readers = readers.split(',');
-    }
-    switch (type) {
-      case 'graph':
-        var destination = "../../graph/{{diary}}/";
-        var nodes = [];
-        var from = $('#groundings').children('li').first().attr('id');
-        var to = $('#groundings').children('li').last().attr('id');
-        switch ("{{link}}") {
-          case ('pp'):
-          case ('ipp'):
-            nodes.push({id: from, shape: 'box'});
-            nodes.push({id: to, shape: 'box'});
-            break;
-          case ('dd'):
-          case ('idd'):
-            nodes.push({id: from, shape: 'diamond'});
-            nodes.push({id: to, shape: 'diamond'});
-            break;
-          case ('dp'):
-            nodes.push({id: from, shape: 'box'});
-            nodes.push({id: to, shape: 'diamond'});
-            break;
-        }
-        data.nodes = nodes;
-        var diary_name = $("#diary").text();
-        data.name = prompt("{{i18n.i_enter_graph_name}}", diary_name);
-        break;
-      default:
-        var destination = '../../editable_memo/';
-        data.name = $('#leave-name').val().trim();
-        data.body = "";
-    }
-    data.groundings.push("{{_id}}");
-    if (type) {
-      $.ajax({
-        url: "../../",
-        type: "POST",
-        dataType: "json",
-        contentType: "application/json",
-        data: JSON.stringify(data),
-        success: function(data) {
-          self.location = destination+data.id;
-        }
-      });
-    }
-  }
-
-  $('#groundings').find('.toggle').click(function(){
-    $(this).next().slideToggle('fast');
-    $(".preview").not($(this).next()).slideUp('fast');
-  });
-
-  $("#show-leaves").click(function () {
-    var option = { direction: 'left' };
-    $('#leaves').toggle('fold');
-  });
-
-  $('#diary').on('click', function() {
-    self.location = '../../memo/{{diary}}/?by=date';
+    create($(this)[0].className, '{{_id}}', $('#leave-name').val().trim());
   });
 
   $('#add-grounding').on('click', function() {
@@ -291,6 +194,7 @@
           data.negative = there;
           data.name = data.name + $('#'+data.groundings[1]).find('h4').html().trim();
         }
+        if (!data.history) data.history = [];
         data.history.push({
           "user": user,
           "date": new Date().toJSON()
@@ -327,6 +231,7 @@
   });
 
   {{>commentsscript}}
+  {{>layoutscript}}
   {{>logscript}}
   </script>
 </html>

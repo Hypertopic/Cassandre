@@ -29,8 +29,8 @@
           {{/authorized}}
           {{#authorized}}
           <div id="add-leaves">
-            <input id="leave-name" type="search" placeholder="{{i18n.i_name.theoretical}}" />
-            <button type="button" class="theoretical" id="add">+</button>
+            <input id="leave-name" type="search" placeholder="{{i18n.i_name.theoretical}}" hidden="hidden"/>
+            <button type="button" class="theoretical" id="add" hidden="hidden">+</button>
           </div>
           <h1> <img src="../../style/{{type}}.png"/> {{name}} </h1>
           <input id="name" type="search" hidden="hidden" value="{{name}}"/>
@@ -90,16 +90,8 @@
   {{>script}}
   <script>
   var refresh = true;
-  var user = "{{peer}}";
-  if ("{{logged}}") user = "{{logged}}";
   $(document).ready(function() {
-    stickToHeader();
-    if ($('#contributors').text().length < 1) {
-      $('#contributors').before("{{i18n.i_everyone}}");
-    }
-    if ($('#readers').text().length < 1) {
-      $('#readers').before("{{i18n.i_everyone}}");
-    }
+    {{>render}}
     moment.locale('{{locale}}');
     var moments = $('.moment');
     moments.each(function() {
@@ -167,21 +159,6 @@
       }
     }
     if (table.rows[table.rows.length-1].cells[0].innerHTML != '...') $('#add_row').show();
-    if ($('#leaves li').length > 0) {
-      $("#show-leaves").show();
-    }
-    if ($('#groundings li').length > 1) $('#remove_grounding').show();
-  });
-
-  $('h1').on('click', function() {
-    $(this).hide();
-    $('#name').show();
-  });
-
-  $('#name').on('keypress', function(key) {
-    if (key.which == 13) {
-      record('name', $('#name').val().trim());
-    }
   });
 
   $('table')
@@ -257,69 +234,7 @@
   });
 
   $('#add').on('click', function() {
-    create($(this)[0].className, null, $('#leave-name').val().trim());
-  });
-
-  function create(type, prop_id, prop_name) {
-    var contributors = "{{contributors}}";
-    var readers = "{{readers}}";
-    var data = {
-      diary: "{{diary}}",
-      type: type,
-      groundings: [],
-      history: []
-    };
-    data.history.push({
-      "user": user,
-      "date": new Date().toJSON()
-    });
-    if (contributors.length > 0) {
-      data.contributors = contributors.split(',');
-    } else if ("{{logged}}") {
-      data.contributors = ["{{logged}}"];
-    }
-    if (readers.length > 0) {
-      data.readers = readers.split(',');
-    }
-    switch (type) {
-      case 'diagram':
-        var destination = "../../diagram/{{diary}}/";
-        data.link = 'pp';
-        data.name = prop_name;
-        data.groundings.push(prop_id);
-        break;
-      default:
-        var destination = '../../editable_memo/';
-        data.name = prop_name;
-        data.body = "";
-        data.groundings.push("{{_id}}");
-    }
-    if (type) {
-      $.ajax({
-        url: "../../",
-        type: "POST",
-        dataType: "json",
-        contentType: "application/json",
-        data: JSON.stringify(data),
-        success: function(data) {
-          self.location = destination+data.id;
-        }
-      });
-    }
-  }
-
-  $('#groundings').find('.toggle').click(function(){
-    $(this).next().slideToggle('fast');
-    $(".preview").not($(this).next()).slideUp('fast');
-  });
-
-  $("#show-leaves").click(function () {
-    var option = { direction: 'left' };
-    $('#leaves').toggle('fold');
-  });
-
-  $('#diary').on('click', function() {
-    self.location = '../../memo/{{diary}}/?by=date';
+    create($(this)[0].className, '{{_id}}', $('#leave-name').val().trim());
   });
 
   $('#add-grounding').on('click', function() {
@@ -414,9 +329,6 @@
               });
             });
             break;
-          case 'name':
-            data.name = value;
-            break;
           case 'add-row':
             data.cells.push({'...': []});
             break;
@@ -469,5 +381,6 @@
   {{>commentsscript}}
   {{>layoutscript}}
   {{>logscript}}
+  {{>editname}}
   </script>
 </html>

@@ -2,12 +2,14 @@ function(o, req){
   // !json templates.editable_text
   // !code lib/mustache.js
   // !code l10n/l10n.js
+  // !code lib/shared.js
   var username = req.userCtx.name;
   var data = {
     authorized: !o.readers || o.readers.indexOf(username)>-1 || o.contributors && o.contributors.indexOf(username)>-1 || req.userCtx.roles.indexOf("_admin")>-1,
     i18n: localized(),
     highlights: "{}",
     attributes:[],
+    flat: true,
     logged: username,
     logged_fullname: username,
     logs:[],
@@ -45,5 +47,5 @@ function(o, req){
         });
     }
   }
-  return Mustache.to_html(templates.editable_text, data);
+  return Mustache.to_html(templates.editable_text, data, shared);
 }

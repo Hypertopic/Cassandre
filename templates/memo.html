@@ -110,10 +110,10 @@
     </div>
     <div id="show-leaves" hidden="hidden"><div class="reverse">{{i18n.i_leaves}}</div></div>
     <div id="dialog" title="{{i18n.i_groundings}}" hidden="hidden">
-      <select onChange="record('+',this.value);"><option>{{i18n.i_select_grounding}}</option></select>
+      <select onChange="record('+', 'grounding', this.value);"><option>{{i18n.i_select_grounding}}</option></select>
     </div>
     <div id="removable" title="{{i18n.i_groundings}}" hidden="hidden">
-      <select onChange="record('-',this.value);"><option>{{i18n.i_select_grounding}}</option></select>
+      <select onChange="record('-', 'grounding', this.value);"><option>{{i18n.i_select_grounding}}</option></select>
     </div>
   </body>
   {{>script}}
@@ -285,7 +285,24 @@
 
   $('#contributors_edit').on('keypress', function(key) {
     if (key.which == 13) {
-      record('+','contributors');
+      record('+','contributors',$('#contributors_edit').val().trim().toLowerCase());
+    }
+  });
+
+  $('#contributors_edit').autocomplete({
+    minLength: 3,
+    source: function(request, response) {
+      $.getJSON('../../userlist/' + request.term, function (data) {
+        response($.map(data.rows, function (value, key) {
+          if ("{{contributors}}".split(',').indexOf(value.id) == -1) return {
+            label: value.value.fullname,
+            value: value.id
+          };
+        }));
+      });
+    },
+    select: function (event, ui) {
+      record('+', 'contributors', ui.item.value);
     }
   });
 
@@ -296,7 +313,24 @@
 
   $('#readers_edit').on('keypress', function(key) {
     if (key.which == 13) {
-      record('+','readers');
+      record('+', 'readers', $('#readers_edit').val().trim().toLowerCase());
+    }
+  });
+
+  $('#readers_edit').autocomplete({
+    minLength: 3,
+    source: function(request, response) {
+      $.getJSON('../../userlist/' + request.term, function (data) {
+        response($.map(data.rows, function (value, key) {
+          if ("{{readers}}".split(',').indexOf(value.id) == -1) return {
+            label: value.value.fullname,
+            value: value.id
+          };
+        }));
+      });
+    },
+    select: function (event, ui) {
+      record('+', 'readers', ui.item.value);
     }
   });
 
@@ -380,29 +414,27 @@
     });
   }
 
-  function record(action, what) {
+  function record(action, type, value) {
     $.ajax({
       url: "../../{{_id}}",
       type: "GET",
       dataType: "json",
       success: function(data) {
-        switch(what) {
+        switch(type) {
           case ('contributors'):
-            var newcontributor = $('#contributors_edit').val().trim().toLowerCase();
             if (!data.contributors) data.contributors = [];
-            data.contributors.push(newcontributor);
+            data.contributors.push(value);
           break;
           case ('readers'):
-            var newreader = $('#readers_edit').val().trim().toLowerCase();
             if (!data.readers) data.readers = [];
-            data.readers.push(newreader);
+            data.readers.push(value);
           break;
           default:
             if (action == '+') {
               if (!data.groundings) data.groundings = [];
-              if (data.groundings.indexOf(what) == -1) data.groundings.push(what);
+              if (data.groundings.indexOf(value) == -1) data.groundings.push(value);
             } else {
-              var i = data.groundings.indexOf(what);
+              var i = data.groundings.indexOf(value);
               if (i > -1) data.groundings.splice(i, 1);
             }
         }

@@ -167,6 +167,13 @@
       "reduce": "false"
     }
   }, {
+    "from": "userlist/:user",
+    "to": "_view/userid/",
+    "query": {
+      "startkey": ":user",
+      "limit": "5"
+    }
+  }, {
     "from": "tasklist/:diary",
     "to": "_list/tasklist/tasklist",
     "query": {

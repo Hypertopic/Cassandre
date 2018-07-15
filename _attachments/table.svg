@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="23">
+<rect fill="green" stroke="black" stroke-width="1"  x="1" y="1"  width="9" height="7"/>
+<rect fill="green" stroke="black" stroke-width="1" x="10" y="1"  width="9" height="7"/>
+<rect fill="white" stroke="black" stroke-width="1"  x="1" y="8"  width="9" height="7"/>
+<rect fill="red"   stroke="black" stroke-width="1" x="10" y="8"  width="9" height="7"/>
+<rect fill="red"   stroke="black" stroke-width="1"  x="1" y="15" width="9" height="7"/>
+<rect fill="green" stroke="black" stroke-width="1" x="10" y="15" width="9" height="7"/>
+</svg>

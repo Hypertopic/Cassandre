@@ -324,35 +324,35 @@ button.comment {
 }
 
 .operational {
-  background-image: url('operational.png');
+  background-image: url('operational.svg');
 }
 
 .theoretical {
-  background-image: url('theoretical.png');
+  background-image: url('theoretical.svg');
 }
 
 .coding {
-  background-image: url('coding.png');
+  background-image: url('coding.svg');
 }
 
 .field {
-  background-image: url('field.png');
+  background-image: url('field.svg');
 }
 
 .table {
-  background-image: url('table.png');
+  background-image: url('table.svg');
 }
 
 .diagram {
-  background-image: url('diagram.png');
+  background-image: url('diagram.svg');
 }
 
 .graph {
-  background-image: url('graph.png');
+  background-image: url('graph.svg');
 }
 
 .storyline {
-  background-image: url('storyline.png');
+  background-image: url('storyline.svg');
 }
 
 #network {

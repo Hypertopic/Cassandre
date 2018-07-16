@@ -339,6 +339,10 @@ button.comment {
   background-image: url('field.svg');
 }
 
+.transcript {
+  background-image: url('transcript.svg');
+}
+
 .table {
   background-image: url('table.svg');
 }

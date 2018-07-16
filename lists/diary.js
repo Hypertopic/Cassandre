@@ -47,6 +47,7 @@ function(head, req) {
         memos_name[row.value.id] = row.value.name;
         memos_path[row.value.id] = 'memo';
         switch (row.value.type) {
+          case "transcript":
           case "field":
             var node_level = '2';
             var group = '2';

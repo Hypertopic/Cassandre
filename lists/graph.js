@@ -84,7 +84,7 @@ function(head, req) {
         }
       break;
       case ('L'):
-        var type = row.doc.type || 'field';
+        var type = row.doc.type || 'transcript';
         var id = row.doc._id;
         var href = row.doc._id;
         var name = row.doc.name || '...';
@@ -106,7 +106,7 @@ function(head, req) {
       break;
       default:
       var username = req.userCtx.name;
-      var type = row.doc.type || 'field';
+      var type = row.doc.type || 'transcript';
       var diary = row.doc.diary || row.doc.corpus;
       var name = row.doc.name || '...';
       var data = {

@@ -57,7 +57,7 @@ function(head, req) {
               var preview = ' ';
             }
           }
-          var ground_type = row.doc.type || 'field';
+          var ground_type = row.doc.type || 'transcript';
           switch (ground_type) {
             case ('diagram'):
             var ground_path = '';
@@ -78,7 +78,7 @@ function(head, req) {
         }
       break;
       case ('L'):
-        var type = row.doc.type || 'field';
+        var type = row.doc.type || 'transcript';
         var id = row.doc._id;
         var href = row.doc._id;
         var name = row.doc.name || '...';

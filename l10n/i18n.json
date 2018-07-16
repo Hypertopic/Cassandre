@@ -82,7 +82,8 @@
     "i_comment": "Comment",
     "i_enter_comment": "Enter your comment",
     "i_name": {
-       "field": "Emotion or experience reported by informants ",
+       "field": "Field observed",
+       "transcript": "Informant pseudonym",
        "coding": "Property or dimenson",
        "theoretical": "Category or relation to be sampled",
        "operational": "Planning next contact with the field",
@@ -91,6 +92,7 @@
     },
     "i_content": {
       "field": "What am I observing ?",
+      "transcript": "What was told ?",
       "coding": "How is defined such an activity ? What process is at stake ?",
       "operational": "Things not to forget to observe on the field",
       "theoretical": "Theoretical question(s) raised when coding the material",
@@ -186,7 +188,8 @@
     "i_comment": "Commenter",
     "i_enter_comment": "Saisissez un commentaire",
     "i_name": {
-       "field": "Émotion ou vécu exprimé par les personnes rencontrées",
+       "field": "Terrain observé",
+       "transcript": "Pseudonyme de l'informatrice",
        "coding": "Propriété ou dimension",
        "theoretical": "Question de recherche ou phénomène à échantillonner",
        "operational": "Aide-mémoire pour la suite",
@@ -194,7 +197,8 @@
        "negative-case": "Cas négatif"
     },
     "i_content": {
-      "field": "Que m'a-t-on dit ? Qu'ai je observé ?",
+      "field": "Qu'ai je observé ?",
+      "transcript": "Que m'a-t-on dit ?",
       "coding": "Comment se définit tel processus, telle action ou telle activité ?",
       "operational": "Que ne faut-il pas oublier de faire sur le terrain ?",
       "theoretical": "Reformulation de la question de recherche, nouvelles questions théoriques que suscite l'analyse du matériau, propriété ou articulation à approfondir.",

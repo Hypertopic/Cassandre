@@ -1,6 +1,6 @@
 function(o) {
   var diary = o.diary || o.corpus || o._id;
-  var type = o.type || 'field';
+  var type = o.type || 'transcript';
   var name = o.name || '...';
   var date = o.date;
   var update = o.date;
@@ -40,7 +40,7 @@ function(o) {
       diary_name: o.diary_name
     });
   } else if (!o.commented) {
-    var type = o.type || 'field';
+    var type = o.type || 'transcript';
     var groundings = o.groundings || [];
     if (o.body) {
       var preview = o.body.substr(0, 200).replace(/\s/g, ' ');

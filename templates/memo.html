@@ -42,7 +42,7 @@
           <div id="add-leaves">
             <input id="leave-name" type="search" placeholder="" hidden="hidden" />
             <button type="button" id="add" hidden="hidden">+</button>
-            <button id="create" class="diagram" type="button" hidden="hidden">+</button>
+            <button id="create" type="button" hidden="hidden">&nbsp;</button>
             <button id="create-table" class="table" type="button" hidden="hidden">+</button>
           </div>
           <h1><img src="../../style/{{type}}.svg"/> {{name}}</h1>
@@ -143,6 +143,11 @@
         $("#name").attr("placeHolder", "{{i18n.i_name.field}}");
         $('#add').addClass('coding');
         $("#leave-name").attr("placeHolder", "{{i18n.i_name.coding}}");
+        break;
+      case ('transcript'):
+        $("#name").attr("placeHolder", "{{{i18n.i_name.transcript}}}");
+        $('#add').addClass('coding');
+        $("#leave-name").attr("placeHolder", "{{i18n.i_name.coding}}");
         $('#clear_highlights').show();
         $('#specific').show();
         $('#rare').show();
@@ -156,6 +161,7 @@
         $("#leave-name").attr("placeHolder", "{{i18n.i_name.theoretical}}");
         if ($('#name').val().length > 0) {
           $('#create').show();
+          $('#create').addClass('diagram');
           $('#create-table').show();
         }
         break;
@@ -167,6 +173,8 @@
       case ('operational'):
         $("#name").attr("placeHolder", "{{i18n.i_name.operational}}");
         $('#add').addClass('field');
+        $('#create').addClass('transcript');
+        $('#create').show();
         $("#leave-name").attr("placeHolder", "{{i18n.i_name.field}}");
         break;
       case ('diagram'):
@@ -220,7 +228,7 @@
          'margin-left': '40px',
       });
     }
-    if ("{{type}}" === 'field') {
+    if ("{{type}}" === 'transcript') {
       $.ajax({
         url: "../../corpus_words/{{diary}}",
         type: "GET",
@@ -270,6 +278,7 @@
         }
       });
     }
+    stickToHeader();
     $.ajax({
       url: "../../changes/memo/{{_id}}/{{update_seq}}",
       type: "GET",
@@ -335,7 +344,7 @@
   });
 
   $('#edit').on('click', function() {
-    if ('{{type}}' == 'field') { self.location = '../../editable_text/{{_id}}';} 
+    if ('{{type}}' == 'transcript') { self.location = '../../editable_text/{{_id}}';}
     else { self.location = '../../editable_memo/{{_id}}';}
   });
 

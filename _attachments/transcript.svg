@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="24">
+<g id="turn" stroke-width="1">
+    <line x1="0"  y1="2" x2="8"  y2="2" stroke="black"/>
+    <line x1="10" y1="2" x2="20" y2="2" stroke="gray"/>
+    <line x1="3"  y1="6" x2="18" y2="6" stroke="gray"/>
+</g>
+<use xlink:href="#turn" x="0" y="0"/>
+<use xlink:href="#turn" x="0" y="8"/>
+<use xlink:href="#turn" x="0" y="16"/>
+</svg>

@@ -176,6 +176,7 @@ function(head, req) {
             node_level: node_level,
             rev: row.value.rev,
             date: date,
+            update: row.value.update,
             groundings: row.value.groundings,
             path: path,
             type: row.value.type

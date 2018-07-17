@@ -36,8 +36,8 @@
         {{#sections}}
           {{#memos}}
           <li class="{{type}}"><input type="checkbox" id="{{id}}" name="{{rev}}" hidden="hidden" />
-            <span id="{{date}}" class="moment">{{date}}</span>&nbsp;–
-            <a href="../../{{path}}/{{diary}}/{{id}}" class="tooltip">{{name}}
+            <span id="{{date}}" name="{{update}}" class="moment"></span>&nbsp;–
+            <a href="../../{{path}}/{{diary}}/{{id}}" class="tooltip unread">{{name}}
             {{#preview}}<span class="preview">{{preview}}</span>{{/preview}}</a>
           </li>
           {{/memos}}
@@ -68,6 +68,20 @@
     converter.setFlavor('github');
     $('.preview').html(function(i, text) {
       return converter.makeHtml(text.trim());
+    });
+    if ('{{logged}}') $.ajax({
+      url: "../../{{logged}}",
+      type: "GET",
+      dataType: "json",
+      success: function(data) {
+        if(data.fullname) $('#username').text(data.fullname);
+        for (i in data.activity) {
+          var id = '#'+data.activity[i].doc;
+          if (data.activity[i].date > $(id).parent().find('.moment').attr('name')) {
+            $(id).parent().find('.tooltip').removeClass('unread');
+          }
+        }
+      }
     });
     {{/list}}
     {{#network}}
@@ -167,7 +181,7 @@
     var moments = $(what+' .moment');
     moments.each(function() {
       var now = moment();
-      var jstime = $(this).text();
+      var jstime = $(this).attr('id');
       var mmtime = moment(jstime);
       if(now.diff(mmtime, 'days') <= 2) {
         $(this).text(mmtime.fromNow());

@@ -167,6 +167,10 @@ div.post {
   background-color: #eeeeee;
 }
 
+.unread {
+  font-weight: bold !important;
+}
+
 .preview {
     display:none;
 }

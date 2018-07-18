@@ -249,8 +249,7 @@ div.post {
 
 .comment>.meta,
 #negative-case>.meta,
-#contributors_add,
-#readers_add,
+#modify_rights,
 #authorization {
   color: gray;
   font-size:70%;
@@ -422,7 +421,10 @@ input.actor {
   vertical-align: top;
 }
 
+.remove_contributor,
+.remove_reader,
 .remove {
+  border: none;
   background: url('x.png') no-repeat;
 }
 

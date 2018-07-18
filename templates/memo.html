@@ -49,12 +49,9 @@
           <input id="name" type="search" hidden="hidden" value="{{name}}"/>
           <p id="authorization">
             {{i18n.i_created-by}} {{creator}} <span class="moment">{{date}}</span><br/>
-            {{i18n.i_contributors}} <span id="contributors">{{contributors_fullnames}}</span>
-            <button type="button" id="contributors_add">+</button>
-            <input id="contributors_edit" type="search" hidden="hidden" /><br/>
-            {{i18n.i_readers}} <span id="readers">{{readers_fullnames}}</span>
-            <button type="button" id="readers_add">...</button>
-            <input id="readers_edit" type="search" hidden="hidden" /><br/>
+            {{i18n.i_editable-by}} <span class="contributors">{{contributors_fullnames}}</span><br/>
+            {{i18n.i_readable-by}} <span class="readers">{{readers_fullnames}}</span>
+            <button id='modify_rights' type="button">...</button>
           </p>
           <div class="speeches">
           {{#body}}
@@ -110,10 +107,29 @@
     </div>
     <div id="show-leaves" hidden="hidden"><div class="reverse">{{i18n.i_leaves}}</div></div>
     <div id="dialog" title="{{i18n.i_groundings}}" hidden="hidden">
-      <select onChange="record('+', 'grounding', this.value);"><option>{{i18n.i_select_grounding}}</option></select>
+      <select onChange="record('add_grounding', this.value);"><option>{{i18n.i_select_grounding}}</option></select>
+    </div>
+    <div id="modify_rights_dialog" title="{{i18n.i_modify_rights}}" hidden="hidden" class="ui-front">
+      <table><tr><th>{{i18n.i_contributors}}</th><th>{{i18n.i_readers}}</th></tr><tr><td>
+        <input id="add_contributor" type="search" placeholder="{{i18n.i_add_contributor}}"/><br/>
+        <p>{{i18n.i_editable-by}}</p>
+        <div class="contributors">
+        {{#contributors_fullnames}}
+          <p>{{.}}<button class='remove_contributor' value='{{.}}'>x</button></p>
+        {{/contributors_fullnames}}
+        </div>
+      </td><td>
+        <input id="add_reader" type="search" placeholder="{{i18n.i_add_reader}}"/><br/>
+        <p>{{i18n.i_readable-by}}</p>
+        <div class="readers">
+        {{#readers_fullnames}}
+          <p>{{.}}<button class='remove_reader' value='{{.}}'>x</button></p>
+        {{/readers_fullnames}}
+        </div>
+      </td></tr></table>
     </div>
     <div id="removable" title="{{i18n.i_groundings}}" hidden="hidden">
-      <select onChange="record('-', 'grounding', this.value);"><option>{{i18n.i_select_grounding}}</option></select>
+      <select onChange="record('remove_grounding', this.value);"><option>{{i18n.i_select_grounding}}</option></select>
     </div>
   </body>
   {{>script}}
@@ -287,18 +303,13 @@
     });
   });
 
-  $('#contributors_add').on('click', function() {
-    $('#contributors_add').hide();
-    $('#contributors_edit').show();
-  });
-
-  $('#contributors_edit').on('keypress', function(key) {
+  $('#add_contributor').on('keypress', function(key) {
     if (key.which == 13) {
-      record('+','contributors',$('#contributors_edit').val().trim().toLowerCase());
+      record('add_contributor', $('#add_contributor').val().trim().toLowerCase());
     }
   });
 
-  $('#contributors_edit').autocomplete({
+  $('#add_contributor').autocomplete({
     minLength: 3,
     source: function(request, response) {
       $.getJSON('../../userlist/' + request.term, function (data) {
@@ -311,22 +322,17 @@
       });
     },
     select: function (event, ui) {
-      record('+', 'contributors', ui.item.value);
+      record('add_contributor', ui.item.value);
     }
   });
 
-  $('#readers_add').on('click', function() {
-    $('#readers_add').hide();
-    $('#readers_edit').show();
-  });
-
-  $('#readers_edit').on('keypress', function(key) {
+  $('#add_reader').on('keypress', function(key) {
     if (key.which == 13) {
-      record('+', 'readers', $('#readers_edit').val().trim().toLowerCase());
+      record('add_reader', $('#add_reader').val().trim().toLowerCase());
     }
   });
 
-  $('#readers_edit').autocomplete({
+  $('#add_reader').autocomplete({
     minLength: 3,
     source: function(request, response) {
       $.getJSON('../../userlist/' + request.term, function (data) {
@@ -339,8 +345,28 @@
       });
     },
     select: function (event, ui) {
-      record('+', 'readers', ui.item.value);
+      record('add_reader', ui.item.value);
     }
+  });
+
+  $('.remove_reader').on('click', function() {
+    var i = "{{readers_fullnames}}".split(',').indexOf($(this).val());
+    record('remove_reader', "{{readers}}".split(',')[i]);
+  });
+
+  $('.remove_contributor').on('click', function() {
+    var i = "{{contributors_fullnames}}".split(',').indexOf($(this).val());
+    record('remove_contributor', "{{contributors}}".split(',')[i]);
+  });
+
+  $('#modify_rights').on('click', function() {
+    $("#modify_rights_dialog").dialog({
+      autoOpen: true,
+      modal: true,
+      autoResize: true,
+      width:'auto',
+      minHeight: 250
+    });
   });
 
   $('#edit').on('click', function() {
@@ -423,29 +449,37 @@
     });
   }
 
-  function record(action, type, value) {
+  function record(action, value) {
     $.ajax({
       url: "../../{{_id}}",
       type: "GET",
       dataType: "json",
       success: function(data) {
-        switch(type) {
-          case ('contributors'):
+        switch(action) {
+          case ('add_contributor'):
             if (!data.contributors) data.contributors = [];
             data.contributors.push(value);
           break;
-          case ('readers'):
+          case ('remove_contributor'):
+            var i = data.contributors.indexOf(value);
+            data.contributors.splice(i, 1);
+          break;
+          case ('add_reader'):
             if (!data.readers) data.readers = [];
             data.readers.push(value);
           break;
-          default:
-            if (action == '+') {
-              if (!data.groundings) data.groundings = [];
-              if (data.groundings.indexOf(value) == -1) data.groundings.push(value);
-            } else {
-              var i = data.groundings.indexOf(value);
-              if (i > -1) data.groundings.splice(i, 1);
-            }
+          case ('remove_reader'):
+            var i = data.readers.indexOf(value);
+            data.readers.splice(i, 1);
+          break;
+          case ('add_grounding'):
+            if (!data.groundings) data.groundings = [];
+            if (data.groundings.indexOf(value) == -1) data.groundings.push(value);
+          break;
+          case ('remove_grounding'):
+            var i = data.groundings.indexOf(value);
+            if (i > -1) data.groundings.splice(i, 1);
+          break;
         }
         $.ajax({
           type: "PUT",

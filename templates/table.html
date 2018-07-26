@@ -1,3 +1,4 @@
+<!doctype html>
 <html>
   <head>
     <title>{{diary_name}} - {{name}}</title>
@@ -5,22 +6,23 @@
     {{>diagramcss}}
   </head>
   <body>
-    <div id="container">
-      <div id="header" class="menu">
-        <button type="button" id="diary">{{diary_name}}</button>
-        {{>log}}
-      </div>
-      <div id="memo">
+    <nav id="header" class="navbar navbar-expand bd-navbar fixed-top navbar-light bg-light">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item"><a class="nav-link" id="diary">{{diary_name}}</a></li>
+      </ul>
+      {{>log}}
+    </nav>
+    <div id="container" class='container-fluid h-100'>
+      <div id="memo" class='row h-100'>
         {{#authorized}}
-        <div id="groundings">
+        <div class="col-md-3" id='groundings'>
           <legend>{{i18n.i_groundings}}</legend>
           {{#groundings}}
           <li class="{{type}}" id="{{id}}">
-            <h4 class="toggle">{{name}}</h4>
-            <div class="preview">{{preview}} <a href="{{href}}">-></a></div>
+            <a href="{{href}}">{{name}}</a> <span class="toggle dropdown-toggle"> </span>
+            <div class="preview">{{preview}}</div>
           </li>
           {{/groundings}}
-          <div id="add-grounding"><span>{{i18n.i_add_groundings}}</span></div>
         </div>
         {{/authorized}}
         <div id="content">
@@ -29,38 +31,21 @@
           {{/authorized}}
           {{#authorized}}
           <div id="add-leaves">
-            <input id="leave-name" type="search" placeholder="{{i18n.i_name.theoretical}}" hidden="hidden"/>
-            <button type="button" class="theoretical" id="add" hidden="hidden">+</button>
+            <input id="leave-name" type="search" placeholder="{{i18n.i_name.theoretical}}" class="hidden"/>
+            <button type="button" class="theoretical hidden" id="add">+</button>
           </div>
           <h1> <img src="../../style/{{type}}.svg"/> {{name}} </h1>
-          <input id="name" type="search" hidden="hidden" value="{{name}}"/>
-          <p id="authorization">
-            {{i18n.i_created-by}} {{creator}} <span class="moment">{{date}}</span><br/>
-            {{i18n.i_editable-by}} <span class="contributors">{{contributors_fullnames}}</span><br/>
-            {{i18n.i_readable-by}} <span class="readers">{{readers_fullnames}}</span>
-          </p>
+          <input id="name" type="search" class="hidden" value="{{name}}"/>
+          {{>rights}}
           <table id="table">
             <thead><tr><td></td></tr></thead>
           </table>
-          <button type="button" id="add_row" hidden="hidden">+</button>
+          <button type="button" id="add_row" class="hidden">+</button>
           <p>&nbsp;</p>
-          <div id="comments">
-            {{#comments}}
-            <div class="comment {{checked}}" id="{{id}}" name="{{rev}}">
-              <span class="meta"><span class="user">{{user}}</span> (<span class="moment">{{date}}</span>)</span>:
-              {{#logged}}<div class="checkbox"><input type="checkbox" class="comment_check" {{checked}}></div>{{/logged}}<br/>
-              <span class="comment_text">{{text}}</span>
-              <input size="80" height="50" type="text" hidden="hidden" class="comment_edit" value="{{text}}"/>
-            </div>
-            {{/comments}}
-            <button type="button" id="comment_create">{{i18n.i_comment}}</button>
-            <textarea cols="80" rows="5" type="text" hidden="hidden" placeHolder="{{i18n.i_enter_comment}}"></textarea>
-            <button type="button" id="commented" hidden="hidden">{{i18n.i_done}}</button>
-          </div>
-          <p>&nbsp;</p>
+          {{>comments}}
           {{/authorized}}
-        </div>
-        <div id="leaves">
+        </main>
+        <div class="col" id="leaves">
           <ul id="branch">
           {{#leaves}}
             <li class="{{type}}"><a href="{{href}}">{{name}}</a></li>
@@ -68,21 +53,39 @@
           </ul>
         </div>
       </div>
-      <div id="footer" class="menu">
+      <nav id="footer" class="navbar fixed-bottom navbar-light bg-light">
         {{#authorized}}
-        <button type="button" id="remove_grounding" hidden="hidden">{{i18n.i_remove_grounding}}</button>
+        <div role="group">
+          <button class='btn btn-sm' data-toggle="modal" data-target="#add_grounding"><span>{{i18n.i_add_groundings}}</span></button>
+          <button class='btn btn-sm hidden' data-toggle="modal" data-target="#remove_grounding" id="remove_grounding_btn">{{i18n.i_remove_grounding}}</button>
+          <button class='btn btn-sm' id="comment_create">{{i18n.i_comment}}</button>
+        </div>
         {{/authorized}}
         <a href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
+      </nav>
+    </div>
+    <div id="show-leaves" class="hidden"><div class="reverse">{{i18n.i_leaves}}</div></div>
+    <div id="add_grounding" class="modal fade" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">{{i18n.i_add_groundings}}</div>
+          <div class="modal-body">
+            <select onChange="record('add_grounding', this.value);"><option>{{i18n.i_select_grounding}}</option></select>
+          </div>
+        </div>
       </div>
     </div>
-    <div id="show-leaves" hidden="hidden"><div class="reverse">{{i18n.i_leaves}}</div></div>
-    <div id="dialog" title="{{i18n.i_groundings}}" hidden="hidden">
-      <select onChange="record('add-grounding',this.value);"><option>{{i18n.i_select_grounding}}</option></select>
+    <div id="remove_grounding" class="modal fade" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">{{i18n.i_remove_grounding}}</div>
+          <div class="modal-body">
+            <select onChange="record('remove_grounding', this.value);"><option>{{i18n.i_select_grounding}}</option></select>
+          </div>
+        </div>
+      </div>
     </div>
-    <div id="removable" title="{{i18n.i_groundings}}" hidden="hidden">
-      <select onChange="record('remove-grounding',this.value);"><option>{{i18n.i_select_grounding}}</option></select>
-    </div>
-    <div id="dialog-cells" hidden="hidden">
+    <div id="dialog-cells" class="hidden">
       <select id='color'>
       </select>
     </div>
@@ -124,7 +127,7 @@
                   created_headers.push(k);
                   var hcell = tbl_header.insertCell(created_headers.indexOf(k));
                   hcell.id = 'head'+k;
-                  hcell.innerHTML = $('#'+k).find('h4').html();
+                  hcell.innerHTML = $('#'+k).find('a').html();
                   hcell.innerHTML += '<button type="button" class="create diagram" >+</button>';
                 }
                 while (tbl_row.cells.length < created_headers.indexOf(k)) {
@@ -158,7 +161,7 @@
         }
       }
     }
-    if (table.rows[table.rows.length-1].cells[0].innerHTML != '...') $('#add_row').show();
+    if (table.rows[table.rows.length-1].cells[0].innerHTML != '...') $('#add_row').removeClass('hidden');
   });
 
   $('table')
@@ -218,26 +221,11 @@
     record('add-row', table.rows[table.rows.length-1].cells[0].innerHTML);
   });
 
-  $('#remove_grounding').on('click', function() {
-    $('#groundings').children('li').each(function() {
-      $("#removable").find('select').append($('<option>', {
-        value: ($(this).attr('id')),
-        text: ($(this).find('h4').html())
-      }));
-    });
-    $("#removable").dialog({
-      autoOpen: true,
-      modal: true,
-      autoResize: true,
-      width:'auto'
-    });
-  });
-
   $('#add').on('click', function() {
     create($(this)[0].className, '{{_id}}', $('#leave-name').val().trim());
   });
 
-  $('#add-grounding').on('click', function() {
+  $('#add_grounding').on('show.bs.modal', function (event) {
     $.ajax({
       url: "../../memo_attribute/{{diary}}",
       type: "GET",
@@ -248,19 +236,25 @@
           var id = r.value['id'];
           var ground_type = r.value['type'];
           if(document.getElementById(id) == null && id != "{{_id}}" && ground_type == 'coding') {
-            $("#dialog").find('select').append($('<option>', {
+            $("#add_grounding").find('select').append($('<option>', {
               value: id,
               text: r.value['name']
             }));
           }
         }
-        $("#dialog").dialog({
-          autoOpen: true,
-          modal: true,
-          autoResize: true,
-          width:'auto'
-        });
       }
+    });
+  });
+
+  $('#remove_grounding').on('show.bs.modal', function (event) {
+    $('#groundings').children('li').each(function() {
+      var id = ($(this).attr('id')),
+          name = ($(this).find('a').text());
+      if (name.length > 45) name = name.substr(0,45)+'...';
+      $("#remove_grounding").find('select').append($('<option>', {
+        value: id,
+        text: name
+      }));
     });
   });
 
@@ -276,7 +270,7 @@
           if (!document.getElementById(data.groundings[i])) data.groundings.splice(i, 1);
         }
         switch(type) {
-          case 'add-grounding':
+          case 'add_grounding':
             var done = true;
             if (data.groundings.indexOf(value) == -1) data.groundings.push(value);
             var obj = {};
@@ -292,7 +286,6 @@
             $("#dialog").dialog('close');
             break;
           case 'cell':
-            console.log(value);
             var coord = value.split('{}');
             var adding = false;
             var obj = {}
@@ -332,7 +325,7 @@
           case 'add-row':
             data.cells.push({'...': []});
             break;
-          case 'remove-grounding':
+          case 'remove_grounding':
             $.each(data.cells, function(k , row) {
               $.each(row, function(k , cells) {
                 var action = false;

@@ -84,6 +84,7 @@
     "i_remove_grounding": "Remove a ground",
     "i_select_grounding": "Select a ground",
     "i_groundings": "Grounded in",
+    "i_grounding": "Grounded in",
     "i_comment": "Comment",
     "i_enter_comment": "Enter your comment",
     "i_name": {
@@ -195,6 +196,7 @@
     "i_remove_grounding": "Retirer un ancrage",
     "i_select_grounding": "Choisissez un ancrage",
     "i_groundings": "Ancrages",
+    "i_grounding": "Ancrage",
     "i_comment": "Commenter",
     "i_enter_comment": "Saisissez un commentaire",
     "i_name": {

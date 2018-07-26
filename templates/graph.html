@@ -1,3 +1,4 @@
+<!doctype html>
 <html>
   <head>
     <title>{{diary_name}} - {{name}}</title>
@@ -6,24 +7,25 @@
     {{>viscss}}
   </head>
   <body>
-    <div id="container">
-      <div id="header" class="menu">
-        <button type="button" id="diary">{{diary_name}}</button>
-        {{>log}}
-      </div>
-      <div id="memo">
+    <nav id="header" class="navbar navbar-expand bd-navbar fixed-top navbar-light bg-light">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item"><a class="nav-link" id="diary">{{diary_name}}</a></li>
+      </ul>
+      {{>log}}
+    </nav>
+    <div id="container" class='container-fluid h-100'>
+      <div id="memo" class='row h-100'>
         {{#authorized}}
-        <div id="groundings">
+        <div class="col-md-3" id='groundings'>
           <legend>{{i18n.i_groundings}}</legend>
           {{#groundings}}
           <li class="{{type}}" id="{{id}}">
-            <h4><a href="{{href}}">{{name}}</a></h4>
+            <a href="{{href}}">{{name}}</a>
           </li>
           {{/groundings}}
-          <div id="add-grounding"></div>
         </div>
         {{/authorized}}
-        <div id="content">
+        <main class="col" id="content">
           {{^authorized}}
           <h1>{{i18n.i_sign-in_required}}</h1>
           {{/authorized}}
@@ -33,30 +35,13 @@
             <button type="button" class="storyline" id="add">+</button>
           </div>
           <h1> <img src="../../style/{{type}}.svg"/> {{name}} </h1>
-          <input id="name" type="search" hidden="hidden" value="{{name}}"/>
-          <p id="authorization">
-            {{i18n.i_created-by}} {{creator}} <span class="moment">{{date}}</span><br/>
-            {{i18n.i_editable-by}} <span class="contributors">{{contributors_fullnames}}</span><br/>
-            {{i18n.i_readable-by}} <span class="readers">{{readers_fullnames}}</span>
-          </p>
+          <input id="name" type="search" class="form-control hidden" value="{{name}}"/>
+          {{>rights}}
           <div id="graph"></div>
-          <div id="comments">
-            {{#comments}}
-            <div class="comment {{checked}}" id="{{id}}" name="{{rev}}">
-              <span class="meta"><span class="user">{{user}}</span> (<span class="moment">{{date}}</span>)</span>:
-              {{#logged}}<div class="checkbox"><input type="checkbox" class="comment_check" {{checked}}></div>{{/logged}}<br/>
-              <span class="comment_text">{{text}}</span>
-              <input size="80" height="50" type="text" hidden="hidden" class="comment_edit" value="{{text}}"/>
-            </div>
-            {{/comments}}
-            <button type="button" id="comment_create">{{i18n.i_comment}}</button>
-            <textarea cols="80" rows="5" type="text" hidden="hidden" placeHolder="{{i18n.i_enter_comment}}"></textarea>
-            <button type="button" id="commented" hidden="hidden">{{i18n.i_done}}</button>
-          </div>
-          <p>&nbsp;</p>
+          {{>comments}}
           {{/authorized}}
-        </div>
-        <div id="leaves">
+        </main>
+        <div class="col" id="leaves">
           <ul id="branch">
           {{#leaves}}
             <li class="{{type}}"><a href="{{href}}">{{name}}</a></li>
@@ -64,19 +49,36 @@
           </ul>
         </div>
       </div>
-      <div id="footer" class="menu">
+      <nav id="footer" class="navbar fixed-bottom">
         {{#authorized}}
-        <button type="button" id="remove_grounding" hidden="hidden">{{i18n.i_remove_grounding}}</button>
+        <div role="group">
+          <button class='btn btn-sm' data-toggle="modal" data-target="#add_grounding" type="button">{{i18n.i_add_groundings}}</button>
+          <button class='btn btn-sm hidden' data-toggle="modal" data-target="#remove_grounding" id="remove_grounding_btn">{{i18n.i_remove_grounding}}</button>
+        </div>
         {{/authorized}}
         <a href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
-      </div>
+      </nav>
     </div>
     <div id="show-leaves" hidden="hidden"><div class="reverse">{{i18n.i_leaves}}</div></div>
-    <div id="dialog" hidden="hidden">
-      <select onChange="save('+',this.value);"></select>
+    <div id="add_grounding" class="modal fade" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">{{i18n.i_add_groundings}}</div>
+          <div class="modal-body">
+            <select onChange="record('add_grounding', this.value);"><option>{{i18n.i_select_grounding}}</option></select>
+          </div>
+        </div>
+      </div>
     </div>
-    <div id="removable" title="{{i18n.i_groundings}}" hidden="hidden">
-      <select onChange="save('-',this.value);"><option>{{i18n.i_select_grounding}}</option></select>
+    <div id="remove_grounding" class="modal fade" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">{{i18n.i_remove_grounding}}</div>
+          <div class="modal-body">
+            <select onChange="record('remove_grounding', this.value);"><option>{{i18n.i_select_grounding}}</option></select>
+          </div>
+        </div>
+      </div>
     </div>
   </body>
   {{>script}}
@@ -174,7 +176,7 @@
       }
     };
     var isolated_nodes = nodes.filter(function(a) { if (connected_nodes.indexOf(a.id) == -1) return a;});
-    if (isolated_nodes.length > 0) save('-', '');
+    if (isolated_nodes.length > 0) record('clean_nodes', '');
     var network = new vis.Network(container, data, options);
     network.on('click', function (selected) {
       if (typeof selected.nodes[0] === "undefined" && selected.edges[0].length == 32) {
@@ -183,7 +185,6 @@
         self.location = "../../memo/{{diary}}/"+selected.nodes[0];
       } else {}
     });
-    $('#add-grounding').html("{{i18n.i_add_groundings}}");
     $("#dialog").attr("title","{{i18n.i_groundings}}");
     $("#dialog").find('select').append($('<option>', {
       text: "{{i18n.i_select_grounding}}"
@@ -194,7 +195,7 @@
     create($(this)[0].className, '{{_id}}', $('#leave-name').val().trim());
   });
 
-  $('#add-grounding').on('click', function() {
+  $('#add_grounding').on('show.bs.modal', function (event) {
     $.ajax({
       url: "../../memo_attribute/{{diary}}",
       type: "GET",
@@ -206,7 +207,7 @@
           var ground_type = r.value['type'];
           var ground_label = r.value['name'];
           if(document.getElementById(id) == null && id != "{{_id}}" && ground_type == 'diagram') {
-            $("#dialog").find('select').append($('<option>', {
+            $("#add_grounding").find('select').append($('<option>', {
               id: id,
               value: id,
               text: ground_label
@@ -215,26 +216,17 @@
         }
       }
     });
-    $("#dialog").dialog({
-      autoOpen: true,
-      modal: true,
-      autoResize: true,
-      width:'auto'
-    });
-  });
+  })
 
-  $('#remove_grounding').on('click', function() {
+  $('#remove_grounding').on('show.bs.modal', function (event) {
     $('#groundings').children('li').each(function() {
-      $("#removable").find('select').append($('<option>', {
-        value: ($(this).attr('id')),
-        text: ($(this).find('h4').text())
+      var id = ($(this).attr('id')),
+          name = ($(this).find('a').text());
+      if (name.length > 45) name = name.substr(0,45)+'...';
+      $("#remove_grounding").find('select').append($('<option>', {
+        value: id,
+        text: name
       }));
-    });
-    $("#removable").dialog({
-      autoOpen: true,
-      modal: true,
-      autoResize: true,
-      width:'auto'
     });
   });
 
@@ -243,7 +235,7 @@
     return t.substring(0, 12)+t.substring(12, 30).replace(/\s/,"\n")+t.substring(30, 50).replace(/\s/,"\n");
   }
 
-  function save(action, what) {
+  function record(action, what) {
     $.ajax({
       url: "../../"+what,
       type: "GET",
@@ -261,36 +253,36 @@
           dataType: "json",
           success: function(data) {
             var keep_trace = true;
-            if (action == '+') {
-              var nodeids = data.nodes.map(function(a) {return a.id;});
-              if (data.groundings.indexOf(what) == -1) data.groundings.push(what);
-              switch (added.link) {
-                case ('pp'):
-                case ('ipp'):
-                  if(nodeids.indexOf(added.groundings[0]) == -1) data.nodes.push({id: added.groundings[0], shape: 'box'});
-                  if(nodeids.indexOf(added.groundings[1]) == -1) data.nodes.push({id: added.groundings[1], shape: 'box'});
-                  break;
-                case ('dd'):
-                case ('idd'):
-                  if(nodeids.indexOf(added.groundings[0]) == -1) data.nodes.push({id: added.groundings[0], shape: 'diamond'});
-                  if(nodeids.indexOf(added.groundings[1]) == -1) data.nodes.push({id: added.groundings[1], shape: 'diamond'});
-                  break;
-                case ('dp'):
-                  if(nodeids.indexOf(added.groundings[0]) == -1) data.nodes.push({id: added.groundings[0], shape: 'box'});
-                  if(nodeids.indexOf(added.groundings[1]) == -1) data.nodes.push({id: added.groundings[1], shape: 'diamond'});
-                  break;
-              }
-            } else if (what.length > 0) {
-              var i = data.groundings.indexOf(what);
-              if (i > -1) data.groundings.splice(i, 1);
-            } else {
-              data.nodes = data.nodes.filter(function(a) { if (connected_nodes.indexOf(a.id) > -1) return a;});
-              keep_trace = false;
+            switch(action) {
+              case ('add_grounding'):
+                var nodeids = data.nodes.map(function(a) {return a.id;});
+                if (data.groundings.indexOf(what) == -1) data.groundings.push(what);
+                switch (added.link) {
+                  case ('pp'):
+                  case ('ipp'):
+                    if(nodeids.indexOf(added.groundings[0]) == -1) data.nodes.push({id: added.groundings[0], shape: 'box'});
+                    if(nodeids.indexOf(added.groundings[1]) == -1) data.nodes.push({id: added.groundings[1], shape: 'box'});
+                    break;
+                  case ('dd'):
+                  case ('idd'):
+                    if(nodeids.indexOf(added.groundings[0]) == -1) data.nodes.push({id: added.groundings[0], shape: 'diamond'});
+                    if(nodeids.indexOf(added.groundings[1]) == -1) data.nodes.push({id: added.groundings[1], shape: 'diamond'});
+                    break;
+                  case ('dp'):
+                    if(nodeids.indexOf(added.groundings[0]) == -1) data.nodes.push({id: added.groundings[0], shape: 'box'});
+                    if(nodeids.indexOf(added.groundings[1]) == -1) data.nodes.push({id: added.groundings[1], shape: 'diamond'});
+                    break;
+                }
+              break;
+              case ('remove_grounding'):
+                var i = data.groundings.indexOf(what);
+                if (i > -1) data.groundings.splice(i, 1);
+              break;
+              case ('clean_nodes'):
+                data.nodes = data.nodes.filter(function(a) { if (connected_nodes.indexOf(a.id) > -1) return a;});
+                keep_trace = false;
+              break;
             }
-            if (keep_trace) data.history.push({
-              "user": user,
-              "date": new Date().toJSON()
-            });
             $.ajax({
               type: "PUT",
               url: "../../{{_id}}",

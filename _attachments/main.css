@@ -1,4 +1,5 @@
 html {
+  height:100%;
   min-height:100%;
   position:relative;
 }
@@ -6,6 +7,11 @@ html {
 body {
   height: 100%;
   margin: 0;
+}
+
+.icon {
+  width: 16px;
+  height: 16px;
 }
 
 form {
@@ -19,6 +25,7 @@ form {
 }
 
 #container {
+  padding-top:44px
   min-height: 100%;
   position: relative;
 }
@@ -46,16 +53,8 @@ form {
   margin: 0px 2px;
 }
 
-#container>#memo {
-  padding: 30px 0 0 0;
-}
-
 #content {
   padding-bottom: 35px;
-}
-
-#memo>#content {
-  padding: 0 35px 0 21%;
 }
 
 #content h1 {
@@ -103,19 +102,12 @@ div.post {
   font-size: small;
 }
 
+.hidden {
+  display: none !important;
+}
+
 #groundings {
-  background-color: #eeeeee;
-  width: 20%;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right:0;
-  float:left;
-  background-repeat: no-repeat;
-  cursor: pointer;
-  padding: 35px 0 135px 5px;
-  overflow-y: auto;
+  border-right: 1px solid #eeeeee;
 }
 
 #add-leaves {
@@ -175,11 +167,11 @@ div.post {
     display:none;
 }
 
-.tooltip{
+.mytooltip {
   position: relative;
 }
 
-.tooltip .preview {
+.mytooltip .preview {
   position: fixed;
   right: 15px;
   top: 50px;
@@ -189,7 +181,7 @@ div.post {
   width: 50%;
 }
 
-.tooltip:hover .preview {
+.mytooltip:hover .preview {
   font-size: smaller;
   display: inline;
   color: #ffffff;
@@ -201,27 +193,23 @@ div.post {
   visibility: visible;
 }
 
-.tooltip:hover .preview a{
+.mytooltip:hover .preview a{
   color: #ffffff;
 }
 
-.tooltip:hover .preview h1{
+.mytooltip:hover .preview h1{
   font: inherit;
   font-weight: bold;
 }
 
-.tooltip:hover .preview td,
-.tooltip:hover .preview th{
+.mytooltip:hover .preview td,
+.mytooltip:hover .preview th{
   color: #ffffff;
   font-size: smaller;
 }
 
-.tooltip:hover .preview img{
+.mytooltip:hover .preview img{
   width: 100%;
-}
-
-#memo {
-  padding: 35px 0 0 0;
 }
 
 #memo>#content h1 {
@@ -239,12 +227,7 @@ div.post {
 
 #container>#content #name {
   font-size:150%;
-  margin: 50px 0 0 10px;
-}
-
-#container>#memo>#content #name {
-  font-size:150%;
-  margin: 10px 0 0 10px;
+  margin: 55px 0 0 10px;
 }
 
 .comment>.meta,
@@ -286,18 +269,6 @@ button.comment {
 .checked {
   background-color: lightgray;
   color: gray;
-}
-
-#add-grounding, #select-type {
-  width: 20%;
-  position: fixed;
-  text-align: center;
-  bottom: 20px;
-  padding-bottom:15px;
-  zmargin-left:-5px;
-  zmargin-right:5px;
-  background-color:#eeeeee;
-  z-index: +1;
 }
 
 #groundings>li,#memos>li,#selectable-memos>li,#branch>li{
@@ -348,6 +319,7 @@ button.comment {
 
 .table {
   background-image: url('table.svg');
+  margin-bottom: 0px;
 }
 
 .diagram {

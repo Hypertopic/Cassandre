@@ -1,3 +1,4 @@
+<!doctype html>
 <html>
   <head>
     <title>{{diary_name}} - {{name}}</title>
@@ -5,25 +6,26 @@
     {{>diagramcss}}
   </head>
   <body>
-    <div id="container">
-      <div id="header" class="menu">
-        <button type="button" id="diary">{{diary_name}}</button>
-        {{>log}}
-      </div>
-      <div id="memo">
+    <nav id="header" class="navbar navbar-expand bd-navbar fixed-top navbar-light bg-light">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item"><a class="nav-link" id="diary">{{diary_name}}</a></li>
+      </ul>
+      {{>log}}
+    </nav>
+    <div id="container" class='container-fluid h-100'>
+      <div id="memo" class='row h-100'>
         {{#authorized}}
-        <div id="groundings">
+        <div class="col-md-3" id='groundings'>
           <legend>{{i18n.i_groundings}}</legend>                   
           {{#groundings}}
           <li class="{{type}}" id="{{id}}">
-            <h4 class="toggle">{{name}}</h4>
-            <div class="preview">{{preview}} <a href="{{href}}">-></a></div>
+            <a href="{{href}}">{{name}}</a> <span class="toggle dropdown-toggle"> </span>
+            <div class="preview">{{preview}}</div>
           </li>            
           {{/groundings}}
-          <div id="add-grounding"></div>
         </div>
         {{/authorized}}
-        <div id="content">
+        <main class="col" id="content">
           {{^authorized}}
           <h1>{{i18n.i_sign-in_required}}</h1>
           {{/authorized}}
@@ -31,24 +33,20 @@
           <div id="add-leaves">
             <input id="leave-name" type="search" placeholder="{{i18n.i_name.theoretical}}" />
             <button type="button" class="theoretical" id="add">+</button>
-            <button type="button" class="graph" id="create" hidden="hidden">+</button>
+            <button type="button" class="graph hidden" id="create">+</button>
           </div>
           <h1> <img src="../../style/{{type}}.svg"/> <span id="name"> {{name}} </span> </h1>
-          <p id="authorization">
-            {{i18n.i_created-by}} {{creator}} <span class="moment">{{date}}</span><br/>
-            {{i18n.i_editable-by}} <span class="contributors">{{contributors_fullnames}}</span><br/>
-            {{i18n.i_readable-by}} <span class="readers">{{readers_fullnames}}</span>
-          </p>
+          {{>rights}}
           <div id="diagram" class="{{link}}">
             <div class="layout-1"></div>
             <div class="layout-2"></div>
           </div>
           <p>&nbsp;</p>
-          <div id="negative-case" hidden="hidden">
+          <div id="negative-case" class="hidden">
             <span class="meta">{{i18n.i_name.negative-case}}: </span><span class="negative_text">{{negative}}</span>
-            <button type="button" id="add_negative-case">+</button>
-            <input type="text" size="35" hidden="hidden" placeHolder="{{i18n.i_content.negative-case}}" value="{{negative}}"/>
-            <button type="button" id="negative-case_created" hidden="hidden">{{i18n.i_done}}</button>
+            <button class="btn" type="button" id="add_negative-case">+</button>
+            <input type="text" size="35" class="form-control hidden" placeHolder="{{i18n.i_content.negative-case}}" value="{{negative}}"/>
+            <button class="btn hidden" type="button" id="negative-case_created">{{i18n.i_done}}</button>
           </div>
           {{>comments}}
           {{/authorized}}
@@ -60,14 +58,25 @@
           {{/leaves}}
           </ul>
         </div>
-      </div>
-      <div id="footer" class="menu">
+      </main>
+      <nav id="footer" class="navbar fixed-bottom navbar-light bg-light">
+        <div role='group'>
+          <button class='btn btn-sm' data-toggle="modal" data-target="#add_grounding" id="add_grounding_btn"><span>{{i18n.i_add_groundings}}</span></button>
+          <button class='btn btn-sm' id="comment_create">{{i18n.i_comment}}</button>
+        </div>
         <a href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
       </div>
     </div>
-    <div id="show-leaves" hidden="hidden"><div class="reverse">{{i18n.i_leaves}}</div></div>
-    <div id="dialog" hidden="hidden">
-        <select onChange="adapt(this);"></select>
+    <div id="show-leaves" class="hidden"><div class="reverse">{{i18n.i_leaves}}</div></div>
+    <div id="add_grounding" class="modal fade" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">{{i18n.i_add_groundings}}</div>
+          <div class="modal-body">
+            <select onChange="adapt(this);"></select>
+          </div>
+        </div>
+      </div>
     </div>
   </body>
   {{>script}}
@@ -107,7 +116,7 @@
           var ground_date = r.value['date']; // unused
           var ground_preview = r.value['preview'];
           if ($('#groundings li').length < 2 && document.getElementById(id) == null && ground_href != "{{_id}}" && ground_type == 'coding') {
-            $("#dialog").find('select').append($('<option>', {
+            $("#add_grounding").find('select').append($('<option>', {
               id: ground_href,
               value: ground_href,
               text: ground_label
@@ -117,8 +126,8 @@
         $('#groundings').children('li').each(function() {
           var prop_href = ($(this).attr('id'));
           var prop_href = ($(this).find("div").find("a").attr('href'));
-          var prop_label = ($(this).find('h4').html());
-          var prop_label = '<div class="polarity">+</div>'+($(this).find('h4').html())+'<div class="molarity">&ndash;</div>';
+          var prop_label = ($(this).find('a').html());
+          var prop_label = '<div class="polarity">+</div>'+($(this).find('a').html())+'<div class="molarity">&ndash;</div>';
           $('#diagram').append($('<a>', {
             class: 'node',
             href: prop_href,
@@ -128,23 +137,22 @@
       }
     });
     if ($('#groundings li').length == 1) {
-      $('#add-grounding').html("{{i18n.i_add_groundings}}");
-      $("#dialog").attr("title","{{i18n.i_groundings}}");
-      $("#dialog").find('select').append($('<option>', {
+      $('#add_grounding_btn').html("{{i18n.i_add_groundings}}");
+      $("#add_grounding").find('.modal-header').html("{{i18n.i_groundings}}");
+      $("#add_grounding").find('select').append($('<option>', {
         text: "{{i18n.i_select_grounding}}"
       }));
     } else {
-      $('#create').show();
-      $('#negative-case').show();
-      $('#add-grounding').html("{{i18n.i_diagram_type}}");
-      $("#dialog").attr("title","{{i18n.i_diagram_type}}");
-      $("#dialog").find('select').append($('<option>', { text: "{{i18n.i_link}}" }));
-      $("#dialog").find('select').append(
+      $('#create').removeClass('hidden');
+      $('#negative-case').removeClass('hidden');
+      $('#add_grounding_btn').html("{{i18n.i_diagram_type}}");
+      $("#add_grounding").find('.modal-header').html("{{i18n.i_diagram_type}}");
+      $("#add_grounding").find('select').append($('<option>', { text: "{{i18n.i_link}}" }));
+      $("#add_grounding").find('select').append(
         $('<option>', { value: 'pp', text: "{{i18n.i_link_properties}}" }),
         $('<option>', { value: 'ipp', text: "{{i18n.i_inverse_link_between_properties}}" }),
         $('<option>', { value: 'dd', text: "{{i18n.i_link_dimensions}}" }),
-        $('<option>', { value: 'idd', text: "{{i18n.i_inverse_link_between_dimensions}}" }),
-        $('<option>', { value: 'dp', text: "{{i18n.i_link_property_dimension}}" })
+        $('<option>', { value: 'idd', text: "{{i18n.i_inverse_link_between_dimensions}}" })
       );
     }
     $.ajax({
@@ -163,15 +171,6 @@
     create($(this)[0].className, '{{_id}}', $('#leave-name').val().trim());
   });
 
-  $('#add-grounding').on('click', function() {
-    $("#dialog").dialog({
-      autoOpen: true,
-      modal: true,
-      autoResize: true,
-      width:'auto'
-    });
-  });
-
   function adapt(there) {
     refresh = true;
     $.ajax({
@@ -182,17 +181,17 @@
         for (var i in data.groundings) {
           if (!document.getElementById(data.groundings[i])) data.groundings.splice(i, 1);
         }
-        data.name = $('#'+data.groundings[0]).find('h4').html().trim() +' & ';
+        data.name = $('#'+data.groundings[0]).find('a').html().trim() +' & ';
         if (there.value && there.value.length == 32) {
           if (data.groundings.indexOf(there.value) == -1) data.groundings.push(there.value);
           data.name = data.name + $('#'+there.value).text();
         } else if (there.value && there.value.length < 4) {
           data.link = there.value;
-          data.name = data.name + $('#'+data.groundings[1]).find('h4').html().trim();
+          data.name = data.name + $('#'+data.groundings[1]).find('a').html().trim();
           $("#dialog").dialog('close');
         } else {
           data.negative = there;
-          data.name = data.name + $('#'+data.groundings[1]).find('h4').html().trim();
+          data.name = data.name + $('#'+data.groundings[1]).find('a').html().trim();
         }
         if (!data.history) data.history = [];
         data.history.push({
@@ -220,8 +219,8 @@
     refresh = false;
     $(".negative_text").remove();
     $("#add_negative-case").remove();
-    $("#negative-case").find('input').show();
-    $('#negative-case_created').show();
+    $("#negative-case").find('input').removeClass('hidden');
+    $('#negative-case_created').removeClass('hidden');
     $("#comment_create").remove();
     $('html, body').scrollTop($(document).height());
   });

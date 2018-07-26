@@ -5,19 +5,19 @@
     <link rel="stylesheet" href="../../style/cal-heatmap.css" />
   </head>
   <body id="watermark">
-    <div id="container">
-      <header>
-        <div id="header" class="menu">
-          <button type="button" id="diary">{{diary_name}}</button>
-          {{i18n.i_filter}}
-          <button type="button" id="all-activity">{{i18n.i_all}}</button>
-          <button type="button" id="only-created">{{i18n.i_creations}}</button>
-          <button type="button" id="only-modified">{{i18n.i_modifications}}</button>
-          <button type="button" id="only-comments">{{i18n.i_comments}}</button>
-          {{>log}}
-        </div>
-      </header>
-      <div id="content">
+    <nav id="header" class="navbar navbar-expand bd-navbar fixed-top navbar-light bg-light">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item"><a class="nav-link" id="diary">{{diary_name}}</a></li>
+        {{i18n.i_filter}}
+        <li class="nav-item"><a class="nav-link" id="all-activity">{{i18n.i_all}}</a></li>
+        <li class="nav-item"><a class="nav-link" id="only-created">{{i18n.i_creations}}</a></li>
+        <li class="nav-item"><a class="nav-link" id="only-modified">{{i18n.i_modifications}}</a></li>
+        <li class="nav-item"><a class="nav-link" id="only-comments">{{i18n.i_comments}}</a></li>
+      </ul>
+      {{>log}}
+    </nav>
+    <div id="container" class='container-fluid h-100'>
+      <main class="col" id="content">
         <h1>{{i18n.i_activity}}</h1>
         <div id="cal-heatmap"></div>
         <div id="activity" title="{{i18n.i_activity}}">
@@ -46,10 +46,10 @@
           </li>
         {{/activity}}
         </ul></div>
-      </div>
-      <div id="footer" class="menu">
+      </main>
+      <nav id="footer" class="navbar fixed-bottom navbar-light bg-light">
         <a href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
-      </div>
+      </nav>
     </div>
   </body>
   {{>script}}

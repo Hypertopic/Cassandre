@@ -1,7 +1,7 @@
 #graph {
   margin-left: 10px;
   margin-right: 10px;
-  height: 75%;
+  height: 500px;
   border: 1px solid lightgray;
 }
 
@@ -112,6 +112,7 @@
 
 .pp>.node, .dp>.node:nth-child(3) {
   padding-top: 140px;
+padding-bottom: 150px;
   height: 160px;
   border:2px solid black;
   float:left;
@@ -126,6 +127,7 @@
   border-bottom:2px solid transparent;
   border-right:2px solid transparent;
   border-left: 2px solid transparent;
+padding-bottom: 150px;
 }
 
 .ipp>.layout-1 {
@@ -156,6 +158,8 @@
 
 .ipp>.node {
   padding-top: 140px;
+padding-bottom: 150px;
+
   height: 160px;
   border:2px solid black;
   float:left;
@@ -172,7 +176,7 @@
 
 .dd>.layout-1 {
   position: absolute;
-  top:0;
+  top:0px;
   width: 0px;
   height: 0px;
   border-bottom:0px solid transparent;
@@ -184,8 +188,8 @@
 
 .dd>.layout-2 {
   position: absolute;
-  top:0;
-  left:2;
+  top:0px;
+  left:2px;
   width: 0px;
   height: 0px;
   border-bottom:0px solid transparent;
@@ -255,7 +259,11 @@
   text-align: center;
   padding-top: 140px;
   padding-bottom: 140px;
+  margin-left: 14px;
+  margin-right: 14px;
 }
+
+
 
 .idd>.node:nth-child(3)  {
   padding-top: 240px;
@@ -269,7 +277,7 @@
 
 .idd>.layout-1 {
   position: absolute;
-  top:0;
+  top:0px;
   width: 0px;
   height: 0px;
   border-top:0px solid transparent;
@@ -280,19 +288,17 @@
 }
 
 .idd>.layout-2 {
+bbackground: red;
   position: absolute;
-  bottom:0;
-  left:0;
+  top:2px;
+  left:0px;
   width: 0px;
   height: 0px;
   border-top:0px solid transparent;
   border-bottom:298px solid white;
   border-left: 0px solid transparent;
-  border-right:  398px solid transparent;
+  border-right:  397px solid transparent;
   z-index: -1;
-}
-
-.idd>.node {
 }
 
 .idd>a>.polarity, .idd>a>.molarity   {

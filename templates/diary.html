@@ -7,47 +7,51 @@
     {{/list}}
   </head>
   <body id="watermark">
-    <div id="container">
-      <header>
-        <div id="header" class="menu">
-          <button type="button" id="diaries">{{i18n.i_diaries}}</button>
-          <button type="button" id="drawNetwork">{{i18n.i_network}}</button>
-          <button type="button" id="drawTimeline">{{i18n.i_timeline}}</button>
-          <select id="sort">
-            <option>{{i18n.i_sort}}</option>
-            <option value="name">{{i18n.i_title}}</option>
-            <option value="date">{{i18n.i_date}}</option>
-            <option value="update">{{i18n.i_update}}</option>
-            <option value="type">{{i18n.i_type}}</option>
-          </select>
-          <button type="button" id="patterns">{{i18n.i_patterns}}</button>
-          {{>log}}
+    <nav id="header" class="navbar navbar-expand bd-navbar fixed-top navbar-light bg-light">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item"><a class="nav-link" id="diaries">{{i18n.i_diaries}}</a></li>
+        <li class="nav-item"><a class="nav-link" id="drawNetwork">{{i18n.i_network}}</a></li>
+        <li class="nav-item"><a class="nav-link" id="drawTimeline">{{i18n.i_timeline}}</a></li>
+        <div class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="sort" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          {{i18n.i_sort}}
+          </a>
+          <div class="dropdown-menu" aria-labelledby="sort">
+            <a class="dropdown-item" href="?by=name">{{i18n.i_title}}</a>
+            <a class="dropdown-item" href="?by=date">{{i18n.i_date}}</a>
+            <a class="dropdown-item" href="?by=update">{{i18n.i_update}}</a>
+            <a class="dropdown-item" href="?by=type">{{i18n.i_type}}</a>
+          </div>
         </div>
-      </header>
-      <div id="content">
+        <li class="nav-item"><a class="nav-link" id="patterns">{{i18n.i_patterns}}</a></li>
+      </ul>
+      {{>log}}
+    </nav>
+    <div id="container" class='container-fluid'>
+      <div id="content" class='col'>
         <h1>{{diary_name}}</h1>
-        <input id="name" type="search" hidden="hidden" value="{{diary_name}}"/>
+        <input id="name" type="search" class="form-control hidden" value="{{diary_name}}"/>
         <div id="add-leaves">
-          <img id="sticky" src="../../style/checklist.png" hidden="hidden" alt="{{i18n.i_todo}}"/>
-          <img id="show-activity" src="../../style/clock.png" alt="{{i18n.i_activity}}"/>
+          <img id="sticky" src="https://icongr.am/octicons/tasklist.svg?color=e6e6e6&size=32" class="hidden" alt="{{i18n.i_todo}}"/>
+          <img id="show-activity" src="https://icongr.am/octicons/clock.svg?color=e6e6e6&size=32" alt="{{i18n.i_activity}}"/>
         </div>
-        <div id="network" hidden="hidden"></div>
+        <div id="network" class="hidden"></div>
         <ul id="memos">
         {{#sections}}
           {{#memos}}
-          <li class="{{type}}"><input type="checkbox" id="{{id}}" name="{{rev}}" hidden="hidden" />
-            <span id="{{date}}" name="{{update}}" class="moment"></span>&nbsp;–
-            <a href="../../{{path}}/{{diary}}/{{id}}" class="tooltip unread">{{name}}
-            {{#preview}}<span class="preview">{{preview}}</span>{{/preview}}</a>
+          <li class="{{type}} mytooltip"><input type="checkbox" id="{{id}}" name="{{rev}}" class="hidden" />
+            <span id="{{date}}" name="{{update}}" class="moment unread"></span>&nbsp;–
+            <a href="../../{{path}}/{{diary}}/{{id}}" class="unread">{{name}}</a>
+            {{#preview}}<span class="preview">{{preview}}</span>{{/preview}}
           </li>
           {{/memos}}
         {{/sections}}
         </ul>
       </div>
-      <div id="footer" class="menu">
-        <a href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
-      </div>
     </div>
+    <nav id="footer" class="navbar fixed-bottom">
+      <a class='navbar-text' href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
+    </nav>
   </body>
   {{>script}}
   {{#list}}<script src="../../script/showdown.min.js"></script>{{/list}}
@@ -78,7 +82,7 @@
         for (i in data.activity) {
           var id = '#'+data.activity[i].doc;
           if (data.activity[i].date > $(id).parent().find('.moment').attr('name')) {
-            $(id).parent().find('.tooltip').removeClass('unread');
+            $(id).parent().find('.unread').removeClass('unread');
           }
         }
       }
@@ -95,7 +99,7 @@
       type: "GET",
       dataType: "json",
       success: function(todo) {
-        if (todo.pending > 0) $('#sticky').show();
+        if (todo.pending > 0) $('#sticky').removeClass("hidden");
       }
     });
   });
@@ -103,9 +107,6 @@
   $('#header')
     .on('click', '#diaries', function() {
       self.location = '..';
-    })
-    .on('change', '#sort', function() {
-      self.location = '?by=' + $('#sort').val();
     })
     .on('click', '#drawNetwork', function() {
       self.location = '?by=network';
@@ -119,12 +120,14 @@
 
   $('#footer')
     .on('click', '#show_delete', function() {
-      $("#network").hide();
-      $("#memos>li>input").show();
+      $("#network").addClass("hidden");
+      $("#memos>li>input").removeClass("hidden");
       $("#footer").html(
-        '<button id="cancel" type="button">{{i18n.i_cancel}}</button>'
-        + '<input id="toggle" type="checkbox">{{i18n.i_select}}</button>'
-        + '<button id="delete" type="button">{{i18n.i_delete}}</button>'
+        '<div role="group">'
+        + '<button class="btn navbar-btn btn-sm" id="cancel" type="button">{{i18n.i_cancel}}</button>'
+        + '<input id="toggle" type="checkbox">{{i18n.i_select}}</input>'
+        + '<button class="btn navbar-btn btn-sm" id="delete" type="button">{{i18n.i_delete}}</button>'
+        + '</div>'
       );
     })
 
@@ -169,9 +172,9 @@
   });
 
   function resetUI() {
-    $("#memos>li>input").hide();
+    $("#memos>li>input").addClass("hidden");
     $("#footer").html(
-      '<button type="button" id="show_delete">{{i18n.i_delete}}...</button>'
+      '<button class="btn navbar-btn btn-sm" type="button" id="show_delete">{{i18n.i_delete}}...</button>'
       + '<a href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>'
     );
   }
@@ -200,8 +203,8 @@
 
   {{#timeline}}
   function drawTimeline() {
-    $("#show_delete").hide();
-    $(".vis-network").hide();
+    $("#footer").addClass("hidden");
+    $(".vis-network").addClass("hidden");
     var container = document.getElementById('network');
     var data = {{{timeline}}};
     var options = {locale: '{{locale}}'};
@@ -228,14 +231,14 @@
         self.location = selected.item;
       }
     });
-    $("#memos").hide();
-    $("#network").show();
+    $("#memos").addClass("hidden");
+    $("#network").removeClass("hidden");
   }
   {{/timeline}}
 
   {{#network}}
   function drawNetwork() {
-    $("#show_delete").hide();
+    $("#footer").addClass("hidden");
     var diagrams = "{{{diagrams}}}";
     diagrams = diagrams.split(',');
     var graphs = "{{{graphs}}}";
@@ -281,8 +284,8 @@
         }
       }
     });
-    $("#memos").hide();
-    $("#network").show();
+    $("#memos").addClass("hidden");
+    $("#network").removeClass("hidden");
   }
   {{/network}}
 

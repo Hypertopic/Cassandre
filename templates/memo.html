@@ -1,58 +1,57 @@
+<!doctype html>
 <html>
   <head>
     <title>{{diary_name}} - {{name}}</title>
     {{>links}}
   </head>
   <body>
-    <div id="container">
-      <div id="header" class="menu">
-        <button type="button" id="diary">{{diary_name}}</button>
+    <nav id="header" class="navbar navbar-expand bd-navbar fixed-top navbar-light bg-light">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item"><a class="nav-link" id="diary">{{diary_name}}</a></li>
         {{#authorized}}
-        <button type='button' id='clear_highlights' hidden="hidden">{{i18n.i_raw}}</button>
-        <button type='button' id='specific' class='highlight_words'
-          disabled='disabled' hidden="hidden">{{i18n.i_specific}}</button>
-        <button type='button' id='rare' class='highlight_words'
-          disabled='disabled' hidden="hidden">{{i18n.i_rare}}</button>
-        <button type='button' id='repeated' disabled='disabled' hidden="hidden">
-          {{i18n.i_phrases}}</button>
+        <div id='lexical' class="btn-group hidden" role="group">
+          <li class="nav-item"><a class="nav-link"  id='clear_highlights'>{{i18n.i_raw}}</a></li>
+          <li class="nav-item"><a class="nav-link highlight_words" id='specific'
+            disabled>{{i18n.i_specific}}</a></li>
+          <li class="nav-item"><a class="nav-link highlight_words" id='rare'
+            disabled>{{i18n.i_rare}}</a></li>
+          <li class="nav-item"><a class="nav-link"  id='repeated' disabled>
+            {{i18n.i_phrases}}</a></li>
+        </div>
+        <form class="form-inline input-group-sm">
+          <input id='kwic' class="form-control input-sm hidden" type='search' placeholder='{{i18n.i_search}}'/>
+        </form>
         {{/authorized}}
-        {{>log}}
+      </ul>
+      {{>log}}
+    </nav>
+    <div id="container" class='container-fluid h-100'>
+      <div id="memo" class='row h-100'>
         {{#authorized}}
-        <input id='kwic' type='search' placeholder='{{i18n.i_search}}' hidden="hidden"/>
-        {{/authorized}}
-      </div>
-      <div id="memo">
-        {{#authorized}}
-        <div id="groundings">
-          <legend>{{i18n.i_groundings}}</legend>                   
+        <div class="col-md-3" id='groundings'>
+          <legend>{{i18n.i_groundings}}</legend>
           {{#groundings}}
           <li class="{{type}}" id="{{id}}">
-            <h4 class="toggle">{{name}}</h4>
-            <div class="preview">{{preview}} <a href="{{href}}">-></a></div>
-          </li>            
+            <a href="{{href}}">{{name}}</a> <span class="toggle dropdown-toggle"> </span>
+            <div class="preview">{{preview}}</div>
+          </li>
           {{/groundings}}
-          <div id="add-grounding"><span>{{i18n.i_add_groundings}}</span></div>
         </div>
         {{/authorized}}
-        <div id="content">
-          {{^authorized}}
+        <main class="col" id="content">
+        {{^authorized}}
           <h1 id="name">{{i18n.i_sign-in_required}}</h1>
-          {{/authorized}}
-          {{#authorized}}
+        {{/authorized}}
+        {{#authorized}}
           <div id="add-leaves">
-            <input id="leave-name" type="search" placeholder="" hidden="hidden" />
-            <button type="button" id="add" hidden="hidden">+</button>
-            <button id="create" type="button" hidden="hidden">&nbsp;</button>
-            <button id="create-table" class="table" type="button" hidden="hidden">+</button>
+            <input id="leave-name" type="search" placeholder="" class="hidden" />
+            <button type="button" id="add" class="hidden">+</button>
+            <button id="create" type="button" class="hidden">&nbsp;</button>
+            <button id="create-table" class="table hidden" type="button">+</button>
           </div>
           <h1><img src="../../style/{{type}}.svg"/> {{name}}</h1>
-          <input id="name" type="search" hidden="hidden" value="{{name}}"/>
-          <p id="authorization">
-            {{i18n.i_created-by}} {{creator}} <span class="moment">{{date}}</span><br/>
-            {{i18n.i_editable-by}} <span class="contributors">{{contributors_fullnames}}</span><br/>
-            {{i18n.i_readable-by}} <span class="readers">{{readers_fullnames}}</span>
-            <button id='modify_rights' type="button">...</button>
-          </p>
+          <input id="name" type="search" class="form-control hidden" value="{{name}}"/>
+          {{>rights}}
           <div class="speeches">
           {{#body}}
           <div class="speeches-row">
@@ -73,23 +72,10 @@
           </div>
           {{/body}}
           </div>
-          <div id="comments">
-            {{#comments}}
-            <div class="comment {{checked}}" id="{{id}}" name="{{rev}}">
-              <span class="meta"><span class="user">{{user}}</span> (<span class="moment">{{date}}</span>)</span>:
-              {{#logged}}<div class="checkbox"><input type="checkbox" class="comment_check" {{checked}}></div>{{/logged}}<br/>
-              <span class="comment_text">{{text}}</span>
-              <input size="80" height="50" type="text" hidden="hidden" class="comment_edit" value="{{text}}"/>
-            </div>
-            {{/comments}}
-            <button type="button" id="comment_create">{{i18n.i_comment}}</button>
-            <textarea cols="80" rows="5" type="text" hidden="hidden" placeHolder="{{i18n.i_enter_comment}}"></textarea>
-            <button type="button" id="commented" hidden="hidden">{{i18n.i_done}}</button>
-          </div>
-          <p>&nbsp;</p>
+          {{>comments}}
         {{/authorized}}
-        </div>
-        <div id="leaves">
+        </main>
+        <div class="col" id="leaves">
           <ul id="branch">
           {{#leaves}}
             <li class="{{type}}"><a href="{{href}}">{{name}}</a></li>
@@ -97,39 +83,64 @@
           </ul>
         </div>
       </div>
-      <div id="footer" class="menu">
+      <nav id="footer" class="navbar fixed-bottom navbar-light bg-light">
         {{#authorized}}
-        <button type="button" id="remove_grounding" hidden="hidden">{{i18n.i_remove_grounding}}</button>
-        <button type="button" id="edit">{{i18n.i_edit}}</button>
+        <div role="group">
+          <button class='btn btn-sm' data-toggle="modal" data-target="#add_grounding"><span>{{i18n.i_add_groundings}}</span></button>
+          <button class='btn btn-sm hidden' data-toggle="modal" data-target="#remove_grounding" id="remove_grounding_btn">{{i18n.i_remove_grounding}}</button>
+          <button class='btn btn-sm' id="edit">{{i18n.i_edit}}</button>
+          <button class='btn btn-sm' id="comment_create">{{i18n.i_comment}}</button>
+        </div>
         {{/authorized}}
-        <a href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
+        <a class='navbar-text' href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
+      </nav>
+    </div>
+    <div id="show-leaves" class="hidden"><div class="reverse">{{i18n.i_leaves}}</div></div>
+    <div id="add_grounding" class="modal fade" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">{{i18n.i_add_groundings}}</div>
+          <div class="modal-body">
+            <select onChange="record('add_grounding', this.value);"><option>{{i18n.i_select_grounding}}</option></select>
+          </div>
+        </div>
       </div>
     </div>
-    <div id="show-leaves" hidden="hidden"><div class="reverse">{{i18n.i_leaves}}</div></div>
-    <div id="dialog" title="{{i18n.i_groundings}}" hidden="hidden">
-      <select onChange="record('add_grounding', this.value);"><option>{{i18n.i_select_grounding}}</option></select>
-    </div>
-    <div id="modify_rights_dialog" title="{{i18n.i_modify_rights}}" hidden="hidden" class="ui-front">
-      <table><tr><th>{{i18n.i_contributors}}</th><th>{{i18n.i_readers}}</th></tr><tr><td>
-        <input id="add_contributor" type="search" placeholder="{{i18n.i_add_contributor}}"/><br/>
-        <p>{{i18n.i_editable-by}}</p>
-        <div class="contributors">
-        {{#contributors_fullnames}}
-          <p>{{.}}<button class='remove_contributor' value='{{.}}'>x</button></p>
-        {{/contributors_fullnames}}
+    <div id="remove_grounding" class="modal fade" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">{{i18n.i_remove_grounding}}</div>
+          <div class="modal-body">
+            <select onChange="record('remove_grounding', this.value);"><option>{{i18n.i_select_grounding}}</option></select>
+          </div>
         </div>
-      </td><td>
-        <input id="add_reader" type="search" placeholder="{{i18n.i_add_reader}}"/><br/>
-        <p>{{i18n.i_readable-by}}</p>
-        <div class="readers">
-        {{#readers_fullnames}}
-          <p>{{.}}<button class='remove_reader' value='{{.}}'>x</button></p>
-        {{/readers_fullnames}}
-        </div>
-      </td></tr></table>
+      </div>
     </div>
-    <div id="removable" title="{{i18n.i_groundings}}" hidden="hidden">
-      <select onChange="record('remove_grounding', this.value);"><option>{{i18n.i_select_grounding}}</option></select>
+    <div id="modify_rights_dialog" class="modal fade" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">{{i18n.i_modify_rights}}</div>
+          <div class="modal-body">
+            <table><tr><th>{{i18n.i_contributors}}</th><th>{{i18n.i_readers}}</th></tr><tr><td>
+              <input id="add_contributor" type="search" placeholder="{{i18n.i_add_contributor}}"/><br/>
+              <p>{{i18n.i_editable-by}}</p>
+              <div class="contributors">
+              {{#contributors_fullnames}}
+                <p>{{.}}<button class='remove_contributor' value='{{.}}'>x</button></p>
+              {{/contributors_fullnames}}
+              </div>
+            </td><td>
+              <input id="add_reader" type="search" placeholder="{{i18n.i_add_reader}}"/><br/>
+              <p>{{i18n.i_readable-by}}</p>
+              <div class="readers">
+              {{#readers_fullnames}}
+                <p>{{.}}<button class='remove_reader' value='{{.}}'>x</button></p>
+              {{/readers_fullnames}}
+              </div>
+            </td></tr></table>
+          </div>
+        </div>
+      </div>
     </div>
   </body>
   {{>script}}
@@ -164,11 +175,8 @@
         $("#name").attr("placeHolder", "{{{i18n.i_name.transcript}}}");
         $('#add').addClass('coding');
         $("#leave-name").attr("placeHolder", "{{i18n.i_name.coding}}");
-        $('#clear_highlights').show();
-        $('#specific').show();
-        $('#rare').show();
-        $('#repeated').show();
-        $('#kwic').show();
+        $('#lexical').removeClass('hidden');
+        $('#kwic').removeClass('hidden');
         $('.writing').removeClass('writing').addClass('words');
         break;
       case ('coding'):
@@ -176,9 +184,9 @@
         $('#add').addClass('theoretical');
         $("#leave-name").attr("placeHolder", "{{i18n.i_name.theoretical}}");
         if ($('#name').val().length > 0) {
-          $('#create').show();
+          $('#create').removeClass('hidden');
           $('#create').addClass('diagram');
-          $('#create-table').show();
+          $('#create-table').removeClass('hidden');
         }
         break;
       case ('theoretical'):
@@ -190,7 +198,7 @@
         $("#name").attr("placeHolder", "{{i18n.i_name.operational}}");
         $('#add').addClass('field');
         $('#create').addClass('transcript');
-        $('#create').show();
+        $('#create').removeClass('hidden');
         $("#leave-name").attr("placeHolder", "{{i18n.i_name.field}}");
         break;
       case ('diagram'):
@@ -213,37 +221,8 @@
     $('.post').html(function(i, text) {
       return converter.makeHtml(text.trim());
     });
-    if ($('#groundings li').length < 1) {
-      $("#groundings").css({
-        'visibility': 'hidden'
-      });
-      $("#add-grounding").css({
-        'visibility': 'visible'
-      });
-      $("#add-grounding").css({
-        'height': '36px',
-        'line-height': '36px',
-        'position':'fixed',
-        'top': '2px',
-        'left': '0px',
-        'padding-bottom':'0px',
-        'transform': 'rotate(90deg)',
-        'transform-origin': 'left bottom 0'
-      });
-      $("#add-grounding span").css({
-        'position':'absolute',
-        'left':'0',
-        'right':'0',
-        'transform': 'rotate(180deg)',
-        'transform-origin': 'center center 0'
-      });
-      $("#content").css({
-         'padding-left': '40px'
-      });
-      $("#comments").css({
-         'margin-left': '40px',
-      });
-    }
+    if ($('#groundings li').length == 1) $("#groundings").find('legend').text("{{i18n.i_grounding}}");
+    if ($('#groundings li').length < 1) $("#groundings").addClass('hidden');
     if ("{{type}}" === 'transcript') {
       $.ajax({
         url: "../../corpus_words/{{diary}}",
@@ -311,6 +290,7 @@
 
   $('#add_contributor').autocomplete({
     minLength: 3,
+    appendTo: '#modify_rights_dialog',
     source: function(request, response) {
       $.getJSON('../../userlist/' + request.term, function (data) {
         response($.map(data.rows, function (value, key) {
@@ -334,6 +314,7 @@
 
   $('#add_reader').autocomplete({
     minLength: 3,
+    appendTo: '#modify_rights_dialog',
     source: function(request, response) {
       $.getJSON('../../userlist/' + request.term, function (data) {
         response($.map(data.rows, function (value, key) {
@@ -359,34 +340,9 @@
     record('remove_contributor', "{{contributors}}".split(',')[i]);
   });
 
-  $('#modify_rights').on('click', function() {
-    $("#modify_rights_dialog").dialog({
-      autoOpen: true,
-      modal: true,
-      autoResize: true,
-      width:'auto',
-      minHeight: 250
-    });
-  });
-
   $('#edit').on('click', function() {
     if ('{{type}}' == 'transcript') { self.location = '../../editable_text/{{_id}}';}
     else { self.location = '../../editable_memo/{{_id}}';}
-  });
-
-  $('#remove_grounding').on('click', function() {
-    $('#groundings').children('li').each(function() {
-      $("#removable").find('select').append($('<option>', {
-        value: ($(this).attr('id')),
-        text: ($(this).find('h4').html())
-      }));
-    });
-    $("#removable").dialog({
-      autoOpen: true,
-      modal: true,
-      autoResize: true,
-      width:'auto'
-    });
   });
 
   $('#add').on('click', function() {
@@ -394,36 +350,47 @@
   });
 
   $('#create').on('click', function() {
-    create($(this)[0].className, '{{_id}}', $('#leave-name').val().trim());
+    var name = $('#leave-name').val().trim(),
+        type = $(this)[0].className;
+    if (type == 'diagram') name = $('#name').val().trim(); 
+    create(type, '{{_id}}', name);
   });
 
   $('#create-table').on('click', function() {
     create($(this)[0].className, '{{_id}}', $('#leave-name').val().trim());
   });
 
-  $('#add-grounding').on('click', function() {
+  $('#add_grounding').on('show.bs.modal', function (event) {
     $.ajax({
       url: "../../memo_attribute/{{diary}}",
       type: "GET",
       dataType: "json",
       success: function(ground_candidates) {
         for (var i in ground_candidates.rows) {
-          var r = ground_candidates.rows[i];
-          var id = r.value['id'];
+          var r = ground_candidates.rows[i],
+              id = r.value['id'],
+              name = r.value['name'];
+          if (name.length > 45) name = name.substr(0,45)+'...';
           if(document.getElementById(id) == null && id != "{{_id}}") {
-            $("#dialog").find('select').append($('<option>', {
+            $("#add_grounding").find('select').append($('<option>', {
               value: id,
-              text: r.value['name']
+              text: name
             }));
           }
         }
-        $("#dialog").dialog({
-          autoOpen: true,
-          modal: true,
-          autoResize: true,
-          width:'auto'
-        });
       }
+    });
+  })
+
+  $('#remove_grounding').on('show.bs.modal', function (event) {
+    $('#groundings').children('li').each(function() {
+      var id = ($(this).attr('id')),
+          name = ($(this).find('a').text());
+      if (name.length > 45) name = name.substr(0,45)+'...';
+      $("#remove_grounding").find('select').append($('<option>', {
+        value: id,
+        text: name
+      }));
     });
   });
 

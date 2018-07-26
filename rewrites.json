@@ -221,6 +221,9 @@
     "from": "script/:file", 
     "to": ":file"
   }, {
+    "from": "fonts/:file", 
+    "to": ":file"
+  }, {
     "from": "style/img/network/:file",
     "to": ":file"
   }, {

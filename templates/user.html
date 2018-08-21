@@ -1,3 +1,4 @@
+<!doctype html>
 <html>
   <head>
     <title>{{fullname}}</title>
@@ -6,19 +7,19 @@
   </head>
   <body id="watermark">
     <div id="container">
-      <div id="header" class="menu">
+      <nav id="header" class="navbar navbar-expand bd-navbar fixed-top navbar-light bg-light">
+        <ul class="navbar-nav mr-auto">
+          {{i18n.i_filter}}
+          <li class="nav-item"><a class="nav-link" id="all-activity">{{i18n.i_all}}</a></li>
+          <li class="nav-item"><a class="nav-link" id="only-created">{{i18n.i_creations}}</a></li>
+          <li class="nav-item"><a class="nav-link" id="only-modified">{{i18n.i_modifications}}</a></li>
+          <li class="nav-item"><a class="nav-link" id="only-comments">{{i18n.i_comments}}</a></li>
+        </ul>
         {{>log}}
-      </div>
+      </nav>
       <div id="content">
         <h1>{{fullname}} <span id="contribution"></span></h1>
         <div id="cal-heatmap"></div>
-        <fieldset>
-          <legend>{{i18n.i_filter}}</legend>
-          <button type="button" id="all-activity">{{i18n.i_all}}</button>
-          <button type="button" id="only-created">{{i18n.i_creations}}</button>
-          <button type="button" id="only-modified">{{i18n.i_modifications}}</button>
-          <button type="button" id="only-comments">{{i18n.i_comments}}</button>
-        </fieldset>
         <ul>
           {{#activity}}
           <li class="{{action}}">
@@ -28,11 +29,10 @@
           {{/activity}}
         </ul>
       </div>
-      <div id="footer" class="menu">
-        <a href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
-      </div>
+      <nav id="footer" class="navbar fixed-bottom navbar-light bg-light">
+        <a class='navbar-text' href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
+      </nav>
     </div>
-  </body>
   {{>script}}
   <script type="text/javascript" src="../script/d3.min.js"></script>
   <script type="text/javascript" src="../script/cal-heatmap.min.js"></script>
@@ -124,5 +124,6 @@
   {{>layoutscript}}
   {{>logscript}}
   </script>
+  </body>
 </html>
 

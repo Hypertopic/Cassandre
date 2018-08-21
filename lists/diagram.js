@@ -53,9 +53,9 @@ function(head, req) {
             var preview = row.doc.body.substr(0, 200).replace(/\s/g, ' ');
           } else {
             if (row.doc.speeches) {
-              var preview = row.doc.speeches[0].text.substr(0, 200) || ' ';
+              var preview = row.doc.speeches[0].text.substr(0, 200) || null;
             } else {
-              var preview = ' ';
+              var preview = null;
             }
           }
           var ground_type = row.doc.type || 'transcript';

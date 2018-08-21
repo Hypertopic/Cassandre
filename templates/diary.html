@@ -1,3 +1,4 @@
+<!doctype html>
 <html>
   <head>
     <title>{{diary_name}}</title>
@@ -10,8 +11,15 @@
     <nav id="header" class="navbar navbar-expand bd-navbar fixed-top navbar-light bg-light">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item"><a class="nav-link" id="diaries">{{i18n.i_diaries}}</a></li>
-        <li class="nav-item"><a class="nav-link" id="drawNetwork">{{i18n.i_network}}</a></li>
-        <li class="nav-item"><a class="nav-link" id="drawTimeline">{{i18n.i_timeline}}</a></li>
+        <div class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="show" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          {{i18n.i_show}}
+          </a>
+          <div class="dropdown-menu" aria-labelledby="show">
+            <a class="dropdown-item" id="drawNetwork">{{i18n.i_network}}</a>
+            <a class="dropdown-item" id="drawTimeline">{{i18n.i_timeline}}</a>
+          </div>
+        </div>
         <div class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="sort" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           {{i18n.i_sort}}
@@ -23,7 +31,7 @@
             <a class="dropdown-item" href="?by=type">{{i18n.i_type}}</a>
           </div>
         </div>
-        <li class="nav-item"><a class="nav-link" id="patterns">{{i18n.i_patterns}}</a></li>
+        <li class="nav-item"><a class="nav-link hidden" id="patterns">{{i18n.i_patterns}}</a></li>
       </ul>
       {{>log}}
     </nav>
@@ -39,7 +47,7 @@
         <ul id="memos">
         {{#sections}}
           {{#memos}}
-          <li class="{{type}} mytooltip"><input type="checkbox" id="{{id}}" name="{{rev}}" class="hidden" />
+          <li class="{{type}} mytooltip"><input type="checkbox" id="{{id}}" name="{{rev}}" class="hidden deletable" />
             <span id="{{date}}" name="{{update}}" class="moment unread"></span>&nbsp;–
             <a href="../../{{path}}/{{diary}}/{{id}}" class="unread">{{name}}</a>
             {{#preview}}<span class="preview">{{preview}}</span>{{/preview}}
@@ -49,10 +57,9 @@
         </ul>
       </div>
     </div>
-    <nav id="footer" class="navbar fixed-bottom">
+    <nav id="footer" class="navbar fixed-bottom navbar-light bg-light">
       <a class='navbar-text' href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
     </nav>
-  </body>
   {{>script}}
   {{#list}}<script src="../../script/showdown.min.js"></script>{{/list}}
   {{^list}}<script src="../../script/vis.min.js"></script>{{/list}}
@@ -102,6 +109,14 @@
         if (todo.pending > 0) $('#sticky').removeClass("hidden");
       }
     });
+    $.ajax({
+      url: "../../kwic/{{diary}}",
+      type: "GET",
+      dataType: "json",
+      success: function(kwic) {
+        if (kwic.pending > 0) $('#patterns').removeClass("hidden");
+      }
+    });
   });
 
   $('#header')
@@ -143,7 +158,7 @@
     })
 
     .on('click', '#delete', function() {
-      var checked = $("input:checked");
+      var checked = $("input.deletable:checked");
       var countdown = checked.size();
       if (!countdown) {
         resetUI();
@@ -175,7 +190,7 @@
     $("#memos>li>input").addClass("hidden");
     $("#footer").html(
       '<button class="btn navbar-btn btn-sm" type="button" id="show_delete">{{i18n.i_delete}}...</button>'
-      + '<a href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>'
+      + '<a class="navbar-text" href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>'
     );
   }
 
@@ -293,5 +308,6 @@
   {{>logscript}}
   {{>editname}}
   </script>
+  </body>
 </html>
 

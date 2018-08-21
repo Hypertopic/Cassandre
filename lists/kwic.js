@@ -3,6 +3,7 @@ function(head, req) {
   // !code lib/mustache.js
   // !code lib/string.js
   // !code l10n/l10n.js
+  // !code lib/shared.js
   const OFFSET = 35;
   start({"headers":{"Content-Type":"text/html;charset=utf-8"}});
   var parameters = req.query.startkey;
@@ -23,5 +24,5 @@ function(head, req) {
         + v.context.replace(/[\n\t]/g, ' ')
     });
   }
-  return Mustache.to_html(templates.kwic, data);
+  return Mustache.to_html(templates.kwic, data, shared);
 }

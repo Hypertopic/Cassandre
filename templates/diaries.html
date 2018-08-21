@@ -1,123 +1,118 @@
+<!doctype html>
 <html>
   <head>
     {{>links}}
   </head>
   <body id="watermark">
     <div id="container">
-      <div id="header" class="menu">
+      <nav id="header" class="navbar navbar-expand bd-navbar fixed-top navbar-light bg-light">
+        <ul class="navbar-nav mr-auto">&nbsp;</ul>
         {{>log}}
-      </div>
-      <div id="content">
-        <h1>{{i18n.i_diaries}}</h1>
-        <ul>
-          {{#diaries}}
-          <li>
-            <b>{{name}}</b>&nbsp;–
-            <a href='../memo/{{id}}/?by=date'>{{count}} {{i18n.i_memos}}</a>
-          </li>
-          {{/diaries}}
-        </ul>
-        <div id="dialog" title="{{i18n.i_enter_diary_name}}" hidden="hidden">
-          <input name="diary" placeholder="{{i18n.i_my_diary}}"></input>
+      </nav>
+      <div id="container" class='container-fluid'>
+        <div id="content" class='col'>
+          <h1>{{i18n.i_diaries}}</h1>
+          <div class="card-columns">
+            {{#diaries}}
+            <div class="card text-center bg-light mb-3">
+              <a href='../memo/{{id}}/?by=date'>
+                <div class="card-body">
+                  <h5 class="card-title">{{name}}</h5>
+                  <p>{{count}} {{i18n.i_memos}}</p>
+                </div>
+              </a>
+            </div>
+            {{/diaries}}
+            {{#logged}}
+            <div class="card text-center bg-light mb-3">
+              <div class="card-body">
+                <h5 class="card-title">{{i18n.i_create}}</h5>
+                <input id="my_diary" placeholder="{{i18n.i_my_diary}}" class="form-control input-sm" />
+              </div>
+            </div>
+            {{/logged}}
+          </div>
         </div>
       </div>
-      <div id="footer" class="menu">
-        {{#logged}}
-        <button type="button" id="create" class="theoretical"> + </button>
-        {{/logged}}
-        <a href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
-      </div>
+      <nav id="footer" class="navbar fixed-bottom navbar-light bg-light">
+        <a class='navbar-text' href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
+      </nav>
     </div>
-  </body>
   {{>script}}
   <script>
-  var refresh = true;
   $(document).ready(function() {
     stickToHeader();
-  });
-
-  $('#create').on('click', function() {
-    $("#dialog").dialog({
-      autoOpen:false,
-      modal:true,
-      width:'auto',
-      autoResize: true,
-      buttons:{
-        "ok":function(){
-          $(this).dialog("close");
-          var diary_name = $('#dialog').find('input[name="diary"]').val().trim();
-          createDiary(diary_name);
-          return true;
-        },
-        "cancel":function(){
-          $(this).dialog("close");
-          return false;
-        }
-      },
-      open: function() {
-        $("#dialog").keypress(function(e) {
-          if (e.keyCode == $.ui.keyCode.ENTER) {
-            $(this).parent().find("button:eq(1)").trigger("click");
-          }
-        });
+    if ('{{logged}}') $.ajax({
+      url: "../{{logged}}",
+      type: "GET",
+      dataType: "json",
+      success: function(data) {
+        if(data.fullname) $('#username').text(data.fullname);
       }
     });
-    $("#dialog").dialog("open");
+  });
+
+  $('#my_diary').on('keypress', function(key) {
+    if (key.which == 13) {
+      createDiary($('#my_diary').val().trim());
+    }
   });
 
   function createDiary(diary_name) {
-    var type = $('#create')[0].className;
-    var date = new Date().toJSON();
-    var user = "{{peer}}";
-    if ("{{logged}}") user = "{{logged}}";
-    var diary = {
-      diary_name: diary_name,
-      history: [{
-        "user": user,
-        "date": date
-      }]
-    };
-    var data = {
-      contributors: [],
-      readers: [],
-      type: type,
-      groundings: [],
-      history: [{
-        "user": user,
-        "date": date
-      }],
-      name: "{{i18n.i_name.theoretical}}",
-      body: ""
-    };
-    if ("{{logged}}") {
-      data.contributors.push("{{logged}}");
-    }
-    if (diary_name) {
-      $.ajax({
-        url: "../",
-        type: "POST",
-        dataType: "json",
-        contentType: "application/json",
-        data: JSON.stringify(diary),
-        success: function(diary) {
-          data.diary = diary.id;
-          $.ajax({
-            url: "../",
-            type: "POST",
-            dataType: "json",
-            contentType: "application/json",
-            data: JSON.stringify(data),
-            success: function(data) {
-              location.replace('../editable_memo/'+data.id)
-            }
-          });
-        }
-      });
+    console.log(diary_name);
+    if (diary_name == '') {
+      alert('{{i18n.i_enter_diary_name}}');
+    } else {
+      var diary = {
+        diary_name: diary_name,
+        history: [{
+          "user": user,
+          "date": new Date().toJSON()
+        }]
+      };
+      var data = {
+        contributors: [],
+        readers: [],
+        type: 'theoretical',
+        groundings: [],
+        history: [{
+          "user": user,
+          "date": new Date().toJSON()
+        }],
+        name: "{{i18n.i_name.theoretical}}",
+        body: ""
+      };
+      if ("{{logged}}") {
+        data.contributors.push("{{logged}}");
+      }
+      if (diary_name) {
+        $.ajax({
+          url: "../",
+          type: "POST",
+          dataType: "json",
+          contentType: "application/json",
+          data: JSON.stringify(diary),
+          success: function(diary) {
+            data.diary = diary.id;
+            $.ajax({
+              url: "../",
+              type: "POST",
+              dataType: "json",
+              contentType: "application/json",
+              data: JSON.stringify(data),
+              success: function(data) {
+                location.replace('../editable_memo/'+data.id)
+              }
+            });
+          }
+        });
+      }
     }
   };
 
   {{>layoutscript}}
   {{>logscript}}
   </script>
+  </body>
 </html>
 

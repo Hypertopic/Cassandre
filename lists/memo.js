@@ -15,7 +15,7 @@ function(head, req) {
         var id = row.value._id;
         var fullname = id;
         data.contributors.push(id);
-        if (row.doc) fullname = row.doc.fullname;
+        if (row.doc && row.doc.fullname) fullname = row.doc.fullname;
         if (row.doc && !fullnames[id]) fullnames[id] = fullname;
         data.contributors_fullnames.push(fullname);
       break;
@@ -26,14 +26,14 @@ function(head, req) {
         var id = row.value._id;
         var fullname = id;
         data.readers.push(id);
-        if (row.doc) fullname = row.doc.fullname;
+        if (row.doc && row.doc.fullname) fullname = row.doc.fullname;
         if (row.doc && !fullnames[id]) fullnames[id] = fullname;
         data.readers_fullnames.push(fullname);
       break;
       case ('M'):
         var user = row.value._id;
         if (row.doc && !fullnames[user]) fullnames[user] = row.doc.fullname;
-        if (row.doc) user = row.doc.fullname;
+        if (row.doc && row.doc.fullname) user = row.doc.fullname;
         data.comments.push({
           user: user,
           date: row.value.date,
@@ -46,7 +46,7 @@ function(head, req) {
       case ('H'):
         var user = row.value._id;
         if (row.doc && !fullnames[user]) fullnames[user] = row.doc.fullname;
-        if (row.doc) user = row.doc.fullname;
+        if (row.doc && row.doc.fullname) user = row.doc.fullname;
         data.creator = user;
         data.date = row.value.date;
       break;
@@ -56,9 +56,9 @@ function(head, req) {
             var preview = row.doc.body.substr(0, 200).replace(/\s/g, ' ');
           } else {
             if (row.doc.speeches) {
-              var preview = row.doc.speeches[0].text.substr(0, 200) || ' ';
+              var preview = row.doc.speeches[0].text.substr(0, 200) || null;
             } else {
-              var preview = ' ';
+              var preview = null;
             }
           }
           var ground_type = row.doc.type || 'transcript';

@@ -2,6 +2,7 @@ function(head, req) {
   // !json templates.patterns
   // !code lib/mustache.js
   // !code l10n/l10n.js
+  // !code lib/shared.js
   start({"headers":{"Content-Type":"text/html;charset=utf-8"}});
   var data = {
     i18n: localized(),
@@ -15,7 +16,12 @@ function(head, req) {
       kwic: row.value.text
     });
   }
-  return Mustache.to_html(templates.patterns, data);
+  provides("html", function() {
+    return Mustache.to_html(templates.patterns, data, shared);
+  });
+  provides("json", function() {
+    send(toJSON(
+      {pending: data.patterns.length}
+    ));
+  });
 }
-
-

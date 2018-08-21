@@ -1,3 +1,4 @@
+<!doctype html>
 <html>
   <head>
     {{>links}}
@@ -5,12 +6,14 @@
   <body id="watermark">
     <form id="container">
       <header>
-        <div id="header" class="menu">
-          <button type="button" id="corpus">&nbsp;</button>
+        <nav id="header" class="navbar navbar-expand bd-navbar fixed-top navbar-light bg-light">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item"><a class="nav-link" id="corpus">&nbsp;</a></li>
+          </ul>
           {{>log}}
-        </div>
+        </nav>
       </header>
-      <div id="content">
+      <div id="content" class='col'>
         {{^authorized}}
         <h1>{{i18n.i_sign-in_required}}</h1>
         {{/authorized}}
@@ -45,15 +48,16 @@
         </table>
         {{/authorized}}
       </div>
-      <div id="footer" class="menu">
+      <nav id="footer" class="navbar fixed-bottom navbar-light bg-light">
         {{#authorized}}
-        <button type="button" id="save">{{i18n.i_save}}</button>
-        <button type="button" id="done">{{i18n.i_done}}</button>
+        <div role="group">
+          <button type="button" class='btn btn-sm' id="save">{{i18n.i_save}}</button>
+          <button type="button" class='btn btn-sm' id="done">{{i18n.i_done}}</button>
+        </div>
         {{/authorized}}
-        <a href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
-      </div>
+        <a class='navbar-text' href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
+      </nav>
     </form>
-  </body>
   <script src="../script/jquery.js"></script>
   <script>
   $(document).ready(function() {
@@ -151,4 +155,5 @@
   {{>layoutscript}}
   {{>logscript}}
   </script>
+  </body>
 </html>

@@ -112,7 +112,12 @@
     }
   }, {
     "from": "editable_memo/:memo",
-    "to": "_show/editable_memo/:memo"
+    "to": "_list/editable_memo/memo",
+    "query": {
+      "startkey": [":memo"],
+      "endkey": [":memo", {}],
+      "include_docs": "true"
+    }
   }, {
     "from": "editable_text/:text",
     "to": "_show/editable_text/:text"

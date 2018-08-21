@@ -1,29 +1,32 @@
+<!doctype html>
 <html>
   <head>
-    <link rel="icon" type="image/png" href="../style/favicon.png" />
-    <link rel="stylesheet" type="text/css" href="../style/main.css" />
+    <title>{{i18n.i_patterns}}</title>
+    {{>links}}
   </head>
   <body id="watermark">
-    <div id="container">
-      <header>
-      <div id="header" class="menu">
-        <button type="button" id="corpus">&nbsp;</button>
+    <header>
+      <div id="header" class="navbar navbar-expand bd-navbar fixed-top navbar-light bg-light">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item"><a class="nav-link" id="corpus">&nbsp;</a></li>
+        </ul>
         <input id="kwic" type="search" placeholder="{{i18n.i_search}}" />
       </div>
-      </header>
-      <div id="content">
+    </header>
+    <div id="container"  class='container-fluid'>
+      <div id="content" class="col">
         <h1>{{i18n.i_patterns}}</h1>
+        <div></div>
         <ul>
           {{#patterns}}
-          <li id="{{highlight}}" data-text="{{document}}" class="kwic"><span/>
+          <li id="{{highlight}}" data-text="{{document}}" class="kwic"><span></span>
             <a href='../kwic/{{corpus}}/{{kwic}}' >{{kwic}}</a>
           </li>
           {{/patterns}}
         </ul>
       </div>
-      <div id="footer" class="menu" />
+      <nav id="footer" class="navbar fixed-bottom navbar-light bg-light"></nav>
     </div>
-  </body>
   <script src="../script/jquery.js"></script>
   <script>
   $(document).ready(function() {
@@ -46,9 +49,9 @@
   $('#footer')
     .on('click', '#show_delete', function() {
       $("#footer").html(
-        '<button id="cancel" type="button">{{i18n.i_cancel}}</button>'
+        '<div role="group"><button id="cancel" type="button" class="btn navbar-btn btn-sm">{{i18n.i_cancel}}</button>'
         + '<input id="toggle" type="checkbox">{{i18n.i_select}}</button>'
-        + '<button id="delete" type="button">{{i18n.i_delete}}</button>'
+        + '<button id="delete" type="button" class="btn navbar-btn btn-sm">{{i18n.i_delete}}</button></div>'
       );
       $(".kwic>span").prepend("<input type='checkbox' />");
     })
@@ -105,12 +108,13 @@
 
   function resetUI() {
     $('#footer').html(
-      '<button type="button" id="show_delete">{{i18n.i_delete}}...</button>'
-      + '<a href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>'
+      '<button type="button" id="show_delete" class="btn navbar-btn btn-sm">{{i18n.i_delete}}...</button>'
+      + '<a class="navbar-text" href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>'
     );
     $('input[type="checkbox"]').remove();
   }
 
   </script>
+  </body>
 </html>
 

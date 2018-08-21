@@ -11,7 +11,7 @@ function(o) {
       for (var id in o.readers) {
         emit([o.readers[id], diary, {}]);
       }
-    } else if (!o.commented && !o.fullname ) {
+    } else if (!o.commented && !o.fullname && !o.activity) {
       emit([null, diary, {}]);
     }
   }

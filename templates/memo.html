@@ -10,17 +10,17 @@
         <li class="nav-item"><a class="nav-link" id="diary">{{diary_name}}</a></li>
         {{#authorized}}
         <div id='lexical' class="btn-group hidden" role="group">
-          <li class="nav-item"><a class="nav-link"  id='clear_highlights'>{{i18n.i_raw}}</a></li>
+          <li class="nav-item"><a class="nav-link" id='clear_highlights'>{{i18n.i_raw}}</a></li>
           <li class="nav-item"><a class="nav-link highlight_words" id='specific'
             disabled>{{i18n.i_specific}}</a></li>
           <li class="nav-item"><a class="nav-link highlight_words" id='rare'
             disabled>{{i18n.i_rare}}</a></li>
-          <li class="nav-item"><a class="nav-link"  id='repeated' disabled>
+          <li class="nav-item"><a class="nav-link" id='repeated' disabled>
             {{i18n.i_phrases}}</a></li>
         </div>
-        <form class="form-inline input-group-sm">
-          <input id='kwic' class="form-control input-sm hidden" type='search' placeholder='{{i18n.i_search}}'/>
-        </form>
+        <div class="form-inline input-group-sm">
+          <input id='kwic' type='search' class="form-control input-sm hidden" placeholder='{{i18n.i_search}}'/>
+        </div>
         {{/authorized}}
       </ul>
       {{>log}}
@@ -32,8 +32,8 @@
           <legend>{{i18n.i_groundings}}</legend>
           {{#groundings}}
           <li class="{{type}}" id="{{id}}">
-            <a href="{{href}}">{{name}}</a> <span class="toggle dropdown-toggle"> </span>
-            <div class="preview">{{preview}}</div>
+            <a href="{{href}}">{{name}}</a> {{#preview}}<span class="toggle dropdown-toggle"> </span>
+            <div class="preview">{{preview}}</div>{{/preview}}
           </li>
           {{/groundings}}
         </div>
@@ -142,7 +142,6 @@
         </div>
       </div>
     </div>
-  </body>
   {{>script}}
   <script src="../../script/showdown.min.js"></script>
   <script>
@@ -398,21 +397,21 @@
     $.ajax({
       url: '../../'+id,
       type: "GET",
-      dataType: "json",
-      success: function(diagram) {
-        var properties = diagram.name.split('&');
-        if (diagram.groundings[0] == "{{_id}}") {
-          diagram.name = name+' & '+ properties[1].trim();
-        } else {
-          diagram.name = properties[0].trim() +' & '+name;
-        }
-        $.ajax({
-          type: "PUT",
-          url: '../../'+id,
-          contentType: "application/json",
-          data: JSON.stringify(diagram)
-        });
+      dataType: "json"
+    })
+    .done(function(diagram) {
+      var properties = diagram.name.split('&');
+      if (diagram.groundings[0] == "{{_id}}") {
+        diagram.name = name+' & '+ properties[1].trim();
+      } else {
+        diagram.name = properties[0].trim() +' & '+name;
       }
+      $.ajax({
+        type: "PUT",
+        url: '../../'+id,
+        contentType: "application/json",
+        data: JSON.stringify(diagram)
+      });
     });
   }
 
@@ -529,4 +528,5 @@
   {{>logscript}}
   {{>editname}}
   </script>
+  </body>
 </html>

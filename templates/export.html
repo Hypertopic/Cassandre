@@ -1,0 +1,107 @@
+<!doctype html>
+<html>
+  <head>
+    <title>{{diary_name}}</title>
+    {{>links}}
+  </head>
+  <body id="watermark">
+    <nav id="header" class="navbar navbar-expand bd-navbar fixed-top navbar-light bg-light">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item"><a class="nav-link" id="diary">{{diary_name}}</a></li>
+        <li class="nav-item"><a class="nav-link" href="../../export/{{diary}}/json">json</a></li>
+        <li class="nav-item"><a class="nav-link" href="../../export/{{diary}}/xml">xml</a></li>
+      </ul>
+      {{>log}}
+    </nav>
+    <div id="container" class='container-fluid'>
+      <div id="content" class='col'>
+        <h1>{{diary_name}}</h1>
+        <ul id="memos">
+        {{#sections}}
+          {{#memos}}
+          <table border="1">
+            <tr><td>Author</td><td>{{author}}</td></tr>
+            <tr><td>Date</td><td><span class="moment" id="{{date}}"></span> (rev: <span class="moment" id="{{update}}"></span>)</td></tr>
+            <tr><td>Type</td><td>{{type}}</td></tr>
+            <tr><td>Grounding</td><td>{{#groundings}}{{name}}{{/groundings}}</td></tr>
+            <tr><td>Title</td><td>{{name}}</td></tr>
+          </table>
+          {{#preview}}<span class="content">{{preview}}</span>{{/preview}}
+          </li>
+          {{/memos}}
+        {{/sections}}
+        </ul>
+      </div>
+    </div>
+    <nav id="footer" class="navbar fixed-bottom">
+      <a class='navbar-text' href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
+    </nav>
+  {{>script}}
+  {{#list}}<script src="../../script/showdown.min.js"></script>{{/list}}
+  <script>
+  var refresh = true;
+  $(document).ready(function() {
+    moment.locale('{{locale}}');
+    stickToHeader();
+    {{#list}}
+    momentRelative('#memos');
+    var converter = new showdown.Converter({
+      tables: 'true',
+      tasklists: 'true',
+      strikethrough: 'true'
+    });
+    converter.setFlavor('github');
+    $('.content').html(function(i, text) {
+      return converter.makeHtml(text.trim());
+    });
+    if ('{{logged}}') $.ajax({
+      url: "../../{{logged}}",
+      type: "GET",
+      dataType: "json",
+      success: function(data) {
+        if(data.fullname) $('#username').text(data.fullname);
+        for (i in data.activity) {
+          var id = '#'+data.activity[i].doc;
+          if (data.activity[i].date > $(id).parent().find('.moment').attr('name')) {
+            $(id).parent().find('.unread').removeClass('unread');
+          }
+        }
+      }
+    });
+    {{/list}}
+  });
+
+  $('#header')
+    .on('click', '#diary', function() {
+      self.location = '../../memo/{{diary}}/?by=date';
+    });
+
+  {{#list}}
+  function momentRelative(what) {
+    var moments = $(what+' .moment');
+    moments.each(function() {
+      var now = moment();
+      var jstime = $(this).attr('id');
+      var mmtime = moment(jstime);
+      if(now.diff(mmtime, 'days') <= 2) {
+        $(this).text(mmtime.fromNow());
+      } else if(now.diff(mmtime, 'years') < 1) {
+        $(this).text("{{i18n.i_on-a-date}}"+' '+mmtime.format("Do MMMM"));
+      } else {
+        $(this).text("{{i18n.i_on-a-date}}"+' '+mmtime.format("Do MMMM YYYY"));
+      }
+    });
+    var contributions = $('ul li .moment');
+    contributions.each(function() {
+      $(this).text($(this).text().replace(/./, function(x) { return x.toUpperCase(); }));
+    });
+  }
+  {{/list}}
+
+  {{>layoutscript}}
+  {{>logscript}}
+  {{>editname}}
+  </script>
+  </body>
+</html>
+

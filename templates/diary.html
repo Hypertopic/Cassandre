@@ -18,6 +18,11 @@
           <div class="dropdown-menu" aria-labelledby="show">
             <a class="dropdown-item" id="drawNetwork">{{i18n.i_network}}</a>
             <a class="dropdown-item" id="drawTimeline">{{i18n.i_timeline}}</a>
+            {{#logged}}
+            <a class="dropdown-item" href="../../export/{{diary}}/html">html</a>
+            <a class="dropdown-item" href="../../export/{{diary}}/json">json</a>
+            <a class="dropdown-item" href="../../export/{{diary}}/xml">xml</a>
+            {{/logged}}
           </div>
         </div>
         <div class="nav-item dropdown">

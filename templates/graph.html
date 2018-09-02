@@ -7,7 +7,7 @@
     {{>viscss}}
   </head>
   <body>
-    <nav id="header" class="navbar navbar-expand bd-navbar fixed-top navbar-light bg-light">
+    <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item"><a class="nav-link" id="diary">{{diary_name}}</a></li>
       </ul>
@@ -49,11 +49,11 @@
           </ul>
         </div>
       </div>
-      <nav id="footer" class="navbar fixed-bottom">
+      <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
         {{#authorized}}
         <div role="group">
-          <button class='btn btn-sm' data-toggle="modal" data-target="#add_grounding" type="button">{{i18n.i_add_groundings}}</button>
-          <button class='btn btn-sm hidden' data-toggle="modal" data-target="#remove_grounding" id="remove_grounding_btn">{{i18n.i_remove_grounding}}</button>
+          <button class='btn btn-outline-light btn-sm' data-toggle="modal" data-target="#add_grounding" type="button">{{i18n.i_add_groundings}}</button>
+          <button class='btn btn-outline-light btn-sm hidden' data-toggle="modal" data-target="#remove_grounding" id="remove_grounding_btn">{{i18n.i_remove_grounding}}</button>
         </div>
         {{/authorized}}
         <a class='navbar-text' href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>

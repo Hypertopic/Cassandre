@@ -8,6 +8,7 @@ function(head, req) {
     activity: [],
     flat: true,
     i18n: localized(),
+    list: true,
     locale: req.headers["Accept-Language"],
     logged: req.userCtx.name
   };

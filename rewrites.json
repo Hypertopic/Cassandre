@@ -34,9 +34,13 @@
     }
   }, {
     "from": "memo/", 
-    "to": "_list/diaries/diaries",
+    "to": "_list/diaries/diaries"
+  }, {
+    "from": "news/",
+    "to": "_list/news/news",
     "query": {
-      "group": "true"
+      "group": "false",
+      "reduce": "false"
     }
   }, {
     "from": "memo/:diary", 

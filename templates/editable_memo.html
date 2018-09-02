@@ -8,7 +8,7 @@
   <body id="watermark">
     <form id="container">
       <header>
-        <nav id="header" class="navbar navbar-expand bd-navbar fixed-top navbar-light bg-light">
+        <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item"><a class="nav-link" id="diary">{{diary_name}}</a></li>
           </ul>
@@ -41,9 +41,9 @@
           </main>
         </div>
       </div>
-      <nav id="footer" class="navbar fixed-bottom navbar-light bg-light">
+      <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
         {{#authorized}}
-        <button type="button" class='btn btn-sm' id="done">{{i18n.i_done}}</button>
+        <button type="button" class='btn btn-outline-light btn-sm' id="done">{{i18n.i_done}}</button>
         {{/authorized}}
         <a class='navbar-text' href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
       </nav>

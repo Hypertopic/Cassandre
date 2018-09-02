@@ -6,7 +6,7 @@
   </head>
   <body id="watermark">
     <header>
-      <div id="header" class="navbar navbar-expand bd-navbar fixed-top navbar-light bg-light">
+      <div id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item"><a class="nav-link" id="corpus">&nbsp;</a></li>
         </ul>
@@ -25,7 +25,7 @@
           {{/patterns}}
         </ul>
       </div>
-      <nav id="footer" class="navbar fixed-bottom navbar-light bg-light"></nav>
+      <nav id="footer" class="{{>navbarstyle}} fixed-bottom"></nav>
     </div>
   <script src="../script/jquery.js"></script>
   <script>
@@ -38,9 +38,10 @@
         $("#corpus").html(d.diary_name);
       }
     });
+    stickToHeader();
+    resetUI();
   });
 
-  resetUI();
 
   $('#corpus').on('click', function(){
     self.location = '../memo/{{corpus}}/?by=date';
@@ -49,9 +50,9 @@
   $('#footer')
     .on('click', '#show_delete', function() {
       $("#footer").html(
-        '<div role="group"><button id="cancel" type="button" class="btn navbar-btn btn-sm">{{i18n.i_cancel}}</button>'
-        + '<input id="toggle" type="checkbox">{{i18n.i_select}}</button>'
-        + '<button id="delete" type="button" class="btn navbar-btn btn-sm">{{i18n.i_delete}}</button></div>'
+        '<div role="group"><button id="cancel" type="button" class="btn btn-outline-light navbar-btn btn-sm">{{i18n.i_cancel}}</button>'
+        + '<input id="toggle" type="checkbox"><span class="navbar-text">{{i18n.i_select}}</span></button>'
+        + '<button id="delete" type="button" class="btn btn-outline-light navbar-btn btn-sm">{{i18n.i_delete}}</button></div>'
       );
       $(".kwic>span").prepend("<input type='checkbox' />");
     })
@@ -108,12 +109,13 @@
 
   function resetUI() {
     $('#footer').html(
-      '<button type="button" id="show_delete" class="btn navbar-btn btn-sm">{{i18n.i_delete}}...</button>'
+      '<button type="button" id="show_delete" class="btn btn-outline-light navbar-btn btn-sm">{{i18n.i_delete}}...</button>'
       + '<a class="navbar-text" href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>'
     );
     $('input[type="checkbox"]').remove();
   }
 
+  {{>layoutscript}}
   </script>
   </body>
 </html>

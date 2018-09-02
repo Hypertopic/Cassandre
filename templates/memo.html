@@ -5,21 +5,20 @@
     {{>links}}
   </head>
   <body>
-    <nav id="header" class="navbar navbar-expand bd-navbar fixed-top navbar-light bg-light">
+    <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item"><a class="nav-link" id="diary">{{diary_name}}</a></li>
         {{#authorized}}
         <div id='lexical' class="btn-group hidden" role="group">
           <li class="nav-item"><a class="nav-link" id='clear_highlights'>{{i18n.i_raw}}</a></li>
-          <li class="nav-item"><a class="nav-link highlight_words" id='specific'
-            disabled>{{i18n.i_specific}}</a></li>
-          <li class="nav-item"><a class="nav-link highlight_words" id='rare'
-            disabled>{{i18n.i_rare}}</a></li>
-          <li class="nav-item"><a class="nav-link" id='repeated' disabled>
-            {{i18n.i_phrases}}</a></li>
+          <li class="nav-item"><a class="nav-link highlight_words disabled" id='specific'>{{i18n.i_specific}}</a></li>
+          <li class="nav-item"><a class="nav-link highlight_words disabled" id='rare'>{{i18n.i_rare}}</a></li>
+          <li class="nav-item"><a class="nav-link disabled" id='repeated'>{{i18n.i_phrases}}</a></li>
         </div>
         <div class="form-inline input-group-sm">
-          <input id='kwic' type='search' class="form-control input-sm hidden" placeholder='{{i18n.i_search}}'/>
+          <input id='kwic' type='search' class="form-control input-sm hidden kwic" placeholder='{{i18n.i_search}}' />
+            <img class="kwic hidden" src="https://icongr.am/octicons/search.svg?color=e6e6e6&size=32" alt="{{i18n.i_search}}"/>
+          </input>
         </div>
         {{/authorized}}
       </ul>
@@ -83,13 +82,13 @@
           </ul>
         </div>
       </div>
-      <nav id="footer" class="navbar fixed-bottom navbar-light bg-light">
+      <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
         {{#authorized}}
         <div role="group">
-          <button class='btn btn-sm' data-toggle="modal" data-target="#add_grounding"><span>{{i18n.i_add_groundings}}</span></button>
-          <button class='btn btn-sm hidden' data-toggle="modal" data-target="#remove_grounding" id="remove_grounding_btn">{{i18n.i_remove_grounding}}</button>
-          <button class='btn btn-sm' id="edit">{{i18n.i_edit}}</button>
-          <button class='btn btn-sm' id="comment_create">{{i18n.i_comment}}</button>
+          <button class='btn navbar-btn btn-outline-light btn-sm' data-toggle="modal" data-target="#add_grounding"><span>{{i18n.i_add_groundings}}</span></button>
+          <button class='btn navbar-btn btn-outline-light btn-sm hidden' data-toggle="modal" data-target="#remove_grounding" id="remove_grounding_btn">{{i18n.i_remove_grounding}}</button>
+          <button class='btn navbar-btn btn-outline-light btn-sm' id="edit">{{i18n.i_edit}}</button>
+          <button class='btn navbar-btn btn-outline-light btn-sm' id="comment_create">{{i18n.i_comment}}</button>
         </div>
         {{/authorized}}
         <a class='navbar-text' href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
@@ -175,7 +174,7 @@
         $('#add').addClass('coding');
         $("#leave-name").attr("placeHolder", "{{i18n.i_name.coding}}");
         $('#lexical').removeClass('hidden');
-        $('#kwic').removeClass('hidden');
+        $('.kwic').removeClass('hidden');
         $('.writing').removeClass('writing').addClass('words');
         break;
       case ('coding'):
@@ -213,6 +212,7 @@
         break;
     }
     var converter = new showdown.Converter({
+      parseImgDimensions: 'true',
       tables: 'true',
       tasklists: 'true',
       strikethrough: 'true'
@@ -253,8 +253,8 @@
                 var m = metrics[k];
                 m.specific /= max_specific;
               }
-              $('#rare').removeAttr('disabled');
-              $('#specific').removeAttr('disabled');
+              $('#rare').removeClass('disabled');
+              $('#specific').removeClass('disabled');
             }
           });
         }
@@ -268,7 +268,7 @@
             var r = phrases.rows[l];
             trigrams[[r.key[1], r.key[2], r.key[3]]] = r.value;
           }
-          $('#repeated').removeAttr('disabled');
+          $('#repeated').removeClass('disabled');
         }
       });
     }

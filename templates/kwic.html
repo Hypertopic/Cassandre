@@ -5,7 +5,7 @@
     {{>links}}
   </head>
   <body id="watermark">
-    <nav id="header" class="navbar navbar-expand bd-navbar fixed-top navbar-light bg-light">
+    <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item"><a class="nav-link" id="corpus">&nbsp;</a></li>
       </ul>
@@ -22,8 +22,8 @@
         </div>
         {{/occurrences}}
       </div>
-      <nav id="footer" class="navbar fixed-bottom navbar-light bg-light">
-        <input type="button" id="new_pattern" class='btn btn-sm' value="{{i18n.i_new_pattern}}" />
+      <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
+        <input type="button" id="new_pattern" class='btn btn-outline-light btn-sm' value="{{i18n.i_new_pattern}}" />
         <a class='navbar-text' href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
       </nav>
     </div>
@@ -38,6 +38,7 @@
         $("#corpus").html(d.diary_name);
       }
     });
+    stickToHeader();
   });
 
   $('#corpus').on('click', function(){
@@ -71,6 +72,12 @@
           data: JSON.stringify(text),
           success: function() {
             self.location = '../../kwic/{{corpus}}'
+          },
+          error: function(request) {
+            alert(
+              (JSON.parse(request.responseText).reason || request.responseText)
+              + '\nCode ' + request.status
+            );
           }
         });
       }
@@ -92,6 +99,8 @@
       self.location = $('#kwic').val().toLowerCase();
     }
   });
+
+  {{>layoutscript}}
   </script>
   </body>
 </html>

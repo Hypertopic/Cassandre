@@ -1,18 +1,19 @@
 function(o) {
   var diary = o.diary || o.corpus;
   if (o.diary_name) {
-    emit([null, o._id, o.diary_name]);
+    emit([o._id, {}, null, o.diary_name]);
   } else {
     if (o.contributors)
       for (var id in o.contributors) {
-        emit([o.contributors[id], diary, {}]);
+        emit([diary, o._id, o.contributors[id], {}]);
       }
     if (o.readers) {
       for (var id in o.readers) {
-        emit([o.readers[id], diary, {}]);
+        if (o.contributors.indexOf(o.readers[id]) < 0)
+          emit([diary, o._id, o.readers[id], {}]);
       }
     } else if (!o.commented && !o.fullname && !o.activity) {
-      emit([null, diary, {}]);
+      emit([diary, o._id, null, {}]);
     }
   }
 }

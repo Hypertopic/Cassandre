@@ -8,7 +8,7 @@
     {{/list}}
   </head>
   <body id="watermark">
-    <nav id="header" class="navbar navbar-expand bd-navbar fixed-top navbar-light bg-light">
+    <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item"><a class="nav-link" id="diaries">{{i18n.i_diaries}}</a></li>
         <div class="nav-item dropdown">
@@ -42,11 +42,11 @@
     </nav>
     <div id="container" class='container-fluid'>
       <div id="content" class='col'>
-        <h1>{{diary_name}}</h1>
+        <h1>{{diary_name}} <span id="size" class="badge badge-pill badge-secondary"></span></h1>
         <input id="name" type="search" class="form-control hidden" value="{{diary_name}}"/>
         <div id="add-leaves">
           <img id="sticky" src="https://icongr.am/octicons/tasklist.svg?color=e6e6e6&size=32" class="hidden" alt="{{i18n.i_todo}}"/>
-          <img id="show-activity" src="https://icongr.am/octicons/clock.svg?color=e6e6e6&size=32" alt="{{i18n.i_activity}}"/>
+          <img id="show-activity" src="https://icongr.am/octicons/history.svg?color=e6e6e6&size=32" alt="{{i18n.i_activity}}"/>
         </div>
         <div id="network" class="hidden"></div>
         <ul id="memos">
@@ -55,14 +55,14 @@
           <li class="{{type}} mytooltip"><input type="checkbox" id="{{id}}" name="{{rev}}" class="hidden deletable" />
             <span id="{{date}}" name="{{update}}" class="moment unread"></span>&nbsp;–
             <a href="../../{{path}}/{{diary}}/{{id}}" class="unread">{{name}}</a>
-            {{#preview}}<span class="preview">{{preview}}</span>{{/preview}}
+            {{#preview}}<span class="preview text-light bg-dark">{{preview}}</span>{{/preview}}
           </li>
           {{/memos}}
         {{/sections}}
         </ul>
       </div>
     </div>
-    <nav id="footer" class="navbar fixed-bottom navbar-light bg-light">
+    <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
       <a class='navbar-text' href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
     </nav>
   {{>script}}
@@ -85,6 +85,7 @@
     $('.preview').html(function(i, text) {
       return converter.makeHtml(text.trim());
     });
+    $('#size').html($('#memos>li').length);
     if ('{{logged}}') $.ajax({
       url: "../../{{logged}}",
       type: "GET",
@@ -97,6 +98,7 @@
             $(id).parent().find('.unread').removeClass('unread');
           }
         }
+        if ($('a.unread').length > 0) $('#size').prepend($('a.unread').length+'/');
       }
     });
     {{/list}}
@@ -144,9 +146,9 @@
       $("#memos>li>input").removeClass("hidden");
       $("#footer").html(
         '<div role="group">'
-        + '<button class="btn navbar-btn btn-sm" id="cancel" type="button">{{i18n.i_cancel}}</button>'
-        + '<input id="toggle" type="checkbox">{{i18n.i_select}}</input>'
-        + '<button class="btn navbar-btn btn-sm" id="delete" type="button">{{i18n.i_delete}}</button>'
+        + '<button class="btn navbar-btn btn-outline-light btn-sm" id="cancel" type="button">{{i18n.i_cancel}}</button>'
+        + '<input id="toggle" type="checkbox"><span class="navbar-text">{{i18n.i_select}}</span></input>'
+        + '<button class="btn navbar-btn btn-outline-light btn-sm" id="delete" type="button">{{i18n.i_delete}}</button>'
         + '</div>'
       );
     })
@@ -194,7 +196,7 @@
   function resetUI() {
     $("#memos>li>input").addClass("hidden");
     $("#footer").html(
-      '<button class="btn navbar-btn btn-sm" type="button" id="show_delete">{{i18n.i_delete}}...</button>'
+      '<button class="btn navbar-btn btn-outline-light btn-sm" type="button" id="show_delete">{{i18n.i_delete}}...</button>'
       + '<a class="navbar-text" href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>'
     );
   }

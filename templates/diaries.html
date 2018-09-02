@@ -5,7 +5,7 @@
   </head>
   <body id="watermark">
     <div id="container">
-      <nav id="header" class="navbar navbar-expand bd-navbar fixed-top navbar-light bg-light">
+      <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
         <ul class="navbar-nav mr-auto">&nbsp;</ul>
         {{>log}}
       </nav>
@@ -15,12 +15,15 @@
           <div class="card-columns">
             {{#diaries}}
             <div class="card text-center bg-light mb-3">
-              <a href='../memo/{{id}}/?by=date'>
-                <div class="card-body">
+              <div class="card-body">
+                <a href='../memo/{{id}}/?by=date'>
                   <h5 class="card-title">{{name}}</h5>
-                  <p>{{count}} {{i18n.i_memos}}</p>
-                </div>
-              </a>
+                </a>
+                <p class="card-text">
+                  {{count}} {{i18n.i_memos}}
+                  <span id="{{id}}" class="badge badge-pill badge-secondary"></span>
+                </p>
+              </div>
             </div>
             {{/diaries}}
             {{#logged}}
@@ -34,7 +37,7 @@
           </div>
         </div>
       </div>
-      <nav id="footer" class="navbar fixed-bottom navbar-light bg-light">
+      <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
         <a class='navbar-text' href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
       </nav>
     </div>
@@ -48,6 +51,16 @@
       dataType: "json",
       success: function(data) {
         if(data.fullname) $('#username').text(data.fullname);
+      }
+    });
+    if ('{{logged}}') $.ajax({
+      url: "../news/",
+      type: "GET",
+      dataType: "json",
+      success: function(data) {
+        for (var i in data) {
+          $('#'+data[i].id).text(data[i].news);
+        }
       }
     });
   });

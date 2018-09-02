@@ -6,14 +6,14 @@
   <body id="watermark">
     <form id="container">
       <header>
-        <nav id="header" class="navbar navbar-expand bd-navbar fixed-top navbar-light bg-light">
+        <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item"><a class="nav-link" id="corpus">&nbsp;</a></li>
           </ul>
           {{>log}}
         </nav>
       </header>
-      <div id="content" class='col'>
+      <div id="memo" class='col'>
         {{^authorized}}
         <h1>{{i18n.i_sign-in_required}}</h1>
         {{/authorized}}
@@ -48,11 +48,11 @@
         </table>
         {{/authorized}}
       </div>
-      <nav id="footer" class="navbar fixed-bottom navbar-light bg-light">
+      <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
         {{#authorized}}
         <div role="group">
-          <button type="button" class='btn btn-sm' id="save">{{i18n.i_save}}</button>
-          <button type="button" class='btn btn-sm' id="done">{{i18n.i_done}}</button>
+          <button type="button" class='btn btn-outline-light btn-sm' id="save">{{i18n.i_save}}</button>
+          <button type="button" class='btn btn-outline-light btn-sm' id="done">{{i18n.i_done}}</button>
         </div>
         {{/authorized}}
         <a class='navbar-text' href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
@@ -61,7 +61,6 @@
   <script src="../script/jquery.js"></script>
   <script>
   $(document).ready(function() {
-    stickToHeader();
     $.ajax({
       url: "../{{corpus}}",
       type: "GET",
@@ -70,6 +69,7 @@
         $("#corpus").html(d.diary_name);
       }
     });
+    stickToHeader();
   });
 
   function save(draft, toDoAfter) {
@@ -132,7 +132,7 @@
     });
   });
 
-  $('#content')
+  $('#memo')
     .on('click', '.insert', function() {
       var current = $(this).closest('.turn');
       var next = current.clone()

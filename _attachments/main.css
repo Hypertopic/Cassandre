@@ -9,6 +9,14 @@ body {
   margin: 0;
 }
 
+#groundings a, #content a {
+  color: gray !important;
+}
+
+#content {
+  padding-bottom: 60px;
+}
+
 #watermark {
   background-image: url(cassandre_background.png);
   background-position: 100% 0%;
@@ -116,9 +124,7 @@ div.post {
 .mytooltip:hover .preview {
   font-size: smaller;
   display: inline;
-  color: #ffffff;
   border: 1px solid #DCA;
-  background: #444;
   -moz-border-radius: 11px;
   -webkit-border-radius: 11px;
   border-radius: 11px;

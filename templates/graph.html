@@ -16,7 +16,7 @@
     <div id="container" class='container-fluid h-100'>
       <div id="memo" class='row h-100'>
         {{#authorized}}
-        <div class="col-md-3" id='groundings'>
+        <div class="col-3" id='groundings'>
           <legend>{{i18n.i_groundings}}</legend>
           {{#groundings}}
           <li class="{{type}}" id="{{id}}">
@@ -30,10 +30,6 @@
           <h1>{{i18n.i_sign-in_required}}</h1>
           {{/authorized}}
           {{#authorized}}
-          <div id="add-leaves">
-            <input id="leave-name" type="search" placeholder="{{i18n.i_name.storyline}}" />
-            <button type="button" class="storyline" id="add">+</button>
-          </div>
           <h1> <img src="../../style/{{type}}.svg"/> {{name}} </h1>
           <input id="name" type="search" class="form-control hidden" value="{{name}}"/>
           {{>rights}}
@@ -55,11 +51,18 @@
           <button class='btn btn-outline-light btn-sm' data-toggle="modal" data-target="#add_grounding" type="button">{{i18n.i_add_groundings}}</button>
           <button class='btn btn-outline-light btn-sm hidden' data-toggle="modal" data-target="#remove_grounding" id="remove_grounding_btn">{{i18n.i_remove_grounding}}</button>
         </div>
+        <div id="add-leaves">
+          <div class="input-group input-group-sm">
+            <input id="leave-name" type="search" placeholder="{{i18n.i_name.storyline}}" class="form-control input" />
+            <div class="input-group-append">
+              <span class="input-group-text storyline" id="add">+</span>
+            </div>
+          </div>
+        </div>
         {{/authorized}}
-        <a class='navbar-text' href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
       </nav>
     </div>
-    <div id="show-leaves" hidden="hidden"><div class="reverse">{{i18n.i_leaves}}</div></div>
+    <div id="show-leaves" class="hidden"><div class="reverse">{{i18n.i_leaves}}</div></div>
     <div id="add_grounding" class="modal fade" role="dialog">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -191,7 +194,8 @@
   });
 
   $('#add').on('click', function() {
-    create($(this)[0].className, '{{_id}}', $('#leave-name').val().trim());
+    var classlist = $(this)[0].classList;
+    create(classlist[classlist.length - 1], '{{_id}}', $('#leave-name').val().trim());
   });
 
   $('#add_grounding').on('show.bs.modal', function (event) {

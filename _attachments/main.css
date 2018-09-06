@@ -55,7 +55,7 @@ div.post {
   border-right: 1px solid #eeeeee;
 }
 
-#add-leaves {
+#top-right {
   position: fixed;
   right: 36px;
   top: 36px;
@@ -198,7 +198,7 @@ button.comment {
   padding-bottom: 5px;
 }
 
-.create,#create,#create-table,#add {
+.create {
   background-color:transparent;
   background-repeat: no-repeat;
   background-origin: content-box;
@@ -215,6 +215,11 @@ button.comment {
 .red {
   width: 100%;
   background-color:red;
+}
+
+.input-group-text {
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .operational {
@@ -311,7 +316,11 @@ input.actor {
 
 #kwic {
   float: right;
-  margin: 0px 10px;
+}
+
+.post img {
+  max-width: 100%;
+  height: auto;
 }
 
 .occurrence{

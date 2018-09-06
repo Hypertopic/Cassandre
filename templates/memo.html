@@ -5,29 +5,37 @@
     {{>links}}
   </head>
   <body>
-    <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item"><a class="nav-link" id="diary">{{diary_name}}</a></li>
-        {{#authorized}}
-        <div id='lexical' class="btn-group hidden" role="group">
-          <li class="nav-item"><a class="nav-link" id='clear_highlights'>{{i18n.i_raw}}</a></li>
-          <li class="nav-item"><a class="nav-link highlight_words disabled" id='specific'>{{i18n.i_specific}}</a></li>
-          <li class="nav-item"><a class="nav-link highlight_words disabled" id='rare'>{{i18n.i_rare}}</a></li>
-          <li class="nav-item"><a class="nav-link disabled" id='repeated'>{{i18n.i_phrases}}</a></li>
-        </div>
-        <div class="form-inline input-group-sm">
-          <input id='kwic' type='search' class="form-control input-sm hidden kwic" placeholder='{{i18n.i_search}}' />
-            <img class="kwic hidden" src="https://icongr.am/octicons/search.svg?color=e6e6e6&size=32" alt="{{i18n.i_search}}"/>
-          </input>
-        </div>
-        {{/authorized}}
-      </ul>
-      {{>log}}
+    <nav id="header" class="{{>navbarstyle}} navbar-expand-lg bd-navbar fixed-top">
+      <a class="text-light" id="diary">{{diary_name}}</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="text-light bg-dark" ><img src="https://icongr.am/octicons/three-bars.svg?color=ffffff" alt="X" /></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          {{#authorized}}
+          <div id='lexical' class="btn-group hidden" role="group">
+            <li class="nav-item"><a class="nav-link" id='clear_highlights'>{{i18n.i_raw}}</a></li>
+            <li class="nav-item"><a class="nav-link highlight_words disabled" id='specific'>{{i18n.i_specific}}</a></li>
+            <li class="nav-item"><a class="nav-link highlight_words disabled" id='rare'>{{i18n.i_rare}}</a></li>
+            <li class="nav-item"><a class="nav-link disabled" id='repeated'>{{i18n.i_phrases}}</a></li>
+          </div>
+          <div class="form-inline">
+            <div class="input-group input-group-sm">
+              <input id='kwic' type='search' class="form-control hidden kwic" placeholder='{{i18n.i_search}}'>
+              <div class="input-group-append">
+                <img class="input-group-text kwic hidden" src="https://icongr.am/octicons/search.svg?color=000000&size=16" alt="{{i18n.i_search}}"/>
+              </div>
+            </div>
+          </div>
+          {{/authorized}}
+        </ul>
+        {{>log}}
+      </div>
     </nav>
     <div id="container" class='container-fluid h-100'>
       <div id="memo" class='row h-100'>
         {{#authorized}}
-        <div class="col-md-3" id='groundings'>
+        <div class="col-3" id='groundings'>
           <legend>{{i18n.i_groundings}}</legend>
           {{#groundings}}
           <li class="{{type}}" id="{{id}}">
@@ -42,12 +50,6 @@
           <h1 id="name">{{i18n.i_sign-in_required}}</h1>
         {{/authorized}}
         {{#authorized}}
-          <div id="add-leaves">
-            <input id="leave-name" type="search" placeholder="" class="hidden" />
-            <button type="button" id="add" class="hidden">+</button>
-            <button id="create" type="button" class="hidden">&nbsp;</button>
-            <button id="create-table" class="table hidden" type="button">+</button>
-          </div>
           <h1><img src="../../style/{{type}}.svg"/> {{name}}</h1>
           <input id="name" type="search" class="form-control hidden" value="{{name}}"/>
           {{>rights}}
@@ -90,10 +92,19 @@
           <button class='btn navbar-btn btn-outline-light btn-sm' id="edit">{{i18n.i_edit}}</button>
           <button class='btn navbar-btn btn-outline-light btn-sm' id="comment_create">{{i18n.i_comment}}</button>
         </div>
+        <div id="add-leaves">
+          <div class="input-group input-group-sm">
+            <input id="leave-name" type="search" placeholder="" class="form-control hidden" />
+            <div class="input-group-append">
+              <span id="add" class="input-group-text hidden">+</span>
+            </div>
+          </div>
+        </div>
         {{/authorized}}
-        <a class='navbar-text' href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
       </nav>
     </div>
+    <span id="create" class="input-group-text hidden">+</span>
+    <span id="create-table" class="input-group-text hidden table">+</span>
     <div id="show-leaves" class="hidden"><div class="reverse">{{i18n.i_leaves}}</div></div>
     <div id="add_grounding" class="modal fade" role="dialog">
       <div class="modal-dialog" role="document">
@@ -186,6 +197,8 @@
           $('#create').addClass('diagram');
           $('#create-table').removeClass('hidden');
         }
+        $('#add').parent().append($('#create'));
+        $('#add').parent().append($('#create-table'));
         break;
       case ('theoretical'):
         $("#name").attr("placeHolder", "{{i18n.i_name.theoretical}}");
@@ -198,6 +211,7 @@
         $('#create').addClass('transcript');
         $('#create').removeClass('hidden');
         $("#leave-name").attr("placeHolder", "{{i18n.i_name.field}}");
+        $('#add').parent().append($('#create'));
         break;
       case ('diagram'):
         self.location = "../../diagram/{{diary}}/{{_id}}";
@@ -345,18 +359,22 @@
   });
 
   $('#add').on('click', function() {
-    create($(this)[0].className, '{{_id}}', $('#leave-name').val().trim());
+    var classlist = $(this)[0].classList;
+    create(classlist[classlist.length - 1], '{{_id}}', $('#leave-name').val().trim());
   });
 
   $('#create').on('click', function() {
     var name = $('#leave-name').val().trim(),
-        type = $(this)[0].className;
+        classlist = $(this)[0].classList,
+        type = classlist[classlist.length - 1];
     if (type == 'diagram') name = $('#name').val().trim(); 
     create(type, '{{_id}}', name);
   });
 
   $('#create-table').on('click', function() {
-    create($(this)[0].className, '{{_id}}', $('#leave-name').val().trim());
+    var classlist = $(this)[0].classList;
+        type = classlist[classlist.length - 1];
+    create(type, '{{_id}}', $('#leave-name').val().trim());
   });
 
   $('#add_grounding').on('show.bs.modal', function (event) {

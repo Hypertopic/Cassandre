@@ -6,7 +6,6 @@
     <link rel="stylesheet" href="../style/simplemde.min.css" />
   </head>
   <body id="watermark">
-    <form id="container">
       <header>
         <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
           <ul class="navbar-nav mr-auto">
@@ -18,7 +17,7 @@
       <div id="container" class='container-fluid h-100'>
         <div id="memo" class='row h-100'>
           {{#authorized}}
-          <div class="col-md-3" id="groundings">
+          <div class="col-3" id="groundings">
             <legend>{{i18n.i_groundings}}</legend>
             {{#groundings}}
             <li id="{{.}}" class="{{type}}">
@@ -47,7 +46,6 @@
         {{/authorized}}
         <a class='navbar-text' href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
       </nav>
-    </form>
 
   <script src="../script/jquery.js"></script>
   <script src="../script/simplemde.min.js"></script>

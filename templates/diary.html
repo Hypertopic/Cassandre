@@ -8,43 +8,48 @@
     {{/list}}
   </head>
   <body id="watermark">
-    <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item"><a class="nav-link" id="diaries">{{i18n.i_diaries}}</a></li>
-        <div class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="show" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          {{i18n.i_show}}
-          </a>
-          <div class="dropdown-menu" aria-labelledby="show">
-            <a class="dropdown-item" id="drawNetwork">{{i18n.i_network}}</a>
-            <a class="dropdown-item" id="drawTimeline">{{i18n.i_timeline}}</a>
-            {{#logged}}
-            <a class="dropdown-item" href="../../export/{{diary}}/html">html</a>
-            <a class="dropdown-item" href="../../export/{{diary}}/json">json</a>
-            <a class="dropdown-item" href="../../export/{{diary}}/xml">xml</a>
-            {{/logged}}
+    <nav id="header" class="{{>navbarstyle}} navbar-expand-md fixed-top">
+      <a class="text-light" id="diaries">{{i18n.i_diaries}}</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="text-light bg-dark" ><img src="https://icongr.am/octicons/three-bars.svg?color=ffffff" alt="X" /></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <div class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="show" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {{i18n.i_show}}
+            </a>
+            <div class="dropdown-menu" aria-labelledby="show">
+              <a class="dropdown-item" id="drawNetwork">{{i18n.i_network}}</a>
+              <a class="dropdown-item" id="drawTimeline">{{i18n.i_timeline}}</a>
+              {{#logged}}
+              <a class="dropdown-item" href="../../export/{{diary}}/html">html</a>
+              <a class="dropdown-item" href="../../export/{{diary}}/json">json</a>
+              <a class="dropdown-item" href="../../export/{{diary}}/xml">xml</a>
+              {{/logged}}
+            </div>
           </div>
-        </div>
-        <div class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="sort" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          {{i18n.i_sort}}
-          </a>
-          <div class="dropdown-menu" aria-labelledby="sort">
-            <a class="dropdown-item" href="?by=name">{{i18n.i_title}}</a>
-            <a class="dropdown-item" href="?by=date">{{i18n.i_date}}</a>
-            <a class="dropdown-item" href="?by=update">{{i18n.i_update}}</a>
-            <a class="dropdown-item" href="?by=type">{{i18n.i_type}}</a>
+          <div class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="sort" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {{i18n.i_sort}}
+            </a>
+            <div class="dropdown-menu" aria-labelledby="sort">
+              <a class="dropdown-item" href="?by=name">{{i18n.i_title}}</a>
+              <a class="dropdown-item" href="?by=date">{{i18n.i_date}}</a>
+              <a class="dropdown-item" href="?by=update">{{i18n.i_update}}</a>
+              <a class="dropdown-item" href="?by=type">{{i18n.i_type}}</a>
+            </div>
           </div>
-        </div>
-        <li class="nav-item"><a class="nav-link hidden" id="patterns">{{i18n.i_patterns}}</a></li>
-      </ul>
-      {{>log}}
+          <li class="nav-item"><a class="nav-link hidden" id="patterns">{{i18n.i_patterns}}</a></li>
+        </ul>
+        {{>log}}
+      </div>
     </nav>
     <div id="container" class='container-fluid'>
       <div id="content" class='col'>
         <h1>{{diary_name}} <span id="size" class="badge badge-pill badge-secondary"></span></h1>
         <input id="name" type="search" class="form-control hidden" value="{{diary_name}}"/>
-        <div id="add-leaves">
+        <div id="top-right">
           <img id="sticky" src="https://icongr.am/octicons/tasklist.svg?color=e6e6e6&size=32" class="hidden" alt="{{i18n.i_todo}}"/>
           <img id="show-activity" src="https://icongr.am/octicons/history.svg?color=e6e6e6&size=32" alt="{{i18n.i_activity}}"/>
         </div>
@@ -52,10 +57,12 @@
         <ul id="memos">
         {{#sections}}
           {{#memos}}
-          <li class="{{type}} mytooltip"><input type="checkbox" id="{{id}}" name="{{rev}}" class="hidden deletable" />
+          <li class="{{type}}"><input type="checkbox" id="{{id}}" name="{{rev}}" class="hidden deletable" />
             <span id="{{date}}" name="{{update}}" class="moment unread"></span>&nbsp;–
-            <a href="../../{{path}}/{{diary}}/{{id}}" class="unread">{{name}}</a>
-            {{#preview}}<span class="preview text-light bg-dark">{{preview}}</span>{{/preview}}
+            <span class="mytooltip">
+              <a href="../../{{path}}/{{diary}}/{{id}}" class="unread">{{name}}</a>
+              {{#preview}}<span class="preview text-light bg-dark">{{preview}}</span>{{/preview}}
+            </span>
           </li>
           {{/memos}}
         {{/sections}}

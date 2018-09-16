@@ -11,38 +11,45 @@
     <nav id="header" class="{{>navbarstyle}} navbar-expand-md fixed-top">
       <a class="text-light" id="diaries">{{i18n.i_diaries}}</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="text-light bg-dark" ><img src="https://icongr.am/octicons/three-bars.svg?color=ffffff" alt="X" /></span>
+        <span class="text-light bg-dark"><img src="../../style/three-bars.svg" alt="=" /></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-          <div class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="show" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            {{i18n.i_show}}
-            </a>
-            <div class="dropdown-menu" aria-labelledby="show">
-              <a class="dropdown-item" id="drawNetwork">{{i18n.i_network}}</a>
-              <a class="dropdown-item" id="drawTimeline">{{i18n.i_timeline}}</a>
-              {{#logged}}
-              <a class="dropdown-item" href="../../export/{{diary}}/html">html</a>
-              <a class="dropdown-item" href="../../export/{{diary}}/json">json</a>
-              <a class="dropdown-item" href="../../export/{{diary}}/xml">xml</a>
-              {{/logged}}
+          <li class="form-inline justify-content-between">
+            <div class="dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="show" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              {{i18n.i_show}}
+              </a>
+              <div class="dropdown-menu" aria-labelledby="show">
+                <a class="dropdown-item" id="drawNetwork">{{i18n.i_network}}</a>
+                <a class="dropdown-item" id="drawTimeline">{{i18n.i_timeline}}</a>
+                {{#logged}}
+                <a class="dropdown-item" href="../../export/{{diary}}/html">html</a>
+                <a class="dropdown-item" href="../../export/{{diary}}/json">json</a>
+                <a class="dropdown-item" href="../../export/{{diary}}/xml">xml</a>
+                {{/logged}}
+              </div>
             </div>
-          </div>
-          <div class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="sort" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            {{i18n.i_sort}}
-            </a>
-            <div class="dropdown-menu" aria-labelledby="sort">
-              <a class="dropdown-item" href="?by=name">{{i18n.i_title}}</a>
-              <a class="dropdown-item" href="?by=date">{{i18n.i_date}}</a>
-              <a class="dropdown-item" href="?by=update">{{i18n.i_update}}</a>
-              <a class="dropdown-item" href="?by=type">{{i18n.i_type}}</a>
+            <div class="dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="sort" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              {{i18n.i_sort}}
+              </a>
+              <div class="dropdown-menu" aria-labelledby="sort">
+                <a class="dropdown-item" href="?by=name">{{i18n.i_title}}</a>
+                <a class="dropdown-item" href="?by=date">{{i18n.i_date}}</a>
+                <a class="dropdown-item" href="?by=update">{{i18n.i_update}}</a>
+                <a class="dropdown-item" href="?by=type">{{i18n.i_type}}</a>
+              </div>
             </div>
-          </div>
-          <li class="nav-item"><a class="nav-link hidden" id="patterns">{{i18n.i_patterns}}</a></li>
+            <a class="nav-link hidden" id="patterns">{{i18n.i_patterns}}</a>
+          </li>
         </ul>
-        {{>log}}
+        <ul class="navbar-nav justify-content-between">
+          <li class="form-inline justify-content-between">
+            <div></div>
+            {{>log}}
+          </li>
+        </ul>
       </div>
     </nav>
     <div id="container" class='container-fluid'>
@@ -50,8 +57,8 @@
         <h1>{{diary_name}} <span id="size" class="badge badge-pill badge-secondary"></span></h1>
         <input id="name" type="search" class="form-control hidden" value="{{diary_name}}"/>
         <div id="top-right">
-          <img id="sticky" src="https://icongr.am/octicons/tasklist.svg?color=e6e6e6&size=32" class="hidden" alt="{{i18n.i_todo}}"/>
-          <img id="show-activity" src="https://icongr.am/octicons/history.svg?color=e6e6e6&size=32" alt="{{i18n.i_activity}}"/>
+          <img id="sticky" src="../../style/tasklist.svg" class="hidden" alt="{{i18n.i_todo}}"/>
+          <img id="show-activity" src="../../style/history.svg" alt="{{i18n.i_activity}}"/>
         </div>
         <div id="network" class="hidden"></div>
         <ul id="memos">

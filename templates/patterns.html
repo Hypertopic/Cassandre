@@ -10,7 +10,14 @@
         <ul class="navbar-nav mr-auto">
           <li class="nav-item"><a class="nav-link" id="corpus">&nbsp;</a></li>
         </ul>
-        <input id="kwic" type="search" placeholder="{{i18n.i_search}}" />
+        <div class="form-inline justify-content-between">
+          <div class="input-group input-group-sm">
+            <input id="kwic" type="search" class="form-control" placeholder="{{i18n.i_search}}" />
+            <div class="input-group-append">
+              <span class="input-group-text kwic search">?</span>
+            </div>
+          </div>
+        </div>
       </div>
     </header>
     <div id="container"  class='container-fluid'>
@@ -104,6 +111,12 @@
     var corpusUrl = encodeURIComponent("{{{corpus}}}");
     if (key.which == 13) {
       self.location = '../kwic/' +corpusUrl+ '/' + $('#kwic').val().toLowerCase();
+    }
+  });
+
+  $('.search').on('click', function() {
+    if ($('#kwic').val().length > 0) {
+      self.location = '../kwic/{{corpus}}/' + $('#kwic').val().toLowerCase();
     }
   });
 

@@ -13,7 +13,7 @@ body {
   color: gray !important;
 }
 
-#content {
+#content, #memo {
   padding-bottom: 60px;
 }
 
@@ -259,6 +259,11 @@ button.comment {
   background-image: url('storyline.svg');
 }
 
+.search {
+  background-image: url('search.svg');
+  color: transparent;
+}
+
 #network {
   margin-left: 10px;
   margin-right: 10px;
@@ -295,11 +300,12 @@ input.actor {
 .remove_reader,
 .remove {
   border: none;
-  background: url('x.png') no-repeat;
+  color: transparent;
+  background: url('x.svg') no-repeat;
 }
 
 .insert {
-  background: url('add.png') no-repeat;
+  background: url('plus.svg') no-repeat;
 }
 
 .remove, .insert {
@@ -308,6 +314,11 @@ input.actor {
   width: 25px;
   height: 29px;
   color: rgba(100,100,100,0);
+}
+
+.remove:hover, .insert:hover {
+  color: transparent;
+  decoration: none;
 }
 
 .words{

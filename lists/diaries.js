@@ -11,7 +11,6 @@ function(head, req) {
     logged: req.userCtx.name,
     diaries: [],
     flat: true,
-    list: true,
     peer: req.peer
   };
   while (row = getRow()) {

@@ -98,29 +98,28 @@
       };
       if ("{{logged}}") {
         data.contributors.push("{{logged}}");
+        data.readers.push("{{logged}}");
       }
-      if (diary_name) {
-        $.ajax({
-          url: "../",
-          type: "POST",
-          dataType: "json",
-          contentType: "application/json",
-          data: JSON.stringify(diary),
-          success: function(diary) {
-            data.diary = diary.id;
-            $.ajax({
-              url: "../",
-              type: "POST",
-              dataType: "json",
-              contentType: "application/json",
-              data: JSON.stringify(data),
-              success: function(data) {
-                location.replace('../editable_memo/'+data.id)
-              }
-            });
-          }
-        });
-      }
+      $.ajax({
+        url: "../",
+        type: "POST",
+        dataType: "json",
+        contentType: "application/json",
+        data: JSON.stringify(diary),
+        success: function(diary) {
+          data.diary = diary.id;
+          $.ajax({
+            url: "../",
+            type: "POST",
+            dataType: "json",
+            contentType: "application/json",
+            data: JSON.stringify(data),
+            success: function(data) {
+              location.replace('../editable_memo/'+data.id)
+            }
+          });
+        }
+      });
     }
   };
 

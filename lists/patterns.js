@@ -7,7 +7,6 @@ function(head, req) {
   var data = {
     i18n: localized(),
     corpus: req.query.corpus,
-    list: true,
     patterns: []
   };
   while (row = getRow()) {

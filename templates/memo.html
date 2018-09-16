@@ -8,28 +8,30 @@
     <nav id="header" class="{{>navbarstyle}} navbar-expand-lg bd-navbar fixed-top">
       <a class="text-light" id="diary">{{diary_name}}</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="text-light bg-dark" ><img src="https://icongr.am/octicons/three-bars.svg?color=ffffff" alt="X" /></span>
+        <span><img src="../../style/three-bars.svg" /></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           {{#authorized}}
-          <div id='lexical' class="btn-group hidden" role="group">
-            <li class="nav-item"><a class="nav-link" id='clear_highlights'>{{i18n.i_raw}}</a></li>
-            <li class="nav-item"><a class="nav-link highlight_words disabled" id='specific'>{{i18n.i_specific}}</a></li>
-            <li class="nav-item"><a class="nav-link highlight_words disabled" id='rare'>{{i18n.i_rare}}</a></li>
-            <li class="nav-item"><a class="nav-link disabled" id='repeated'>{{i18n.i_phrases}}</a></li>
-          </div>
-          <div class="form-inline">
-            <div class="input-group input-group-sm">
-              <input id='kwic' type='search' class="form-control hidden kwic" placeholder='{{i18n.i_search}}'>
-              <div class="input-group-append">
-                <img class="input-group-text kwic hidden" src="https://icongr.am/octicons/search.svg?color=000000&size=16" alt="{{i18n.i_search}}"/>
-              </div>
-            </div>
+          <div id='lexical' class="btn-group justify-content-between hidden" role="group">
+            <li class="nav-item btn-sm"><a class="nav-link" id='clear_highlights'>{{i18n.i_raw}}</a></li>
+            <li class="nav-item btn-sm"><a class="nav-link highlight_words disabled" id='specific'>{{i18n.i_specific}}</a></li>
+            <li class="nav-item btn-sm"><a class="nav-link highlight_words disabled" id='rare'>{{i18n.i_rare}}</a></li>
+            <li class="nav-item btn-sm"><a class="nav-link disabled" id='repeated'>{{i18n.i_phrases}}</a></li>
           </div>
           {{/authorized}}
         </ul>
-        {{>log}}
+        <ul class="navbar-nav">
+          <li class="form-inline justify-content-between">
+            <div class="input-group input-group-sm">
+              <input id='kwic' type='search' class="form-control hidden kwic" placeholder='{{i18n.i_search}}'>
+              <div class="input-group-append">
+                <span class="input-group-text kwic search hidden">?</span>
+              </div>
+            </div>
+            {{>log}}
+          </li>
+        </ul>
       </div>
     </nav>
     <div id="container" class='container-fluid h-100'>
@@ -533,6 +535,12 @@
     $('#kwic').val(
       document.getSelection().toString().trimLeft()
     );
+  });
+
+  $('.search').on('click', function() {
+    if ($('#kwic').val().length > 0) {
+      self.location = '../../kwic/{{diary}}/' + $('#kwic').val().toLowerCase();
+    }
   });
 
   $('#kwic').on('keypress', function(key) {

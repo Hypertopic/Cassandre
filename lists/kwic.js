@@ -11,7 +11,6 @@ function(head, req) {
   var data = {
     i18n: localized(),
     corpus: parameters[0],
-    list: true,
     pattern: parameters[1],
     occurrences: []
   };

@@ -56,11 +56,15 @@
       </main>
       <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
         <div role='group'>
+          {{#editable}}
           <button class='btn btn-outline-light btn-sm' data-toggle="modal" data-target="#add_grounding" id="add_grounding_btn"><span>{{i18n.i_add_groundings}}</span></button>
+          {{/editable}}
+          {{#authorized}}
           <button class='btn btn-outline-light btn-sm' id="comment_create">{{i18n.i_comment}}</button>
+          {{/authorized}}
         </div>
-        {{#authorized}}
         <div id="add-leaves">
+          {{#editable}}
           <div class="input-group input-group-sm">
             <input id="leave-name" type="search" placeholder="{{i18n.i_name.theoretical}}" class="form-control" />
             <div class="input-group-append">
@@ -68,8 +72,8 @@
               <span class="input-group-text hidden graph" id="create">+</span>
             </div>
           </div>
+          {{/editable}}
         </div>
-        {{/authorized}}
       </div>
     </div>
     <div id="show-leaves" class="hidden"><div class="reverse">{{i18n.i_leaves}}</div></div>

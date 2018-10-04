@@ -132,14 +132,17 @@
     });
   });
 
+  function insert_turn(current) {
+    var next = current.clone(true);
+    next.find('input').val(current.prev().find('input').val());
+    next.find('textarea').val('');
+    current.after(next);
+    next.find('textarea').select();
+  }
+
   $('#memo')
     .on('click', '.insert', function() {
-      var current = $(this).closest('.turn');
-      var next = current.clone()
-      next.find('input').val(current.prev().find('input').val());
-      next.find('textarea').val('');
-      current.after(next);
-      return false;
+      insert_turn($(this).closest('.turn'));
     })
     .on('click', '.remove', function() {
       var current = $(this).closest('.turn');
@@ -151,6 +154,14 @@
       }
       return false;
     });
+
+  $('.speech').on('keypress', function(key) {
+    if (key.which == 13) {
+      key.preventDefault();
+      insert_turn($(this).closest('.turn'));
+      if (this.parentNode.rowIndex + 2 == $('.speech').length ) $('html, body').scrollTop($(document).height());
+    }
+  });
 
   {{>layoutscript}}
   {{>logscript}}

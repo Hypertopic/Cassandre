@@ -114,6 +114,7 @@ function(head, req) {
         date: row.doc.date,
         diary: diary,
         draft: draft,
+        editable: !row.doc.contributors || row.doc.contributors && row.doc.contributors.indexOf(username)>-1 || req.userCtx.roles.indexOf("_admin")>-1,
         groundings: [],
         peer: req.peer,
         locale: req.headers["Accept-Language"],

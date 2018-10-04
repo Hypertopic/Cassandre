@@ -23,12 +23,14 @@
         </ul>
         <ul class="navbar-nav">
           <li class="form-inline justify-content-between">
+            {{#authorized}}
             <div class="input-group input-group-sm">
               <input id='kwic' type='search' class="form-control hidden kwic" placeholder='{{i18n.i_search}}'>
               <div class="input-group-append">
                 <span class="input-group-text kwic search hidden">?</span>
               </div>
             </div>
+            {{/authorized}}
             {{>log}}
           </li>
         </ul>
@@ -89,18 +91,22 @@
       <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
         {{#authorized}}
         <div role="group">
+          {{#editable}}
           <button class='btn navbar-btn btn-outline-light btn-sm' data-toggle="modal" data-target="#add_grounding"><span>{{i18n.i_add_groundings}}</span></button>
           <button class='btn navbar-btn btn-outline-light btn-sm hidden' data-toggle="modal" data-target="#remove_grounding" id="remove_grounding_btn">{{i18n.i_remove_grounding}}</button>
           <button class='btn navbar-btn btn-outline-light btn-sm' id="edit">{{i18n.i_edit}}</button>
+          {{/editable}}
           <button class='btn navbar-btn btn-outline-light btn-sm' id="comment_create">{{i18n.i_comment}}</button>
         </div>
-        <div id="add-leaves">
+        <div id="add-leaves" class="form-inline justify-content-between">
+          {{#editable}}
           <div class="input-group input-group-sm">
             <input id="leave-name" type="search" placeholder="" class="form-control hidden" />
             <div class="input-group-append">
               <span id="add" class="input-group-text hidden">+</span>
             </div>
           </div>
+          {{/editable}}
         </div>
         {{/authorized}}
       </nav>
@@ -552,7 +558,9 @@
   {{>commentsscript}}
   {{>layoutscript}}
   {{>logscript}}
-  {{>editname}}
+  {{#editable}}
+    {{>editname}}
+  {{/editable}}
   </script>
   </body>
 </html>

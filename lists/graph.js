@@ -121,6 +121,7 @@ function(head, req) {
         comments: [],
         date: row.doc.date,
         diary: diary,
+        editable: !row.doc.contributors || row.doc.contributors && row.doc.contributors.indexOf(username)>-1 || req.userCtx.roles.indexOf("_admin")>-1,
         edges: [],
         groundings: [],
         nodes: [],

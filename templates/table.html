@@ -19,13 +19,13 @@
           <legend>{{i18n.i_groundings}}</legend>
           {{#groundings}}
           <li class="{{type}}" id="{{id}}">
-            <a href="{{href}}">{{name}}</a> <span class="toggle dropdown-toggle"> </span>
-            <div class="preview">{{preview}}</div>
+            <a href="{{href}}">{{name}}</a> {{#preview}}<span class="toggle dropdown-toggle"> </span>
+            <div class="preview">{{preview}}</div>{{/preview}}
           </li>
           {{/groundings}}
         </div>
         {{/authorized}}
-        <div id="content">
+        <main class="col" id="content">
           {{^authorized}}
           <h1>{{i18n.i_sign-in_required}}</h1>
           {{/authorized}}
@@ -36,7 +36,9 @@
           <table id="table">
             <thead><tr><td></td></tr></thead>
           </table>
+          {{#editable}}
           <button type="button" id="add_row" class="btn btn-sm hidden">+</button>
+          {{/editable}}
           <p>&nbsp;</p>
           {{>comments}}
           {{/authorized}}
@@ -50,21 +52,25 @@
         </div>
       </div>
       <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
-        {{#authorized}}
         <div role="group">
+          {{#editable}}
           <button class='btn btn-outline-light btn-sm' data-toggle="modal" data-target="#add_grounding"><span>{{i18n.i_add_groundings}}</span></button>
           <button class='btn btn-outline-light btn-sm hidden' data-toggle="modal" data-target="#remove_grounding" id="remove_grounding_btn">{{i18n.i_remove_grounding}}</button>
+          {{/editable}}
+          {{#authorized}}
           <button class='btn btn-outline-light btn-sm' id="comment_create">{{i18n.i_comment}}</button>
+          {{/authorized}}
         </div>
         <div id="add-leaves">
+          {{#editable}}
           <div class="input-group input-group-sm">
             <input id="leave-name" type="search" placeholder="{{i18n.i_name.theoretical}}" class="input-sm hidden"/>
             <div class="input-group-append">
               <span id="add" type="button" class="input-group-text hidden theoretical" >+</span>
             </div>
           </div>
+          {{/editable}}
         </div>
-        {{/authorized}}
       </nav>
     </div>
     <div id="show-leaves" class="hidden"><div class="reverse">{{i18n.i_leaves}}</div></div>
@@ -166,6 +172,7 @@
     if (table.rows[table.rows.length-1].cells[0].innerHTML != '...') $('#add_row').removeClass('hidden');
   });
 
+  {{#editable}}
   $('table')
     .on('click', '.create', function() {
       create(
@@ -213,6 +220,7 @@
         );
       }
   });
+  {{/editable}}
 
   $('#color').on('change', function() {
     record('cell', this.value);
@@ -377,7 +385,9 @@
   {{>commentsscript}}
   {{>layoutscript}}
   {{>logscript}}
-  {{>editname}}
+  {{#editable}}
+    {{>editname}}
+  {{/editable}}
   </script>
   </body>
 </html>

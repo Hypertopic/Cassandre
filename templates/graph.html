@@ -106,17 +106,15 @@
     var container = document.getElementById('graph');
     var nodes = [];
     {{#nodes}}
-      var label = "{{label}}";
+      var label = wrap("{{label}}");
       var vertical = 'line-height: 90px;';
       if (label.length > 19) vertical = '';
       switch ("{{shape}}") {
         case ('box'):
-          var shape = '<rect x="2" y="2" width="344" height="96" rx="20" fill="white" stroke="black" stroke-width="3" />';
+          var shape = 'box';
           break;
         default:
-          var shape = '<polygon fill="white" stroke="black" stroke-width="3"'+
-            ' points="33,1   315,1  345,50'+
-            '        315,99  33,99  3,50" />';
+          var shape = 'box';
           break;
       }
       var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="350" height="102">' +
@@ -128,8 +126,8 @@
       var image = "data:image/svg+xml;charset=utf-8,"+ encodeURIComponent(svg);
       nodes.push({
         id: "{{id}}",
-        shape: 'image',
-        image: image
+        label: label,
+        shape: shape
       });
     {{/nodes}}
     var edges = [];
@@ -171,10 +169,18 @@
         navigationButtons: true,
         keyboard: true
       },
+      layout: {
+        randomSeed: 1,
+        improvedLayout: true
+      },
       physics: {
+        barnesHut: {
+          avoidOverlap: 1
+        },
         repulsion: {
-          nodeDistance: 1000
-        }
+          nodeDistance: 100
+        },
+        solver: 'repulsion',
       }
     };
     var isolated_nodes = nodes.filter(function(a) { if (connected_nodes.indexOf(a.id) == -1) return a;});

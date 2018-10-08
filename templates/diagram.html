@@ -39,9 +39,11 @@
           <p>&nbsp;</p>
           <div id="negative-case" class="hidden">
             <span class="meta">{{i18n.i_name.negative-case}}: </span><span class="negative_text">{{negative}}</span>
+            {{#editable}}
             <button class="btn" type="button" id="add_negative-case">+</button>
             <input type="text" size="35" class="form-control hidden" placeHolder="{{i18n.i_content.negative-case}}" value="{{negative}}"/>
             <button class="btn hidden" type="button" id="negative-case_created">{{i18n.i_done}}</button>
+            {{/editable}}
           </div>
           {{>comments}}
           {{/authorized}}
@@ -172,6 +174,7 @@
     });
   });
 
+  {{#editable}}
   $('#add').on('click', function() {
     var classlist = $(this)[0].classList;
     create(classlist[classlist.length - 1], '{{_id}}', $('#leave-name').val().trim());
@@ -239,6 +242,7 @@
   $("#negative-case_created").click(function () {
     adapt($('#negative-case').find('input').val().trim());
   });
+  {{/editable}}
 
   {{>commentsscript}}
   {{>layoutscript}}

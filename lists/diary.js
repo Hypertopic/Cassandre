@@ -166,22 +166,22 @@ function(head, req) {
               });
               var preview = preview.join('\n \n');
             }
+            section.memos.push({
+              color: color,
+              preview: preview.substr(0,3000),
+              diary: row.key[0],
+              id: row.value.id,
+              name: name,
+              node_level: node_level,
+              rev: row.value.rev,
+              date: date,
+              update: row.value.update,
+              groundings: row.value.groundings,
+              path: path,
+              type: row.value.type
+            });
+            data.sections.push(section);
           }
-          section.memos.push({
-            color: color,
-            preview: preview.substr(0,3000),
-            diary: row.key[0],
-            id: row.value.id,
-            name: name,
-            node_level: node_level,
-            rev: row.value.rev,
-            date: date,
-            update: row.value.update,
-            groundings: row.value.groundings,
-            path: path,
-            type: row.value.type
-          });
-          data.sections.push(section);
         }
       break;
       case ('D'):

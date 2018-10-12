@@ -156,7 +156,7 @@ function(head, req) {
         } else {
           var authorized = [];
           var authorized = authorized.concat(row.doc.contributors,row.doc.readers);
-          if (authorized.indexOf(req.userCtx.name) != -1) {
+          if (authorized.indexOf(req.userCtx.name) > -1 || !row.doc.contributors || row.doc.contributors.length < 1 || !row.doc.readers || row.doc.readers < 1) {
             if (row.doc.body) preview = row.doc.body.replace(/\n\n/g, '\n \n');
             if (row.doc.speeches) {
               preview = row.doc.speeches.map(function(a) {

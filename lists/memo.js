@@ -106,7 +106,7 @@ function(head, req) {
         i18n: localized(),
         _id: row.doc._id,
         _rev: row.doc._rev,
-        authorized: !row.doc.readers || row.doc.readers.indexOf(username)>-1 || row.doc.contributors && row.doc.contributors.indexOf(username)>-1 || req.userCtx.roles.indexOf("_admin")>-1,
+        authorized: !row.doc.readers || row.doc.readers.length==0 || row.doc.readers.indexOf(username)>-1 || row.doc.contributors && row.doc.contributors.indexOf(username)>-1 || req.userCtx.roles.indexOf("_admin")>-1,
         body: [],
         contributors: [],
         contributors_fullnames: [],

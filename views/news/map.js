@@ -13,8 +13,12 @@ function(o) {
       }
     }
     if (o.readers) {
-      for (var id in o.readers) {
-        emit([o._id, lastedit, o.readers[id], diary]);
+      if (o.readers.length < 1) {
+        emit([o._id, lastedit, null, diary]);
+      } else {
+        for (var id in o.readers) {
+          emit([o._id, lastedit, o.readers[id], diary]);
+        }
       }
     } else if (!o.commented && !o.fullname && !o.activity) {
       emit([o._id, lastedit, null, diary]);

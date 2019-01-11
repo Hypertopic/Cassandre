@@ -231,6 +231,15 @@
       "feed": "longpoll",
       "since": ":update_seq"
     }
+  }, {
+    "from": "changes/diary/:id/:update_seq",
+    "to": "../../_changes",
+    "query": {
+      "filter": "cassandre/diary",
+      "id": ":id",
+      "feed": "longpoll",
+      "since": ":update_seq"
+    }
   }, { 
     "from": "", 
     "to": "../../",

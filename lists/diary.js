@@ -19,7 +19,8 @@ function(head, req) {
     sections: [],
     locale: req.headers["Accept-Language"],
     peer: req.peer,
-    tables: []
+    tables: [],
+    update_seq: req.info.update_seq
   };
   data.locale = data.locale.split(',');
   data.locale = data.locale[0].substring(0,2);

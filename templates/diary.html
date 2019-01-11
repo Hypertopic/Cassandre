@@ -139,6 +139,12 @@
         if (kwic.pending > 0) $('#patterns').removeClass("hidden");
       }
     });
+    $.ajax({
+      url: "../../changes/diary/{{_id}}/{{update_seq}}",
+      type: "GET",
+      dataType: "json",
+      success: reload
+    });
   });
 
   $('#header')

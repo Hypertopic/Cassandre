@@ -4,7 +4,6 @@ function(head, req) {
   // !code l10n/l10n.js
   // !code lib/shared.js
   start({"headers":{"Content-Type":"text/html;charset=utf-8"}});
-  var ledger = [[[]]];
   var diaries = [[[]]];
   var data = {
     i18n: localized(),
@@ -14,23 +13,23 @@ function(head, req) {
     peer: req.peer
   };
   while (row = getRow()) {
-    var index = row.key[0];
-    if (row.key[3].length > 0) {
-      ledger[index] = row.key[3];
-    } else if (row.key[2] === req.userCtx.name || row.key[2] == null) {
-      if (diaries[index] === undefined) diaries[index] = [];
-      if (diaries[index].indexOf(row.key[1]) < 0) {
-        diaries[index].push(row.key[1]);
+    var index = row.key[1];
+    if (req.query.startkey[0] == req.userCtx.name || req.query.startkey[0] == null) {
+      if (data.diaries.map(function(a){return a.id}).indexOf(index) < 0) {
+        data.diaries.push({
+          'id': index,
+          'name': row.doc.diary_name
+        });
       }
     }
   }
 
-  for (i in diaries) {
-    if (i !== "0") data.diaries.push({
-      id: i,
-      name: ledger[i],
-      count: diaries[i].length
-    });
-  }
-  return Mustache.to_html(templates.diaries, data, shared);
+  provides("html", function() {
+    return Mustache.to_html(templates.diaries, data, shared);
+  });
+  provides("json", function() {
+    send(toJSON(data.diaries));
+  });
+
+
 }

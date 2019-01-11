@@ -21,13 +21,13 @@
                   <h5 class="card-title">{{name}}</h5>
                 </a>
                 <p class="card-text">
-                  {{count}} {{i18n.i_memos}}
-                  <span id="{{id}}" class="badge badge-pill badge-secondary"></span>
+                  <span id="{{id}}" title="{{i18n.i_memos}}" class="badge badge-pill badge-secondary"></span>
                 </p>
               </div>
             </div>
             {{/diaries}}
             {{#logged}}
+            <div class="loader alert alert-danger">{{i18n.i_loading}}</div>
             <div class="card text-center bg-light mb-3">
               <div class="card-body">
                 <h5 class="card-title">{{i18n.i_create}}</h5>
@@ -46,7 +46,55 @@
   <script>
   $(document).ready(function() {
     stickToHeader();
-    if ('{{logged}}') $.ajax({
+    {{#logged}}
+    var added = [];
+    $.ajax({
+      url: "../diaries/{{logged}}",
+      type: "GET",
+      dataType: "json",
+      success: function(data) {
+        for (var i in data) {
+          if (!$('#'+data[i].id).length) {
+            var card = document.createElement('div');
+            var card_body = document.createElement('div');
+            var card_title = document.createElement('div');
+            var card_text = document.createElement('p');
+            var card_badge = document.createElement('span');
+            card.className = 'card text-center bg-light mb-3';
+            card_body.className = 'card-body';
+            card_text.className = 'card-text';
+            card_title.className = 'card-title';
+            card_badge.className = 'badge badge-pill badge-secondary';
+            card_badge.id = data[i].id;
+            card_badge.title = "{{i18n.i_memos}}";
+            card_title.innerHTML = "<a href='../memo/"+data[i].id+"/?by=date'><h5>"+data[i].name+'</h5></a>';
+            card_text.appendChild(card_badge);
+            card_body.appendChild(card_title);
+            card_body.appendChild(card_text);
+            card.appendChild(card_body);
+            $('h1 + div').prepend(card);
+            added.push(data[i].id);
+          }
+        }
+      }
+    }).done(function(){
+      if (added.length > 1) $.ajax({
+        url: "../news/",
+        type: "GET",
+        dataType: "json",
+        success: function(data) {
+          for (var i in data) {
+            $('#'+data[i].id).text(data[i].size);
+            if (data[i].news) {
+              $('#'+data[i].id).prepend(data[i].news+'/');
+            }
+          }
+        }
+      });
+    }).done(function(){
+      $(".loader").addClass("hidden");
+    });
+    $.ajax({
       url: "../{{logged}}",
       type: "GET",
       dataType: "json",
@@ -54,16 +102,7 @@
         if(data.fullname) $('#username').text(data.fullname);
       }
     });
-    if ('{{logged}}') $.ajax({
-      url: "../news/",
-      type: "GET",
-      dataType: "json",
-      success: function(data) {
-        for (var i in data) {
-          $('#'+data[i].id).text(data[i].news);
-        }
-      }
-    });
+    {{/logged}}
   });
 
   $('#my_diary').on('keypress', function(key) {
@@ -73,7 +112,6 @@
   });
 
   function createDiary(diary_name) {
-    console.log(diary_name);
     if (diary_name == '') {
       alert('{{i18n.i_enter_diary_name}}');
     } else {

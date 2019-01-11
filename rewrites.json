@@ -33,8 +33,21 @@
       "include_docs": "true"
     }
   }, {
-    "from": "memo/", 
-    "to": "_list/diaries/diaries"
+    "from": "memo/",
+    "to": "_list/diaries/diaries",
+    "query": {
+      "startkey": [null],
+      "endkey": [null, {}],
+      "include_docs": "true"
+    }
+  }, {
+    "from": "diaries/:user",
+    "to": "_list/diaries/diaries",
+    "query": {
+      "startkey": [":user"],
+      "endkey": [":user", {}],
+      "include_docs": "true"
+    }
   }, {
     "from": "news/",
     "to": "_list/news/news",

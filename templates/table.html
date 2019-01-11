@@ -37,7 +37,7 @@
             <thead><tr><td></td></tr></thead>
           </table>
           {{#editable}}
-          <button type="button" id="add_row" class="btn btn-sm hidden">+</button>
+          <button type="button" id="add_row" title="{{i18n.i_create.row}}" class="btn btn-sm hidden">+</button>
           {{/editable}}
           <p>&nbsp;</p>
           {{>comments}}
@@ -64,9 +64,9 @@
         <div id="add-leaves">
           {{#editable}}
           <div class="input-group input-group-sm">
-            <input id="leave-name" type="search" placeholder="{{i18n.i_name.theoretical}}" class="input-sm hidden"/>
+            <input id="leave-name" type="search" placeholder="{{i18n.i_name.theoretical}}" class="input-sm form-control hidden"/>
             <div class="input-group-append">
-              <span id="add" type="button" class="input-group-text hidden theoretical" >+</span>
+              <span id="add" type="button" title="{{i18n.i_create.theoretical}}" class="input-group-text hidden theoretical">+</span>
             </div>
           </div>
           {{/editable}}
@@ -136,7 +136,7 @@
                   var hcell = tbl_header.insertCell(created_headers.indexOf(k));
                   hcell.id = 'head'+k;
                   hcell.innerHTML = $('#'+k).find('a').html();
-                  hcell.innerHTML += '<button type="button" class="create diagram" >+</button>';
+                  hcell.innerHTML += '<button type="button" title="{{i18n.i_create.diagram}}" class="create diagram">+</button>';
                 }
                 while (tbl_row.cells.length < created_headers.indexOf(k)) {
                   var cell = tbl_row.insertCell(tbl_row.cells.length);

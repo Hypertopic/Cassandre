@@ -103,7 +103,7 @@
           <div class="input-group input-group-sm">
             <input id="leave-name" type="search" placeholder="" class="form-control hidden" />
             <div class="input-group-append">
-              <span id="add" class="input-group-text hidden">+</span>
+              <span id="add" title="" class="input-group-text hidden">+</span>
             </div>
           </div>
           {{/editable}}
@@ -112,8 +112,8 @@
       </nav>
     </div>
     {{#editable}}
-    <span id="create" class="input-group-text hidden">+</span>
-    <span id="create-table" class="input-group-text hidden table">+</span>
+    <span id="create" title="" class="input-group-text hidden">+</span>
+    <span id="create-table" title="{{i18n.i_create.table}}" class="input-group-text hidden table">+</span>
     <div id="add_grounding" class="modal fade" role="dialog">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -188,11 +188,13 @@
       case ('field'):
         $("#name").attr("placeHolder", "{{i18n.i_name.field}}");
         $('#add').addClass('coding');
+        $("#add").attr("title", "{{i18n.i_create.coding}}");
         $("#leave-name").attr("placeHolder", "{{i18n.i_name.coding}}");
         break;
       case ('transcript'):
         $("#name").attr("placeHolder", "{{{i18n.i_name.transcript}}}");
         $('#add').addClass('coding');
+        $("#add").attr("title", "{{i18n.i_create.coding}}");
         $("#leave-name").attr("placeHolder", "{{i18n.i_name.coding}}");
         $('#lexical').removeClass('hidden');
         $('.kwic').removeClass('hidden');
@@ -201,10 +203,12 @@
       case ('coding'):
         $("#name").attr("placeHolder", "{{i18n.i_name.coding}}");
         $('#add').addClass('theoretical');
+        $("#add").attr("title", "{{i18n.i_create.theoretical}}");
         $("#leave-name").attr("placeHolder", "{{i18n.i_name.theoretical}}");
         if ($('#name').val().length > 0) {
           $('#create').removeClass('hidden');
           $('#create').addClass('diagram');
+          $("#create").attr("title", "{{i18n.i_create.diagram}}");
           $('#create-table').removeClass('hidden');
         }
         $('#add').parent().append($('#create'));
@@ -213,12 +217,15 @@
       case ('theoretical'):
         $("#name").attr("placeHolder", "{{i18n.i_name.theoretical}}");
         $('#add').addClass('operational');
+        $("#add").attr("title", "{{i18n.i_create.operational}}");
         $("#leave-name").attr("placeHolder", "{{i18n.i_name.operational}}");
         break;
       case ('operational'):
         $("#name").attr("placeHolder", "{{i18n.i_name.operational}}");
         $('#add').addClass('field');
+        $("#add").attr("title", "{{i18n.i_create.field}}");
         $('#create').addClass('transcript');
+        $('#create').attr("title", "{{i18n.i_create.transcript}}");
         $('#create').removeClass('hidden');
         $("#leave-name").attr("placeHolder", "{{i18n.i_name.field}}");
         $('#add').parent().append($('#create'));
@@ -232,6 +239,7 @@
       case ('storyline'):
         $("#name").attr("placeHolder", "{{i18n.i_name.storyline}}");
         $('#add').addClass('storyline');
+        $("#add").attr("title", "{{i18n.i_create.storyline}}");
         $("#leave-name").attr("placeHolder", "{{i18n.i_name.storyline}}");
         break;
     }

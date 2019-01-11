@@ -4,7 +4,6 @@
     "i_diary": "Diary for Qualitative Analysis",
     "i_corpora": "Corpora",
     "i_loading": "Loading...",
-    "i_create": "Create...",
     "i_username": "Username",
     "i_password": "Password",
     "i_sign-in": "Sign in",
@@ -90,6 +89,19 @@
     "i_grounding": "Grounded in",
     "i_comment": "Comment",
     "i_enter_comment": "Enter your comment",
+    "i_create": {
+       "diary": "Create...",
+       "field": "Create a field memo",
+       "transcript": "Create a transcript",
+       "coding": "Create a coding memo",
+       "theoretical": "Create a theoretical memo",
+       "operational": "Create an operational memo",
+       "storyline": "Create a storyline memo",
+       "table": "Create a properties table",
+       "row": "Add a row",
+       "diagram": "Create a diagram",
+       "graph": "Create a graph"
+    },
     "i_name": {
        "field": "Observed field",
        "transcript": "Informant pseudonym",
@@ -119,7 +131,6 @@
   "fr": {
     "i_qda": "Analyse qualitative de textes",
     "i_diary": "Journal pour l'analyse qualitative",
-    "i_create": "Créer...",
     "i_loading": "En chargement...",
     "i_username": "Identifiant",
     "i_password": "Mot de passe",
@@ -205,6 +216,19 @@
     "i_grounding": "Ancrage",
     "i_comment": "Commenter",
     "i_enter_comment": "Saisissez un commentaire",
+    "i_create": {
+       "diary": "Créer...",
+       "field": "Créer un compte-rendu d'observation",
+       "transcript": "Créer une transcription",
+       "coding": "Créer un compte-rendu de codage",
+       "theoretical": "Créer un compte-rendu théorique",
+       "operational": "Créer un compte-rendu opérationnel",
+       "storyline": "Créer un compte-rendu de scénario",
+       "table": "Créer une table des propriétés",
+       "row": "Ajouter une ligne",
+       "diagram": "Créer un diagramme",
+       "graph": "Créer une schématisation"
+    },
     "i_name": {
        "field": "Terrain observé",
        "transcript": "Pseudonyme de l'informatrice",

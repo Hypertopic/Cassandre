@@ -7,13 +7,13 @@
   <body id="watermark">
     <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item"><a class="nav-link" id="diary">{{diary_name}}</a></li>
+        <li class="nav-item"><a class="text-light nav-link" id="diary">{{diary_name}}</a></li>
       </ul>
       {{>log}}
     </nav>
     <div id="container" class='container-fluid h-100'>
       <main class="col" id="content">
-        <h1>{{i18n.i_todo}}</h1>
+        <h1>{{i18n.i_tasklist}}</h1>
         <div id="todo">
           <h2 id='unchecked-todo' class="hidden">{{i18n.i_todo}}</h2>
           <ul>

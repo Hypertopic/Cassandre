@@ -14,20 +14,16 @@
         <div id="content" class='col'>
           <h1>{{i18n.i_diaries}}</h1>
           <div class="card-columns">
+            {{#logged}}
+            <div class="loader alert alert-primary">{{i18n.i_loading}}</div>
+            {{/logged}}
             {{#diaries}}
             <div class="card text-center bg-light mb-3">
-              <div class="card-body">
-                <a href='../memo/{{id}}/?by=date'>
-                  <h5 class="card-title">{{name}}</h5>
-                </a>
-                <p class="card-text">
-                  <span id="{{id}}" title="{{i18n.i_memos}}" class="badge badge-pill badge-secondary"></span>
-                </p>
-              </div>
+              <h5><a href='../memo/{{id}}/?by=date'>{{name}}</a></h5>
+              <p><span id="{{id}}" title="{{i18n.i_memos}}" class="badge badge-pill badge-secondary"></span></p>
             </div>
             {{/diaries}}
             {{#logged}}
-            <div class="loader alert alert-danger">{{i18n.i_loading}}</div>
             <div class="card text-center bg-light mb-3">
               <div class="card-body">
                 <h5 class="card-title">{{i18n.i_create.diary}}</h5>
@@ -55,23 +51,11 @@
       success: function(data) {
         for (var i in data) {
           if (!$('#'+data[i].id).length) {
-            var card = document.createElement('div');
-            var card_body = document.createElement('div');
-            var card_title = document.createElement('div');
-            var card_text = document.createElement('p');
-            var card_badge = document.createElement('span');
-            card.className = 'card text-center bg-light mb-3';
-            card_body.className = 'card-body';
-            card_text.className = 'card-text';
-            card_title.className = 'card-title';
-            card_badge.className = 'badge badge-pill badge-secondary';
-            card_badge.id = data[i].id;
-            card_badge.title = "{{i18n.i_memos}}";
-            card_title.innerHTML = "<a href='../memo/"+data[i].id+"/?by=date'><h5>"+data[i].name+'</h5></a>';
-            card_text.appendChild(card_badge);
-            card_body.appendChild(card_title);
-            card_body.appendChild(card_text);
-            card.appendChild(card_body);
+            var card = '<div class="card text-center bg-light mb-3">'
+              +'<h5><a href="../memo/'+data[i].id+'/?by=date">'+data[i].name+'</a></h5>'
+              +'<div title="{{i18n.i_restricted-access}}" class="card-icons"><img src="../style/lock.svg" alt="" /></div>'
+              +'<p><span id="'+data[i].id+'" title="{{i18n.i_memos}}" class="badge badge-pill badge-secondary"></span></p>'
+              +'</div>';
             $('h1 + div').prepend(card);
             added.push(data[i].id);
           }
@@ -87,6 +71,12 @@
             $('#'+data[i].id).text(data[i].size);
             if (data[i].news) {
               $('#'+data[i].id).prepend(data[i].news+'/');
+              $('#'+data[i].id).parent().parent().removeClass('bg-light');
+              $('#'+data[i].id).parent().parent().addClass('alert-success');
+              $('#'+data[i].id).parent().parent().attr("title", "{{i18n.i_updated-diary}}");
+              $('#'+data[i].id).removeClass('badge-secondary');
+              $('#'+data[i].id).addClass('badge-success');
+              $('#'+data[i].id).attr("title", "{{i18n.i_memos-number}}");
             }
           }
         }

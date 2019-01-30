@@ -201,6 +201,7 @@ button.comment {
 
 
 #add, #create, #create-table, #diaries, #diary,
+#all-activity, #only-created, #only-modified, #only-comments,
 #clear_highlights, #rare, #specific, #repeated,
 #show-activity, #sticky {
   cursor: pointer;
@@ -272,6 +273,19 @@ button.comment {
   cursor: pointer;
   background-image: url('search.svg');
   color: transparent;
+}
+
+.card>h5{
+  color: blue;
+  lline-height:  3rem;
+  margin-top:  1rem;
+}
+
+.card-icons{
+  position: absolute;
+  bottom: -.35rem;
+  right: .55rem;
+  font-size: 2.5em;
 }
 
 #network {

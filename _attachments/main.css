@@ -203,7 +203,7 @@ button.comment {
 #add, #create, #create-table, #diaries, #diary,
 #all-activity, #only-created, #only-modified, #only-comments,
 #clear_highlights, #rare, #specific, #repeated,
-#show-activity, #sticky {
+#show-activity {
   cursor: pointer;
 }
 
@@ -286,6 +286,16 @@ button.comment {
   bottom: -.35rem;
   right: .55rem;
   font-size: 2.5em;
+}
+
+#tasklist-alert {
+  cursor: pointer;
+}
+
+#tasklist-alert img{
+  position: absolute;
+  bottom: .4rem;
+  right: .55rem;
 }
 
 #network {

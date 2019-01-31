@@ -55,11 +55,17 @@
     </nav>
     <div id="container" class='container-fluid'>
       <div id="content" class='col'>
-        <h1>{{diary_name}} <span id="size" class="badge badge-pill badge-secondary"></span></h1>
+        <h1>{{diary_name}}
+          <span id="size" class="badge badge-pill badge-secondary" title="{{i18n.i_memos}}"></span>
+          <span id="comments" class="badge badge-pill badge-info" title="{{i18n.i_unchecked-comment}}"></span>
+        </h1>
         <input id="name" type="search" class="form-control hidden" value="{{diary_name}}"/>
         <div id="top-right">
-          <img id="sticky" src="../../style/tasklist.svg" class="hidden" alt="{{i18n.i_todo}}"/>
-          <img id="show-activity" src="../../style/history.svg" alt="{{i18n.i_activity}}"/>
+          <img id="show-activity" src="../../style/history.svg" alt="{{i18n.i_activity}}" title="{{i18n.i_activity}}"/>
+        </div>
+        <div id="tasklist-alert" class="alert alert-primary hidden" title="{{i18n.i_tasklist}}">
+          {{i18n.i_tasklist-alert}}
+          <img src="../../style/tasklist.svg" alt="{{i18n.i_tasklist}}"/>
         </div>
         <div id="network" class="hidden"></div>
         <ul id="memos">
@@ -113,7 +119,12 @@
             $(id).parent().find('.unread').removeClass('unread');
           }
         }
-        if ($('a.unread').length > 0) $('#size').prepend($('a.unread').length+'/');
+        if ($('a.unread').length > 0) {
+          $('#size').prepend($('a.unread').length+'/');
+          $('#size').removeClass("badge-secondary");
+          $('#size').addClass("badge-success");
+          $('#size').attr("title", "{{i18n.i_memos-number}}");
+        }
       }
     });
     {{/list}}
@@ -128,7 +139,8 @@
       type: "GET",
       dataType: "json",
       success: function(todo) {
-        if (todo.pending > 0) $('#sticky').removeClass("hidden");
+        if (todo.pending > 0) $('#tasklist-alert').removeClass("hidden");
+        if (todo.comments > 0) $('#comments').prepend(todo.comments);
       }
     });
     $.ajax({
@@ -206,7 +218,7 @@
       });
     });
 
-  $('#sticky').on('click', function() {
+  $('#tasklist-alert').on('click', function() {
     self.location = "../../tasklist/{{diary}}/";
   });
 

@@ -63,9 +63,10 @@ function(head, req) {
   });
   provides("json", function() {
     var number = data.ungrounded.length + data.unnamed.length + data.draft.length + data.diagram.length + data.todo.length + data.comment.length;
-    send(toJSON(
-      {pending: number}
-    ));
+    send(toJSON({
+      comments: data.comment.length,
+      pending: number
+    }));
   });
 }
 

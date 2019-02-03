@@ -8,18 +8,26 @@
   <body id="watermark">
     <div id="container">
       <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
+        <a href="../memo/" class="text-light">{{i18n.i_diaries}}</a>
         <ul class="navbar-nav mr-auto">
+          {{#authorized}}
           <span class="navbar-text">{{i18n.i_filter}}</span>
           <li class="nav-item"><a class="nav-link" id="all-activity">{{i18n.i_all}}</a></li>
           <li class="nav-item"><a class="nav-link" id="only-created">{{i18n.i_creations}}</a></li>
           <li class="nav-item"><a class="nav-link" id="only-modified">{{i18n.i_modifications}}</a></li>
           <li class="nav-item"><a class="nav-link" id="only-comments">{{i18n.i_comments}}</a></li>
+          {{/authorized}}
         </ul>
         {{>log}}
       </nav>
       <div id="content">
+        {{^authorized}}
+          <h1>{{i18n.i_sign-in_required}}</h1>
+        {{/authorized}}
+        {{#authorized}}
         <h1>{{fullname}} <span id="contribution"></span></h1>
         <div id="cal-heatmap"></div>
+        {{>readrights}}
         <ul>
           {{#activity}}
           <li class="{{action}}">
@@ -28,6 +36,7 @@
           </li>
           {{/activity}}
         </ul>
+        {{/authorized}}
       </div>
       <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
         <a class='navbar-text' href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>

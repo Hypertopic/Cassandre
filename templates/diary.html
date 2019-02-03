@@ -63,10 +63,12 @@
         <div id="top-right">
           <img id="show-activity" src="../../style/history.svg" alt="{{i18n.i_activity}}" title="{{i18n.i_activity}}"/>
         </div>
+        {{#list}}
         <div id="tasklist-alert" class="alert alert-primary hidden" title="{{i18n.i_tasklist}}">
           {{i18n.i_tasklist-alert}}
           <img src="../../style/tasklist.svg" alt="{{i18n.i_tasklist}}"/>
         </div>
+        {{/list}}
         <div id="network" class="hidden"></div>
         <ul id="memos">
         {{#sections}}

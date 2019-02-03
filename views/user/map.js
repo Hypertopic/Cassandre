@@ -13,5 +13,11 @@ function(o) {
         emit([o.history[key].user, o.history[key].date, operation], {'diary': diary, '_id': o._id , 'name': o.name, 'type': o.type});
       }
     }
+    if (o.activity) {
+      emit([o._id, null, 'R'], {'_id': o._id});
+      if (o.readers) for (var key in o.readers) {
+        emit([o._id, null, 'R'], {'_id': o.readers[key]});
+      }
+    }
   }
 }

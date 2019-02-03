@@ -199,11 +199,11 @@ button.comment {
   padding-bottom: 5px;
 }
 
-
+a.dropdown-item,
 #add, #create, #create-table, #diaries, #diary,
 #all-activity, #only-created, #only-modified, #only-comments,
 #clear_highlights, #rare, #specific, #repeated,
-#show-activity {
+#show-activity, #tasklist-alert {
   cursor: pointer;
 }
 
@@ -277,7 +277,6 @@ button.comment {
 
 .card>h5{
   color: blue;
-  lline-height:  3rem;
   margin-top:  1rem;
 }
 
@@ -286,10 +285,6 @@ button.comment {
   bottom: -.35rem;
   right: .55rem;
   font-size: 2.5em;
-}
-
-#tasklist-alert {
-  cursor: pointer;
 }
 
 #tasklist-alert img{

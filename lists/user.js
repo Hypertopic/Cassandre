@@ -6,10 +6,13 @@ function(head, req) {
   start({"headers":{"Content-Type":"text/html;charset=utf-8"}});
   var data = {
     activity: [],
+    authorized: req.userCtx.name==req.query.startkey[0] || (row && row.doc && row.doc.readers.indexOf(req.userCtx.name)) || req.userCtx.roles.indexOf("_admin")>-1,
     flat: true,
     i18n: localized(),
     locale: req.headers["Accept-Language"],
-    logged: req.userCtx.name
+    logged: req.userCtx.name,
+    readers: [],
+    readers_fullnames: []
   };
   while (row = getRow()) {
     var type = 'memo';
@@ -23,6 +26,12 @@ function(head, req) {
     switch (row.key[2]) {
       case ('N'):
         data.fullname = row.value.fullname;
+        break;
+      case ('R'):
+        data.readers.push(row.value._id);
+        var fullname = row.value._id;
+        if (row.doc && row.doc.fullname) fullname = row.doc.fullname;
+        data.readers_fullnames.push(fullname);
         break;
       case ('M'):
         var type = 'memo';

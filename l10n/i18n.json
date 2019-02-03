@@ -94,6 +94,17 @@
     "i_grounding": "Grounded in",
     "i_comment": "Comment",
     "i_enter_comment": "Enter your comment",
+    "i_memo": {
+       "field": "Field memo",
+       "transcript": "Interview transcript",
+       "coding": "Coding memo",
+       "theoretical": "Theoretical memo",
+       "operational": "Operational memo",
+       "storyline": "Storyline memo",
+       "table": "Properties table",
+       "diagram": "Diagram",
+       "graph": "Graph"
+    },
     "i_create": {
        "diary": "Create...",
        "field": "Create a field memo",
@@ -226,10 +237,21 @@
     "i_grounding": "Ancrage",
     "i_comment": "Commenter",
     "i_enter_comment": "Saisissez un commentaire",
+    "i_memo": {
+       "field": "Compte-rendu d'observation",
+       "transcript": "Transcription d'entretien",
+       "coding": "Compte-rendu de codage",
+       "theoretical": "Compte-rendu théorique",
+       "operational": "Compte-rendu opérationnel",
+       "storyline": "Compte-rendu de scénario",
+       "table": "Table des propriétés",
+       "diagram": "Diagramme",
+       "graph": "Schématisation"
+    },
     "i_create": {
        "diary": "Créer...",
        "field": "Créer un compte-rendu d'observation",
-       "transcript": "Créer une transcription",
+       "transcript": "Créer une transcription d'entretien",
        "coding": "Créer un compte-rendu de codage",
        "theoretical": "Créer un compte-rendu théorique",
        "operational": "Créer un compte-rendu opérationnel",

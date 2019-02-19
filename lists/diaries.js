@@ -7,6 +7,7 @@ function(head, req) {
   var diaries = [[[]]];
   var data = {
     i18n: localized(),
+    locale: req.headers["Accept-Language"],
     logged: req.userCtx.name,
     diaries: [],
     flat: true,
@@ -16,7 +17,7 @@ function(head, req) {
     var index = row.key[1];
     if (req.query.startkey[0] == req.userCtx.name || req.query.startkey[0] == null) {
       if (data.diaries.map(function(a){return a.id}).indexOf(index) < 0) {
-        data.diaries.push({
+        if (index != null) data.diaries.push({
           'id': index,
           'name': row.doc.diary_name
         });

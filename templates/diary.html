@@ -146,6 +146,7 @@
     {{#timeline}}
       drawTimeline();
     {{/timeline}}
+    {{#list}}
     $.ajax({
       url: "../../tasklist/{{diary}}",
       type: "GET",
@@ -155,6 +156,7 @@
         if (todo.comments > 0) $('#comments').prepend(todo.comments);
       }
     });
+    {{/list}}
     $.ajax({
       url: "../../kwic/{{diary}}",
       type: "GET",

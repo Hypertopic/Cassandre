@@ -151,6 +151,7 @@ div.post {
   width: 100%;
 }
 
+.card>p>.moment,
 .comment>.meta,
 #negative-case>.meta,
 #modify_rights,
@@ -200,7 +201,7 @@ button.comment {
 }
 
 a.dropdown-item,
-#add, #create, #create-table, #diaries, #diary,
+#add, #create, #create-table, #diaries, #diary, #corpus,
 #all-activity, #only-created, #only-modified, #only-comments,
 #clear_highlights, #rare, #specific, #repeated,
 #show-activity, #tasklist-alert {

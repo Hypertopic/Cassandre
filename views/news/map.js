@@ -5,7 +5,7 @@ function(o) {
       emit([o.activity[i].doc, o.activity[i].date, o._id]);
     }
   } else if (!o.diary_name) { 
-    var lastedit = 1;
+    var lastedit = "1";
     if (o.history) lastedit = o.history[o.history.length-1].date;
     if (o.contributors) {
       for (var id in o.contributors) {

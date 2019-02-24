@@ -45,7 +45,16 @@ function(head, req) {
       break;
       case ('M'):
         memos_name[row.value.id] = row.value.name;
-        memos_path[row.value.id] = 'memo';
+        switch(row.value.type) {
+          case ('graph'):
+          case ('table'):
+          case ('diagram'):
+            memos_path[row.value.id] = row.value.type;
+          break;
+          default:
+            memos_path[row.value.id] = 'memo';
+          break;
+        }
         break;
       case ('Z'):
         var object = {

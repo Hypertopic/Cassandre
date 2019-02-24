@@ -11,12 +11,9 @@ function(head, req) {
 
   while (row = getRow()) {
     if (row.key[2] == req.userCtx.name || row.key[2] == null) {
-      if (row.key[3]) {
+      if (row.key[3] != null) {
         var row_index = row.key[0];
         var row_diary = row.key[3];
-        if (lastvisit[row_diary] == null) {
-          lastvisit[row_diary] = row.key[1];
-        } else if (lastvisit[row_diary] < row.key[1]) lastvisit[row_diary] = row.key[1];
         var n = number.map(function(a){return a.diary}).indexOf(row_diary);
         if (n > -1) {
           if (number[n].memos.indexOf(row_index) < 0)
@@ -29,7 +26,9 @@ function(head, req) {
         }
       } else if (row.key[0] == previous.key[0] && previous.key[3] && previous.key[3].length > 0) {
         var diary = previous.key[3];
-        if (lastvisit[diary] < row.key[1]) lastvisit[diary] = row.key[1];
+        if (lastvisit[diary] == null) {
+          lastvisit[diary] = row.key[1];
+        } else if (lastvisit[diary] < row.key[1]) lastvisit[row_diary] = row.key[1];
       }
       if (row.key[0] !== previous.key[0] && previous.key[3] && previous.key[3].length > 0) {
         var diary = previous.key[3];

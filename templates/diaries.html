@@ -78,7 +78,8 @@
               $('#'+data[i].id).removeClass('badge-secondary');
               $('#'+data[i].id).addClass('badge-success');
               $('#'+data[i].id).attr("title", "{{i18n.i_memos-number}}");
-              $("<br/><span class='moment'>Dernière consultation "+moment(data[i].lastvisit).fromNow()+'</span>').insertAfter('#'+data[i].id);
+              if (typeof data[i].lastvisit !== 'undefined')
+                $("<br/><span class='moment'>Dernière consultation "+moment(data[i].lastvisit).fromNow()+'</span>').insertAfter('#'+data[i].id);
             }
           }
         }

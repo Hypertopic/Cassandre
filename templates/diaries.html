@@ -15,7 +15,7 @@
           <h1>{{i18n.i_diaries}}</h1>
           <div class="card-columns">
             {{#logged}}
-            <div class="loader alert alert-primary">{{i18n.i_loading}}</div>
+            <div id="loading" class="loader alert alert-primary">{{i18n.i_loading}}</div>
             {{/logged}}
             {{#diaries}}
             <div class="card text-center bg-light mb-3">
@@ -35,6 +35,7 @@
         </div>
       </div>
       <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
+        <button class="btn navbar-btn btn-outline-light btn-sm d-none" id="show" type="button">{{i18n.i_show-more}}</button>
         <a class='navbar-text' href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
       </nav>
     </div>
@@ -56,36 +57,15 @@
               +'<div title="{{i18n.i_restricted-access}}" class="card-icons"><img src="../style/lock.svg" alt="" /></div>'
               +'<p><span id="'+data[i].id+'" title="{{i18n.i_memos}}" class="badge badge-pill badge-secondary"></span></p>'
               +'</div>';
-            $('h1 + div').prepend(card);
+            $('#loading').after(card);
             added.push(data[i].id);
           }
         }
       }
     }).done(function(){
-      moment.locale('{{locale}}');
-      if (added.length > 1) $.ajax({
-        url: "../news/",
-        type: "GET",
-        dataType: "json",
-        success: function(data) {
-          for (var i in data) {
-            $('#'+data[i].id).text(data[i].size);
-            if (data[i].news) {
-              $('#'+data[i].id).prepend(data[i].news+'/');
-              $('#'+data[i].id).parent().parent().removeClass('bg-light');
-              $('#'+data[i].id).parent().parent().addClass('alert-success');
-              $('#'+data[i].id).parent().parent().attr("title", "{{i18n.i_updated-diary}}");
-              $('#'+data[i].id).removeClass('badge-secondary');
-              $('#'+data[i].id).addClass('badge-success');
-              $('#'+data[i].id).attr("title", "{{i18n.i_memos-number}}");
-              if (typeof data[i].lastvisit !== 'undefined')
-                $("<br/><span class='moment'>Dernière consultation "+moment(data[i].lastvisit).fromNow()+'</span>').insertAfter('#'+data[i].id);
-            }
-          }
-        }
-      });
+      if (added.length > 1) $("#show").removeClass('d-none');
     }).done(function(){
-      $(".loader").addClass("hidden");
+      $("#loading").addClass('d-none');
     });
     $.ajax({
       url: "../{{logged}}",
@@ -96,6 +76,35 @@
       }
     });
     {{/logged}}
+  });
+
+  $('#show').on('click', function() {
+    $("#loading").removeClass('d-none');
+    moment.locale('{{locale}}');
+    $.ajax({
+      url: "../news/",
+      type: "GET",
+      dataType: "json",
+      success: function(data) {
+        for (var i in data) {
+          $('#'+data[i].id).text(data[i].size);
+          if (data[i].news) {
+            $('#'+data[i].id).prepend(data[i].news+'/');
+            $('#'+data[i].id).parent().parent().removeClass('bg-light');
+            $('#'+data[i].id).parent().parent().addClass('alert-success');
+            $('#'+data[i].id).parent().parent().attr("title", "{{i18n.i_updated-diary}}");
+            $('#'+data[i].id).removeClass('badge-secondary');
+            $('#'+data[i].id).addClass('badge-success');
+            $('#'+data[i].id).attr("title", "{{i18n.i_memos-number}}");
+            if (typeof data[i].lastvisit !== 'undefined')
+              $("<br/><span class='moment'>{{i18n.i_last-visit}} "+moment(data[i].lastvisit).fromNow()+'</span>').insertAfter('#'+data[i].id);
+          }
+        }
+      }
+    }).done(function(){
+      $("#show").addClass('d-none');
+      $("#loading").addClass('d-none');
+    });
   });
 
   $('#my_diary').on('keypress', function(key) {

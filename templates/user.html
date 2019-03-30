@@ -13,9 +13,9 @@
           {{#authorized}}
           <span class="navbar-text">{{i18n.i_filter}}</span>
           <li class="nav-item"><a class="nav-link" id="all-activity">{{i18n.i_all}}</a></li>
-          <li class="nav-item"><a class="nav-link" id="only-created">{{i18n.i_creations}}</a></li>
-          <li class="nav-item"><a class="nav-link" id="only-modified">{{i18n.i_modifications}}</a></li>
-          <li class="nav-item"><a class="nav-link" id="only-comments">{{i18n.i_comments}}</a></li>
+          <li class="nav-item"><a class="nav-link d-none" id="only-created">{{i18n.i_creations}}</a></li>
+          <li class="nav-item"><a class="nav-link d-none" id="only-modified">{{i18n.i_modifications}}</a></li>
+          <li class="nav-item"><a class="nav-link d-none" id="only-comments">{{i18n.i_comments}}</a></li>
           {{/authorized}}
         </ul>
         {{>log}}
@@ -28,17 +28,16 @@
         <h1>{{fullname}} <span id="contribution"></span></h1>
         <div id="cal-heatmap"></div>
         {{>readrights}}
-        <ul>
-          {{#activity}}
-          <li class="{{action}}">
-            <span id="{{date}}" class="moment"></span>&nbsp;–
-            <a href='../{{type}}/{{diary}}/{{id}}'>{{name}}</a>
-          </li>
-          {{/activity}}
+        <ul id="events">
         </ul>
         {{/authorized}}
       </div>
       <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
+        {{#authorized}}
+        <div class='pagination'>
+          <button class='btn navbar-btn btn-outline-light btn-sm' id="next">{{i18n.i_show-more}}</button>
+        </div>
+        {{/authorized}}
         <a class='navbar-text' href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
       </nav>
     </div>
@@ -50,69 +49,103 @@
   var cal = new CalHeatMap();
   $(document).ready(function() {
     stickToHeader();
-    moment.locale('{{locale}}');
-    var moments = $('.moment');
-    var times = {};
-    moments.each(function() {
-      var now = moment();
-      var jstime = $(this).attr("id");
-      var unixstamp = moment(jstime).format('X');
-      times[unixstamp] = 1;
-      var mmtime = moment(jstime);
-      if(now.diff(mmtime, 'days') <= 2) {
-        $(this).text(mmtime.fromNow());
-      } else if(now.diff(mmtime, 'years') <= 1) {
-        $(this).text("{{i18n.i_on-a-date}}"+' '+mmtime.format("Do MMMM"));
-      } else {
-        $(this).text("{{i18n.i_on-a-date}}"+' '+mmtime.format("Do MMMM YYYY"));
-      }
-    });
-    var contributions = $('ul li .moment');
-    contributions.each(function() {
-      $(this).text($(this).text().replace(/./, function(x) { return x.toUpperCase(); }));
-    });
-    if ($('ul .created').length < 1) $('#only-created').hide();
-    if ($('ul .modified').length < 1) $('#only-modified').hide();
-    if ($('ul .commented').length < 1) $('#only-comments').hide();
-    drawChart(times);
-    showContributions();
+    {{#authorized}}
+    showActivity('a');
+    {{/authorized}}
   });
 
+  function showActivity(start) {
+    moment.locale('{{locale}}');
+    let now = moment();
+    $.ajax({
+      url: "../user/{{id}}/"+start,
+      type: "GET",
+      dataType: "json",
+      success: function(data) {
+        for (var i in data) {
+          $("#content ul").append('<li class="'+data[i].action+'">'
+            +'<span id="'+data[i].date+'" class="moment"></span>&nbsp;– '
+            +'<a href="../'+data[i].type+'/'+data[i].diary+'/'+data[i].id+'">'+data[i].name+'</a>'
+            +'</li>');
+        }
+      }
+    }).done(function(){
+      var moments = $('.moment');
+      var times = {};
+      moments.each(function() {
+        var jstime = $(this).attr("id");
+        var unixstamp = moment(jstime).format('X');
+        times[unixstamp] = 1;
+        var mmtime = moment(jstime);
+        if(now.diff(mmtime, 'days') <= 2) {
+          $(this).text(mmtime.fromNow());
+        } else if(now.diff(mmtime, 'years') <= 1) {
+          $(this).text("{{i18n.i_on-a-date}}"+' '+mmtime.format("Do MMMM"));
+        } else {
+          $(this).text("{{i18n.i_on-a-date}}"+' '+mmtime.format("Do MMMM YYYY"));
+        }
+      });
+      var contributions = $('ul li .moment');
+      var n = contributions.length / 100;
+      if (n !== parseInt(n, 10)) $('#next').prop('disabled', true);
+      contributions.each(function() {
+        $(this).text($(this).text().replace(/./, function(x) { return x.toUpperCase(); }));
+      });
+      if ($('ul .created').length < 1) {
+        $('#only-created').addClass('d-none');
+      } else $('#only-created').removeClass('d-none');
+      if ($('ul .modified').length < 1) {
+        $('#only-modified').addClass('d-none');
+      } else $('#only-modified').removeClass('d-none');
+      if ($('ul .commented').length < 1) {
+        $('#only-comments').addClass('d-none');
+      } else $('#only-comments').removeClass('d-none');
+      if (start == 'a') drawChart(times);
+      showContributions();
+    });
+  }
+
   function drawChart(data) {
+    var end = new Date($('#content ul li:first').find("span").attr('id'));
+    var start = new Date(end.setFullYear(end.getFullYear() - 1))
     cal.init({
       domain: "week",
       subDomain: "day",
       data: data,
       range: 53,
-      start: new Date(new Date().setFullYear(new Date().getFullYear() - 1)),
-      end: new Date(),
+      start: start,
+      end: end,
       itemName: ["contribution", "contributions"],
       domainLabelFormat: ""
     });
   }
 
+  $('#next').on('click', function() {
+    showActivity($("li").last().find("span").attr('id'));
+  });
+
   $('#all-activity').on('click', function() {
-    $(".created").show();
-    $(".modified").show();
-    $(".commented").show();
+    $(".created").removeClass('d-none');
+    $(".modified").removeClass('d-none');
+    $(".commented").removeClass('d-none');
     showContributions();
   });
   $('#only-created').on('click', function() {
-    $(".created").show();
-    $(".modified").hide();
-    $(".commented").hide();
+    $(".created").removeClass('d-none');
+    $(".modified").addClass('d-none');
+    $(".commented").addClass('d-none');
     showContributions();
   });
   $('#only-comments').on('click', function() {
-    $(".created").hide();
-    $(".modified").hide();
-    $(".commented").show();
+    $(".created").addClass('d-none');
+    $(".modified").addClass('d-none');
+    $(".commented").removeClass('d-none');
     showContributions();
   });
   $('#only-modified').on('click', function() {
-    $(".created").hide();
-    $(".commented").hide();
-    $(".modified").show();
+    $(".created").addClass('d-none');
+    $(".commented").addClass('d-none');
+    $(".modified").removeClass('d-none');
     showContributions();
   });
 

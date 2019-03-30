@@ -6,9 +6,10 @@ function(head, req) {
   start({"headers":{"Content-Type":"text/html;charset=utf-8"}});
   var data = {
     activity: [],
-    authorized: req.userCtx.name==req.query.startkey[0] || (row && row.doc && row.doc.readers.indexOf(req.userCtx.name)) || req.userCtx.roles.indexOf("_admin")>-1,
+    authorized: req.userCtx.name==req.query.startkey[0] || req.userCtx.roles.indexOf("_admin")>-1,
     flat: true,
     i18n: localized(),
+    id: req.query.startkey[0],
     locale: req.headers["Accept-Language"],
     logged: req.userCtx.name,
     readers: [],
@@ -74,5 +75,12 @@ function(head, req) {
         break;
     }
   }
-  return Mustache.to_html(templates.user, data, shared);
+  if (data.readers.indexOf(req.userCtx.name) > -1) data.authorized = true;
+  provides("html", function() {
+    return Mustache.to_html(templates.user, data, shared);
+  });
+  provides("json", function() {
+//    if (data.authorized)
+      send(toJSON(data.activity));
+  });
 }

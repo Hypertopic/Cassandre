@@ -1,7 +1,7 @@
 function(o) {
   var diary = o.diary || o.corpus;
   if (o.fullname)
-    emit([o._id, null, 'N'], {'fullname': o.fullname});
+    emit([o._id, 'b', 'N'], {'fullname': o.fullname});
   if (o.commented) {
     emit([o.user, o.date, 'M'], {'diary': diary, '_id': o.commented, 'text': o.text});
   } else {
@@ -14,9 +14,9 @@ function(o) {
       }
     }
     if (o.activity) {
-      emit([o._id, null, 'R'], {'_id': o._id});
+      emit([o._id, 'b', 'R'], {'_id': o._id});
       if (o.readers) for (var key in o.readers) {
-        emit([o._id, null, 'R'], {'_id': o.readers[key]});
+        emit([o._id, 'b', 'R'], {'_id': o.readers[key]});
       }
     }
   }

@@ -7,7 +7,9 @@
   <body id="watermark">
     <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item"><a class="nav-link" id="corpus">&nbsp;</a></li>
+        <li class="nav-item"><a class="nav-link text-light" id="corpus">&nbsp;</a></li>
+        <li class="nav-item"><a class="nav-link text-light" id="show-all">{{i18n.i_all-memos}}</a></li>
+        <li class="nav-item"><a class="nav-link text-light" id="show-transcript">{{i18n.i_transcript-only}}</a></li>
       </ul>
       <div class="form-inline justify-content-between">
         <div class="input-group input-group-sm">
@@ -23,7 +25,7 @@
         <h1>{{i18n.i_kwic}}</h1>
         <h2>{{i18n.i_occurrences}}: {{pattern}}</h2>
         {{#occurrences}}
-        <div class="occurrence" data-text="{{id}}">
+        <div class="occurrence {{type}}" data-text="{{id}}">
           <div class="context">{{context}}</div>
           <div>[<a href="../../memo/{{corpus}}/{{id}}">{{title}}</a>]</div>
         </div>
@@ -111,6 +113,14 @@
     if (key.which == 13) {
       self.location = $('#kwic').val().toLowerCase();
     }
+  });
+
+  $('#show-transcript').on('click', function() {
+    $(".occurrence").addClass('d-none');
+    $(".transcript").removeClass('d-none');
+  });
+  $('#show-all').on('click', function() {
+    $(".occurrence").removeClass('d-none');
   });
 
   {{>layoutscript}}

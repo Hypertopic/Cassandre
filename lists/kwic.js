@@ -21,6 +21,7 @@ function(head, req) {
     if (context.length < FRAME) context = context + new Array(FRAME - context.length + 1).join(' ');
     data.occurrences.push({
       title: v.title,
+      type: v.type,
       corpus: row.key[0],
       id: row.id,
       context: context

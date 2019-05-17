@@ -9,12 +9,9 @@ body {
   margin: 0;
 }
 
+#leaves a,
 #groundings a, #content a {
   color: gray !important;
-}
-
-#content, #memo {
-  padding-bottom: 60px;
 }
 
 #watermark {
@@ -55,6 +52,15 @@ div.post {
   border-right: 1px solid #eeeeee;
 }
 
+#content {
+  border-top: 1px solid #eeeeee;
+}
+
+#leaves {
+  border-left: 1px solid #eeeeee;
+  border-top: 1px solid #eeeeee;
+}
+
 #top-right {
   position: fixed;
   right: 36px;
@@ -68,7 +74,6 @@ div.post {
   position:fixed;
   top: 0px;
   right: 0px;
-  background-color:#eeeeee;
   padding-left:5px;
   padding-right:5px;
   transform: rotate(270deg);
@@ -78,31 +83,6 @@ div.post {
 .reverse{
   transform: rotate(180deg);
   transform-origin: center center 0;
-}
-
-#leaves {
-  position: fixed;
-  display: none;
-  background-color: transparent;
-  top: 36px;
-  right: 0px;
-  width: 30%;
-  padding:5px;
-  padding-top:0px;
-  padding-right:30px;
-  padding-left:0px;
-  direction: rtl;
-  overflow-y: auto;
-  bottom: 28px;
-}
-
-#leaves>ul {
-  margin-top: 0px;
-  margin-bottom: 0px;
-  padding-top: 16px;
-  padding-bottom: 16px;
-  direction: ltr;
-  background-color: #eeeeee;
 }
 
 .unread {
@@ -132,8 +112,13 @@ div.post {
   visibility: visible;
 }
 
+.mytooltip:hover .preview code,
 .mytooltip:hover .preview a{
   color: #ffffff;
+}
+
+.mytooltip:hover .preview hr{
+  border-color: #DCA;
 }
 
 .mytooltip:hover .preview h1{
@@ -193,14 +178,14 @@ button.comment {
   color: gray;
 }
 
-#groundings>li,#memos>li,#selectable-memos>li,#branch>li{
+#groundings>li,#memos>li,#selectable-memos>li,#leaves>li{
   list-style-type: none;
   background-repeat: no-repeat;
   padding-left: 30px;
   padding-bottom: 5px;
 }
 
-a.dropdown-item,
+a.dropdown-item, .create-leave,
 #add, #create, #create-table, #diaries, #diary, #corpus,
 #all-activity, #only-created, #only-modified, #only-comments,
 #clear_highlights, #rare, #specific, #repeated,
@@ -365,7 +350,10 @@ input.actor {
 }
 
 .occurrence{
+  margin-left: 5mm;
+  padding-left: 7mm;
   display: table-row;
+  background-repeat: no-repeat;
 }
 
 .occurrence>div{

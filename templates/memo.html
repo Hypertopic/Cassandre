@@ -5,51 +5,9 @@
     {{>links}}
   </head>
   <body>
-    <nav id="header" class="{{>navbarstyle}} navbar-expand-lg bd-navbar fixed-top">
-      <a class="text-light" id="diary">{{diary_name}}</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span><img src="../../style/three-bars.svg" /></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-          {{#authorized}}
-          <div id='lexical' class="btn-group justify-content-between hidden" role="group">
-            <li class="nav-item btn-sm"><a class="nav-link" id='clear_highlights'>{{i18n.i_raw}}</a></li>
-            <li class="nav-item btn-sm"><a class="nav-link highlight_words disabled" id='specific'>{{i18n.i_specific}}</a></li>
-            <li class="nav-item btn-sm"><a class="nav-link highlight_words disabled" id='rare'>{{i18n.i_rare}}</a></li>
-            <li class="nav-item btn-sm"><a class="nav-link disabled" id='repeated'>{{i18n.i_phrases}}</a></li>
-          </div>
-          {{/authorized}}
-        </ul>
-        <ul class="navbar-nav">
-          <li class="form-inline justify-content-between">
-            {{#authorized}}
-            <div class="input-group input-group-sm">
-              <input id='kwic' type='search' class="form-control hidden kwic" placeholder='{{i18n.i_search}}'>
-              <div class="input-group-append">
-                <span class="input-group-text kwic search hidden">?</span>
-              </div>
-            </div>
-            {{/authorized}}
-            {{>log}}
-          </li>
-        </ul>
-      </div>
-    </nav>
     <div id="container" class='container-fluid h-100'>
       <div id="memo" class='row h-100'>
-        {{#authorized}}
-        <div class="col-3" id='groundings'>
-          <legend>{{i18n.i_groundings}}</legend>
-          {{#groundings}}
-          <li class="{{type}}" id="{{id}}">
-            <a href="{{href}}">{{name}}</a> {{#preview}}<span class="toggle dropdown-toggle"> </span>
-            <div class="preview">{{preview}}</div>{{/preview}}
-          </li>
-          {{/groundings}}
-        </div>
-        {{/authorized}}
-        <main class="col" id="content">
+        <main class="col pb-0 pb-sm-5 order-2" id="content">
         {{^authorized}}
           <h1 id="name">{{i18n.i_sign-in_required}}</h1>
         {{/authorized}}
@@ -80,36 +38,26 @@
           {{>comments}}
         {{/authorized}}
         </main>
-        <div class="col" id="leaves">
-          <ul id="branch">
-          {{#leaves}}
-            <li class="{{type}}"><a href="{{href}}">{{name}}</a></li>
-          {{/leaves}}
-          </ul>
-        </div>
-      </div>
-      <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
         {{#authorized}}
-        <div role="group">
-          {{#editable}}
-          <button class='btn navbar-btn btn-outline-light btn-sm' data-toggle="modal" data-target="#add_grounding"><span>{{i18n.i_add_groundings}}</span></button>
-          <button class='btn navbar-btn btn-outline-light btn-sm hidden' data-toggle="modal" data-target="#remove_grounding" id="remove_grounding_btn">{{i18n.i_remove_grounding}}</button>
-          <button class='btn navbar-btn btn-outline-light btn-sm' id="edit">{{i18n.i_edit}}</button>
-          {{/editable}}
-          <button class='btn navbar-btn btn-outline-light btn-sm' id="comment_create">{{i18n.i_comment}}</button>
+        <div id='groundings' class="groundings order-1 col-xs-12 col-sm-3 collapse show">
+          <button type="button" class="close" title="{{i18n.i_hide_groundings}}" data-toggle="collapse" href=".groundings">×</button>
+          <legend>{{i18n.i_groundings}}</legend>
+          {{#groundings}}
+          <li class="d-inline d-sm-block {{type}}" id="{{id}}">
+            <a href="{{href}}">{{name}}</a> {{#preview}}<span class="toggle dropdown-toggle"> </span>
+            <div class="preview">{{preview}}</div>{{/preview}}
+          </li>
+          {{/groundings}}
         </div>
-        <div id="add-leaves" class="form-inline justify-content-between">
-          {{#editable}}
-          <div class="input-group input-group-sm">
-            <input id="leave-name" type="search" placeholder="" class="form-control hidden" />
-            <div class="input-group-append">
-              <span id="add" title="" class="input-group-text hidden">+</span>
-            </div>
-          </div>
-          {{/editable}}
+        <div class="order-3 pb-5 col-xs-12 col-sm-3 d-sm-none d-lg-none d-xl-block leaves" id="leaves">
+          <button type="button" class="close">×</button>
+          <legend>{{i18n.i_leaves}}</legend>
+          {{#leaves}}
+            <li class="d-inline d-sm-block {{type}}"><a href="{{href}}">{{name}}</a></li>
+          {{/leaves}}
         </div>
         {{/authorized}}
-      </nav>
+      </div>
     </div>
     {{#editable}}
     <span id="create" title="" class="input-group-text hidden">+</span>
@@ -161,7 +109,79 @@
       </div>
     </div>
     {{/editable}}
-    <div id="show-leaves" class="hidden"><div class="reverse">{{i18n.i_leaves}}</div></div>
+    <div id="show-leaves" class="d-none d-sm-block d-lg-block d-xl-none invisible">
+      <div class="reverse">{{i18n.i_leaves}}
+        <img title="{{i18n.i_leaves}}" src="../../style/chevron-down.svg" alt="{{i18n.i_leaves}}"/>
+      </div>
+    </div>
+    <nav id="header" class="{{>navbarstyle}} navbar-expand-lg bd-navbar fixed-top">
+      <a class="text-light" id="diary">{{diary_name}}</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span><img src="../../style/three-bars.svg" /></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav btn-group justify-content-between">
+          <a id="toggle-groundings" class="nav-link d-none" data-toggle="collapse" title="{{i18n.i_show_groundings}}" aria-expanded="true" href=".groundings">
+            <span class="d-block d-sm-none"><img src="../../style/screen-normal.svg" alt="{{i18n.i_show_grounding}}"></span>
+            <span class="d-none d-sm-block">{{i18n.i_show_groundings}}</span>
+          </a>
+        </div>
+        <ul class="navbar-nav mr-auto">
+          {{#authorized}}
+          <div id='lexical' class="btn-group justify-content-between hidden" role="group">
+            <li class="nav-item btn-sm"><a class="nav-link" id='clear_highlights'>{{i18n.i_raw}}</a></li>
+            <li class="nav-item btn-sm"><a class="nav-link highlight_words disabled" id='specific'>{{i18n.i_specific}}</a></li>
+            <li class="nav-item btn-sm"><a class="nav-link highlight_words disabled" id='rare'>{{i18n.i_rare}}</a></li>
+            <li class="nav-item btn-sm"><a class="nav-link disabled" id='repeated'>{{i18n.i_phrases}}</a></li>
+          </div>
+          {{/authorized}}
+        </ul>
+        <ul class="navbar-nav">
+          <li class="form-inline justify-content-between">
+            {{#authorized}}
+            <div class="input-group input-group-sm">
+              <input id='kwic' type='search' class="form-control hidden kwic" placeholder='{{i18n.i_search}}'>
+              <div class="input-group-append">
+                <span class="input-group-text kwic search hidden">?</span>
+              </div>
+            </div>
+            {{/authorized}}
+            {{>log}}
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
+      {{#authorized}}
+      <div role="group">
+        {{#editable}}
+        <button class='groundings btn navbar-btn btn-outline-light btn-sm collapse show' data-toggle="modal" data-target="#add_grounding" title="{{i18n.i_add_groundings}}">
+          <span class="d-block d-sm-none"><img src="../../style/grounding-add.svg" alt="{{i18n.i_remove_grounding}}"></span>
+          <span class="d-none d-sm-block">{{i18n.i_add_groundings}}</span>
+        </button>
+        <button class='groundings btn navbar-btn btn-outline-light btn-sm collapse show d-none' data-toggle="modal" data-target="#remove_grounding" title="{{i18n.i_remove_grounding}}" id="remove_grounding_btn">
+          <span class="d-block d-sm-none"><img src="../../style/grounding-remove.svg" alt="{{i18n.i_remove_grounding}}"></span>
+          <span class="d-none d-sm-block">{{i18n.i_remove_grounding}}</span>
+        </button>
+        <button class='btn navbar-btn btn-outline-light btn-sm' id="edit" title="{{i18n.i_edit}}">
+          <span class="d-block d-sm-none"><img src="../../style/pencil.svg" alt="{{i18n.i_edit}}"></span>
+          <span class="d-none d-sm-block">{{i18n.i_edit}}</span>
+        </button>
+        {{/editable}}
+        {{>commentsbtn}}
+      </div>
+      <div id="add-leaves" class="form-inline justify-content-between">
+        {{#editable}}
+        <div class="input-group input-group-sm">
+          <input id="leave-name" type="search" placeholder="" class="form-control hidden" />
+          <div class="input-group-append">
+            <span id="add" title="" class="input-group-text hidden">+</span>
+          </div>
+        </div>
+        {{/editable}}
+      </div>
+      {{/authorized}}
+    </nav>
   {{>script}}
   <script src="../../script/showdown.min.js"></script>
   <script>
@@ -415,6 +435,7 @@
           if(document.getElementById(id) == null && id != "{{_id}}") {
             $("#add_grounding").find('select').append($('<option>', {
               value: id,
+              title: r.value['name'],
               text: name
             }));
           }
@@ -430,6 +451,7 @@
       if (name.length > 45) name = name.substr(0,45)+'...';
       $("#remove_grounding").find('select').append($('<option>', {
         value: id,
+        title: ($(this).find('a').text()),
         text: name
       }));
     });

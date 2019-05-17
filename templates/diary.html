@@ -53,7 +53,7 @@
         </ul>
       </div>
     </nav>
-    <div id="container" class='container-fluid'>
+    <div id="container" class='container-fluid pb-5'>
       <div id="content" class='col'>
         <h1>{{diary_name}}
           <span id="size" class="badge badge-pill badge-secondary" title="{{i18n.i_memos}}"></span>
@@ -70,7 +70,7 @@
         </div>
         {{/list}}
         <div id="network" class="hidden"></div>
-        <ul id="memos">
+        <div id="memos">
         {{#sections}}
           {{#memos}}
           <li class="{{type}}"><input type="checkbox" id="{{id}}" name="{{rev}}" class="hidden deletable" />
@@ -82,7 +82,7 @@
           </li>
           {{/memos}}
         {{/sections}}
-        </ul>
+        </div>
       </div>
     </div>
     <nav id="footer" class="{{>navbarstyle}} fixed-bottom">

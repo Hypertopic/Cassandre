@@ -9,23 +9,25 @@
     <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item"><a class="nav-link text-light" id="diary">{{diary_name}}</a></li>
+        <a id="toggle-groundings" class="nav-link d-none" data-toggle="collapse" aria-expanded="true" href=".groundings">{{i18n.i_show_groundings}}</a>
       </ul>
       {{>log}}
     </nav>
     <div id="container" class='container-fluid h-100'>
       <div id="memo" class='row h-100'>
         {{#authorized}}
-        <div class="col-3" id='groundings'>
+        <div  id='groundings' class="groundings col-xs-12 col-sm-3 collapse show">
+          <button type="button" class="close" title="{{i18n.i_hide_groundings}}" data-toggle="collapse" href=".groundings">×</button>
           <legend>{{i18n.i_groundings}}</legend>
           {{#groundings}}
-          <li class="{{type}}" id="{{id}}">
+          <li class="d-inline d-sm-block {{type}}" id="{{id}}">
             <a href="{{href}}">{{name}}</a> {{#preview}}<span class="toggle dropdown-toggle"> </span>
             <div class="preview">{{preview}}</div>{{/preview}}
           </li>
           {{/groundings}}
         </div>
         {{/authorized}}
-        <main class="col" id="content">
+        <main class="col-xs-12 col pb-0 pb-sm-5" id="content">
           {{^authorized}}
           <h1>{{i18n.i_sign-in_required}}</h1>
           {{/authorized}}
@@ -33,38 +35,38 @@
           <h1> <img title="{{i18n.i_memo.table}}" src="../../style/{{type}}.svg"/> {{name}} </h1>
           <input id="name" type="search" class="hidden" value="{{name}}"/>
           {{>rights}}
-          <table id="table">
-            <thead><tr><td></td></tr></thead>
-          </table>
-          {{#editable}}
-          <button type="button" id="add_row" title="{{i18n.i_create.row}}" class="btn btn-sm hidden">+</button>
-          {{/editable}}
+          <div class="table-responsive">
+            <table id="table" class="table-striped">
+              <thead><tr><td></td></tr></thead>
+            </table>
+          </div>
           <p>&nbsp;</p>
           {{>comments}}
           {{/authorized}}
         </main>
-        <div class="col" id="leaves">
-          <ul id="branch">
+        <div class="col-12 col-sm-3 d-sm-none d-lg-none d-xl-block leaves" id="leaves">
+          <button type="button" class="close">×</button>
+          <legend>{{i18n.i_leaves}}</legend>
           {{#leaves}}
-            <li class="{{type}}"><a href="{{href}}">{{name}}</a></li>
+            <li class="d-inline d-sm-block {{type}}"><a href="{{href}}">{{name}}</a></li>
           {{/leaves}}
-          </ul>
         </div>
       </div>
       <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
         <div role="group">
           {{#editable}}
-          <button class='btn btn-outline-light btn-sm' data-toggle="modal" data-target="#add_grounding"><span>{{i18n.i_add_groundings}}</span></button>
-          <button class='btn btn-outline-light btn-sm hidden' data-toggle="modal" data-target="#remove_grounding" id="remove_grounding_btn">{{i18n.i_remove_grounding}}</button>
+          <button class='groundings btn btn-outline-light btn-sm collapse show' data-toggle="modal" data-target="#add_grounding"><span>{{i18n.i_add_groundings}}</span></button>
+          <button class='groundings btn btn-outline-light btn-sm collapse show d-none' data-toggle="modal" data-target="#remove_grounding" id="remove_grounding_btn">{{i18n.i_remove_grounding}}</button>
+          <button id="add_row" class="btn btn-outline-light btn-sm hidden">{{i18n.i_create.row}}</button>
           {{/editable}}
           {{#authorized}}
-          <button class='btn btn-outline-light btn-sm' id="comment_create">{{i18n.i_comment}}</button>
+          {{>commentsbtn}}
           {{/authorized}}
         </div>
-        <div id="add-leaves">
+        <div id="add-leaves" class="form-inline justify-content-between">
           {{#editable}}
           <div class="input-group input-group-sm">
-            <input id="leave-name" type="search" placeholder="{{i18n.i_name.theoretical}}" class="input-sm form-control hidden"/>
+            <input id="leave-name" type="search" placeholder="{{i18n.i_name.theoretical}}" class="form-control hidden"/>
             <div class="input-group-append">
               <span id="add" type="button" title="{{i18n.i_create.theoretical}}" class="input-group-text hidden theoretical">+</span>
             </div>
@@ -73,7 +75,11 @@
         </div>
       </nav>
     </div>
-    <div id="show-leaves" class="hidden"><div class="reverse">{{i18n.i_leaves}}</div></div>
+    <div id="show-leaves" class="d-none d-sm-block d-lg-block d-xl-none invisible">
+      <div class="reverse">{{i18n.i_leaves}}
+        <img title="{{i18n.i_leaves}}" src="../../style/chevron-down.svg" alt="{{i18n.i_leaves}}"/>
+      </div>
+    </div>
     <div id="add_grounding" class="modal fade" role="dialog">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -94,8 +100,8 @@
         </div>
       </div>
     </div>
-    <div id="dialog-cells" class="hidden">
-      <select id='color'>
+    <div id="dialog-cells" class="form-group hidden">
+      <select class='form-control' id='color'>
       </select>
     </div>
   {{>script}}

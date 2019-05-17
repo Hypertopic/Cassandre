@@ -9,23 +9,25 @@
     <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item"><a class="nav-link text-light" id="diary">{{diary_name}}</a></li>
+        <a id="toggle-groundings" class="nav-link d-none" data-toggle="collapse" aria-expanded="true" href="#groundings">{{i18n.i_show_groundings}}</a>
       </ul>
       {{>log}}
     </nav>
     <div id="container" class='container-fluid h-100'>
       <div id="memo" class='row h-100'>
         {{#authorized}}
-        <div class="col-3" id='groundings'>
+        <div id='groundings' class="groundings col-xs-12 col-sm-3 collapse show">
+          <button type="button" class="close" title="{{i18n.i_hide_groundings}}" data-toggle="collapse" href="#groundings">×</button>
           <legend>{{i18n.i_groundings}}</legend>
           {{#groundings}}
-          <li class="{{type}}" id="{{id}}">
+          <li class="d-inline d-sm-block {{type}}" id="{{id}}">
             <a href="{{href}}">{{name}}</a> {{#preview}}<span class="toggle dropdown-toggle"> </span>
             <div class="preview">{{preview}}</div>{{/preview}}
           </li>
           {{/groundings}}
         </div>
         {{/authorized}}
-        <main class="col" id="content">
+        <main class="col pb-sm-5" id="content">
           {{^authorized}}
           <h1>{{i18n.i_sign-in_required}}</h1>
           {{/authorized}}
@@ -40,29 +42,29 @@
           <div id="negative-case" class="hidden">
             <span class="meta">{{i18n.i_name.negative-case}}: </span><span class="negative_text">{{negative}}</span>
             {{#editable}}
-            <button class="btn" type="button" id="add_negative-case">+</button>
             <input type="text" size="35" class="form-control hidden" placeHolder="{{i18n.i_content.negative-case}}" value="{{negative}}"/>
-            <button class="btn hidden" type="button" id="negative-case_created">{{i18n.i_done}}</button>
             {{/editable}}
           </div>
           {{>comments}}
           {{/authorized}}
-        </div>
-        <div id="leaves">
-          <ul id="branch">
+        </main>
+        <div class="col-xs-12 col-sm-3 d-sm-none d-lg-none d-xl-block pb-5 leaves" id="leaves">
+          <button type="button" class="close">×</button>
+          <legend>{{i18n.i_leaves}}</legend>
           {{#leaves}}
             <li class="{{type}}"><a href="{{href}}">{{name}}</a></li>
           {{/leaves}}
-          </ul>
         </div>
-      </main>
+      </div>
       <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
         <div role='group'>
           {{#editable}}
-          <button class='btn btn-outline-light btn-sm' data-toggle="modal" data-target="#add_grounding" id="add_grounding_btn"><span>{{i18n.i_add_groundings}}</span></button>
+          <button class='groundings btn btn-outline-light btn-sm collapse show' data-toggle="modal" data-target="#add_grounding" id="add_grounding_btn"><span>{{i18n.i_add_groundings}}</span></button>
+          <button class="btn btn-outline-light btn-sm" id="add_negative-case">{{i18n.i_add_negative-case}}</button>
+          <button class="btn btn-outline-light btn-sm hidden" id="negative-case_created">{{i18n.i_done}}</button>
           {{/editable}}
           {{#authorized}}
-          <button class='btn btn-outline-light btn-sm' id="comment_create">{{i18n.i_comment}}</button>
+          {{>commentsbtn}}
           {{/authorized}}
         </div>
         <div id="add-leaves">
@@ -70,15 +72,20 @@
           <div class="input-group input-group-sm">
             <input id="leave-name" type="search" placeholder="{{i18n.i_name.theoretical}}" class="form-control" />
             <div class="input-group-append">
-              <span class="input-group-text theoretical" title="{{i18n.i_create.theoretical}}" id="add">+</span>
-              <span class="input-group-text hidden graph" title="{{i18n.i_create.graph}}" id="create">+</span>
+              <span class="input-group-text create-leave theoretical" title="{{i18n.i_create.theoretical}}" id="add">+</span>
+              <span class="input-group-text create-leave hidden graph" title="{{i18n.i_create.graph}}" id="create">+</span>
+              <span class="input-group-text create-leave storyline" title="{{i18n.i_create.storyline}}" id="conclude">+</span>
             </div>
           </div>
           {{/editable}}
         </div>
+      </nav>
+    </div>
+    <div id="show-leaves" class="d-none d-sm-block d-lg-block d-xl-none invisible">
+      <div class="reverse">{{i18n.i_leaves}}
+        <img title="{{i18n.i_leaves}}" src="../../style/chevron-down.svg" alt="{{i18n.i_leaves}}"/>
       </div>
     </div>
-    <div id="show-leaves" class="hidden"><div class="reverse">{{i18n.i_leaves}}</div></div>
     <div id="add_grounding" class="modal fade" role="dialog">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -175,12 +182,7 @@
   });
 
   {{#editable}}
-  $('#add').on('click', function() {
-    var classlist = $(this)[0].classList;
-    create(classlist[classlist.length - 1], '{{_id}}', $('#leave-name').val().trim());
-  });
-
-  $('#create').on('click', function() {
+  $('.create-leave').on('click', function() {
     var classlist = $(this)[0].classList;
     create(classlist[classlist.length - 1], '{{_id}}', $('#leave-name').val().trim());
   });

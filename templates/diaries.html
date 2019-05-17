@@ -10,17 +10,17 @@
         <ul class="navbar-nav mr-auto">&nbsp;</ul>
         {{>log}}
       </nav>
-      <div id="container" class='container-fluid'>
+      <div id="container" class='container-fluid pb-5'>
         <div id="content" class='col'>
           <h1>{{i18n.i_diaries}}</h1>
           <div class="card-columns">
             {{#logged}}
-            <div id="loading" class="loader alert alert-primary">{{i18n.i_loading}}</div>
+            <div id="loading" class="progress-bar progress-bar-striped progress-bar-animated alert" role="progressbar">{{i18n.i_loading}}</div>
             {{/logged}}
             {{#diaries}}
             <div class="card text-center bg-light mb-3">
               <h5><a href='../memo/{{id}}/?by=date'>{{name}}</a></h5>
-              <p><span id="{{id}}" title="{{i18n.i_memos}}" class="badge badge-pill badge-secondary"></span></p>
+              <p><span id="{{id}}" title="{{i18n.i_memos}}" class="badge badge-pill badge-secondary progress-bar-striped progress-bar-animated d-none">{{i18n.i_loading}}</span></p>
             </div>
             {{/diaries}}
             {{#logged}}
@@ -35,7 +35,7 @@
         </div>
       </div>
       <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
-        <button class="btn navbar-btn btn-outline-light btn-sm d-none" id="show" type="button">{{i18n.i_show-more}}</button>
+        <button class="btn navbar-btn btn-outline-light btn-sm d-none" id="show" type="button">{{i18n.i_last-visit}}</button>
         <a class='navbar-text' href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
       </nav>
     </div>
@@ -55,7 +55,7 @@
             var card = '<div class="card text-center bg-light mb-3">'
               +'<h5><a href="../memo/'+data[i].id+'/?by=date">'+data[i].name+'</a></h5>'
               +'<div title="{{i18n.i_restricted-access}}" class="card-icons"><img src="../style/lock.svg" alt="" /></div>'
-              +'<p><span id="'+data[i].id+'" title="{{i18n.i_memos}}" class="badge badge-pill badge-secondary"></span></p>'
+              +'<p><span id="'+data[i].id+'" title="{{i18n.i_memos}}" class="badge badge-pill badge-secondary progress-bar-striped progress-bar-animated d-none">{{i18n.i_loading}}</span></p>'
               +'</div>';
             $('#loading').after(card);
             added.push(data[i].id);
@@ -79,7 +79,7 @@
   });
 
   $('#show').on('click', function() {
-    $("#loading").removeClass('d-none');
+    $(".badge").removeClass('d-none');
     moment.locale('{{locale}}');
     $.ajax({
       url: "../news/",
@@ -103,7 +103,7 @@
       }
     }).done(function(){
       $("#show").addClass('d-none');
-      $("#loading").addClass('d-none');
+      $(".progress-bar-striped").removeClass('progress-bar progress-bar-striped progress-bar-animated');
     });
   });
 

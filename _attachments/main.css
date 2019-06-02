@@ -193,9 +193,17 @@ a.dropdown-item, .create-leave,
   cursor: pointer;
 }
 
+.create-leave {
+  color: transparent;
+}
+
+.create-leave:hover {
+  color: black;
+}
+
 .create {
   cursor: pointer;
-  background-color:transparent;
+  background-color: transparent;
   background-repeat: no-repeat;
   background-origin: content-box;
   text-shadow:none;border:none;box-shadow:none;

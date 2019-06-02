@@ -39,7 +39,7 @@
         {{/authorized}}
         </main>
         {{#authorized}}
-        <div id='groundings' class="groundings order-1 col-xs-12 col-sm-3 collapse show">
+        <div id='groundings' class="groundings order-1 pb-0 pb-sm-5 col-xs-12 col-sm-3 collapse show">
           <button type="button" class="close" title="{{i18n.i_hide_groundings}}" data-toggle="collapse" href=".groundings">×</button>
           <legend>{{i18n.i_groundings}}</legend>
           {{#groundings}}
@@ -60,8 +60,8 @@
       </div>
     </div>
     {{#editable}}
-    <span id="create" title="" class="input-group-text hidden">+</span>
-    <span id="create-table" title="{{i18n.i_create.table}}" class="input-group-text hidden table">+</span>
+    <span id="create" title="" class="input-group-text create-leave hidden">+</span>
+    <span id="create-table" title="{{i18n.i_create.table}}" class="input-group-text create-leave hidden table">+</span>
     <div id="add_grounding" class="modal fade" role="dialog">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -175,7 +175,7 @@
         <div class="input-group input-group-sm">
           <input id="leave-name" type="search" placeholder="" class="form-control hidden" />
           <div class="input-group-append">
-            <span id="add" title="" class="input-group-text hidden">+</span>
+            <span id="add" title="" class="input-group-text create-leave hidden">+</span>
           </div>
         </div>
         {{/editable}}

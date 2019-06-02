@@ -52,15 +52,11 @@ function(head, req) {
       break;
       case ('G'):
         if (row.doc)  {
-          if (row.doc.body) {
-            var preview = row.doc.body.substr(0, 200).replace(/\s/g, ' ');
-          } else {
-            if (row.doc.speeches) {
-              var preview = row.doc.speeches[0].text.substr(0, 200) || null;
-            } else {
-              var preview = null;
-            }
-          }
+          var preview = null;
+          if (row.doc.body) preview = row.doc.body;
+          if (row.doc.speeches) preview = row.doc.speeches[0].text;
+          if (row.doc.negative) preview = row.doc.negative;
+          if (preview != null) preview = preview.substr(0, 200).replace(/\s/g, ' ');
           var ground_type = row.doc.type || 'transcript';
           switch (ground_type) {
             case ('diagram'):

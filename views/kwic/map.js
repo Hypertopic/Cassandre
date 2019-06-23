@@ -14,10 +14,8 @@ function (o) {
         return {'text': i};
       });
     }
-//    for (var p in body) {
-//      var speech = body[p];
-    for (var p in o.speeches) {
-      var speech = o.speeches[p];
+    for (var p in body) {
+      var speech = body[p];
       var speech_text = speech.text;
       var speech_end = speech_begin + speech_text.length
         + (speech.actor? speech.actor.length : 0)

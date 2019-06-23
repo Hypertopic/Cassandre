@@ -10,7 +10,9 @@
     <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top justify-content-between">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item"><a class="nav-link text-light" id="diary">{{diary_name}}</a></li>
+        {{#authorized}}
         <a id="toggle-groundings" class="nav-link" data-toggle="collapse" aria-expanded="true" title="{{i18n.i_show_groundings}}" href=".groundings">{{i18n.i_show_groundings}}</a>
+        {{/authorized}}
       </ul>
       {{>log}}
     </nav>
@@ -39,6 +41,7 @@
           {{>comments}}
           {{/authorized}}
         </main>
+        {{#authorized}}
         <div class="col-xs-12 col-sm-3 pb-5 d-sm-none d-lg-none leaves" id="leaves">
           <button type="button" class="close">×</button>
           <legend>{{i18n.i_leaves}}</legend>
@@ -46,6 +49,7 @@
             <li class="d-inline d-sm-block {{type}}"><a href="{{href}}">{{name}}</a></li>
           {{/leaves}}
         </div>
+        {{/authorized}}
       </div>
       <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
         <div role="group">
@@ -53,7 +57,9 @@
           <button class='groundings btn btn-outline-light btn-sm collapse show' data-toggle="modal" data-target="#add_grounding" type="button">{{i18n.i_add_groundings}}</button>
           <button class='groundings btn btn-outline-light btn-sm collapse show d-none' data-toggle="modal" data-target="#remove_grounding" id="remove_grounding_btn">{{i18n.i_remove_grounding}}</button>
           {{/editable}}
+          {{#authorized}}
           {{>commentsbtn}}
+          {{/authorized}}
         </div>
         <div id="add-leaves">
           {{#editable}}
@@ -120,8 +126,8 @@
       var vertical = 'line-height: 90px;';
       if (label.length > 19) vertical = '';
       switch ("{{shape}}") {
-        case ('box'):
-          var shape = 'box';
+        case ('diamond'):
+          var shape = 'hexagon';
           break;
         default:
           var shape = 'box';

@@ -48,6 +48,7 @@
           {{>comments}}
           {{/authorized}}
         </main>
+        {{#authorized}}
         <div class="col-xs-12 col-sm-3 d-sm-none d-lg-none d-xl-block pb-5 leaves" id="leaves">
           <button type="button" class="close">×</button>
           <legend>{{i18n.i_leaves}}</legend>
@@ -55,6 +56,7 @@
             <li class="{{type}}"><a href="{{href}}">{{name}}</a></li>
           {{/leaves}}
         </div>
+        {{/authorized}}
       </div>
       <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
         <div role='group'>
@@ -243,6 +245,12 @@
 
   $("#negative-case_created").click(function () {
     adapt($('#negative-case').find('input').val().trim());
+  });
+
+  $('#negative-case > input').on('keypress', function(key) {
+    if (key.which == 13) {
+      adapt($('#negative-case').find('input').val().trim());
+    }
   });
   {{/editable}}
 

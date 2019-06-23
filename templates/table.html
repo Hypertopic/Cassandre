@@ -44,6 +44,7 @@
           {{>comments}}
           {{/authorized}}
         </main>
+        {{#authorized}}
         <div class="col-12 col-sm-3 d-sm-none d-lg-none d-xl-block leaves" id="leaves">
           <button type="button" class="close">×</button>
           <legend>{{i18n.i_leaves}}</legend>
@@ -51,6 +52,7 @@
             <li class="d-inline d-sm-block {{type}}"><a href="{{href}}">{{name}}</a></li>
           {{/leaves}}
         </div>
+        {{/authorized}}
       </div>
       <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
         <div role="group">

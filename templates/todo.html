@@ -33,14 +33,14 @@
             </li>
           {{/comment}}
           </ul>
-          <h2 id='draft' class="hidden">{{i18n.i_to-be-transcribed}}</h2>
+          <h2 id='editing' class="hidden">{{i18n.i_to-be-resumed}}</h2>
           <ul>
-          {{#draft}}
-            <li class='draft'>
+          {{#editing}}
+            <li class='editing'>
               <span class="moment">{{date}}</span>&nbsp;–
               <a href='../../{{type}}/{{diary}}/{{id}}'>{{name}}</a>
             </li>
-          {{/draft}}
+          {{/editing}}
           </ul>
           <h2 id='unarticulated' class="hidden">{{i18n.i_to-be-articulated}}</h2>
           <ul>
@@ -83,7 +83,7 @@
     momentRelative('#todo');
     if ($('.unchecked-todo').length > 0) $('#unchecked-todo').removeClass('hidden');
     if ($('.unchecked-comment').length > 0) $('#unchecked-comment').removeClass('hidden');
-    if ($('.draft').length > 0) $('#draft').removeClass('hidden');
+    if ($('.editing').length > 0) $('#editing').removeClass('hidden');
     if ($('.unarticulated').length > 0) $('#unarticulated').removeClass('hidden');
     if ($('.unnamed').length > 0) $('#unnamed').removeClass('hidden');
     if ($('.ungrounded').length > 0) $('#ungrounded').removeClass('hidden');

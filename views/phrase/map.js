@@ -1,7 +1,7 @@
 const CRUNCHER = /[a-zàâçéêèëïîôöüùûæœ0-9]+|[^a-zàâçéêèëïîôöüùûæœ0-9]+/gi;
 
 function(o) {
-  if (!o.draft) {
+  if (!o.editing) {
     for each (var s in o.speeches) {
       var chunks = s.text.match(CRUNCHER);
       if (chunks) for (var i=0; i<chunks.length-4; i+=2) {

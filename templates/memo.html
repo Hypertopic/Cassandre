@@ -62,6 +62,12 @@
     {{#editable}}
     <span id="create" title="" class="input-group-text create-leave hidden">+</span>
     <span id="create-table" title="{{i18n.i_create.table}}" class="input-group-text create-leave hidden table">+</span>
+    <div id="editing" class="hidden">
+      {{#editing}}
+      <span class="user">{{editing.user}}</span> {{i18n.i_started_editing}}
+      <span class="moment">{{editing.date}}</span>
+      {{/editing}}
+    </div>
     <div id="add_grounding" class="modal fade" role="dialog">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -163,7 +169,9 @@
           <span class="d-block d-sm-none"><img src="../../style/grounding-remove.svg" alt="{{i18n.i_remove_grounding}}"></span>
           <span class="d-none d-sm-block">{{i18n.i_remove_grounding}}</span>
         </button>
-        <button class='btn navbar-btn btn-outline-light btn-sm' id="edit" title="{{i18n.i_edit}}">
+        <button class='btn navbar-btn btn-outline-light btn-sm' id="edit"
+          {{#editing}} title="" disabled{{/editing}}
+          {{^editing}} title="{{i18n.i_edit}}"{{/editing}}>
           <span class="d-block d-sm-none"><img src="../../style/pencil.svg" alt="{{i18n.i_edit}}"></span>
           <span class="d-none d-sm-block">{{i18n.i_edit}}</span>
         </button>
@@ -188,7 +196,6 @@
   var metrics = {};
   var trigrams = {};
   $(document).ready(function() {
-    if ({{draft}}) self.location = "../../editable_text/{{_id}}";
     {{>render}}
     moment.locale('{{locale}}');
     var moments = $('.moment');
@@ -204,6 +211,15 @@
         $(this).text("{{i18n.i_on-a-date}}"+' '+mmtime.format("Do MMMM YYYY"));
       }
     });
+    {{#editing}}
+    if ('{{logged}}' == '{{editing.user}}') {
+      $('#edit').removeAttr("disabled");
+      $('#edit').text("{{i18n.i_resume}}");
+      $('#edit').attr("title", $('#editing').text().replace(/\s+/g, " "));
+    } else {
+      $('#edit').attr("title", $('#editing').text().replace(/\s+/g, " "));
+    }
+    {{/editing}}
     switch ('{{type}}') {
       case ('field'):
         $("h1>img").attr("title", "{{i18n.i_memo.field}}".replace('&#39;',"'"));

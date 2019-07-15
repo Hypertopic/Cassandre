@@ -1,7 +1,7 @@
 const ALPHA = /[a-zàâçéêèëïîôöüùûæœ0-9]+/gi;
 
 function(o) {
-  if (!o.draft) {
+  if (!o.editing) {
     var counts = {};
     for each (var s in o.speeches) {
       var words = s.text.match(ALPHA);

@@ -96,7 +96,7 @@ function(head, req) {
       default:
       var username = req.userCtx.name;
       var type = row.doc.type || 'transcript';
-      var draft = row.doc.draft || false;
+      var editing = row.doc.editing || false;
       var diary = row.doc.diary || row.doc.corpus;
       var data = {
         i18n: localized(),
@@ -109,8 +109,8 @@ function(head, req) {
         comments: [],
         date: row.doc.date,
         diary: diary,
-        draft: draft,
         editable: !row.doc.contributors || row.doc.contributors && row.doc.contributors.indexOf(username)>-1 || req.userCtx.roles.indexOf("_admin")>-1,
+        editing: editing,
         groundings: [],
         peer: req.peer,
         locale: req.headers["Accept-Language"],

@@ -70,6 +70,25 @@
       }
     });
     stickToHeader();
+    $.ajax({
+      url: "../{{_id}}",
+      type: "GET",
+      dataType: "json",
+      success: function(data) {
+        var user = "{{peer}}";
+        if ("{{logged}}") user = "{{logged}}";
+        data.editing = {
+          "user": user,
+          "date": new Date().toJSON()
+        };
+        $.ajax({
+          type: "PUT",
+          url: "../{{_id}}",
+          contentType: "application/json",
+          data: JSON.stringify(data),
+        });
+      }
+    });
   });
 
   function save(draft, toDoAfter) {
@@ -78,11 +97,7 @@
       type: "GET",
       dataType: "json",
       success: function(data) {
-        if (draft) {
-          data.draft = true;
-        } else {
-          data.draft = false;
-        }
+        if (draft == false) delete data.editing;
         data.speeches = [];
         $('.turn').each(function() {
           var turn = {

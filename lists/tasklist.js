@@ -8,7 +8,7 @@ function(head, req) {
   var data = {
     comment: [],
     diagram: [],
-    draft: [],
+    editing: [],
     i18n: localized(),
     locale: req.headers["Accept-Language"],
     logged: req.userCtx.name,
@@ -44,7 +44,7 @@ function(head, req) {
         data.unnamed.push(obj);
       break;
       case ('D'):
-        data.draft.push(obj);
+        data.editing.push(obj);
       break;
       case ('A'):
         data.diagram.push(obj);
@@ -62,7 +62,7 @@ function(head, req) {
     return Mustache.to_html(templates.todo, data, shared);
   });
   provides("json", function() {
-    var number = data.ungrounded.length + data.unnamed.length + data.draft.length + data.diagram.length + data.todo.length + data.comment.length;
+    var number = data.ungrounded.length + data.unnamed.length + data.editing.length + data.diagram.length + data.todo.length + data.comment.length;
     send(toJSON({
       comments: data.comment.length,
       pending: number

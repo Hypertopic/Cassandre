@@ -38,6 +38,7 @@ function(o, req){
         data.groundings = o.groundings ;
         break;
       case 'draft':
+      case 'editing':
       case '_revisions':
         break;
       default:

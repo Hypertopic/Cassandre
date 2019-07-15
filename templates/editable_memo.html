@@ -71,6 +71,25 @@
     stickToHeader();
     if ($('#groundings li').length < 1) $("#groundings").addClass('hidden');
     $('#groundings').find('.toggle').next().slideToggle('fast');
+    $.ajax({
+      url: "../{{_id}}",
+      type: "GET",
+      dataType: "json",
+      success: function(data) {
+        var user = "{{peer}}";
+        if ("{{logged}}") user = "{{logged}}";
+        data.editing = {
+          "user": user,
+          "date": new Date().toJSON()
+        };
+        $.ajax({
+          type: "PUT",
+          url: "../{{_id}}",
+          contentType: "application/json",
+          data: JSON.stringify(data),
+        });
+      }
+    });
   });
 
   function save(draft, toDoAfter) {
@@ -87,6 +106,7 @@
           "user": user,
           "date": new Date().toJSON()
         });
+        delete data.editing;
         $.ajax({
           type: "PUT",
           url: "../{{_id}}",

@@ -327,6 +327,11 @@ input.actor {
   background: url('x.svg') no-repeat;
 }
 
+#content svg {
+  display: block;
+  margin: auto;
+}
+
 .insert {
   background: url('plus.svg') no-repeat;
 }

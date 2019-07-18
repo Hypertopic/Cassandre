@@ -64,7 +64,7 @@ function(head, req) {
           });
           if (row.doc.link) {
             var color = 'green';
-            if (row.doc.link == 'ipp' || row.doc.link == 'idd' ) var color = 'red';
+            if (row.doc.link == 'ipp' || row.doc.link == 'idd' ) color = 'red';
             data.edges.push({
               id: row.value._id,
               from: row.doc.groundings[0],
@@ -74,9 +74,12 @@ function(head, req) {
             data.connected_nodes.push(row.doc.groundings[0],row.doc.groundings[1]);
           }
           if (row.doc.negative && row.doc.negative.trim().length > 0) {
+            var color = 'red';
+            if (row.doc.link == 'ipp' || row.doc.link == 'idd' ) color = 'green';
             data.edges.push({
               from: row.doc.groundings[1],
               to: row.doc.groundings[0],
+              color: color,
               dashes: true,
               label: row.doc.negative
             });

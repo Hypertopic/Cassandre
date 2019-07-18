@@ -13,6 +13,13 @@
         {{#authorized}}
         <a id="toggle-groundings" class="nav-link" data-toggle="collapse" aria-expanded="true" title="{{i18n.i_show_groundings}}" href=".groundings">{{i18n.i_show_groundings}}</a>
         {{/authorized}}
+        <div class="dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="render" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{i18n.i_layout}}</a>
+          <div class="dropdown-menu" aria-labelledby="render">
+            <div id="graphviz" class="dropdown-item">Statique</div>
+            <div id="vis" class="dropdown-item">Dynamique</div>
+          </div>
+        </div>
       </ul>
       {{>log}}
     </nav>
@@ -37,7 +44,7 @@
           <h1> <img title="{{i18n.i_memo.graph}}" src="../../style/{{type}}.svg"/> {{name}} </h1>
           <input id="name" type="search" class="form-control hidden" value="{{name}}"/>
           {{>rights}}
-          <div id="graph"></div>
+          <div id="graph" class="d-none"></div>
           {{>comments}}
           {{/authorized}}
         </main>
@@ -100,8 +107,13 @@
     </div>
   {{>script}}
   <script src="../../script/vis.min.js"></script>
+  <script src="../../script/viz.js"></script>
+  <script src="../../script/full.render.js"></script>
   <script>
-  var connected_nodes = "{{connected_nodes}}".split(',');
+  let connected_nodes = "{{connected_nodes}}".split(','),
+      edges = [],
+      main = document.getElementById("content"),
+      nodes = [];
   $(document).ready(function() {
     {{>render}}
     $('#groundings').collapse({toggle: false});
@@ -119,12 +131,8 @@
         $(this).text("{{i18n.i_on-a-date}}"+' '+mmtime.format("Do MMMM YYYY"));
       }
     });
-    var container = document.getElementById('graph');
-    var nodes = [];
     {{#nodes}}
       var label = wrap("{{label}}");
-      var vertical = 'line-height: 90px;';
-      if (label.length > 19) vertical = '';
       switch ("{{shape}}") {
         case ('diamond'):
           var shape = 'hexagon';
@@ -133,20 +141,12 @@
           var shape = 'box';
           break;
       }
-      var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="350" height="102">' +
-        shape +
-        '<foreignObject x="0" y="2" width="100%" height="100%">' +
-        '<div xmlns="http://www.w3.org/1999/xhtml" style="font-size:2em; font-family: Helvetica; text-align: center; padding-right: 1em; padding-left: 1em; '+vertical+'">'+
-        label+
-        '</div></foreignObject></svg>';
-      var image = "data:image/svg+xml;charset=utf-8,"+ encodeURIComponent(svg);
       nodes.push({
         id: "{{id}}",
         label: label,
         shape: shape
       });
     {{/nodes}}
-    var edges = [];
     {{#edges}}
       {{^dashes}}
         edges.push({
@@ -161,11 +161,26 @@
         edges.push({
           from: "{{from}}",
           to: "{{to}}",
+          color: "{{color}}",
           label: label,
           dashes: true
         });
       {{/dashes}}
     {{/edges}}
+    var isolated_nodes = nodes.filter(function(a) { if (connected_nodes.indexOf(a.id) == -1) return a;});
+    if (isolated_nodes.length > 0) record('clean_nodes', '');
+    drawGraphViz();
+  });
+
+  $('#add').on('click', function() {
+    var classlist = $(this)[0].classList;
+    create(classlist[classlist.length - 1], '{{_id}}', $('#leave-name').val().trim());
+  });
+
+  $('#vis').on('click', function() {
+    destroyGraphViz();
+    $('#graph').removeClass('d-none');
+    var container = document.getElementById('graph');
     var data = {
       nodes: nodes,
       edges: edges
@@ -199,8 +214,6 @@
         solver: 'repulsion',
       }
     };
-    var isolated_nodes = nodes.filter(function(a) { if (connected_nodes.indexOf(a.id) == -1) return a;});
-    if (isolated_nodes.length > 0) record('clean_nodes', '');
     var network = new vis.Network(container, data, options);
     network.on('click', function (selected) {
       if (typeof selected.nodes[0] === "undefined" && selected.edges[0].length == 32) {
@@ -209,15 +222,11 @@
         self.location = "../../memo/{{diary}}/"+selected.nodes[0];
       } else {}
     });
-    $("#dialog").attr("title","{{i18n.i_groundings}}");
-    $("#dialog").find('select').append($('<option>', {
-      text: "{{i18n.i_select_grounding}}"
-    }));
   });
 
-  $('#add').on('click', function() {
-    var classlist = $(this)[0].classList;
-    create(classlist[classlist.length - 1], '{{_id}}', $('#leave-name').val().trim());
+  $('#graphviz').on('click', function() {
+    drawGraphViz();
+    $('#graph').addClass('d-none');
   });
 
   $('#add_grounding').on('show.bs.modal', function (event) {
@@ -255,6 +264,42 @@
       }));
     });
   });
+
+  function destroyGraphViz() {
+    var svg = document.getElementsByTagName("svg");
+    if (svg.length > 0) main.removeChild(svg[0]);
+  }
+
+  function drawGraphViz() {
+    destroyGraphViz();
+    var viz = new Viz();
+    var graphviz = 'graph "{{name}}" {overlap=false; graph [fontname = "helvetica"]; node [fontname = "helvetica" style="filled" fillcolor="white"]; edge [fontname = "helvetica"];';
+    for (var i in nodes) {
+      graphviz += 'node'+nodes[i].id + '[label="' + nodes[i].label.replace(/['"]/g, '\'').replace(/\n/g, '\\n') + '", shape='+nodes[i].shape+']; ';
+    }
+    for (var i in edges) {
+      if (edges[i].dashes == null) {
+        graphviz += 'node'+edges[i].from + ' -- ' + 'node'+edges[i].to + '[color=' +edges[i].color+ ']; ';
+      } else {
+        graphviz += 'node'+edges[i].from + ' -- ' + 'node'+edges[i].to + '[style=dashed,color='+edges[i].color+',label="' +edges[i].label.replace(/['"]/g, '\'').replace(/\n/g, '\\n')+ '"]; ';
+      }
+    }
+    graphviz += '}';
+    var options = {
+      engine: 'neato',
+      format: 'svg'
+    };
+    viz.renderSVGElement(graphviz, options)
+    .then(function(element) {
+      main.appendChild(element);
+      if($('svg').attr('width').slice(0, -2) > 300)
+        $('svg').removeAttr('width').removeAttr('height');
+    })
+    .catch(error => {
+      viz = new Viz();
+      console.error(error);
+    });
+  }
 
   function wrap(t) {
     t = t.trim().replace(/&#39;/g, '\'').replace(/&quot;/g, '"');

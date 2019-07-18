@@ -8,8 +8,15 @@
     <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item"><a class="nav-link text-light" id="corpus">&nbsp;</a></li>
-        <li class="nav-item"><a class="nav-link text-light" id="show-all">{{i18n.i_all-memos}}</a></li>
-        <li class="nav-item"><a class="nav-link text-light" id="show-transcript">{{i18n.i_transcript-only}}</a></li>
+        <li class="dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="filter" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          {{i18n.i_filter}}
+          </a>
+          <div class="dropdown-menu" aria-labelledby="filter">
+            <a class="dropdown-item" id="show-all">{{i18n.i_all-memos}}</a>
+            <a class="dropdown-item" id="show-transcript">{{i18n.i_transcript-only}}</a>
+          </div>
+        </li>
       </ul>
       <div class="form-inline justify-content-between">
         <div class="input-group input-group-sm">
@@ -36,7 +43,7 @@
         <a class='navbar-text' href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
       </nav>
     </div>
-  <script src="../../script/jquery.js"></script>
+  {{>script}}
   <script> 
   $(document).ready(function() {
     $.ajax({

@@ -144,14 +144,6 @@
         </ul>
         <ul class="navbar-nav">
           <li class="form-inline justify-content-between">
-            {{#authorized}}
-            <div class="input-group input-group-sm">
-              <input id='kwic' type='search' class="form-control kwic" placeholder='{{i18n.i_search}}'>
-              <div class="input-group-append">
-                <span class="input-group-text kwic search">?</span>
-              </div>
-            </div>
-            {{/authorized}}
             {{>log}}
           </li>
         </ul>
@@ -585,28 +577,6 @@
     var w = metrics[word.toLowerCase()];
     return (w)?w[type]:.05;
   }
-
-  String.prototype.trimLeft = String.prototype.trimLeft || function() {
-    return this.replace(/^\s+/,'');
-  };
-
-  $('#content').on('mouseup', function() {
-    $('#kwic').val(
-      document.getSelection().toString().trimLeft()
-    );
-  });
-
-  $('.search').on('click', function() {
-    if ($('#kwic').val().length > 0) {
-      self.location = '../../kwic/{{diary}}/' + $('#kwic').val().toLowerCase();
-    }
-  });
-
-  $('#kwic').on('keypress', function(key) {
-    if (key.which == 13) {
-      self.location = '../../kwic/{{diary}}/' + $('#kwic').val().toLowerCase();
-    }
-  });
 
   {{>commentsscript}}
   {{>layoutscript}}

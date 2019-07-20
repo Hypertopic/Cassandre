@@ -224,7 +224,10 @@
     }
   }, {
     "from": "kwic",
-    "to": "_list/kwic/kwic"
+    "to": "_list/kwic/kwic",
+    "query": {
+      "include_docs": "true"
+    }
   }, {
     "from": "kwic/:corpus",
     "to": "_list/patterns/corpus_pattern",

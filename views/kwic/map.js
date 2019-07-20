@@ -4,15 +4,16 @@ function (o) {
     const OFFSET = 35;
     const FRAME = 80;
     const WORD_MATCHER = /\\[nt]|[^\s,;:\.!?…—–)(\][}{`'‘’"″“”«»&%<>€$*/+-]+/gi;
-    var diary = o.diary || o.corpus;
-    var type = o.type || 'transcript';
-    var speech_begin = (o.name? o.name.length : 0) + 1;
+    var body = [{'text': o.name}],
+        diary = o.diary || o.corpus,
+        speech_begin = 1,
+        type = o.type || 'transcript';
     if (o.speeches) {
-      var body = o.speeches;
+      body = body.concat(o.speeches);
     } else if (o.body) {
-      var body = o.body.split("\n").map(function(i){
+      body = body.concat(o.body.split("\n").map(function(i){
         return {'text': i};
-      });
+      }));
     }
     for (var p in body) {
       var speech = body[p];

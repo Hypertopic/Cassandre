@@ -7,13 +7,13 @@
   <body id="watermark">
     <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item"><a class="nav-link text-light" id="corpus">&nbsp;</a></li>
-        <li class="dropdown">
+        <li class="nav-item"><a class="nav-link text-light" id="diary">&nbsp;</a></li>
+        <li class="dropdown d-none">
           <a class="nav-link dropdown-toggle" href="#" id="filter" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           {{i18n.i_filter}}
           </a>
           <div class="dropdown-menu" aria-labelledby="filter">
-            <a class="dropdown-item" id="show-all">{{i18n.i_all-memos}}</a>
+            <a class="dropdown-item disabled" id="show-all">{{i18n.i_all-memos}}</a>
             <a class="dropdown-item" id="show-transcript">{{i18n.i_transcript-only}}</a>
           </div>
         </li>
@@ -34,7 +34,7 @@
         {{#occurrences}}
         <div class="occurrence {{type}}" data-text="{{id}}">
           <div class="context">{{context}}</div>
-          <div>[<a href="../../memo/{{corpus}}/{{id}}">{{title}}</a>]</div>
+          <div>[<a href="../../{{path}}/{{corpus}}/{{id}}">{{title}}</a>]</div>
         </div>
         {{/occurrences}}
       </div>
@@ -47,18 +47,20 @@
   <script> 
   $(document).ready(function() {
     $.ajax({
-      url: "../../{{corpus}}",
+      url: "../../{{diary}}",
       type: "GET",
       dataType: "json",
       success: function(d) {
-        $("#corpus").html(d.diary_name);
+        $("#diary").html(d.diary_name);
       }
     });
     stickToHeader();
+    if ($(".transcript").length > 0 && $(".occurrence").length > $(".transcript").length)
+      $("#filter").parent().removeClass('d-none');
   });
 
-  $('#corpus').on('click', function(){
-    self.location = '../../memo/{{corpus}}/?by=date';
+  $('#diary').on('click', function(){
+    self.location = '../../memo/{{diary}}/?by=date';
   });
 
   function getUUID() {
@@ -87,7 +89,7 @@
           contentType: "application/json",
           data: JSON.stringify(text),
           success: function() {
-            self.location = '../../kwic/{{corpus}}'
+            self.location = '../../kwic/{{diary}}'
           },
           error: function(request) {
             alert(
@@ -100,34 +102,16 @@
     });
   });
 
-  String.prototype.trimLeft = String.prototype.trimLeft || function() {
-    return this.replace(/^\s+/,'');
-  };
-
-  $('#content').on('mouseup', function() {
-    $('#kwic').val(
-      document.getSelection().toString().trimLeft()
-    );
-  });
-
-  $('.search').on('click', function() {
-    if ($('#kwic').val().length > 0) {
-      self.location = $('#kwic').val().toLowerCase();
-    }
-  });
-
-  $('#kwic').on('keypress', function(key) {
-    if (key.which == 13) {
-      self.location = $('#kwic').val().toLowerCase();
-    }
-  });
-
   $('#show-transcript').on('click', function() {
     $(".occurrence").addClass('d-none');
     $(".transcript").removeClass('d-none');
+    $("#show-all").removeClass('disabled');
+    $("#show-transcript").addClass('disabled');
   });
   $('#show-all').on('click', function() {
     $(".occurrence").removeClass('d-none');
+    $("#show-all").addClass('disabled');
+    $("#show-transcript").removeClass('disabled');
   });
 
   {{>layoutscript}}

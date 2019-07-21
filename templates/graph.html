@@ -115,6 +115,7 @@
   let connected_nodes = "{{connected_nodes}}".split(','),
       edges = [],
       main = document.getElementById("content"),
+      container = document.getElementById('graph'),
       nodes = [];
   $(document).ready(function() {
     {{>render}}
@@ -182,7 +183,6 @@
   $('#vis').on('click', function() {
     destroyGraphViz();
     $('#graph').removeClass('d-none');
-    var container = document.getElementById('graph');
     var data = {
       nodes: nodes,
       edges: edges
@@ -293,7 +293,7 @@
     };
     viz.renderSVGElement(graphviz, options)
     .then(function(element) {
-      main.appendChild(element);
+      main.insertBefore(element, container);
       if($('svg').attr('width').slice(0, -2) > 300)
         $('svg').removeAttr('width').removeAttr('height');
     })

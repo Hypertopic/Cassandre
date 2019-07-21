@@ -159,6 +159,6 @@ function(head, req) {
   }
   if (data.editing.user) data.editing.user_fullname = data.editing.user;
   if (fullnames[data.editing.user]) data.editing.user_fullname = fullnames[data.editing.user];
-  data.groundings = data.groundings.sort(function(a,b){return (a.name.toUpperCase() > b.name.toUpperCase()) ? 1 : ((b.name.toUpperCase() > a.name.toUpperCase()) ? -1 : 0);});
+  data.groundings = dSort(data.groundings, data.locale);
   return Mustache.to_html(templates.memo, data, shared);
 }

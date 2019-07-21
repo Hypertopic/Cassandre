@@ -146,6 +146,6 @@ function(head, req) {
       }
     if (fullnames[username]) data.logged_fullname = fullnames[username];
   }
-  data.groundings = data.groundings.sort(function(a,b){return (a.name.toUpperCase() > b.name.toUpperCase()) ? 1 : ((b.name.toUpperCase() > a.name.toUpperCase()) ? -1 : 0);});
+  data.groundings = dSort(data.groundings, data.locale);
   return Mustache.to_html(templates.table, data, shared);
 }

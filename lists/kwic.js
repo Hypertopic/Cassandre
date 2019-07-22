@@ -29,13 +29,17 @@ function(head, req) {
       var missing = v.begin + OFFSET - v.match;
       var context = ' '.repeat(missing>0? missing : 0) + v.context.replace(/[\n\t]/g, ' ');
       if (context.length < FRAME) context = context + new Array(FRAME - context.length + 1).join(' ');
+      var concord = [];
+      concord.push({pre: context.substring(0,25)});
+      concord.push({pole: context.substring(25, FRAME - 25)});
+      concord.push({post: context.substring(FRAME - 25)});
       data.occurrences.push({
         title: v.title,
         type: v.type,
         path: path,
         corpus: row.key[0],
         id: row.id,
-        context: context
+        context: concord
       });
     }
   }

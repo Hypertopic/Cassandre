@@ -28,13 +28,20 @@
       </div>
     </nav>
     <div id="container" class='container-fluid'>
-      <div id="content" class="row mb-3 pb-5">
+      <div id="content" class="col mb-3 pb-5">
         <h1>{{i18n.i_kwic}}</h1>
         <h2>{{i18n.i_occurrences}}: {{pattern}}</h2>
         {{#occurrences}}
-        <div class="occurrence {{type}}" data-text="{{id}}">
-          <div class="context">{{context}}</div>
-          <div>[<a href="../../{{path}}/{{corpus}}/{{id}}">{{title}}</a>]</div>
+        <div class="occurrence" data-text="{{id}}">
+          {{#context}}
+          <div class="context d-none d-lg-inline">{{pre}}</div>
+          <div class="context">{{pole}}</div>
+          <div class="context d-none d-md-inline">{{post}}</div>
+          {{/context}}
+          <a class="{{type}}" href="../../{{path}}/{{corpus}}/{{id}}" title="{{title}}">
+            <div class="ml-4 d-inline"></div>
+            <span class="ml-1 d-none d-xl-inline">{{title}}</span>
+          </a>
         </div>
         {{/occurrences}}
       </div>
@@ -104,7 +111,7 @@
 
   $('#show-transcript').on('click', function() {
     $(".occurrence").addClass('d-none');
-    $(".transcript").removeClass('d-none');
+    $(".transcript").parent().removeClass('d-none');
     $("#show-all").removeClass('disabled');
     $("#show-transcript").addClass('disabled');
   });

@@ -366,11 +366,14 @@ input.actor {
   margin-left: 5mm;
   padding-left: 7mm;
   display: table-row;
-  background-repeat: no-repeat;
 }
 
 .occurrence>div{
   display:table-cell;
+}
+
+.occurrence>a{
+  background-repeat: no-repeat;
 }
 
 .context{

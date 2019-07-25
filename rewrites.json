@@ -27,8 +27,9 @@
     "from": "user/:user",
     "to": "_list/user/user",
     "query": {
-      "startkey": [":user", "b"],
-      "endkey": [":user", "b", {}],
+      "startkey": [":user", {}],
+      "endkey": [":user"],
+      "descending": "true",
       "include_docs": "true"
     }
    }, {
@@ -38,7 +39,7 @@
       "startkey": [":user", ":start"],
       "endkey": [":user"],
       "descending": "true",
-      "limit": "100",
+      "limit": "30",
       "include_docs": "true"
     }
   }, {

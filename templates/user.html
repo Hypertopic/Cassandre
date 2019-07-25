@@ -8,30 +8,33 @@
   <body id="watermark">
     <div id="container">
       <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
-        <a href="../memo/" class="text-light">{{i18n.i_diaries}}</a>
-        <ul class="navbar-nav mr-auto">
-          {{#authorized}}
-          <span class="navbar-text">{{i18n.i_filter}}</span>
-          <li class="nav-item"><a class="nav-link" id="all-activity">{{i18n.i_all}}</a></li>
-          <li class="nav-item"><a class="nav-link d-none" id="only-created">{{i18n.i_creations}}</a></li>
-          <li class="nav-item"><a class="nav-link d-none" id="only-modified">{{i18n.i_modifications}}</a></li>
-          <li class="nav-item"><a class="nav-link d-none" id="only-comments">{{i18n.i_comments}}</a></li>
-          {{/authorized}}
-        </ul>
+        <a class="text-light" id="diaries">{{i18n.i_diaries}}</a>
+        <ul class="navbar-nav mr-auto"></ul>
         {{>log}}
       </nav>
-      <div id="content" class="col pb-5">
+      <main id="content" class="col pb-5">
         {{^authorized}}
           <h1>{{i18n.i_sign-in_required}}</h1>
         {{/authorized}}
         {{#authorized}}
         <h1>{{fullname}} <span id="contribution"></span></h1>
-        <div id="cal-heatmap"></div>
+        <fieldset class="form-group">
+          <legend class="col-form-label">
+          {{i18n.i_filter}}
+          {{#stats}}
+          <a id="all-activity">{{i18n.i_all}} ({{all}})</a>
+          <a class="d-none" id="only-created">{{i18n.i_creations}} ({{created}})</a>
+          <a class="d-none" id="only-modified">{{i18n.i_modifications}} ({{modified}})</a>
+          <a class="d-none" id="only-commented">{{i18n.i_comments}} ({{commented}})</a>
+          {{/stats}}
+          <div id="cal-heatmap"></div>
+          </legend>
+        </fieldset>
         {{>readrights}}
         <ul id="events">
         </ul>
         {{/authorized}}
-      </div>
+      </main>
       <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
         {{#authorized}}
         <div class='pagination'>
@@ -45,17 +48,53 @@
   <script type="text/javascript" src="../script/d3.min.js"></script>
   <script type="text/javascript" src="../script/cal-heatmap.min.js"></script>
   <script>
-  var refresh = true;
-  var cal = new CalHeatMap();
+  {{^authorized}}
+  stickToHeader();
+  {{/authorized}}
+  {{#authorized}}
+  moment.locale('{{locale}}');
+  let cal = new CalHeatMap(),
+      all = {},
+      created = {},
+      commented = {},
+      modified = {},
+      end = new Date('{{end}}'),
+      start = new Date('{{start}}');
   $(document).ready(function() {
     stickToHeader();
-    {{#authorized}}
+    moment.locale('{{locale}}');
+    {{#activity}}
+    if('{{date}}' > start.toJSON()) {
+      all[moment('{{date}}').format('X')] = 1;
+      switch('{{action}}') {
+        case('commented'):
+          commented[moment('{{date}}').format('X')] = 1;
+        break;
+        case('created'):
+          created[moment('{{date}}').format('X')] = 1;
+        break;
+        case('modified'):
+          modified[moment('{{date}}').format('X')] = 1;
+        break;
+      }
+    }
+    {{/activity}}
+    drawChart(all);
+    {{#stats}}
+    if ({{commented}} > 0) $('#only-commented').removeClass('d-none');
+    if ({{created}} > 0) $('#only-created').removeClass('d-none');
+    if ({{modified}} > 0) $('#only-modified').removeClass('d-none');
+    {{/stats}}
     showActivity('a');
-    {{/authorized}}
+  });
+
+  $(window).scroll(function(){
+    if ($(window).scrollTop() == $(document).height() - $(window).height()){
+      showActivity($("li").last().find("span").attr('id'));
+    }
   });
 
   function showActivity(start) {
-    moment.locale('{{locale}}');
     let now = moment();
     $.ajax({
       url: "../user/{{id}}/"+start,
@@ -71,11 +110,8 @@
       }
     }).done(function(){
       var moments = $('.moment');
-      var times = {};
       moments.each(function() {
         var jstime = $(this).attr("id");
-        var unixstamp = moment(jstime).format('X');
-        times[unixstamp] = 1;
         var mmtime = moment(jstime);
         if(now.diff(mmtime, 'days') <= 2) {
           $(this).text(mmtime.fromNow());
@@ -85,33 +121,26 @@
           $(this).text("{{i18n.i_on-a-date}}"+' '+mmtime.format("Do MMMM YYYY"));
         }
       });
-      var contributions = $('ul li .moment');
-      var n = contributions.length / 100;
+      var contributions = $('ul#events li .moment');
+      var n = contributions.length / 30;
       if (n !== parseInt(n, 10)) $('#next').prop('disabled', true);
       contributions.each(function() {
         $(this).text($(this).text().replace(/./, function(x) { return x.toUpperCase(); }));
       });
-      if ($('ul .created').length < 1) {
-        $('#only-created').addClass('d-none');
-      } else $('#only-created').removeClass('d-none');
-      if ($('ul .modified').length < 1) {
-        $('#only-modified').addClass('d-none');
-      } else $('#only-modified').removeClass('d-none');
-      if ($('ul .commented').length < 1) {
-        $('#only-comments').addClass('d-none');
-      } else $('#only-comments').removeClass('d-none');
-      if (start == 'a') drawChart(times);
-      showContributions();
     });
   }
 
-  function drawChart(data) {
-    var end = new Date($('#content ul li:first').find("span").attr('id'));
-    var start = new Date(end.setFullYear(end.getFullYear() - 1))
+  function drawChart(array) {
     cal.init({
       domain: "week",
       subDomain: "day",
-      data: data,
+      subDomainDateFormat: function(date) {
+        return moment(date).format("LL");
+      },
+      subDomainTitleFormat: {
+        filled: "{count} {name}, {date}"
+      },
+      data: array,
       range: 53,
       start: start,
       end: end,
@@ -120,49 +149,28 @@
     });
   }
 
+  $('#diaries').on('click', function() {
+    self.location = '../memo/';
+  });
+
   $('#next').on('click', function() {
     showActivity($("li").last().find("span").attr('id'));
   });
 
   $('#all-activity').on('click', function() {
-    $(".created").removeClass('d-none');
-    $(".modified").removeClass('d-none');
-    $(".commented").removeClass('d-none');
-    showContributions();
+    cal.update(all);
   });
   $('#only-created').on('click', function() {
-    $(".created").removeClass('d-none');
-    $(".modified").addClass('d-none');
-    $(".commented").addClass('d-none');
-    showContributions();
+    cal.update(created);
   });
-  $('#only-comments').on('click', function() {
-    $(".created").addClass('d-none');
-    $(".modified").addClass('d-none');
-    $(".commented").removeClass('d-none');
-    showContributions();
+  $('#only-commented').on('click', function() {
+    cal.update(commented);
   });
   $('#only-modified').on('click', function() {
-    $(".created").addClass('d-none');
-    $(".commented").addClass('d-none');
-    $(".modified").removeClass('d-none');
-    showContributions();
+    cal.update(modified);
   });
 
-  function showContributions() {
-    var times = {};
-    var list = $('ul li span:visible');
-    list.each(function() {
-      var unixstamp = moment(this.id).format('X');
-      times[unixstamp] = 1;
-    });
-    cal.update(times);
-    var n = Object.keys($('ul li span:visible')).length;
-    var n = n - 4;
-    if (n > 0) $('h1 #contribution').html(' ('+n+')');
-    if (n == 0) $('h1 #contribution').html('');
-  }
-
+  {{/authorized}}
   {{>layoutscript}}
   {{>logscript}}
   </script>

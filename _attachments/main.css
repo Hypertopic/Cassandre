@@ -187,7 +187,7 @@ button.comment {
 
 a.dropdown-item, .create-leave,
 #add, #create, #create-table, #diaries, #diary, #corpus,
-#all-activity, #only-created, #only-modified, #only-comments,
+#all-activity, #only-created, #only-modified, #only-commented,
 #clear_highlights, #rare, #specific, #repeated,
 #show-activity, #tasklist-alert {
   cursor: pointer;

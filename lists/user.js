@@ -4,7 +4,10 @@ function(head, req) {
   // !code l10n/l10n.js
   // !code lib/shared.js
   start({"headers":{"Content-Type":"text/html;charset=utf-8"}});
-  var data = {
+  var commented = 0,
+      created = 0,
+      modified = 0,
+      data = {
     activity: [],
     authorized: req.userCtx.name==req.query.startkey[0] || req.userCtx.roles.indexOf("_admin")>-1,
     flat: true,
@@ -12,8 +15,10 @@ function(head, req) {
     id: req.query.startkey[0],
     locale: req.headers["Accept-Language"],
     logged: req.userCtx.name,
+    logged_fullname: req.userCtx.name,
     readers: [],
-    readers_fullnames: []
+    readers_fullnames: [],
+    stats: []
   };
   while (row = getRow()) {
     var type = 'memo';
@@ -52,6 +57,7 @@ function(head, req) {
           name:   row.value.text,
           type:   type
         });
+        commented++;
         break;
       case ('C'):
         data.activity.push({
@@ -62,6 +68,7 @@ function(head, req) {
           name:   row.value.name,
           type:   type
         });
+        created++;
         break;
       case ('E'):
         data.activity.push({
@@ -72,11 +79,27 @@ function(head, req) {
           name:   row.value.name,
           type:   type
         });
+        modified++;
         break;
     }
   }
-  if (data.readers.indexOf(req.userCtx.name) > -1) data.authorized = true;
+  var i = data.readers.indexOf(req.userCtx.name);
+  if (i > -1) {
+    data.authorized = true;
+    data.logged_fullname = data.readers_fullnames[i];
+  }
   provides("html", function() {
+    var end = data.activity[0].date;
+    data.end = end;
+    end = new Date(end);
+    var start = new Date(end.setFullYear(end.getFullYear() - 1));
+    data.start = start.toJSON();
+    data.stats.push({
+      all: created+commented+modified,
+      commented: commented,
+      created: created,
+      modified: modified
+    });
     return Mustache.to_html(templates.user, data, shared);
   });
   provides("json", function() {

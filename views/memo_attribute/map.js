@@ -20,6 +20,8 @@ function(o) {
         value.diary_label = o.diary_name;
       } else {
         value.modified_id = o._id;
+        value.modified_name = name;
+        value.modified_type = type;
       }
       if (o.comment) {
         value.comment = 1;
@@ -30,7 +32,7 @@ function(o) {
   if (o.commented) {
     emit([diary, 'Z', date], {
       _id: o.user,
-      comment: 1,
+      comment: o.text,
       modified_id: o.commented
     });
   }

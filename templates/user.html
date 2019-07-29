@@ -62,7 +62,6 @@
       start = new Date('{{start}}');
   $(document).ready(function() {
     stickToHeader();
-    moment.locale('{{locale}}');
     {{#activity}}
     if('{{date}}' > start.toJSON()) {
       all[moment('{{date}}').format('X')] = 1;
@@ -85,16 +84,16 @@
     if ({{created}} > 0) $('#only-created').removeClass('d-none');
     if ({{modified}} > 0) $('#only-modified').removeClass('d-none');
     {{/stats}}
-    showActivity('a');
+    showMore('a');
   });
 
   $(window).scroll(function(){
     if ($(window).scrollTop() == $(document).height() - $(window).height()){
-      showActivity($("li").last().find("span").attr('id'));
+      showMore($("li").last().find("span").attr('id'));
     }
   });
 
-  function showActivity(start) {
+  function showMore(start) {
     let now = moment();
     $.ajax({
       url: "../user/{{id}}/"+start,
@@ -109,24 +108,7 @@
         }
       }
     }).done(function(){
-      var moments = $('.moment');
-      moments.each(function() {
-        var jstime = $(this).attr("id");
-        var mmtime = moment(jstime);
-        if(now.diff(mmtime, 'days') <= 2) {
-          $(this).text(mmtime.fromNow());
-        } else if(now.diff(mmtime, 'years') <= 1) {
-          $(this).text("{{i18n.i_on-a-date}}"+' '+mmtime.format("Do MMMM"));
-        } else {
-          $(this).text("{{i18n.i_on-a-date}}"+' '+mmtime.format("Do MMMM YYYY"));
-        }
-      });
-      var contributions = $('ul#events li .moment');
-      var n = contributions.length / 30;
-      if (n !== parseInt(n, 10)) $('#next').prop('disabled', true);
-      contributions.each(function() {
-        $(this).text($(this).text().replace(/./, function(x) { return x.toUpperCase(); }));
-      });
+      momentRelative('#events');
     });
   }
 
@@ -154,7 +136,7 @@
   });
 
   $('#next').on('click', function() {
-    showActivity($("li").last().find("span").attr('id'));
+    showMore($("li").last().find("span").attr('id'));
   });
 
   $('#all-activity').on('click', function() {

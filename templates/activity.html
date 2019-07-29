@@ -9,43 +9,30 @@
     <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item"><a class="text-light nav-link" id="diary">{{diary_name}}</a></li>
-        <span class="navbar-text">{{i18n.i_filter}}</span>
-        <li class="nav-item"><a class="nav-link" id="all-activity">{{i18n.i_all}}</a></li>
-        <li class="nav-item"><a class="nav-link" id="only-created">{{i18n.i_creations}}</a></li>
-        <li class="nav-item"><a class="nav-link" id="only-modified">{{i18n.i_modifications}}</a></li>
-        <li class="nav-item"><a class="nav-link" id="only-comments">{{i18n.i_comments}}</a></li>
       </ul>
       {{>log}}
     </nav>
     <div id="container" class='container-fluid h-100'>
       <main class="col pb-5" id="content">
         <h1>{{i18n.i_activity}}</h1>
+        <fieldset class="form-group">
+          <legend class="col-form-label">
+            <span class="navbar-text">{{i18n.i_filter}}</span>
+            <a id="all-activity">{{i18n.i_all}}</a>
+            <a id="only-created">{{i18n.i_creations}}</a>
+            <a id="only-modified">{{i18n.i_modifications}}</a>
+            <a id="only-commented">{{i18n.i_comments}}</a>
+          </legend>
+        </fieldset>
         <div id="cal-heatmap"></div>
         <div id="activity" title="{{i18n.i_activity}}">
-        <div id="contributors"></div>
+        <div id="contributors">
+          <span class="all">&nbsp;</span>
+          <span class="commented d-none">{{#ncommented}}{{user}}&nbsp;({{n}}) {{/ncommented}}</span>
+          <span class="created d-none">{{#ncreated}}{{user}}&nbsp;({{n}}) {{/ncreated}}</span>
+          <span class="modified d-none">{{#nmodified}}{{user}}&nbsp;({{n}}) {{/nmodified}}</span>
+        </div>
         <ul>
-        {{#activity}}
-          <li class="{{comment}}{{created}}{{^created}}{{^comment}}modified{{/comment}}{{/created}}">
-              <span id="{{date}}" class="moment">{{date}}</span>, <span class="{{user}}">{{user}}</span>
-              {{#diary_label}}
-                {{#created}}{{i18n.i_created}} {{/created}}
-                {{#modified}}{{i18n.i_renamed}} {{/modified}}
-                {{i18n.i_the-diary}}
-              {{/diary_label}}
-              {{^diary_label}}
-                {{#comment}}
-                  {{i18n.i_commented}}
-                {{/comment}}
-                {{#created}}
-                  {{i18n.i_created}}
-                {{/created}}
-                {{#modified}}
-                  {{i18n.i_modified}}
-                {{/modified}}
-                <a href="../../{{modified_path}}/{{diary}}/{{modified_id}}">{{modified_name}}</a>
-              {{/diary_label}} 
-          </li>
-        {{/activity}}
         </ul></div>
       </main>
       <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
@@ -57,16 +44,31 @@
   <script type="text/javascript" src="../../script/cal-heatmap.min.js"></script>
   <script>
   var refresh = true;
-  var cal = new CalHeatMap();
+  let cal = new CalHeatMap(),
+      all = {},
+      created = {},
+      commented = {},
+      modified = {},
+      pathes = [],
+      end = new Date('{{end}}'),
+      start = new Date(end.setFullYear(end.getFullYear() - 1));
   $(document).ready(function() {
     moment.locale('{{locale}}');
     stickToHeader();
-    momentRelative('#activity');
-    if ($('ul .created').length < 1) $('#only-created').hide();
-    if ($('ul .modified').length < 1) $('#only-modified').hide();
-    if ($('ul .commented').length < 1) $('#only-comments').hide();
-    showContributions();
-    resetUI();
+    {{#activity}}
+    if('{{date}}' > start.toJSON()) {
+      all[moment('{{date}}').format('X')] = 1;
+      {{#commented}}commented[moment('{{date}}').format('X')] = 1;{{/commented}}
+      {{#created}}created[moment('{{date}}').format('X')] = 1;{{/created}}
+      {{#modified}}modified[moment('{{date}}').format('X')] = 1;{{/modified}}
+      if (pathes['{{modified_id}}'] == null) pathes['{{modified_id}}'] = "{{modified_path}}";
+    }
+    {{/activity}}
+    if (Object.keys(created).length < 1) $('#only-created').hide();
+    if (Object.keys(commented).length < 1) $('#only-modified').hide();
+    if (Object.keys(modified).length < 1) $('#only-commented').hide();
+    showMore("Z");
+    drawChart(all);
   });
 
   $('#sort').on('change', function() {
@@ -81,105 +83,75 @@
     cal.init({
       domain: "week",
       subDomain: "day",
+      subDomainDateFormat: function(date) {
+        return moment(date).format("LL");
+      },
+      subDomainTitleFormat: {
+        filled: "{count} {name}, {date}"
+      },
       data: data,
       range: 53,
-      start: new Date(new Date().setFullYear(new Date().getFullYear() - 1)),
-      end: new Date(),
+      start: start,
+      end: end,
       itemName: ["contribution", "contributions"],
       domainLabelFormat: ""
     });
   }
 
   $('#all-activity').on('click', function() {
-    $(".created").show();
-    $(".modified").show();
-    $(".commented").show();
-    showContributions();
+    $('#contributors').children().removeClass('d-none');
+    $('#contributors .created').addClass('d-none');
+    $('#contributors .modified').addClass('d-none');
+    $('#contributors .commented').addClass('d-none');
+    cal.update(all);
   });
   $('#only-created').on('click', function() {
-    $(".created").show();
-    $(".modified").hide();
-    $(".commented").hide();
-    showContributions();
+    $('#contributors').children().removeClass('d-none');
+    $('#contributors .all').addClass('d-none');
+    $('#contributors .modified').addClass('d-none');
+    $('#contributors .commented').addClass('d-none');
+    cal.update(created);
   });
-  $('#only-comments').on('click', function() {
-    $(".created").hide();
-    $(".modified").hide();
-    $(".commented").show();
-    showContributions();
+  $('#only-commented').on('click', function() {
+    $('#contributors').children().removeClass('d-none');
+    $('#contributors .all').addClass('d-none');
+    $('#contributors .created').addClass('d-none');
+    $('#contributors .modified').addClass('d-none');
+    cal.update(commented);
   });
   $('#only-modified').on('click', function() {
-    $(".created").hide();
-    $(".commented").hide();
-    $(".modified").show();
-    showContributions();
+    $('#contributors').children().removeClass('d-none');
+    $('#contributors .all').addClass('d-none');
+    $('#contributors .created').addClass('d-none');
+    $('#contributors .commented').addClass('d-none');
+    cal.update(modified);
   });
 
-  function showContributions() {
-    var times = {};
-    var contributorlist = new Object ();
-    var contributors = $('ul li span:visible');
-    contributors.each(function() {
-      var contributor = $(this).attr('class');
-      if (contributor != 'moment') {
-        if (contributorlist[contributor]) {
-          contributorlist[contributor] = contributorlist[contributor] + 1;
-        } else {
-          contributorlist[contributor] = 1;
+  function showMore(start) {
+    $.ajax({
+      url: "../../activity/{{diary}}/"+start,
+      type: "GET",
+      dataType: "json",
+      success: function(data) {
+        for (var i in data) {
+          var li = '<li>'
+            +'<span id="'+data[i].date+'" class="moment"></span>, '
+            +'<span class="'+data[i].user+'">'+data[i].user+'</span> ';
+          if (typeof data[i].diary_label !== 'undefined') {
+            if (typeof data[i].created   !== 'undefined') li += '{{i18n.i_created}} {{i18n.i_the-diary}}';
+            if (typeof data[i].modified  !== 'undefined') li += '{{i18n.i_modified}} {{i18n.i_the-diary}}';
+          } else {
+            if (typeof data[i].commented !== 'undefined') li += '{{i18n.i_commented}}&nbsp;: ';
+            if (typeof data[i].created   !== 'undefined') li += '{{i18n.i_created}} ';
+            if (typeof data[i].modified  !== 'undefined') li += '{{i18n.i_modified}} ';
+            li += '<a href="../../'+pathes[data[i].modified_id]+'/{{diary}}/'+data[i].modified_id+'">'+data[i].modified_name+'</a>';
+          }
+          li += '</li>';
+          $("#activity ul").append(li);
         }
-      } else {
-        var unixstamp = moment(this.id).format('X');
-        times[unixstamp] = 1;
       }
-    });
-    cal.update(times);
-    var n = '';
-    for (var c in contributorlist) {
-      if (contributorlist.hasOwnProperty(c)) {
-        n += ' '+c+' ('+contributorlist[c]+')';
-      }
-    }
-    document.getElementById("contributors").innerHTML = n;
-  }
-
-  function resetUI() {
-    var listed = $("#memos>li");
-    listed.each(function() {
-      var type = $(this).attr('class');
-      switch(type){
-        case "graph":
-        case "table":
-        case "diagram":
-          $(this).find('a').attr('href', '../../'+type+'/{{diary}}/'+$(this).find('a').attr('href'));
-          break;
-      }
-    });
-  }
-
-  function momentRelative(what) {
-    var moments = $(what+' .moment');
-    var times = {};
-    moments.each(function() {
-      var now = moment();
-      var jstime = $(this).text();
-
-      var unixstamp = moment(jstime).format('X');
-      times[unixstamp] = 1;
-
-      var mmtime = moment(jstime);
-      if(now.diff(mmtime, 'days') <= 2) {
-        $(this).text(mmtime.fromNow());
-      } else if(now.diff(mmtime, 'years') <= 1) {
-        $(this).text("{{i18n.i_on-a-date}}"+' '+mmtime.format("Do MMMM"));
-      } else {
-        $(this).text("{{i18n.i_on-a-date}}"+' '+mmtime.format("Do MMMM YYYY"));
-      }
-    });
-    drawChart(times);
-
-    var contributions = $('ul li .moment');
-    contributions.each(function() {
-      $(this).text($(this).text().replace(/./, function(x) { return x.toUpperCase(); }));
+    }).done(function(){
+      momentRelative('#activity ul');
     });
   }
 

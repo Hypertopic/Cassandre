@@ -69,16 +69,16 @@
     "from": "memo/:diary", 
     "to": "_list/diary/memo_attribute",
     "query": {
-      "startkey": [":diary"],
-      "endkey": [":diary", {}],
+      "startkey": [":diary", "D"],
+      "endkey": [":diary", "M", {}],
       "include_docs": "true"
     }
   }, {
     "from": "export/:diary/:format",
     "to": "_list/export/memo_attribute",
     "query": {
-      "startkey": [":diary"],
-      "endkey": [":diary", {}],
+      "startkey": [":diary", "D"],
+      "endkey": [":diary", "M", {}],
       "by": "date",
       "in": ":format",
       "include_docs": "true"
@@ -89,6 +89,16 @@
     "query": {
       "startkey": [":diary"],
       "endkey": [":diary", {}],
+      "include_docs": "true"
+    }
+  }, {
+    "from": "activity/:diary/:start",
+    "to": "_list/activity/memo_attribute",
+    "query": {
+      "startkey": [":diary", "Z", ":start"],
+      "endkey": [":diary", "Z"],
+      "descending": "true",
+      "limit": "30",
       "include_docs": "true"
     }
   }, {

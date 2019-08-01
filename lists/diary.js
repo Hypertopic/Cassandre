@@ -13,7 +13,7 @@ function(head, req) {
     i18n: localized(),
     by: req.query.by,
     logged: req.userCtx.name,
-    diary: req.query.diary,
+    diary: req.query.startkey[0],
     diagrams: [],
     graphs: [],
     sections: [],
@@ -165,7 +165,7 @@ function(head, req) {
                 if (a.actor) turn = '**'+a.actor.trim()+'** '+turn;
                 return turn;
               });
-              var preview = preview.join('\n \n');
+              preview = preview.join('\n \n');
             }
             section.memos.push({
               color: color,

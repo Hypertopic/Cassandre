@@ -15,7 +15,7 @@ function(head, req) {
     by: req.query.by,
     logged: req.userCtx.name,
     logged_fullname: req.userCtx.name,
-    diary: req.query.diary,
+    diary: req.query.startkey[0],
     activity: [],
     ncreated: [],
     ncommented: [],

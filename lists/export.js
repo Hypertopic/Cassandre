@@ -12,7 +12,7 @@ function(head, req) {
     i18n: localized(),
     by: req.query.by,
     logged: req.userCtx.name,
-    diary: req.query.diary,
+    diary: req.query.startkey[0],
     sections: [],
     locale: req.headers["Accept-Language"],
     peer: req.peer,

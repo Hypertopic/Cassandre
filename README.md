@@ -28,10 +28,10 @@ Installation procedure
 * In any folder:
 
         git clone https://github.com/Hypertopic/Cassandre.git
-        cd Cassandre
+        cd Cassandre/app
         couchapp init
         couchapp push http://127.0.0.1:5984/cassandre
-        cd node
+        cd ../proxy
         npm install express
         npm install express-http-proxy
         npm install async

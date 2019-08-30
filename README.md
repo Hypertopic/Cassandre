@@ -24,3 +24,8 @@ Installation procedure
     docker-compose up -d
     docker pull benel/couchapp
     docker run --rm -v "$(pwd)"/app:/app --network cassandre_default benel/couchapp push . http://cassandre_couchdb_1:5984/cassandre
+
+Two services are now available:
+
+- Cassandre user interface at <http://localhost/>,
+- CouchDB administration interface at <http://localhost:5984/_utils/> (that should be kept accessible only to system administrators).

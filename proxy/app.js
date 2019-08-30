@@ -5,7 +5,7 @@ var app = require('express')(),
   async = require('async');
 
 var frontend = 80,
-  backend_host = '127.0.0.1',
+  backend_host = 'couchdb',
   backend_port = 5984,
   backend_path = '/cassandre/_design/cassandre/';
 

@@ -18,16 +18,10 @@ Installation requirements
 * Git client
 * [Docker Engine](https://docs.docker.com/install/)
 * [CouchApp](https://github.com/jchris/couchapp) 
-* [Node.js](http://nodejs.org/)
 
 Installation procedure
 ----------------------
 
-    npm install
     docker-compose up -d
     couchapp push app http://127.0.0.1:5984/cassandre
 
-* Change settings in `proxy/app.js`.
-* Test the settings (`sudo` is required for port 80):
-
-    sudo npm start

@@ -23,20 +23,10 @@ Installation requirements
 Installation procedure
 ----------------------
 
-* Create a database named ``cassandre`` at <http://127.0.0.1:5984/_utils>.
+    npm install
+    couchapp push app http://127.0.0.1:5984/cassandre
 
-* In any folder:
-
-        git clone https://github.com/Hypertopic/Cassandre.git
-        cd Cassandre/app
-        couchapp init
-        couchapp push http://127.0.0.1:5984/cassandre
-        cd ../proxy
-        npm install express
-        npm install express-http-proxy
-        npm install async
-
-* Change settings in `app.js`.
+* Change settings in `proxy/app.js`.
 * Test the settings (`sudo` is required for port 80):
 
-        sudo node app.js
+    sudo npm start

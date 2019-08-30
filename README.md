@@ -17,11 +17,10 @@ Installation requirements
 
 * Git client
 * [Docker Engine](https://docs.docker.com/install/)
-* [CouchApp](https://github.com/jchris/couchapp) 
 
 Installation procedure
 ----------------------
 
     docker-compose up -d
-    couchapp push app http://127.0.0.1:5984/cassandre
-
+    docker pull benel/couchapp
+    docker run --rm -v "$(pwd)"/app:/app --network cassandre_default benel/couchapp push . http://cassandre_couchdb_1:5984/cassandre

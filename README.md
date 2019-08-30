@@ -16,7 +16,7 @@ Installation requirements
 -------------------------
 
 * Git client
-* [CouchDB](http://couchdb.apache.org/)
+* [Docker Engine](https://docs.docker.com/install/)
 * [CouchApp](https://github.com/jchris/couchapp) 
 * [Node.js](http://nodejs.org/)
 
@@ -24,6 +24,7 @@ Installation procedure
 ----------------------
 
     npm install
+    docker-compose up -d
     couchapp push app http://127.0.0.1:5984/cassandre
 
 * Change settings in `proxy/app.js`.

@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+
+  couchdb:
+    image: couchdb
+    ports:
+      - 5984:5984
+    volumes:
+      - ./data:/opt/couchdb/data
+      - ./conf/couchdb.ini:/opt/couchdb/etc/local.d/docker.ini
+    logging:
+      options:
+        max-size: "1M"
+        max-file: "3"

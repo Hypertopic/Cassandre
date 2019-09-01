@@ -27,3 +27,24 @@ Two services are now available:
 
 - Cassandre user interface at <http://localhost/>,
 - CouchDB administration interface at <http://localhost:5984/_utils/> (that should be kept accessible only to system administrators).
+
+Authentication settings
+-----------------------
+
+### CouchDB authentication
+
+If you want users to be managed by CouchDB:
+
+1. Go to the CouchDB administration interface.
+2. Create a database named '_users'.
+3. In this database, create a user document. For example:
+
+```json
+{
+    "_id": "org.couchdb.user:alice",
+    "name": "alice",
+    "type": "user",
+    "roles": [],
+    "password": "myGreatPassword"
+}
+```

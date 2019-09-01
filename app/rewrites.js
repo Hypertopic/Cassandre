@@ -227,6 +227,9 @@ function(req2) {
     case 'style':
       reply.path = reply.path = path[path.length-1];
     break;
+    case '_session':
+      reply.path = '../../../_session';
+    break;
     case undefined:
       if (req2.method == 'GET') reply.path = '_show/index';
       if (req2.method == 'POST') reply.path = '../../';

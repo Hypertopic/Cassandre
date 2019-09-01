@@ -22,3 +22,16 @@ services:
     volumes:
       - .:/app
     working_dir: /app
+
+  running_infrastructure:
+    image: dadarek/wait-for-dependencies
+    command: couchdb:5984
+    depends_on:
+      - couchdb
+      - proxy
+
+  push_app:
+    image: benel/couchapp
+    command: push . http://cassandre_couchdb_1:5984/cassandre
+    volumes:
+      - ./app:/app

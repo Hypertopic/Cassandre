@@ -48,3 +48,17 @@ If you want users to be managed by CouchDB:
     "password": "myGreatPassword"
 }
 ```
+
+### LDAP authentication
+
+If you want users to be managed by the LDAP server of your organization:
+
+1. In `docker-compose.yml`
+ - move `ports` section from service `proxy` to service `ldap_proxy`,
+ - in the `depends_on` section of service `running_infrastructure`, add `ldap_proxy`.
+2. In `conf/couchdb.ini`
+  - uncomment the `authentication_handlers` directive with `proxy_auth`,
+  - change the `secret` with a secure password.
+3. In `aaaforrest.json`
+  - change the `forwardedSecretLogin` with the secure password chosen in step #2,
+  - set LDAP settings to fit your own LDAP server.

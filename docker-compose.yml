@@ -17,11 +17,19 @@ services:
   proxy:
     image: node:lts
     command: npm start
-    ports:
-      - 80:80
+#    ports:
+#      - 80:80
     volumes:
       - .:/app
     working_dir: /app
+
+  ldap_proxy:
+    image: benel/aaaforrest
+    ports:
+      - 80:80 #
+    volumes:
+      - ./conf/aaaforrest.json:/AAAforREST/conf/config.json:ro
+    working_dir: /AAAforREST
 
   running_infrastructure:
     image: dadarek/wait-for-dependencies
@@ -29,6 +37,7 @@ services:
     depends_on:
       - couchdb
       - proxy
+      - ldap_proxy #
 
   push_app:
     image: benel/couchapp

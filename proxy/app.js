@@ -72,7 +72,7 @@ app.get(['/corpus/:corpus', '/item/:corpus/:item'], function(request, response) 
  */
 app.use('/kwic/:corpus/:keyword', proxy(backend_host + ':' + backend_port, {
   forwardPath: function(request, response) {
-    return path('/_rewrite/kwic', request.params.corpus, request.params.keyword);
+    return path('_rewrite/kwic', request.params.corpus, request.params.keyword);
   }
 }));
 
@@ -81,7 +81,7 @@ app.use('/kwic/:corpus/:keyword', proxy(backend_host + ':' + backend_port, {
  */
 app.use(proxy(backend_host + ':' + backend_port, {
   forwardPath: function(request, response) {
-    return backend_path + '/_rewrite' + url.parse(request.url).path;
+    return backend_path + '_rewrite' + url.parse(request.url).path;
   }
 }));
 

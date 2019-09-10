@@ -13,6 +13,7 @@ services:
       options:
         max-size: "1M"
         max-file: "3"
+    restart: on-failure
 
   proxy:
     image: node:lts

@@ -160,16 +160,23 @@ function(req2) {
       };
     break;
     case 'kwic':
-      if (path[1].length > 0) {
-        reply.path = "_list/patterns/corpus_pattern";
-        reply.query = {
-          "key": path[1]
-        };
-      } else {
-        reply.path = "_list/kwic/kwic";
-        reply.query = {
-          "include_docs": "true"
-        };
+      switch (path.length) {
+        case 2:
+          return {
+            path: '_list/patterns/corpus_pattern',
+            query: {
+              key: toJSON(path[1])
+            }
+          };
+        case 3:
+          return {
+            path: '_list/kwic/kwic',
+            query: {
+              startkey: toJSON([path[1], path[2]]),
+              endkey: toJSON([path[1], path[2]+'\ufff0']),
+              include_docs: 'true'
+            }
+          };
       }
     break;
     case 'news':

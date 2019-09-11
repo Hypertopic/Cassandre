@@ -68,14 +68,6 @@ app.get(['/corpus/:corpus', '/item/:corpus/:item'], function(request, response) 
 });
 
 /**
- * URI rewriting to hide CouchDB pattern search syntax.
- */
-app.use('/kwic/:corpus/:keyword', proxy(backend_host + ':' + backend_port, {
-  parseReqBody: false,
-  proxyReqPathResolver: (request) => path('_rewrite/kwic', request.params.corpus, request.params.keyword)
-}));
-
-/**
  * URI rewriting to hide CouchDB prefix.
  */
 app.use(proxy(backend_host + ':' + backend_port, {

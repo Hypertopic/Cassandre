@@ -221,13 +221,13 @@ function(req2) {
         "limit": '5'
       };
     break;
-    case 'change':
+    case 'changes':
       reply.path = "../../_changes";
       reply.query = {
         "filter": 'cassandre/'+path[1],
-        "id": '"'+path[2]+'"',
-        "feed": 'langpoll',
-        "since": '"'+path[3]+'"'
+        "id": path[2],
+        "feed": 'longpoll',
+        "since": path[3]
       };
     break;
     case 'script':

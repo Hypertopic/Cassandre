@@ -19,7 +19,7 @@
             {{/logged}}
             {{#diaries}}
             <div class="card text-center bg-light mb-3">
-              <h5><a href='../memo/{{id}}/?by=date'>{{name}}</a></h5>
+              <h5><a href='../memo/{{id}}/'>{{name}}</a></h5>
               <p><span id="{{id}}" title="{{i18n.i_memos}}" class="badge badge-pill badge-secondary progress-bar-striped progress-bar-animated d-none">{{i18n.i_loading}}</span></p>
             </div>
             {{/diaries}}
@@ -53,7 +53,7 @@
         for (var i in data) {
           if (!$('#'+data[i].id).length) {
             var card = '<div class="card text-center bg-light mb-3">'
-              +'<h5><a href="../memo/'+data[i].id+'/?by=date">'+data[i].name+'</a></h5>'
+              +'<h5><a href="../memo/'+data[i].id+'/">'+data[i].name+'</a></h5>'
               +'<div title="{{i18n.i_restricted-access}}" class="card-icons"><img src="../style/lock.svg" alt="" /></div>'
               +'<p><span id="'+data[i].id+'" title="{{i18n.i_memos}}" class="badge badge-pill badge-secondary progress-bar-striped progress-bar-animated d-none">{{i18n.i_loading}}</span></p>'
               +'</div>';

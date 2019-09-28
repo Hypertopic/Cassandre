@@ -38,8 +38,8 @@ function(o) {
   }
 
   if (o.diary_name) {
-    emit([o._id, 'D'], {
-      diary_name: o.diary_name
+    ['name', 'date', 'update', 'type'].forEach(function(order) {
+      emit([o._id, order, null, 'D'], { diary_name: o.diary_name });
     });
   } else if (!o.commented) {
     var type = o.type || 'transcript';
@@ -53,15 +53,24 @@ function(o) {
       var preview = ' ';
       }
     }
-    emit([diary, 'M', name], {
-      id: o._id,
-      rev: o._rev,
-      name: name,
-      type: type,
-      date: date,
-      update: update,
-      groundings: groundings,
-      preview: preview
-    });
+    var contributors = [].concat(o.readers, o.contributors).sort();
+    var users = contributors.filter(function(item, pos, ary) {return !pos || item != ary[pos - 1];} );
+    for (var i in users) {
+      var user = users[i];
+      var obj = {
+        id: o._id,
+        rev: o._rev,
+        name: name,
+        type: type,
+        date: date,
+        update: update,
+        groundings: groundings,
+        preview: preview
+      };
+      emit([diary, 'name', user, 'M', name], obj);
+      emit([diary, 'date', user, 'M', date], obj);
+      emit([diary, 'update', user, 'M', update], obj);
+      emit([diary, 'type', user, 'M', type+o._id], obj);
+    }
   }
 }

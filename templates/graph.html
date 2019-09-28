@@ -278,10 +278,12 @@
       graphviz += 'node'+nodes[i].id + '[label="' + nodes[i].label.replace(/['"]/g, '\'').replace(/\n/g, '\\n') + '", shape='+nodes[i].shape+']; ';
     }
     for (var i in edges) {
-      if (edges[i].dashes == null) {
-        graphviz += 'node'+edges[i].from + ' -- ' + 'node'+edges[i].to + '[color=' +edges[i].color+ ']; ';
-      } else {
-        graphviz += 'node'+edges[i].from + ' -- ' + 'node'+edges[i].to + '[style=dashed,color='+edges[i].color+',label="' +edges[i].label.replace(/['"]/g, '\'').replace(/\n/g, '\\n')+ '"]; ';
+      if (nodes.findIndex(x => x.id === edges[i].to) > -1 && nodes.findIndex(x => x.id === edges[i].from) > -1) {
+        if (edges[i].dashes == null) {
+          graphviz += 'node'+edges[i].from + ' -- ' + 'node'+edges[i].to + '[color=' +edges[i].color+ ']; ';
+        } else {
+          graphviz += 'node'+edges[i].from + ' -- ' + 'node'+edges[i].to + '[style=dashed,color='+edges[i].color+',label="' +edges[i].label.replace(/['"]/g, '\'').replace(/\n/g, '\\n')+ '"]; ';
+        }
       }
     }
     graphviz += '}';

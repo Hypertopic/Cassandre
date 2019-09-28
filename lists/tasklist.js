@@ -10,6 +10,7 @@ function(head, req) {
     diagram: [],
     editing: [],
     i18n: localized(),
+    list: true,
     locale: req.headers["Accept-Language"],
     logged: req.userCtx.name,
     todo: [],

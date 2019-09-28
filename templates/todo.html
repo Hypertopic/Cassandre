@@ -7,7 +7,7 @@
   <body id="watermark">
     <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item"><a class="text-light nav-link" id="diary">{{diary_name}}</a></li>
+        <li class="nav-item"><a class="text-light nav-link" href="../../memo/{{diary}}/" id="diary">{{diary_name}}</a></li>
       </ul>
       {{>log}}
     </nav>
@@ -19,7 +19,7 @@
           <ul>
           {{#todo}}
             <li class='unchecked-todo'>
-              <span class="moment">{{date}}</span>&nbsp;–
+              <span class="{{date}} moment"></span>&nbsp;–
               <a href='../../{{type}}/{{diary}}/{{id}}'>{{name}}</a>
             </li>
           {{/todo}}
@@ -28,7 +28,7 @@
           <ul>
           {{#comment}}
             <li class='unchecked-comment'>
-              <span class="moment">{{date}}</span>&nbsp;–
+              <span class="{{date}} moment"></span>&nbsp;–
               <a href='../../{{type}}/{{diary}}/{{id}}'>{{name}}</a>
             </li>
           {{/comment}}
@@ -37,7 +37,7 @@
           <ul>
           {{#editing}}
             <li class='editing'>
-              <span class="moment">{{date}}</span>&nbsp;–
+              <span class="{{date}} moment"></span>&nbsp;–
               <a href='../../{{type}}/{{diary}}/{{id}}'>{{name}}</a>
             </li>
           {{/editing}}
@@ -46,7 +46,7 @@
           <ul>
           {{#diagram}}
             <li class='unarticulated'>
-              <span class="moment">{{date}}</span>&nbsp;–
+              <span class="{{date}} moment"></span>&nbsp;–
               <a href='../../{{type}}/{{diary}}/{{id}}'>{{name}}</a>
             </li>
           {{/diagram}}
@@ -55,7 +55,7 @@
           <ul>
           {{#unnamed}}
             <li class='unnamed'>
-              <span class="moment">{{date}}</span>&nbsp;–
+              <span class="{{date}} moment"></span>&nbsp;–
               <a href='../../{{type}}/{{diary}}/{{id}}'>{{name}}</a>
             </li>
           {{/unnamed}}
@@ -64,7 +64,7 @@
           <ul>
           {{#ungrounded}}
             <li class='ungrounded'>
-              <span class="moment">{{date}}</span>&nbsp;–
+              <span class="{{date}} moment"></span>&nbsp;–
               <a href='../../{{type}}/{{diary}}/{{id}}'>{{name}}</a>
             </li>
           {{/ungrounded}}
@@ -88,26 +88,6 @@
     if ($('.unnamed').length > 0) $('#unnamed').removeClass('hidden');
     if ($('.ungrounded').length > 0) $('#ungrounded').removeClass('hidden');
   });
-
-  function momentRelative(what) {
-    var moments = $(what+' .moment');
-    moments.each(function() {
-      var now = moment();
-      var jstime = $(this).text();
-      var mmtime = moment(jstime);
-      if(now.diff(mmtime, 'days') <= 2) {
-        $(this).text(mmtime.fromNow());
-      } else if(now.diff(mmtime, 'years') <= 1) {
-        $(this).text("{{i18n.i_on-a-date}}"+' '+mmtime.format("Do MMMM"));
-      } else {
-        $(this).text("{{i18n.i_on-a-date}}"+' '+mmtime.format("Do MMMM YYYY"));
-      }
-    });
-    var contributions = $('ul li .moment');
-    contributions.each(function() {
-      $(this).text($(this).text().replace(/./, function(x) { return x.toUpperCase(); }));
-    });
-  }
 
   {{>layoutscript}}
   {{>logscript}}

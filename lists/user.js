@@ -13,6 +13,7 @@ function(head, req) {
     flat: true,
     i18n: localized(),
     id: req.query.startkey[0],
+    list: true,
     locale: req.headers["Accept-Language"],
     logged: req.userCtx.name,
     logged_fullname: req.userCtx.name,

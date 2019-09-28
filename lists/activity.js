@@ -47,11 +47,9 @@ function(head, req) {
   }
   while (row = getRow()) {
     var preview = '';
+    if (row.key[3] == 'D' && row.value) data.diary_name = row.value.diary_name;
     switch (row.key[1]) {
-      case ('D'):
-        if (row.value) data.diary_name = row.value.diary_name;
-      break;
-      case ('M'):
+      default:
         switch(row.value.type) {
           case ('graph'):
           case ('table'):
@@ -62,7 +60,7 @@ function(head, req) {
             memos_path[row.value.id] = 'memo';
           break;
         }
-        break;
+      break;
       case ('Z'):
         var object = {
             user: row.value._id,

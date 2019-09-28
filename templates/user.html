@@ -102,7 +102,7 @@
       success: function(data) {
         for (var i in data) {
           $("#content ul").append('<li class="'+data[i].action+'">'
-            +'<span id="'+data[i].date+'" class="moment"></span>&nbsp;– '
+            +'<span id="'+data[i].date+'" class="'+data[i].date+' moment"></span>&nbsp;– '
             +'<a href="../'+data[i].type+'/'+data[i].diary+'/'+data[i].id+'">'+data[i].name+'</a>'
             +'</li>');
         }

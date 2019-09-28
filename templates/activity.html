@@ -135,7 +135,7 @@
       success: function(data) {
         for (var i in data) {
           var li = '<li>'
-            +'<span id="'+data[i].date+'" class="moment"></span>, '
+            +'<span id="'+data[i].date+'" class="'+data[i].date+' moment"></span>, '
             +'<span class="'+data[i].user+'">'+data[i].user+'</span> ';
           if (typeof data[i].diary_label !== 'undefined') {
             if (typeof data[i].created   !== 'undefined') li += '{{i18n.i_created}} {{i18n.i_the-diary}}';

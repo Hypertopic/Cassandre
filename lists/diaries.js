@@ -17,7 +17,7 @@ function(head, req) {
     var index = row.key[1];
     if (req.query.startkey[0] == req.userCtx.name || req.query.startkey[0] == null) {
       if (data.diaries.map(function(a){return a.id}).indexOf(index) < 0) {
-        if (index != null) data.diaries.push({
+        if (row.doc && row.doc.diary_name && index != null) data.diaries.push({
           'id': index,
           'name': row.doc.diary_name
         });

@@ -33,13 +33,13 @@
             </div>
             <div class="dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="sort" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              {{i18n.i_sort}}
+              {{i18n.i_sort}} ({{by}})
               </a>
               <div class="dropdown-menu" aria-labelledby="sort">
-                <a class="dropdown-item" href="?by=name">{{i18n.i_title}}</a>
-                <a class="dropdown-item" href="?by=date">{{i18n.i_date}}</a>
-                <a class="dropdown-item" href="?by=update">{{i18n.i_update}}</a>
-                <a class="dropdown-item" href="?by=type">{{i18n.i_type}}</a>
+                <a class="dropdown-item" href="#" value='name'>{{i18n.i_title}}</a>
+                <a class="dropdown-item" href="#" value='date'>{{i18n.i_date}}</a>
+                <a class="dropdown-item" href="#" value='update'>{{i18n.i_update}}</a>
+                <a class="dropdown-item" href="#" value='type'>{{i18n.i_type}}</a>
               </div>
             </div>
             <a class="nav-link hidden" id="patterns">{{i18n.i_patterns}}</a>
@@ -47,7 +47,6 @@
         </ul>
         <ul class="navbar-nav justify-content-between">
           <li class="form-inline justify-content-between">
-            <div></div>
             {{>log}}
           </li>
         </ul>
@@ -56,7 +55,7 @@
     <div id="container" class='container-fluid pb-5'>
       <div id="content" class='col'>
         <h1>{{diary_name}}
-          <span id="size" class="badge badge-pill badge-secondary" title="{{i18n.i_memos}}"></span>
+          <span id="size" class="badge badge-pill badge-{{^unreads}}secondary{{/unreads}}{{#unreads}}success{{/unreads}}" title="{{i18n.i_memos}}">{{#unreads}}{{unreads}}/{{/unreads}}{{size}}</span>
           <span id="comments" class="badge badge-pill badge-info" title="{{i18n.i_unchecked-comment}}"></span>
         </h1>
         <input id="name" type="search" class="form-control hidden" value="{{diary_name}}"/>
@@ -71,18 +70,10 @@
         {{/list}}
         <div id="network" class="hidden"></div>
         <div id="memos">
-        {{#sections}}
-          {{#memos}}
-          <li class="{{type}}"><input type="checkbox" id="{{id}}" name="{{rev}}" class="hidden deletable" />
-            <span id="{{date}}" name="{{update}}" class="moment unread"></span>&nbsp;–
-            <span class="mytooltip">
-              <a href="../../{{path}}/{{diary}}/{{id}}" class="unread">{{name}}</a>
-              {{#preview}}<span class="preview text-light bg-dark">{{preview}}</span>{{/preview}}
-            </span>
-          </li>
-          {{/memos}}
-        {{/sections}}
         </div>
+      </div>
+      <div class="text-center">
+        <img id="more" src="../../script/cloud-download.svg" alt="{{i18n.i_show-more}}"/>
       </div>
     </div>
     <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
@@ -92,43 +83,30 @@
   {{#list}}<script src="../../script/showdown.min.js"></script>{{/list}}
   {{^list}}<script src="../../script/vis.min.js"></script>{{/list}}
   <script>
-  var refresh = true;
+  var refresh = true,
+      activity = {{{activity}}},
+      converter = new showdown.Converter({
+        tables: 'true',
+        tasklists: 'true',
+        strikethrough: 'true'
+      }),
+      from = '0',
+      list = [],
+      origin = '0';
   $(document).ready(function() {
+    {{#logged}}
+    if ("{{by}}".length < 0) track('update');
+    {{/logged}}
+    if (["date","update"].indexOf("{{by}}") > -1) {
+      from = 'a';
+      origin = 'a';
+    }
+    includePublic();
     moment.locale('{{locale}}');
     stickToHeader();
     resetUI();
     {{#list}}
-    momentRelative('#memos');
-    var converter = new showdown.Converter({
-      tables: 'true',
-      tasklists: 'true',
-      strikethrough: 'true'
-    });
-    converter.setFlavor('github');
-    $('.preview').html(function(i, text) {
-      return converter.makeHtml(text.trim());
-    });
-    $('#size').html($('#memos>li').length);
-    if ('{{logged}}') $.ajax({
-      url: "../../{{logged}}",
-      type: "GET",
-      dataType: "json",
-      success: function(data) {
-        if(data.fullname) $('#username').text(data.fullname);
-        for (i in data.activity) {
-          var id = '#'+data.activity[i].doc;
-          if (data.activity[i].date > $(id).parent().find('.moment').attr('name')) {
-            $(id).parent().find('.unread').removeClass('unread');
-          }
-        }
-        if ($('a.unread').length > 0) {
-          $('#size').prepend($('a.unread').length+'/');
-          $('#size').removeClass("badge-secondary");
-          $('#size').addClass("badge-success");
-          $('#size').attr("title", "{{i18n.i_memos-number}}");
-        }
-      }
-    });
+
     $('.theoretical').attr('title',"{{i18n.i_memo.theoretical}}");
     $('.operational').attr('title',"{{i18n.i_memo.operational}}");
     $('.field').attr('title',"{{i18n.i_memo.field}}".replace('&#39;',"'"));
@@ -139,14 +117,7 @@
     $('.graph').attr('title',"{{i18n.i_memo.graph}}");
     $('.diagram').attr('title',"{{i18n.i_memo.diagram}}");
     $('.table').attr('title',"{{i18n.i_memo.table}}");
-    {{/list}}
-    {{#network}}
-      drawNetwork();
-    {{/network}}
-    {{#timeline}}
-      drawTimeline();
-    {{/timeline}}
-    {{#list}}
+
     $.ajax({
       url: "../../tasklist/{{diary}}",
       type: "GET",
@@ -192,25 +163,23 @@
       $("#network").addClass("hidden");
       $("#memos>li>input").removeClass("hidden");
       $("#footer").html(
-        '<div role="group">'
+        '<div role="group" class="form-check-inline">'
         + '<button class="btn navbar-btn btn-outline-light btn-sm" id="cancel" type="button">{{i18n.i_cancel}}</button>'
-        + '<input id="toggle" type="checkbox"><span class="navbar-text">{{i18n.i_select}}</span></input>'
+        + '<div class="custom-control custom-switch"><input id="toggle" type="checkbox" class="custom-control-input"></input><label class="navbar-text custom-control-label" for="toggle">{{i18n.i_select}}</label></div>'
+        + '<input id="toggle-orig" type="checkbox"><span class="navbar-text">{{i18n.i_select}}</span></input>'
         + '<button class="btn navbar-btn btn-outline-light btn-sm" id="delete" type="button">{{i18n.i_delete}}</button>'
         + '</div>'
       );
     })
-
     .on('click', '#cancel', function() {
       resetUI();
     })
-
     .on('click', '#toggle', function() {
       var checked = $("#toggle").is(":checked");
       $("input[type='checkbox']").each(function() {
         $(this).prop("checked", checked);
       });
     })
-
     .on('click', '#delete', function() {
       var checked = $("input.deletable:checked");
       var countdown = checked.size();
@@ -232,6 +201,11 @@
       });
     });
 
+  $('.dropdown-menu a').on('click', function(e) {
+    var by = $(this).attr('value');
+    {{#logged}}track(by).done();{{/logged}}
+  });
+
   $('#tasklist-alert').on('click', function() {
     self.location = "../../tasklist/{{diary}}/";
   });
@@ -248,115 +222,75 @@
     );
   }
 
-  {{#list}}
-  function momentRelative(what) {
-    var moments = $(what+' .moment');
-    moments.each(function() {
-      var now = moment();
-      var jstime = $(this).attr('id');
-      var mmtime = moment(jstime);
-      if(now.diff(mmtime, 'days') <= 2) {
-        $(this).text(mmtime.fromNow());
-      } else if(now.diff(mmtime, 'years') < 1) {
-        $(this).text("{{i18n.i_on-a-date}}"+' '+mmtime.format("Do MMMM"));
-      } else {
-        $(this).text("{{i18n.i_on-a-date}}"+' '+mmtime.format("Do MMMM YYYY"));
-      }
-    });
-    var contributions = $('ul li .moment');
-    contributions.each(function() {
-      $(this).text($(this).text().replace(/./, function(x) { return x.toUpperCase(); }));
-    });
-  }
-  {{/list}}
+  $('#more').on('click', function() {
+    includePublic();
+  });
 
-  {{#timeline}}
-  function drawTimeline() {
-    $("#footer").addClass("hidden");
-    $(".vis-network").addClass("hidden");
-    var container = document.getElementById('network');
-    var data = {{{timeline}}};
-    var options = {locale: '{{locale}}'};
-    var groups = new vis.DataSet([
-      {id: 0, content: '<img src="../../style/theoretical.svg" />', value: 0},
-      {id: 1, content: '<img src="../../style/operational.svg" />', value: 1},
-      {id: 2, content: '<img src="../../style/field.svg" />', value: 2},
-      {id: 3, content: '<img src="../../style/coding.svg" />', value: 3},
-      {id: 4, content: '<img src="../../style/diagram.svg" />', value: 4},
-      {id: 5, content: '<img src="../../style/graph.svg" />', value: 5},
-      {id: 6, content: '<img src="../../style/storyline.svg" />', value: 6},
-      {id: 8, content: '<img src="../../style/table.svg" />', value: 8}
-    ]);
-    timeline = new vis.Timeline(container, data, options);
-    timeline.setGroups(groups);
-    timeline.on('click', function (selected) {
-      if (selected.group == 4) {
-        self.location = '../../diagram/{{diary}}/'+selected.item;
-      } else if (selected.group == 8) {
-        self.location = '../../table/{{diary}}/'+selected.item;
-      } else if (selected.group == 5) {
-        self.location = '../../graph/{{diary}}/'+selected.item;
-      } else if (selected.item !== null) {
-        self.location = selected.item;
-      }
-    });
-    $("#memos").addClass("hidden");
-    $("#network").removeClass("hidden");
-  }
-  {{/timeline}}
+  function showMore() {
+    includePublic();
+  };
 
-  {{#network}}
-  function drawNetwork() {
-    $("#footer").addClass("hidden");
-    var diagrams = "{{{diagrams}}}";
-    diagrams = diagrams.split(',');
-    var graphs = "{{{graphs}}}";
-    graphs = graphs.split(',');
-    var tables = "{{{tables}}}";
-    tables = tables.split(',');
-    var container = document.getElementById('network');
-    var data = {{{network}}};
-    var options = {
-      nodes: {
-        shape: 'box',
-        color: {
-          background: 'white',
-          highlight: {
-            background: 'white'
+  function showList(data) {
+    for (var i in data) {
+      if(document.getElementById(data[i].id) == null) {
+        var unread = 'unread';
+        var date = data[i].date;
+        if('{{by}}' == 'update') date = data[i].update;
+        var sort_key = data[i].sortkey;
+        var j = activity.findIndex(e => e.doc === data[i].id);
+        if (j > -1 && activity[j].date > data[i].update) unread = '';
+        var li = '<li class="'+data[i].type+'" name="'+sort_key+'">'
+          +'<input type="checkbox" id="'+data[i].id+'" name="'+data[i].rev+'" class="hidden deletable" />'
+          +'<span id="'+data[i].id+'" name="'+data[i].update+'" class="'+date+' moment '+unread+'"></span>&nbsp;– '
+          +'<span class="mytooltip">'
+          +'<a href="../../'+data[i].path+'/'+data[i].diary+'/'+data[i].id+'" class="'+unread+'">'+data[i].name+'</a>';
+        if (typeof data[i].preview !== 'undefined' && data[i].preview.trim().length > 0)
+          li += '<span class="preview text-light bg-dark">'+data[i].preview+'</span>';
+        li += '</li>';
+        $("#memos").append(li);
+      }
+    }
+    momentRelative('#memos');
+    converter.setFlavor('github');
+    $('.preview').html(function(i, text) {
+      return converter.makeHtml(text.trim());
+    });
+    if (document.getElementById("memos").childNodes.length >= {{size}}) $('#more').addClass("d-none");
+  }
+
+  async function getMore(coord) {
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: "../../memos/{{diary}}/{{by}}/"+coord,
+        type: "GET",
+        dataType: "json",
+        success: function(data) {
+          list = list.concat(data);
+          if (data.length > 0) {
+            resolve(data[data.length-1].sortkey);
+          } else {
+            resolve(list[list.length-1].sortkey);
           }
         }
-      },
-      edges: {
-        color: 'blue'
-      },
-      layout: {
-        hierarchical: {
-          sortMethod: 'directed'
-        }
-      },
-      interaction: {
-        navigationButtons: true,
-        keyboard: true
-      }
-    };
-    network = new vis.Network(container, data, options);
-    network.on('click', function (selected) {
-      if (selected.nodes[0].length == 32) {
-        if($.inArray(selected.nodes[0], diagrams) != -1) {
-          self.location = '../../diagram/{{diary}}/'+selected.nodes[0];
-        } else if($.inArray(selected.nodes[0], tables) != -1) {
-          self.location = '../../table/{{diary}}/'+selected.nodes[0];
-        } else if($.inArray(selected.nodes[0], graphs) != -1) {
-          self.location = '../../graph/{{diary}}/'+selected.nodes[0];
-        } else {
-          self.location = selected.nodes[0];
-        }
-      }
+      });
     });
-    $("#memos").addClass("hidden");
-    $("#network").removeClass("hidden");
   }
-  {{/network}}
+
+  async function includePublic() {
+    if (list.length > 0) {
+      from = list[list.length-1].sortkey;
+    }
+    let result = await getMore(from);
+    await getMore(origin+'/'+result);
+    list = list.filter((v, i, a) => a.findIndex((t) => (t.id === v.id)) === i);
+    if (["date","update"].indexOf("{{by}}") > -1) {
+      list.sort((a, b) => (a.sortkey < b.sortkey) ? 1 : -1);
+      if (from > list[list.length-1].sortkey) from = list[list.length-1].sortkey;
+    } else {
+      list.sort((a, b) => (a.sortkey > b.sortkey) ? 1 : -1);
+    }
+    showList(list);
+  }
 
   {{>layoutscript}}
   {{>logscript}}

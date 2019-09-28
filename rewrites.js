@@ -1,8 +1,9 @@
 function(req2) {
   var path = req2.path.slice(4),
-      logged = req2.userCtx.name || null,
+      logged = req2.userCtx.name,
       query = req2.query,
       reply = {};
+  if (logged != null) logged = '"'+logged+'"';
   switch(path[0]) {
     case 'activity':
       if (path[2]) {
@@ -44,15 +45,89 @@ function(req2) {
           "include_docs": "true"
         };
       } else if (path[1]) {
+        var diary = path[1];
+        reply.path = "_list/diary/diary";
+        reply.query = {
+          "startkey": '["'+diary+'"]',
+          "endkey":   '["'+diary+'", {}]'
+        };
+      } else {
+        reply.path = "_list/diaries/diaries";
+        reply.query = {
+          "startkey": '[null]',
+          "endkey": '[null, {}]',
+          "include_docs": "true"
+        };
+      }
+    break;
+    case 'memos':
+      var reply = {};
+      if (path[4]) {
+        logged = 'null';
+        var end = path[4];
+      }
+      if (path[3]) {
+        var diary = path[1],
+            order = path[2],
+            start = path[3];
+        reply.path = "_list/memos/memo_attribute";
+        switch (order) {
+          case 'date':
+          case 'update':
+            reply.query = {
+              "startkey": '["'+diary+'", "'+order+'", '+logged+', "M", "'+start+'"]',
+              "endkey":   '["'+diary+'", "'+order+'", '+logged+', "M"]',
+              "descending": 'true',
+              "limit": '30',
+              "include_docs": 'true'
+            };
+          break;
+          default:
+            reply.query = {
+              "startkey": '["'+diary+'", "'+order+'", '+logged+', "M", "'+start+'"]',
+              "endkey":   '["'+diary+'", "'+order+'", '+logged+', "M", {}]',
+              "limit": '30',
+              "include_docs": 'true'
+            };
+          break;
+        }
+      }
+      if (path[4]) {
+        if (start !== end) {
+          reply.query.endkey = '["'+diary+'", "'+order+'",'+logged+', "M", "'+end+'"]';
+          delete reply.query.limit;
+        }
+      }
+    break;
+    case 'old-memo':
+      if (path[2]) {
+        var memo = path[2];
+        reply.path = "_list/memo/memo";
+        reply.query = {
+          "startkey": '["'+memo+'"]',
+          "endkey": '["'+memo+'", {}]',
+          "include_docs": "true"
+        };
+      } else if (path[1]) {
         var diary = path[1],
             [by] = req2.raw_path.split('=').slice(-1);
         reply.path = "_list/diary/memo_attribute";
-        reply.query = {
-          "startkey": '["'+diary+'", "D"]',
-          "endkey": '["'+diary+'", "M", {}]',
-          "by": by,
-          "include_docs": "true"
-        };
+        if (by == 'update') {
+          reply.query = {
+            "startkey": '["'+diary+'", "'+by+'",'+logged+', "M", {}]',
+            "endkey":   '["'+diary+'", "'+by+'",null, "D"]',
+            "by": by,
+            "descending": "true",
+            "include_docs": "true"
+          };
+        } else {
+          reply.query = {
+            "startkey": '["'+diary+'", "'+by+'",null, "D"]',
+            "endkey":   '["'+diary+'", "'+by+'",'+logged+', "M", {}]',
+            "by": by,
+            "include_docs": "true"
+          };
+        }
       } else {
         reply.path = "_list/diaries/diaries";
         reply.query = {
@@ -160,16 +235,21 @@ function(req2) {
       };
     break;
     case 'kwic':
-      if (path[1].length > 0) {
-        reply.path = "_list/patterns/corpus_pattern";
-        reply.query = {
-          "key": path[1]
-        };
-      } else {
-        reply.path = "_list/kwic/kwic";
-        reply.query = {
-          "include_docs": "true"
-        };
+      switch (path.length) {
+        case 2:
+          reply.path = '_list/patterns/corpus_pattern';
+          reply.query = {
+            "key": toJSON(path[1])
+          };
+        break;
+        case 3:
+          reply.path = '_list/kwic/kwic';
+          reply.query = {
+            "startkey": toJSON([path[1], path[2]]),
+            "endkey": toJSON([path[1], path[2]+'\ufff0']),
+            "include_docs": 'true'
+          };
+        break;
       }
     break;
     case 'news':
@@ -214,20 +294,20 @@ function(req2) {
         "limit": '5'
       };
     break;
-    case 'change':
+    case 'changes':
       reply.path = "../../_changes";
       reply.query = {
         "filter": 'cassandre/'+path[1],
-        "id": '"'+path[2]+'"',
-        "feed": 'langpoll',
-        "since": '"'+path[3]+'"'
+        "id": path[2],
+        "feed": 'longpoll',
+        "since": path[3]
       };
     break;
     case 'script':
     case 'style':
-      reply.path = reply.path = path[path.length-1];
+      reply.path = path[path.length-1];
     break;
-    case '':
+    case undefined:
       if (req2.method == 'GET') reply.path = '_show/index';
       if (req2.method == 'POST') reply.path = '../../';
     break;

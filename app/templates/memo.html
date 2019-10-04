@@ -334,12 +334,13 @@
       });
     }
     stickToHeader();
-    $.ajax({
-      url: "../../changes/memo/{{_id}}/{{update_seq}}",
-      type: "GET",
-      dataType: "json",
-      success: reload
-    });
+    var poller = function() { 
+      $.ajax("../../changes/memo/{{_id}}/{{update_seq}}").done(function(data) {
+        if (data.results.length) reload();
+        poller();
+      });
+    };
+    poller();
   });
 
   $('#add_contributor').on('keypress', function(key) {

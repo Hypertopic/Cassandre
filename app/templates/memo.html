@@ -14,7 +14,6 @@
         {{#authorized}}
           <h1><img src="../../style/{{type}}.svg"/> {{name}}</h1>
           <input id="name" type="search" class="form-control hidden" value="{{name}}"/>
-          {{>rights}}
           <div class="speeches">
           {{#body}}
           <div class="speeches-row">
@@ -36,6 +35,7 @@
           {{/body}}
           </div>
           {{>comments}}
+          {{>rights}}
         {{/authorized}}
         </main>
         {{#authorized}}

@@ -42,7 +42,7 @@ function(head, req) {
               sortkey = row.value.update; 
             break;
             case'type':
-              sortkey = row.value.type+row.value.id;
+              sortkey = row.key[4];
             break;
           }
           data.memos.push({

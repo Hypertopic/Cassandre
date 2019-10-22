@@ -54,6 +54,8 @@ div.post {
 
 #content {
   border-top: 1px solid #eeeeee;
+  display: flex;
+  flex-direction: column;
 }
 
 #leaves {
@@ -150,6 +152,7 @@ div.post {
 }
 
 #comments {
+  order: 3;
   position: static;
   top: 0px;
   left: 0px;
@@ -307,6 +310,7 @@ input.actor {
 }
 
 .speeches{
+  order: 2;
   display: table;
 }
 

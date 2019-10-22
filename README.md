@@ -15,28 +15,50 @@ Cassandre is a server software. There is no need to install it on your own compu
 Installation requirements
 -------------------------
 
-* Git client
-* [CouchDB](http://couchdb.apache.org/)
-* [CouchApp](https://github.com/jchris/couchapp) 
-* [Node.js](http://nodejs.org/)
+* [Docker Engine](https://docs.docker.com/install/)
 
 Installation procedure
 ----------------------
 
-* Create a database named ``cassandre`` at <http://127.0.0.1:5984/_utils>.
+    docker-compose up -d running_infrastructure
+    docker-compose run --rm push_app
 
-* In any folder:
+Two services are now available:
 
-        git clone https://github.com/Hypertopic/Cassandre.git
-        cd Cassandre
-        couchapp init
-        couchapp push http://127.0.0.1:5984/cassandre
-        cd node
-        npm install express
-        npm install express-http-proxy
-        npm install async
+- Cassandre user interface at <http://localhost/>,
+- CouchDB administration interface at <http://localhost:5984/_utils/> (that should be kept accessible only to system administrators).
 
-* Change settings in `app.js`.
-* Test the settings (`sudo` is required for port 80):
+Authentication settings
+-----------------------
 
-        sudo node app.js
+### CouchDB authentication
+
+If you want users to be managed by CouchDB:
+
+1. Go to the CouchDB administration interface.
+2. Create a database named '_users'.
+3. In this database, create a user document. For example:
+
+```json
+{
+    "_id": "org.couchdb.user:alice",
+    "name": "alice",
+    "type": "user",
+    "roles": [],
+    "password": "myGreatPassword"
+}
+```
+
+### LDAP authentication
+
+If you want users to be managed by the LDAP server of your organization:
+
+1. In `docker-compose.yml`
+ - move `ports` section from service `proxy` to service `ldap_proxy`,
+ - in the `depends_on` section of service `running_infrastructure`, add `ldap_proxy`.
+2. In `conf/couchdb.ini`
+  - uncomment the `authentication_handlers` directive with `proxy_auth`,
+  - change the `secret` with a secure password.
+3. In `aaaforrest.json`
+  - change the `forwardedSecretLogin` with the secure password chosen in step #2,
+  - set LDAP settings to fit your own LDAP server.

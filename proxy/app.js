@@ -5,7 +5,7 @@ var app = require('express')(),
   async = require('async');
 
 var frontend = 80,
-  backend_host = '127.0.0.1',
+  backend_host = 'couchdb',
   backend_port = 5984,
   backend_path = '/cassandre/_design/cassandre/';
 
@@ -68,21 +68,11 @@ app.get(['/corpus/:corpus', '/item/:corpus/:item'], function(request, response) 
 });
 
 /**
- * URI rewriting to hide CouchDB pattern search syntax.
- */
-app.use('/kwic/:corpus/:keyword', proxy(backend_host + ':' + backend_port, {
-  forwardPath: function(request, response) {
-    return path('/_rewrite/kwic', request.params.corpus, request.params.keyword);
-  }
-}));
-
-/**
  * URI rewriting to hide CouchDB prefix.
  */
 app.use(proxy(backend_host + ':' + backend_port, {
-  forwardPath: function(request, response) {
-    return backend_path + '/_rewrite' + url.parse(request.url).path;
-  }
+  parseReqBody: false,
+  proxyReqPathResolver: (request) => backend_path + '_rewrite' + request.url
 }));
 
 /**

@@ -1,0 +1,17 @@
+{
+  "sites": [{
+    "hostProxy": "",
+    "host": "proxy",
+    "authentication": [
+      {"url": "ldap://ldap.forumsys.com", "id": "uid", "dn": "dc=example,dc=com"}
+    ],
+    "forwardedLoginSecret": "TO_BE_CHANGED",
+    "sessionHandler": {
+      "path": "/_session"
+    },
+    "rules":[{
+      "control": "true",
+      "action": "authenticateIfPresent(context,function(){proxyWork(context)})"
+    }]
+  }]
+}

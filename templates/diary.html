@@ -17,7 +17,7 @@
         <ul class="navbar-nav mr-auto">
           <li class="form-inline justify-content-between">
             <div class="dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="show" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <a class="nav-link dropdown-toggle hidden" href="#" id="show" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               {{i18n.i_show}}
               </a>
               <div class="dropdown-menu" aria-labelledby="show">
@@ -32,8 +32,8 @@
               </div>
             </div>
             <div class="dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="sort" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              {{i18n.i_sort}} ({{by}})
+              <a class="nav-link dropdown-toggle" title="{{i18n.i_sort}}" id="sort" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              {{i18n.i_sort}}
               </a>
               <div class="dropdown-menu" aria-labelledby="sort">
                 <a class="dropdown-item" href="#" value='name'>{{i18n.i_title}}</a>
@@ -103,7 +103,19 @@
     }
     includePublic();
     moment.locale('{{locale}}');
-    stickToHeader();
+    let sort_by ='{{i18n.i_title}}';
+    switch('{{by}}') {
+      case 'date':
+        sort_by ='{{i18n.i_date}}';
+      break;
+      case 'update':
+        sort_by ='{{i18n.i_update}}';
+      break;
+      case 'type':
+        sort_by ='{{i18n.i_type}}';
+      break;
+    }
+    $('#sort').text('{{i18n.i_by}} '+sort_by.toLowerCase());
     resetUI();
     {{#list}}
 
@@ -136,12 +148,13 @@
         if (kwic.pending > 0) $('#patterns').removeClass("hidden");
       }
     });
-    $.ajax({
-      url: "../../changes/diary/{{_id}}/{{update_seq}}",
-      type: "GET",
-      dataType: "json",
-      success: reload
-    });
+    var poller = function() {
+      $.ajax("../../changes/diary/{{_id}}/{{update_seq}}").done(function(data) {
+        if (data.results.length) reload();
+        poller();
+      });
+    };
+    poller();
   });
 
   $('#header')
@@ -166,7 +179,6 @@
         '<div role="group" class="form-check-inline">'
         + '<button class="btn navbar-btn btn-outline-light btn-sm" id="cancel" type="button">{{i18n.i_cancel}}</button>'
         + '<div class="custom-control custom-switch"><input id="toggle" type="checkbox" class="custom-control-input"></input><label class="navbar-text custom-control-label" for="toggle">{{i18n.i_select}}</label></div>'
-        + '<input id="toggle-orig" type="checkbox"><span class="navbar-text">{{i18n.i_select}}</span></input>'
         + '<button class="btn navbar-btn btn-outline-light btn-sm" id="delete" type="button">{{i18n.i_delete}}</button>'
         + '</div>'
       );
@@ -246,7 +258,7 @@
           +'<a href="../../'+data[i].path+'/'+data[i].diary+'/'+data[i].id+'" class="'+unread+'">'+data[i].name+'</a>';
         if (typeof data[i].preview !== 'undefined' && data[i].preview.trim().length > 0)
           li += '<span class="preview text-light bg-dark">'+data[i].preview+'</span>';
-        li += '</li>';
+        li += '</span></li>';
         $("#memos").append(li);
       }
     }
@@ -290,6 +302,7 @@
       list.sort((a, b) => (a.sortkey > b.sortkey) ? 1 : -1);
     }
     showList(list);
+    stickToHeader();
   }
 
   {{>layoutscript}}

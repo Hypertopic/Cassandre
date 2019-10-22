@@ -185,7 +185,7 @@ button.comment {
   padding-bottom: 5px;
 }
 
-a.dropdown-item, .create-leave,
+a.dropdown-item, .create-leave, a.dropdown-toggle,
 #add, #create, #create-table, #diaries, #diary, #corpus,
 #all-activity, #only-created, #only-modified, #only-commented,
 #clear_highlights, #rare, #specific, #repeated,
@@ -253,6 +253,8 @@ a.dropdown-item, .create-leave,
 
 .diagram {
   background-image: url('diagram.svg');
+  background-position: left middle, left middle, left 0px;
+  background-size: auto auto, 70px auto, auto auto;
 }
 
 .graph {
@@ -261,6 +263,11 @@ a.dropdown-item, .create-leave,
 
 .storyline {
   background-image: url('storyline.svg');
+}
+
+#modify_rights {
+  height: 30px;
+  cursor: pointer;
 }
 
 .search {

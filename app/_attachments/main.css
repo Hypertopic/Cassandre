@@ -147,12 +147,21 @@ div.post {
   font-size:70%;
 }
 
+#authorization {
+  order: 1;
+}
+
+.spacer {
+  order: 3;
+}
+
 #negative-case {
+  order: 4;
   position: static;
 }
 
 #comments {
-  order: 3;
+  order: 5;
   position: static;
   top: 0px;
   left: 0px;
@@ -249,6 +258,10 @@ a.dropdown-item, .create-leave, a.dropdown-toggle,
   background-image: url('transcript.svg');
 }
 
+.table-responsive {
+  order: 2;
+}
+
 .table {
   background-image: url('table.svg');
   margin-bottom: 0px;
@@ -339,6 +352,7 @@ input.actor {
 }
 
 #content svg {
+  order: 2;
   display: block;
   margin: auto;
 }

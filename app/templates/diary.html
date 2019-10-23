@@ -55,7 +55,7 @@
     <div id="container" class='container-fluid pb-5'>
       <div id="content" class='col'>
         <h1>{{diary_name}}
-          <span id="size" class="badge badge-pill badge-{{^unreads}}secondary{{/unreads}}{{#unreads}}success{{/unreads}}" title="{{i18n.i_memos}}">{{#unreads}}{{unreads}}/{{/unreads}}{{size}}</span>
+          <span id="size" class="badge badge-pill badge-{{^unreads}}secondary{{/unreads}}{{#unreads}}success{{/unreads}}" title="{{i18n.i_memos}}">{{#unreads}}{{unreads}} / {{/unreads}}{{size}}</span>
           <span id="comments" class="badge badge-pill badge-info" title="{{i18n.i_unchecked-comment}}"></span>
         </h1>
         <input id="name" type="search" class="form-control hidden" value="{{diary_name}}"/>

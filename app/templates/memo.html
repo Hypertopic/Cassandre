@@ -334,7 +334,7 @@
       });
     }
     stickToHeader();
-    var poller = function() { 
+    var poller = function() {
       $.ajax("../../changes/memo/{{_id}}/{{update_seq}}").done(function(data) {
         if (data.results.length) reload();
         poller();

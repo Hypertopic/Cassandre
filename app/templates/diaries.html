@@ -89,7 +89,7 @@
         for (var i in data) {
           $('#'+data[i].id).text(data[i].size);
           if (data[i].news) {
-            $('#'+data[i].id).prepend(data[i].news+'/');
+            $('#'+data[i].id).prepend(data[i].news+' / ');
             $('#'+data[i].id).parent().parent().removeClass('bg-light');
             $('#'+data[i].id).parent().parent().addClass('alert-success');
             $('#'+data[i].id).parent().parent().attr("title", "{{i18n.i_updated-diary}}");

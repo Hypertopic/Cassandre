@@ -73,7 +73,7 @@ var shared = {
       {{i18n.i_readable-by}} <span class='readers'>{{readers_fullnames}}</span>\
     </p>",
   rights:"\
-    <div id='authorization' class='order-2'>\
+    <div id='authorization'>\
       {{i18n.i_created-by}} {{creator}} <span class='moment'>{{date}}</span><br/>\
       {{i18n.i_editable-by}} <span class='contributors'>{{contributors_fullnames}}</span><br/>\
       {{i18n.i_readable-by}} <span class='readers'>{{readers_fullnames}}</span>\
@@ -86,7 +86,7 @@ var shared = {
       {{/edges}}{{/cells}}{{/link}}\
     </div>",
   comments:"\
-    <div id='comments' class='order-4'>\
+    <div id='comments'>\
       {{#comments}}\
       <div class='comment {{checked}}' id='{{id}}' name='{{rev}}'>\
         <span class='meta'><span class='user'>{{user}}</span> (<span class='moment'>{{date}}</span>)</span>:\

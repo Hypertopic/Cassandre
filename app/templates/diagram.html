@@ -40,7 +40,7 @@
             <div class="layout-1"></div>
             <div class="layout-2"></div>
           </div>
-          <p>&nbsp;</p>
+          <p class="spacer">&nbsp;</p>
           <div id="negative-case" class="hidden">
             <span class="meta">{{i18n.i_name.negative-case}}: </span><span class="negative_text">{{negative}}</span>
             {{#editable}}
@@ -178,12 +178,13 @@
         $('<option>', { value: 'idd', text: "{{i18n.i_inverse_link_between_dimensions}}" })
       );
     }
-    $.ajax({
-      url: "../../changes/memo/{{_id}}/{{update_seq}}",
-      type: "GET",
-      dataType: "json",
-      success: reload
-    });
+    var poller = function() {
+      $.ajax("../../changes/memo/{{_id}}/{{update_seq}}").done(function(data) {
+        if (data.results.length) reload();
+        poller();
+      });
+    };
+    poller();
   });
 
   {{#editable}}

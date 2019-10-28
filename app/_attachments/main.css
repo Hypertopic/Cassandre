@@ -54,6 +54,9 @@ div.post {
 
 #content {
   border-top: 1px solid #eeeeee;
+}
+
+#memo>#content {
   display: flex;
   flex-direction: column;
 }

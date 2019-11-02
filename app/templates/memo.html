@@ -492,7 +492,7 @@
         switch(action) {
           case ('add_contributor'):
             if (!data.contributors) data.contributors = [];
-            data.contributors.push(value);
+            if (data.contributors.indexOf(value) == -1) data.contributors.push(value);
           break;
           case ('remove_contributor'):
             var i = data.contributors.indexOf(value);
@@ -500,7 +500,7 @@
           break;
           case ('add_reader'):
             if (!data.readers) data.readers = [];
-            data.readers.push(value);
+            if (data.readers.indexOf(value) == -1) data.readers.push(value);
           break;
           case ('remove_reader'):
             var i = data.readers.indexOf(value);

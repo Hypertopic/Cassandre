@@ -95,7 +95,7 @@
       origin = '0';
   $(document).ready(function() {
     {{#logged}}
-    if ("{{by}}".length < 0) track('update');
+    if ("{{by}}".length <= 0) track('update');
     {{/logged}}
     if (["date","update"].indexOf("{{by}}") > -1) {
       from = 'a';

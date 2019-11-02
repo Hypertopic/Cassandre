@@ -6,7 +6,6 @@ function(head, req) {
   start({"headers":{"Content-Type":"text/html;charset=utf-8"}});
   var read = 0, memos = [], data = {
     activity: [],
-    by: 'update',
     i18n: localized(),
     logged: req.userCtx.name,
     diary: req.query.startkey[0],

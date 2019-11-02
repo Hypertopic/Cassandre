@@ -478,6 +478,7 @@ var shared = {
   if ('{{logged}}') user = '{{logged}}';\
   $('#signin').on('submit', function(e) {\
     e.preventDefault();\
+    $(this).find('input').first().val($(this).find('input').first().val().toLowerCase());\
     $.ajax({\
       url: '/_session',\
       type: 'POST',\

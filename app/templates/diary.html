@@ -148,22 +148,8 @@
         if (kwic.pending > 0) $('#patterns').removeClass("hidden");
       }
     });
-    poller();
+    poller('diary');
   });
-
-  var poller = function() {
-    $.ajax({
-      url: "../../changes/diary/{{_id}}/{{update_seq}}",
-      type: "GET",
-      dataType: "json"
-    }).done(function(data){
-      if (data.results.length) {
-        reload();
-      } else {
-        poller();
-      }
-    });
-  };
 
   $('#header')
     .on('click', '#diaries', function() {

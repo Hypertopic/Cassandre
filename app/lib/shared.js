@@ -174,7 +174,7 @@ var shared = {
     $('.preview').not($(this).next()).slideUp('fast');\
   });\
   $('#diary').on('click', function() {\
-    self.location = '{{>relpath}}memo/{{diary}}/?by=date';\
+    self.location = '{{>relpath}}memo/{{diary}}/';\
   });\
   $('#leave-name').on('keypress', function(key) {\
     if (['coding','diagram'].indexOf('{{type}}') < 0 && key.which == 13) {\
@@ -291,6 +291,17 @@ var shared = {
     }\
   }\
   {{/list}}\
+  function poller(what) {\
+    $.ajax({\
+      url: '../../changes/'+what+'/{{_id}}/{{update_seq}}'\
+    }).done(function(data){\
+      if (data.results.length) {\
+        reload();\
+      } else {\
+        poller(what);\
+      }\
+    });\
+  }\
   {{#list}}\
   $(window).scroll(function(){\
     if ($(window).scrollTop() == $(document).height() - $(window).height()){\

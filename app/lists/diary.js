@@ -16,15 +16,18 @@ function(head, req) {
     peer: req.peer,
     update_seq: req.info.update_seq
   };
+  if (req.userCtx.name == null) data.by = 'update';
   while (row = getRow()) {
     switch (row.key[1]) {
       case 'D':
         data.diary_name = row.value.diary_name;
       break;
       case '0':
-        data.by = row.value.by;
-        if (row.value.activity) data.activity = row.value.activity;
-        if (row.value.fullname) data.logged_fullname = row.value.fullname;
+        if (req.userCtx.name == row.key[2]) {
+          data.by = row.value.by;
+          if (row.value.activity) data.activity = row.value.activity;
+          if (row.value.fullname) data.logged_fullname = row.value.fullname;
+        }
       break;
       case 'M':
         if ([null, req.userCtx.name].indexOf(row.key[2]) > -1 && memos.map(function(a){return a.id}).indexOf(row.key[3]) < 0) {

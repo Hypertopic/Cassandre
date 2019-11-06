@@ -118,18 +118,6 @@
     $('#sort').text('{{i18n.i_by}} '+sort_by.toLowerCase());
     resetUI();
     {{#list}}
-
-    $('.theoretical').attr('title',"{{i18n.i_memo.theoretical}}");
-    $('.operational').attr('title',"{{i18n.i_memo.operational}}");
-    $('.field').attr('title',"{{i18n.i_memo.field}}".replace('&#39;',"'"));
-    $('.transcript').attr('title',"{{i18n.i_memo.transcript}}".replace('&#39;',"'"));
-    $('.coding').attr('title',"{{i18n.i_memo.coding}}");
-    $('.theoretical').attr('title',"{{i18n.i_memo.theoretical}}");
-    $('.storyline').attr('title',"{{i18n.i_memo.storyline}}");
-    $('.graph').attr('title',"{{i18n.i_memo.graph}}");
-    $('.diagram').attr('title',"{{i18n.i_memo.diagram}}");
-    $('.table').attr('title',"{{i18n.i_memo.table}}");
-
     $.ajax({
       url: "../../tasklist/{{diary}}",
       type: "GET",
@@ -296,6 +284,16 @@
       list.sort((a, b) => (a.sortkey > b.sortkey) ? 1 : -1);
     }
     showList(list);
+    $('.theoretical').attr('title',"{{i18n.i_memo.theoretical}}");
+    $('.operational').attr('title',"{{i18n.i_memo.operational}}");
+    $('.field').attr('title',"{{i18n.i_memo.field}}".replace('&#39;',"'"));
+    $('.transcript').attr('title',"{{i18n.i_memo.transcript}}".replace('&#39;',"'"));
+    $('.coding').attr('title',"{{i18n.i_memo.coding}}");
+    $('.theoretical').attr('title',"{{i18n.i_memo.theoretical}}");
+    $('.storyline').attr('title',"{{i18n.i_memo.storyline}}");
+    $('.graph').attr('title',"{{i18n.i_memo.graph}}");
+    $('.diagram').attr('title',"{{i18n.i_memo.diagram}}");
+    $('.table').attr('title',"{{i18n.i_memo.table}}");
     stickToHeader();
   }
 

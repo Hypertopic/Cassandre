@@ -69,11 +69,10 @@
         </div>
         {{/list}}
         <div id="network" class="hidden"></div>
-        <div id="memos">
-        </div>
-      </div>
-      <div class="text-center">
-        <img id="more" src="../../script/cloud-download.svg" alt="{{i18n.i_show-more}}"/>
+        <div id="memos"></div>
+        <p class="text-center">
+          <img id="more" src="../../script/cloud-download.svg" alt="{{i18n.i_show-more}}"/>
+        </p>
       </div>
     </div>
     <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
@@ -92,7 +91,9 @@
       }),
       from = '0',
       list = [],
-      origin = '0';
+      origin = '0',
+      result,
+      results = [];
   $(document).ready(function() {
     {{#logged}}
     if ("{{by}}".length <= 0) track('update');
@@ -274,7 +275,12 @@
     if (list.length > 0) {
       from = list[list.length-1].sortkey;
     }
-    let result = await getMore(from);
+    if (result !== undefined) results.push(result);
+    result = await getMore(from);
+    if (results.indexOf(result) > -1) {
+      result  = '{}';
+      if (["date","update"].indexOf("{{by}}") > -1) result = '1970';
+    }
     await getMore(origin+'/'+result);
     list = list.filter((v, i, a) => a.findIndex((t) => (t.id === v.id)) === i);
     if (["date","update"].indexOf("{{by}}") > -1) {

@@ -94,7 +94,8 @@ function(req2) {
       }
       if (path[4]) {
         if (start !== end) {
-          reply.query.endkey = '["'+diary+'", "'+order+'",'+logged+', "M", "'+end+'"]';
+          if (end !== '{}') end = '"'+end+'"';
+          reply.query.endkey = '["'+diary+'", "'+order+'",'+logged+', "M", '+end+']';
           delete reply.query.limit;
         }
       }

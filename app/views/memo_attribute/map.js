@@ -56,6 +56,7 @@ function(o) {
     }
     var contributors = [].concat(o.readers, o.contributors).sort();
     var users = contributors.filter(function(item, pos, ary) {return !pos || item != ary[pos - 1];} );
+    if (o.readers == undefined || o.readers.length == 0) users.push(null);
     for (var i in users) {
       var user = users[i];
       var obj = {

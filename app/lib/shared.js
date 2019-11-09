@@ -574,7 +574,7 @@ var shared = {
           <div class=\"toast\"  style=\"position: absolute; top: 1%; right: 3%;\" role=\"alert\">\
             <div class=\"toast-body alert-danger\">\
             <button type=\"button\" class=\"close\" data-dismiss=\"toast\">×</button>\
-            {{i18n.i_maintenance}} '+moment(data.date).calendar()+'\
+            {{i18n.i_maintenance}} '+moment(data.date).calendar().toLowerCase()+'\
             </div>\
           </div>');\
           $('.toast').toast({autohide: false});\

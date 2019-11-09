@@ -92,8 +92,10 @@
       from = '0',
       list = [],
       origin = '0',
+      horizon = '{}',
       result,
       results = [];
+  if (["date","update"].indexOf("{{by}}") > -1) horizon = '1970';
   $(document).ready(function() {
     {{#logged}}
     if ("{{by}}".length <= 0) track('update');
@@ -264,7 +266,11 @@
           if (data.length > 0) {
             resolve(data[data.length-1].sortkey);
           } else {
-            resolve(list[list.length-1].sortkey);
+            if (list.length > 0) {
+              resolve(list[list.length-1].sortkey);
+            } else {
+              resolve(horizon);
+            }
           }
         }
       });
@@ -277,15 +283,12 @@
     }
     if (result !== undefined) results.push(result);
     result = await getMore(from);
-    if (results.indexOf(result) > -1) {
-      result  = '{}';
-      if (["date","update"].indexOf("{{by}}") > -1) result = '1970';
-    }
+    if (results.indexOf(result) > -1) result = horizon;
     await getMore(origin+'/'+result);
     list = list.filter((v, i, a) => a.findIndex((t) => (t.id === v.id)) === i);
     if (["date","update"].indexOf("{{by}}") > -1) {
       list.sort((a, b) => (a.sortkey < b.sortkey) ? 1 : -1);
-      if (from > list[list.length-1].sortkey) from = list[list.length-1].sortkey;
+      if (list.length > 0 && from > list[list.length-1].sortkey) from = list[list.length-1].sortkey;
     } else {
       list.sort((a, b) => (a.sortkey > b.sortkey) ? 1 : -1);
     }

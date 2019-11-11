@@ -31,8 +31,8 @@ function(req2) {
       var diary = path[1];
       reply.path = "_view/memo_attribute";
       reply.query = {
-        "startkey": '["'+diary+'", "M"]',
-        "endkey": '["'+diary+'", "M", {}]'
+        "startkey": '["'+diary+'", "name", '+logged+', "M"]',
+        "endkey": '["'+diary+'", "name", '+logged+', "M", {}]'
       };
     break;
     case 'memo':

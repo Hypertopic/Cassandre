@@ -208,7 +208,7 @@ a.dropdown-item, .create-leave, a.dropdown-toggle,
 #add, #create, #create-table, #diaries, #diary, #corpus,
 #all-activity, #only-created, #only-modified, #only-commented,
 #clear_highlights, #rare, #specific, #repeated,
-#show-activity, #tasklist-alert {
+#patterns, #show-activity, #tasklist-alert {
   cursor: pointer;
 }
 

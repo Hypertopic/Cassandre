@@ -56,6 +56,10 @@ div.post {
   border-top: 1px solid #eeeeee;
 }
 
+#memo {
+  padding-top: 56px;
+}
+
 #memo>#content {
   display: flex;
   flex-direction: column;

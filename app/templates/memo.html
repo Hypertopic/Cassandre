@@ -88,6 +88,20 @@
         </div>
       </div>
     </div>
+    <div id="existing_memo" class="modal fade" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-body">
+            <p>{{i18n.i_memo_already_exists}}</p>
+            <p class="linkLeaf">{{i18n.i_link_leaf}}</p>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" data-dismiss="modal">{{i18n.i_cancel}}</button>
+              <button id="link_leaf" type="button" class="btn btn-secondary linkLeaf">{{i18n.i_ground}}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div id="modify_rights_dialog" class="modal fade" role="dialog">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -180,8 +194,10 @@
   {{>script}}
   <script src="../../script/showdown.min.js"></script>
   <script>
-  var metrics = {};
-  var trigrams = {};
+  var metrics = {},
+      trigrams = {},
+      leaf_type = '',
+      leaf_id = '';
   $(document).ready(function() {
     {{>render}}
     moment.locale('{{locale}}');
@@ -210,7 +226,7 @@
       document.getElementById('edit').disabled = true
     }
     $('main').append('<div class="toast" style="position: absolute; top: 1%; right: 3%;" role="alert">'
-      + '<div class="toast-body alert-danger">'
+      + '<div class="toast-body alert-warning">'
       + '<button type="button" class="close" data-dismiss="toast">×</button>'
       + $('#editing').text().replace(/\s+/g, " ") + '</div></div>');
     $('.toast').toast({autohide: false});
@@ -426,6 +442,24 @@
     var classlist = $(this)[0].classList;
         type = classlist[classlist.length - 1];
     create(type, '{{_id}}', $('#leave-name').val().trim());
+  });
+
+  $('#link_leaf').on('click', function() {
+    $.ajax({
+      url: '../../'+leaf_id,
+      type: "GET",
+      dataType: "json"
+    })
+    .then(function(leaf) {
+      if (leaf.groundings.indexOf('{{_id}}') == -1) leaf.groundings.push('{{_id}}');
+      $.ajax({
+        type: "PUT",
+        url: '../../'+leaf_id,
+        contentType: "application/json",
+        data: JSON.stringify(leaf),
+        success: reload
+      });
+    });
   });
 
   $('#add_grounding').on('show.bs.modal', function (event) {

@@ -94,6 +94,8 @@
     "i_enter_memo_name": "Give a name to this memo",
     "i_enter_graph_name": "Give a name to this diagram",
     "i_memo_already_exists": "This memo name already exists",
+    "i_memo_already_linked": "A memo with this name is already grounded here",
+    "i_link_leaf": "Do you want to ground it here ?",
     "i_my_diary": "My diary",
     "i_my_research_question": "My research question",
     "i_memos": "Memos",
@@ -108,6 +110,7 @@
     "i_select_grounding": "Select a ground",
     "i_groundings": "Grounded in",
     "i_grounding": "Grounded in",
+    "i_ground": "Grounding here",
     "i_comment": "Comment",
     "i_enter_comment": "Enter your comment",
     "i_memo": {
@@ -254,6 +257,8 @@
     "i_enter_memo_name": "Donnez un nom à ce compte-rendu",
     "i_enter_graph_name": "Donnez un nom à cette schématisation",
     "i_memo_already_exists": "Un compte-rendu portant ce nom existe déjà",
+    "i_memo_already_linked": "Un compte-rendu portant ce nom est déjà ancré ici",
+    "i_link_leaf": "Voulez-vous l'ancrer ici ?",
     "i_my_diary": "Mon journal de bord",
     "i_my_research_question": "Ma question de recherche",
     "i_memos": "Comptes-rendus",
@@ -268,6 +273,7 @@
     "i_select_grounding": "Choisissez un ancrage",
     "i_groundings": "Ancrages",
     "i_grounding": "Ancrage",
+    "i_ground": "Ancrer",
     "i_comment": "Commenter",
     "i_enter_comment": "Saisissez un commentaire",
     "i_memo": {

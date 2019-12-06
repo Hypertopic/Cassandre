@@ -202,7 +202,14 @@ var shared = {
           i = existing_memos.rows.map(function(e) { return e.value.name; }).indexOf(name);\
         }\
         if (i != -1) {\
-          alert('{{i18n.i_memo_already_exists}}');\
+          if(existing_memos.rows[i].value.groundings.indexOf('{{_id}}') != -1) {\
+            alert('{{i18n.i_memo_already_linked}}');\
+          } else {\
+            leaf_type = existing_memos.rows[i].value.type,\
+            leaf_id = existing_memos.rows[i].value.id;\
+            if (['diagram','graph','table'].indexOf(leaf_type) > -1) $('.linkLeaf').addClass('d-none');\
+            $('#existing_memo').modal('show');\
+          }\
         } else {\
           var data = {\
             groundings: [grounding],\

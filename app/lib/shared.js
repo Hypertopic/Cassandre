@@ -536,8 +536,8 @@ var shared = {
       },\
       success: function(data) {\
         if (!data.contributors) data.contributors = [user];\
-        {{^list}}\
         if (!data.activity) data.activity = [];\
+        {{^list}}\
         var i = data.activity.findIndex(e => e.doc === memo);\
         if (i > -1) {\
           data.activity.splice(i, 1, obj);\

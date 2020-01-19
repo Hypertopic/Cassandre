@@ -1,5 +1,6 @@
 function(head, req) {
   // !json templates.memo
+  // !json templates.deleted
   // !code lib/mustache.js
   // !code l10n/l10n.js
   // !code lib/shared.js
@@ -8,6 +9,7 @@ function(head, req) {
   const ALPHA = /[a-zàâçéêèëïîôöüùû0æœ0-9]+|[^a-zàâçéêèëïîôöüùûæœ0-9]+/gi;
   const SPACES = /^ +$/;
   var fullnames = [];
+  var data = { i18n: localized() };
 
   while (row = getRow()) {
     switch (row.key[1]) {
@@ -157,8 +159,13 @@ function(head, req) {
       }
     if (fullnames[username]) data.logged_fullname = fullnames[username];
   }
-  if (data.editing.user) data.editing.user_fullname = data.editing.user;
-  if (fullnames[data.editing.user]) data.editing.user_fullname = fullnames[data.editing.user];
-  data.groundings = dSort(data.groundings, data.locale);
-  return Mustache.to_html(templates.memo, data, shared);
+
+  if (data._id) {
+    if (data.editing && data.editing.user) data.editing.user_fullname = data.editing.user;
+    if (fullnames[data.editing.user]) data.editing.user_fullname = fullnames[data.editing.user];
+    data.groundings = dSort(data.groundings, data.locale);
+    return Mustache.to_html(templates.memo, data, shared);
+  } else {
+    return Mustache.to_html(templates.deleted, data, shared);
+  }
 }

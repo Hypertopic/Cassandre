@@ -67,8 +67,15 @@
     spellChecker: false
   });
 
+  var warning = 'Save your content';
   $(document).ready(function() {
     stickToHeader();
+    window.addEventListener("beforeunload", function (e) {
+      if (warning != false) {
+        (e || window.event).returnValue = warning;
+        return warning;
+      }
+    });
     if ($('#groundings li').length < 1) $("#groundings").addClass('hidden');
     $('#groundings').find('.toggle').next().slideToggle('fast');
     $.ajax({
@@ -93,6 +100,7 @@
   });
 
   function save(draft, toDoAfter) {
+    warning = false;
     $.ajax({
       url: "../{{_id}}",
       type: "GET",

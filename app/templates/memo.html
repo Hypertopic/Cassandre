@@ -171,7 +171,7 @@
           <span class="d-block d-sm-none"><img src="../../style/grounding-remove.svg" alt="{{i18n.i_remove_grounding}}"></span>
           <span class="d-none d-sm-block">{{i18n.i_remove_grounding}}</span>
         </button>
-        <button class="btn navbar-btn btn-outline-light btn-sm {{#editing}}disabled{{/editing}}" id="edit"
+        <button class="btn navbar-btn btn-outline-light btn-sm d-none {{#editing}}disabled{{/editing}}" id="edit"
           title="{{^editing}}{{i18n.i_edit}}{{/editing}}" {{#editing}}disabled{{/editing}}>
           <span class="d-block d-sm-none"><img src="../../style/pencil.svg" alt="{{i18n.i_edit}}"></span>
           <span class="d-none d-sm-block">{{i18n.i_edit}}</span>
@@ -234,6 +234,7 @@
     $('.toast').toast({autohide: false});
     $('.toast').toast('show');
     {{/editing}}
+    $('#edit').removeClass('d-none');
     {{/logged}}
     switch ('{{type}}') {
       case ('field'):

@@ -92,6 +92,7 @@
     "i_search": "Search in the diary",
     "i_diaries": "Diaries",
     "i_enter_diary_name": "Give a name to your diary",
+    "i_enter_location_date": "Precise date and location",
     "i_enter_memo_name": "Give a name to this memo",
     "i_enter_graph_name": "Give a name to this diagram",
     "i_memo_already_exists": "This memo name already exists",
@@ -139,6 +140,9 @@
        "graph": "Create a graph"
     },
     "i_name": {
+       "pseudonym": "Pseudonym",
+       "date": "Date",
+       "location": "Location",
        "field": "Observed field",
        "transcript": "Informant pseudonym",
        "coding": "Property or dimension",
@@ -148,8 +152,16 @@
        "negative-case": "Negative case"
     },
     "i_content": {
+      "date": {
+        "field": "Field date",
+        "transcript": "Interview date"
+      },
+      "location": {
+        "field": "Field location",
+        "transcript": "Interview location"
+      },
       "field": "What am I observing ?",
-      "transcript": "What was told ?",
+      "transcript": "**Caracole** : What's up, doc?\\n \\n**Sov**: Elementary, my dear!",
       "coding": "How is defined such an activity ? What process is at stake ?",
       "operational": "Things not to forget to observe on the field",
       "theoretical": "Research question or theoretical question(s) raised when coding the material",
@@ -256,6 +268,7 @@
     "i_search": "Chercher dans le journal",
     "i_diaries": "Journaux de bord",
     "i_enter_diary_name": "Donnez un nom à votre journal",
+    "i_enter_location_date": "Precisez le lieu et la date",
     "i_enter_memo_name": "Donnez un nom à ce compte-rendu",
     "i_enter_graph_name": "Donnez un nom à cette schématisation",
     "i_memo_already_exists": "Un compte-rendu portant ce nom existe déjà",
@@ -303,6 +316,9 @@
        "graph": "Créer une schématisation"
     },
     "i_name": {
+       "pseudonym": "Pseudonyme",
+       "date": "Date",
+       "location": "Lieu",
        "field": "Terrain observé",
        "transcript": "Pseudonyme de l'informatrice",
        "coding": "Propriété ou dimension",
@@ -312,8 +328,16 @@
        "negative-case": "Cas négatif"
     },
     "i_content": {
+      "date": {
+        "field": "Date de l'observation",
+        "transcript": "Date de la rencontre"
+      },
+      "location": {
+        "field": "Lieu de l'observation",
+        "transcript": "Lieu de la rencontre"
+      },
       "field": "Qu'ai je observé ?",
-      "transcript": "Que m'a-t-on dit ?",
+      "transcript": "**Caracole** : Quoi de neuf, docteur ?\\n \\n**Sov** : Élementaire, mon cher !",
       "coding": "Comment se définit tel processus, telle action ou telle activité ?",
       "operational": "Que ne faut-il pas oublier de faire sur le terrain ?",
       "theoretical": "Reformulation de la question de recherche, nouvelles questions théoriques que suscite l'analyse du matériau, propriété ou articulation à approfondir.",

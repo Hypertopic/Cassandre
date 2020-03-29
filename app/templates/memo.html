@@ -96,6 +96,35 @@
         </div>
       </div>
     </div>
+    <div id="field_title_dialog" class="modal fade" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">{{i18n.i_create.diary}}
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="type-of-field-memo" id="transcript-leaf" value="transcript" required>
+                <label class="form-check-label" for="transcript-leaf">{{i18n.i_memo.transcript}}</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="type-of-field-memo" id="field-leaf" value="field" required>
+                <label class="form-check-label" for="field-leaf">{{i18n.i_memo.field}}</label>
+              </div><br/>
+              <label for="pseudonym" class="col-sm-3 col-form-label pseudonym">{{i18n.i_name.pseudonym}}</label>
+              <input id="pseudonym" class="pseudonym" type="text" placeholder="{{i18n.i_name.transcript}}" /><br class="pseudonym"/>
+              <label for="location" class="col-sm-3 col-form-label">{{i18n.i_name.location}}</label>
+              <input id="location" type="text" placeholder=""/><br/>
+              <label for="date" class="col-sm-3 col-form-label">{{i18n.i_name.date}}</label>
+              <input id="date" type="text" placeholder=""/>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button id="create_field-memo" type="button" class="btn btn-secondary">{{i18n.i_create.diary}}</button>
+          </div>
+        </div>
+      </div>
+    </div>
     <div id="modify_rights_dialog" class="modal fade" role="dialog">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -280,7 +309,12 @@
         $("#name").attr("placeHolder", "{{i18n.i_name.operational}}");
         $('#add').addClass('field');
         $("#add").attr("title", "{{i18n.i_create.field}}".replace('&#39;',"'"));
+        $('#create').addClass('transcript');
+        $('#create').attr("title", "{{i18n.i_create.transcript}}".replace('&#39;',"'"));
+        $('#create').removeClass('hidden');
         $("#leave-name").attr("placeHolder", "{{i18n.i_name.field}}");
+        $('#leave-name').prop("disabled", true);
+        $('#add').parent().append($('#create'));
         break;
       case ('diagram'):
         self.location = "../../diagram/{{diary}}/{{_id}}";
@@ -425,8 +459,14 @@
   });
 
   $('#add').on('click', function() {
-    var classlist = $(this)[0].classList;
-    create(classlist[classlist.length - 1], '{{_id}}', $('#leave-name').val().trim());
+    var classlist = $(this)[0].classList,
+        type = classlist[classlist.length - 1];
+    if (type == 'field') {
+      $("#field-leaf").prop("checked", true).trigger("click");
+      $('#field_title_dialog').modal('show');
+    } else {
+      create(type, '{{_id}}', $('#leave-name').val().trim());
+    }
   });
 
   $('#create').on('click', function() {
@@ -434,7 +474,37 @@
         classlist = $(this)[0].classList,
         type = classlist[classlist.length - 1];
     if (type == 'diagram') name = $('#name').val().trim(); 
-    create(type, '{{_id}}', name);
+    if (type == 'transcript') {
+      $("#transcript-leaf").prop("checked", true).trigger("click");
+      $('#field_title_dialog').modal('show');
+    } else {
+      create(type, '{{_id}}', name);
+    }
+  });
+
+  $('#create_field-memo').on('click', function() {
+    var name = $('#location').val().trim() + ', ' + $('#date').val().trim(),
+        type = $('input[name="type-of-field-memo"]:checked').val();
+    if (type != 'field') name = $('#pseudonym').val().trim() + ', ' + name;
+    if ([$('#location').val().trim(), $('#date').val().trim()].indexOf('') > -1) {
+      alert('{{i18n.i_enter_location_date}}');
+    } else {
+      create('field', '{{_id}}', name);
+    }
+  });
+
+  $('#field-leaf').on('click', function() {
+    $('.pseudonym').addClass('d-none');
+    $('#create_field-memo').html("{{i18n.i_create.field}}");
+    $('#location').attr("placeHolder", "{{i18n.i_content.location.field}}".replace('&#39;',"'"));
+    $('#date').attr("placeHolder", "{{i18n.i_content.date.field}}".replace('&#39;',"'"));
+  });
+
+  $('#transcript-leaf').on('click', function() {
+    $('.pseudonym').removeClass('d-none');
+    $('#create_field-memo').html("{{i18n.i_create.transcript}}");
+    $('#location').attr("placeHolder", "{{i18n.i_content.location.transcript}}");
+    $('#date').attr("placeHolder", "{{i18n.i_content.date.transcript}}");
   });
 
   $('#create-table').on('click', function() {

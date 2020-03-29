@@ -183,11 +183,18 @@ var shared = {
     }\
   });\
   function create(type, grounding, name) {\
-    if (name == '' && type != 'diagram') {\
-      if (type != 'graph') {\
-        alert('{{i18n.i_enter_memo_name}}');\
-      } else {\
-        alert('{{i18n.i_enter_graph_name}}');\
+    if (name.replace(/[ ,]/g, '') == '' && type != 'diagram') {\
+      switch (type) {\
+        case 'transcript':\
+        case 'field':\
+          alert('{{i18n.i_enter_location_date}}');\
+        break;\
+        case 'graph':\
+          alert('{{i18n.i_enter_graph_name}}');\
+        break;\
+        default:\
+          alert('{{i18n.i_enter_memo_name}}');\
+        break;\
       }\
     } else {\
       let i = 0;\

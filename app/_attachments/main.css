@@ -261,6 +261,10 @@ a.dropdown-item, .create-leave, a.dropdown-toggle,
   background-image: url('field.svg');
 }
 
+.interview {
+  background-image: url('interview.svg');
+}
+
 .transcript {
   background-image: url('transcript.svg');
 }

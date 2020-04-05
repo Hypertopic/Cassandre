@@ -11,7 +11,7 @@ function (o) {
     if (o.speeches) {
       body = body.concat(o.speeches);
     } else if (o.body) {
-      body = body.concat(o.body.split("\n").map(function(i){
+      body = body.concat(o.body.split("\n \n").map(function(i){
         return {'text': i};
       }));
     }

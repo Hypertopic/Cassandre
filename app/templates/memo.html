@@ -104,7 +104,7 @@
           <div class="modal-body">
             <form>
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="type-of-field-memo" id="transcript-leaf" value="transcript" required>
+                <input class="form-check-input" type="radio" name="type-of-field-memo" id="transcript-leaf" value="interview" required>
                 <label class="form-check-label" for="transcript-leaf">{{i18n.i_memo.transcript}}</label>
               </div>
               <div class="form-check form-check-inline">
@@ -274,13 +274,14 @@
         $("#leave-name").attr("placeHolder", "{{i18n.i_name.coding}}");
         break;
       case ('transcript'):
+        $('.writing').removeClass('writing').addClass('words');
+      case ('interview'):
         $("h1>img").attr("title", "{{i18n.i_memo.transcript}}".replace('&#39;',"'"));
         $("#name").attr("placeHolder", "{{{i18n.i_name.transcript}}}");
         $('#add').addClass('coding');
         $("#add").attr("title", "{{i18n.i_create.coding}}");
         $("#leave-name").attr("placeHolder", "{{i18n.i_name.coding}}");
         $('#lexical').removeClass('hidden');
-        $('.writing').removeClass('writing').addClass('words');
         break;
       case ('coding'):
         $("h1>img").attr("title", "{{i18n.i_memo.coding}}");
@@ -309,7 +310,7 @@
         $("#name").attr("placeHolder", "{{i18n.i_name.operational}}");
         $('#add').addClass('field');
         $("#add").attr("title", "{{i18n.i_create.field}}".replace('&#39;',"'"));
-        $('#create').addClass('transcript');
+        $('#create').addClass('interview');
         $('#create').attr("title", "{{i18n.i_create.transcript}}".replace('&#39;',"'"));
         $('#create').removeClass('hidden');
         $("#leave-name").attr("placeHolder", "{{i18n.i_name.field}}");
@@ -341,7 +342,7 @@
     });
     if ($('#groundings li').length == 1) $("#groundings").find('legend').text("{{i18n.i_grounding}}");
     if ($('#groundings li').length < 1) $("#groundings").addClass('hidden');
-    if ("{{type}}" === 'transcript') {
+    if ("{{type}}" === 'interview') {
       $.ajax({
         url: "../../corpus_words/{{diary}}",
         type: "GET",
@@ -461,7 +462,7 @@
   $('#add').on('click', function() {
     var classlist = $(this)[0].classList,
         type = classlist[classlist.length - 1];
-    if (type == 'field') {
+    if (['field', 'interview'].indexOf(type) > -1) {
       $("#field-leaf").prop("checked", true).trigger("click");
       $('#field_title_dialog').modal('show');
     } else {
@@ -474,7 +475,7 @@
         classlist = $(this)[0].classList,
         type = classlist[classlist.length - 1];
     if (type == 'diagram') name = $('#name').val().trim(); 
-    if (type == 'transcript') {
+    if (type == 'interview') {
       $("#transcript-leaf").prop("checked", true).trigger("click");
       $('#field_title_dialog').modal('show');
     } else {
@@ -489,7 +490,7 @@
     if ([$('#location').val().trim(), $('#date').val().trim()].indexOf('') > -1) {
       alert('{{i18n.i_enter_location_date}}');
     } else {
-      create('field', '{{_id}}', name);
+      create(type, '{{_id}}', name);
     }
   });
 

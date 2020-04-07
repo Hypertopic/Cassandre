@@ -274,7 +274,13 @@
         $("#leave-name").attr("placeHolder", "{{i18n.i_name.coding}}");
         break;
       case ('transcript'):
+        $("h1>img").attr("title", "{{i18n.i_memo.transcript}}".replace('&#39;',"'"));
+        $("#name").attr("placeHolder", "{{{i18n.i_name.transcript}}}");
+        $('#add').addClass('coding');
+        $("#add").attr("title", "{{i18n.i_create.coding}}");
+        $("#leave-name").attr("placeHolder", "{{i18n.i_name.coding}}");
         $('.writing').removeClass('writing').addClass('words');
+        break;
       case ('interview'):
         $("h1>img").attr("title", "{{i18n.i_memo.transcript}}".replace('&#39;',"'"));
         $("#name").attr("placeHolder", "{{{i18n.i_name.transcript}}}");

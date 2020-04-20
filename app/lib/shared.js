@@ -583,7 +583,9 @@ var shared = {
       url: '{{>relpath}}maintenance',\
       dataType: 'json'\
     }).done(function(data){\
-      if (new Date(data.date) > new Date(Date.now())) {\
+      var maintenance_start = new Date(data.date);\
+      var maintenance_end = moment(maintenance_start).add(30, 'm').toDate();\
+      if (maintenance_start > new Date(Date.now())) {\
         $('main').append('\
           <div class=\"toast\"  style=\"position: absolute; top: 1%; right: 3%;\" role=\"alert\">\
             <div class=\"toast-body alert-danger\">\
@@ -591,8 +593,18 @@ var shared = {
             {{i18n.i_maintenance}} '+moment(data.date).calendar().toLowerCase()+'\
             </div>\
           </div>');\
-          $('.toast').toast({autohide: false});\
-          $('.toast').toast('show');\
+        $('.toast').toast({autohide: false});\
+        $('.toast').toast('show');\
+      } else if (maintenance_end > new Date(Date.now())) {\
+        $('main').append('\
+          <div class=\"toast\"  style=\"position: absolute; top: 1%; right: 3%;\" role=\"alert\">\
+            <div class=\"toast-body alert-danger\">\
+            <button type=\"button\" class=\"close\" data-dismiss=\"toast\">×</button>\
+            {{i18n.i_maintenance-in-progress}} '+moment(data.date).add(30, 'm').fromNow()+'\
+            </div>\
+          </div>');\
+        $('.toast').toast({autohide: false});\
+        $('.toast').toast('show');\
       }\
     });\
     stickToHeader();\

@@ -1,0 +1,211 @@
+<!doctype html>
+<html>
+  <head>
+    <title>{{i18n.i_timeline}}</title>
+    {{>links}}
+    {{>diagramcss}}
+    {{>viscss}}
+  </head>
+  <body id="container">
+    <nav id="header" class="{{>navbarstyle}} navbar-expand-md fixed-top">
+      <a class="text-light" id="diary">{{i18n.i_diary}}</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="text-light bg-dark"><img src="../../style/three-bars.svg" alt="=" /></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="form-inline justify-content-between">
+          </li>
+        </ul>
+        <ul class="navbar-nav justify-content-between">
+          <li class="form-inline justify-content-between">
+            {{>log}}
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <main class="col pb-5" id="content">
+      <h1>{{i18n.i_timeline}}</h1>
+      <p></p>
+      <div id="graph" class="d-none"></div>
+    </main>
+    <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
+      <a class='navbar-text' href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
+    </nav>
+  {{>script}}
+  <script src="../../script/vis.min.js"></script>
+  <script src="../../script/viz.js"></script>
+  <script src="../../script/full.render.js"></script>
+  <script>
+  let from = '0',
+      list = [],
+      origin = '0',
+      horizon = '{}',
+      main = document.getElementById("content"),
+      container = document.getElementById('graph'),
+      result,
+      results = [];
+  $(document).ready(function() {
+    moment.locale('{{locale}}');
+    stickToHeader();
+    drawGraphViz();
+    {{#logged}}
+    $.ajax({
+      url: "../{{logged}}",
+      type: "GET",
+      dataType: "json",
+      success: function(data) {
+        if(data.fullname) $('#username').text(data.fullname);
+      }
+    });
+    $.ajax({
+      url: "../{{diary}}",
+      type: "GET",
+      dataType: "json",
+      success: function(data) {
+        if(data.diary_name) {
+          $('#diary').text(data.diary_name);
+          $('title').prepend(data.diary_name+' - ');
+        }
+      }
+    });
+    {{/logged}}
+  });
+
+  function destroyGraphViz() {
+    var svg = document.getElementsByTagName("svg");
+    if (svg.length > 0) main.removeChild(svg[0]);
+  }
+
+  function drawGraphViz() {
+    destroyGraphViz();
+    let viz = new Viz(),
+        node = '',
+        nodes = [],
+        edges = [],
+        named_nodes = [],
+        dated_coding = [],
+        surrenders = [],
+        graphviz = 'digraph "{{i18n.i_timeline}}" {compound=true;splines=false;graph [fontname = "helvetica", ranksep = "1"]; node [shape=point,width=.15,fontname = "helvetica"]; edge [fontname = "helvetica", arrowhead = "vee", color=grey, label=""];',
+        theoretical = 'subgraph theoretical {node [color=green]; {rank = same; 1 [style = invis]',
+        operational = 'subgraph operational {node [color=red]; rank = same; 2 [style = invis]',
+        field = 'subgraph field {node [color=grey]; rank = same; 3 [style = invis]',
+        coding = 'subgraph coding {node [color=yellow]; {rank = same; 4 [style = invis]',
+        diagram = 'subgraph diagram { node [color=purple]; rank = same; 5 [style = invis]',
+        storyline = 'subgraph storyline { node [color=blue]; rank = same; 6 [style = invis]';
+
+    {{#nodes}}
+    var date = "{{date}}".substring(0,10);
+    var unique = date+"{{type}}";
+    var first = nodes.map(function(n){ return n.unique }).indexOf(unique);
+    if (first == -1) {
+      nodes.push({
+        id: "{{id}}",
+        name: "{{name}}",
+        date: date,
+        path: "{{path}}",
+        type: "{{type}}",
+        unique: unique,
+        ids: ["{{id}}"]
+      });
+    } else {
+      var exist = nodes[first];
+      exist.ids.push("{{id}}");
+      exist.name += ", {{name}}";
+      nodes.splice(first, 1, exist);
+      surrenders.push({
+        original: "{{id}}",
+        by: nodes[first].id
+      });
+    }
+    if ("{{name}}".length > 0) named_nodes.push('node{{id}}');
+    {{/nodes}}
+    {{#edges}}
+    if (named_nodes.indexOf('node{{from}}') > -1) {
+      edges.push({
+        from: "{{from}}",
+        to: "{{to}}",
+        color: "{{color}}"
+      });
+    }
+    {{/edges}}
+
+    nodes.forEach(function(e, i) {
+      var style = 'href="../../'+e.path+'/{{diary}}/'+e.id+'", label="'+moment(e.date).format("Do MMMM YYYY")+': '+e.name+'"';
+      if (e.ids.length > 1) style = 'fillcolor="white", width=.2, penwidth=3, '+style;
+      node = 'node'+e.id+' ['+style+'];';
+      switch(e.type) {
+        case 'coding':
+          coding += node; 
+        break;
+        case 'theoretical':
+          theoretical += node; 
+        break;
+        case 'operational':
+          operational += node; 
+        break;
+        case 'field':
+        case 'interview':
+        case 'transcript':
+          field += node;
+        break;
+        case 'table':
+        case 'diagram':
+        case 'graph':
+          diagram += node; 
+        break;
+        case 'storyline':
+          storyline += node; 
+        break;
+      }
+    });
+
+    graphviz += theoretical + '}}' + operational + '}'+ field + '}' + coding + '}}' + diagram + '}'+ storyline + '}';
+    graphviz += '1->2->3->4->5->6 [style = invis]';
+
+    for (var i in edges) {
+      var e = edges[i];
+      var f = e;
+      var j = surrenders.map(x => x.original).indexOf(e.from);
+      if (j > -1) {
+        f.from = surrenders[j].by;
+        edges.splice(i, 1, f);
+      }
+      var j = surrenders.map(x => x.original).indexOf(e.to);
+      if (j > -1) {
+        f.to = surrenders[j].by;
+        edges.splice(i, 1, f);
+      }
+    }
+    for (var i in edges) {
+      var e = edges[i];
+      if (edges.map(x => x.from+x.to).indexOf(e.from+e.to) == i && e.from != e.to) {
+        graphviz += 'node'+e.from+' -> node'+e.to+' [color='+e.color+', constraint=false];';
+      }
+    }
+    graphviz += '}';
+    var options = {
+      engine: 'dot',
+      format: 'svg'
+    };
+    viz.renderSVGElement(graphviz, options)
+    .then(function(element) {
+      main.insertBefore(element, container);
+    })
+    .catch(error => {
+      viz = new Viz();
+      console.error(error);
+    });
+  }
+
+  $('#header').on('click', '#diary', function() {
+    self.location = '../../memo/{{diary}}/';
+  });
+
+  {{>layoutscript}}
+  {{>logscript}}
+  {{>editname}}
+  </script>
+  </body>
+</html>
+

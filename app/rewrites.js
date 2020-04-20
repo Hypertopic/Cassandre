@@ -295,6 +295,14 @@ function(req2) {
         "limit": '5'
       };
     break;
+    case 'network':
+      var diary = path[1];
+      reply.path = "_list/network/memo_attribute";
+      reply.query = {
+        "startkey": '["'+diary+'", "date", '+logged+', "M"]',
+        "endkey": '["'+diary+'", "date", '+logged+', "M", {}]'
+      };
+    break;
     case 'changes':
       reply.path = "../../_changes";
       reply.query = {

@@ -42,6 +42,7 @@
                 <a class="dropdown-item" href="#" value='type'>{{i18n.i_type}}</a>
               </div>
             </div>
+            <a class="nav-link" id="drawTimeline">{{i18n.i_timeline}}</a>
             <a class="nav-link hidden" id="patterns">{{i18n.i_patterns}}</a>
           </li>
         </ul>
@@ -150,7 +151,7 @@
       self.location = '?by=network';
     })
     .on('click', '#drawTimeline', function() {
-      self.location = '?by=timeline';
+      self.location = '../../network/{{diary}}';
     })
     .on('click', '#patterns', function() {
       self.location = '../../kwic/{{diary}}';

@@ -135,11 +135,12 @@ function(head, req) {
       data.locale = data.locale.split(',');
       data.locale = data.locale[0].substring(0,2);
       if (row.doc.body) {
+        var body = row.doc.body.replace(/\n\t/g, "\n ").replace(/\n {4,}/g, "\n").replace(/\n\n/g, "\n \n");
         if (row.doc.type == 'interview') {
           var content = {
             words: []
           };
-          for each (var w in row.doc.body.match(ALPHA)) {
+          for each (var w in body.match(ALPHA)) {
             if (w.match(SPACES) && content.words.length>0) {
               w = content.words.pop() + w;
             }
@@ -147,7 +148,7 @@ function(head, req) {
           }
         } else {
           var content = {
-            text: row.doc.body.replace(/\n\t/g, "\n ").replace(/\n {4,}/g, "\n").replace(/\n\n/g, "\n \n")
+            text: body
           };
         }
         data.body.push(content);

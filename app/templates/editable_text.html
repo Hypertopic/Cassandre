@@ -32,15 +32,17 @@
       type: "GET",
       dataType: "json",
       success: function(data) {
-        var body = data.speeches.map(function(a) {
-          var turn = a.text;
-          if (a.actor) turn = '**'+a.actor.trim()+'** '+turn;
-          return turn;
-        });
-        data.body = body.join('\n \n');
-        data.diary = data.corpus;
-        delete data.corpus;
-        data.type = "interview";
+        if (!data.body) {
+          var body = data.speeches.map(function(a) {
+            var turn = a.text;
+            if (a.actor) turn = '**'+a.actor.trim()+'** '+turn;
+            return turn;
+          });
+          data.body = body.join('\n \n');
+          data.diary = data.corpus;
+          delete data.corpus;
+          data.type = "interview";
+        }
         $.ajax({
           type: "PUT",
           url: "../{{_id}}",

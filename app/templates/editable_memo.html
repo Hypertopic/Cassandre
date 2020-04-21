@@ -9,7 +9,7 @@
       <header>
         <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
           <ul class="navbar-nav mr-auto">
-            <li class="nav-item"><a class="nav-link text-light" id="diary">{{diary_name}}</a></li>
+            <li class="nav-item text-light">{{diary_name}}</li>
           </ul>
           {{>log}}
         </nav>
@@ -77,6 +77,7 @@
         return warning;
       }
     });
+    $(".input-group").addClass('hidden');
     if ($('#groundings li').length < 1) $("#groundings").addClass('hidden');
     $('#groundings').find('.toggle').next().slideToggle('fast');
     $.ajax({

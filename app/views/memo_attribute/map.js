@@ -46,10 +46,15 @@ function(o) {
     var type = o.type || 'transcript';
     var groundings = o.groundings || [];
     if (o.body) {
-      var preview = o.body.substr(0, 200).replace(/\s/g, ' ');
+      var preview = o.body.replace(/\s/g, ' ');
     } else {
     if (o.speeches) {
-      var preview = o.speeches[0].text.substr(0, 200) || ' ';
+      var preview = o.speeches.map(function(a) {
+        var turn = a.text;
+        if (a.actor) turn = '**'+a.actor.trim()+'** '+turn;
+        return turn;
+      });
+      preview = preview.join('\n \n');
       } else {
       var preview = ' ';
       }
@@ -67,7 +72,7 @@ function(o) {
         date: date,
         update: update,
         groundings: groundings,
-        preview: preview
+        preview: preview.substr(0,3000)
       };
       emit([diary, 'name', user, 'M', name], obj);
       emit([diary, 'date', user, 'M', date], obj);

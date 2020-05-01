@@ -24,15 +24,7 @@ function(head, req) {
           break;
         }
         if ([null, req.userCtx.name].indexOf(row.key[2]) > -1) {
-          if (row.doc.body) preview = row.doc.body.replace(/\n\n/g, '\n \n');
-          if (row.doc.speeches) {
-            preview = row.doc.speeches.map(function(a) {
-              var turn = a.text;
-              if (a.actor) turn = '**'+a.actor.trim()+'** '+turn;
-              return turn;
-            });
-            preview = preview.join('\n \n');
-          }
+          if (row.value.preview) preview = row.value.preview.replace(/\n\n/g, '\n \n');
           var sortkey = replaceDiacritics(name).toLowerCase().replace(/\//g, ' '); 
           switch(row.key[1]) {
             case'date':
@@ -46,7 +38,7 @@ function(head, req) {
             break;
           }
           data.memos.push({
-            preview: preview.substr(0,3000),
+            preview: preview,
             diary: row.key[0],
             id: row.value.id,
             name: name,

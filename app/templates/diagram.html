@@ -183,6 +183,12 @@
     var shape1 = shape2 = articulated = negative = '',
         content1 = $('#groundings li').first().find('a').html(),
         content2 = $('#groundings li').last().find('a').html();
+    {{#editable}}
+    if("{{name}}".replace(/&#39;|&quot;/g, '').indexOf(content1.replace(/"|'/g, '')) == -1
+    || "{{name}}".replace(/&#39;|&quot;/g, '').indexOf(content2.replace(/"|'/g, '')) == -1) {
+      adapt("{{negative}}");
+    }
+    {{/editable}}
     switch ("{{link}}") {
       case 'pp':
       case 'ipp':

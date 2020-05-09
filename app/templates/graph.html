@@ -168,8 +168,10 @@
         });
       {{/dashes}}
     {{/edges}}
+    {{#editable}}
     var isolated_nodes = nodes.filter(function(a) { if (connected_nodes.indexOf(a.id) == -1) return a;});
     if (isolated_nodes.length > 0) record('clean_nodes', '');
+    {{/editable}}
     drawGraphViz();
   });
 

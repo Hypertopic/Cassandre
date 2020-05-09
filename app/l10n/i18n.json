@@ -96,7 +96,7 @@
     "i_enter_diary_name": "Give a name to your diary",
     "i_enter_location_date": "Precise date and location",
     "i_enter_memo_name": "Give a name to this memo",
-    "i_enter_graph_name": "Give a name to this diagram",
+    "i_enter_graph_name": "Give a name to this graph",
     "i_memo_already_exists": "This memo name already exists",
     "i_memo_already_linked": "A memo with this name is already grounded here",
     "i_link_leaf": "Do you want to ground it here ?",
@@ -106,7 +106,7 @@
     "i_memos-number": "Memos (update/total)",
     "i_updated-diary": "This diary was updated since your last visit",
     "i_leaves": "Next level",
-    "i_add_negative-case": "Add a negative case",
+    "i_add_negative-case": "Precise a negative case",
     "i_add_groundings": "Add grounds",
     "i_hide_groundings": "Hide grounds",
     "i_show_groundings": "Show grounds",
@@ -170,13 +170,12 @@
       "storyline": "Summarize what have learned, draw the storyline of the research project, write the draft of your next paper",
       "negative-case": "Context making the inverted relation possible"
     },
-    "i_diagram_type": "Select type of diagram",
     "i_link": "Linking",
-    "i_link_properties": "Linking two properties",
-    "i_link_dimensions": "Linking two dimensions",
-    "i_inverse_link_between_properties": "Inverse link between two properties",
-    "i_inverse_link_between_dimensions": "Inverse link between two dimensions",
-    "i_link_property_dimension": "Linking a dimension and a property"
+    "i_link_properties": "two properties varying in the same direction",
+    "i_link_dimensions": "two dimensions varying in the same direction",
+    "i_inverse_link_between_properties": "two properties varying in the same direction",
+    "i_inverse_link_between_dimensions": "two dimensions varying in the same direction",
+    "i_current-link": "Current link"
   },
   "fr": {
     "i_qda": "Analyse qualitative de textes",
@@ -284,7 +283,7 @@
     "i_memos-number": "Comptes-rendus (mis à jour / totaux)",
     "i_updated-diary": "Ce journal a été mis à jour depuis votre dernière consultation",
     "i_leaves": "Étage suivant",
-    "i_add_negative-case": "Ajouter un cas négatif",
+    "i_add_negative-case": "Préciser un cas négatif",
     "i_add_groundings": "Ajouter un ancrage",
     "i_hide_groundings": "Cacher les ancrages",
     "i_show_groundings": "Montrer les ancrages",
@@ -348,12 +347,11 @@
       "storyline": "Faire le point sur le déroulement de la recherche, prépaper une restitution à l'intention des acteurs de terrain ou rédiger ses premières conclusions...",
        "negative-case": "Circonstances du renversement de l'articulation"
     },
-    "i_diagram_type": "Type de schématisation",
     "i_link": "Articuler",
-    "i_link_properties": "- deux propriétés",
-    "i_link_dimensions": "- deux dimensions variant dans le même sens",
-    "i_inverse_link_between_properties": "- deux propriétés variant en sens contraire",
-    "i_inverse_link_between_dimensions": "- deux dimensions variant en sens contraire",
-    "i_link_property_dimension": "- une propriété et une dimension"
+    "i_link_properties": "deux propriétés variant dans le même sens",
+    "i_link_dimensions": "deux dimensions variant dans le même sens",
+    "i_inverse_link_between_properties": "deux propriétés variant en sens contraire",
+    "i_inverse_link_between_dimensions": "deux dimensions variant en sens contraire",
+    "i_current-link": "Articulation actuelle"
   }
 }

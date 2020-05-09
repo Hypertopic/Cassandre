@@ -36,10 +36,7 @@
           {{#authorized}}
           <h1> <img title="{{i18n.i_memo.diagram}}" src="../../style/{{type}}.svg"/> <span id="name"> {{name}} </span> </h1>
           {{>rights}}
-          <div id="diagram" class="{{link}}">
-            <div class="layout-1"></div>
-            <div class="layout-2"></div>
-          </div>
+          <svg id="diagram" width="508" height="300" class="{{link}}"></svg>
           <p class="spacer">&nbsp;</p>
           <div id="negative-case" class="hidden">
             <span class="meta">{{i18n.i_name.negative-case}}: </span><span class="negative_text">{{negative}}</span>
@@ -93,9 +90,46 @@
     <div id="add_grounding" class="modal fade" role="dialog">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
-          <div class="modal-header">{{i18n.i_add_groundings}}</div>
-          <div class="modal-body">
+          <div class="modal-header">
+            <h5 class="modal-title">{{i18n.i_add_groundings}}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body text-center">
             <select onChange="adapt(this);"></select>
+            <button id="pp" type="button" class="btn btn-outline-secondary articulate">
+              <svg width="70" height="44">
+                <rect x="1" y="1" width="25" height="40" stroke-width="2"/>
+                <rect x="40" y="1" width="25" height="40" stroke-width="2"/>
+                <path d="M20 9 H 46" stroke-width="2"/>
+                <path d="M20 33 H 46" stroke-width="2"/>
+              </svg><br/>
+              {{i18n.i_link_properties}}
+            </button>
+            <button id="ipp" type="button" class="btn btn-outline-secondary articulate">
+              <svg width="70" height="44">
+                <rect x="1" y="1" width="25" height="40" stroke-width="2"/>
+                <rect x="40" y="1" width="25" height="40" stroke-width="2"/>
+                <path d="M20 9 46 33" stroke-width="2"/>
+                <path d="M20 33 46 9" stroke-width="2"/>
+              </svg><br/>
+              {{i18n.i_inverse_link_between_properties}}
+            </button>
+            <button id="dd" type="button" class="btn btn-outline-secondary articulate">
+              <svg width="70" height="44">
+                <polygon points="1,1 30,1 30,36" stroke-width="2"/>
+                <polygon points="35,1 65,1 35,36 " stroke-width="2"/>
+              </svg><br/>
+              {{i18n.i_link_dimensions}}
+            </button>
+            <button id="idd" type="button" class="btn btn-outline-secondary articulate">
+              <svg width="70" height="44">
+                <polygon points="1,1 65,1 1,36" stroke-width="2"/>
+                <polygon points="1,41 65,41 65,6 " stroke-width="2"/>
+              </svg><br/>
+              {{i18n.i_inverse_link_between_dimensions}}
+            </button>
           </div>
         </div>
       </div>
@@ -134,7 +168,6 @@
             var ground_path = "../../memo/{{diary}}/";
           }
           var ground_label = r.value['name'];
-          var ground_date = r.value['date']; // unused
           var ground_preview = r.value['preview'];
           if ($('#groundings li').length < 2 && document.getElementById(id) == null && ground_href != "{{_id}}" && ground_type == 'coding') {
             $("#add_grounding").find('select').append($('<option>', {
@@ -145,39 +178,103 @@
             }));
           };
         }
-        $('#groundings').children('li').each(function() {
-          var prop_href = ($(this).attr('id'));
-          var prop_href = ($(this).find("div").find("a").attr('href'));
-          var prop_label = ($(this).find('a').html());
-          var prop_label = '<div class="polarity">+</div>'+($(this).find('a').html())+'<div class="molarity">&ndash;</div>';
-          $('#diagram').append($('<a>', {
-            class: 'node',
-            href: prop_href,
-            html: prop_label
-          }));
-        });
       }
     });
+    var shape1 = shape2 = articulated = negative = '',
+        content1 = $('#groundings li').first().find('a').html(),
+        content2 = $('#groundings li').last().find('a').html();
+    switch ("{{link}}") {
+      case 'pp':
+      case 'ipp':
+        shape1 = '<rect x="15" y="1" width="170" height="294" stroke="black" fill="transparent" stroke-width="2"/>';
+        shape2 = '<rect x="319" y="1" width="170" height="294" stroke="black" fill="transparent" stroke-width="2"/>';
+        content1 = '<foreignObject x="15" y="3" width="170" height="290">'
+          +  '<div style="text-align: center; padding-top: 15px">1</div>'
+          +  '<div style="display: table; height: 215px; overflow: hidden;  margin: 0 auto">'
+          +    '<p xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; vertical-align: middle; text-align: center;">'
+          +      content1
+          +    '</p></div>'
+          +    '<div style="text-align: center;">0</div>'
+          +'</foreignObject>'
+        content2 = '<foreignObject x="319" y="3" width="170" height="290">'
+          +  '<div style="text-align: center; padding-top: 15px">1</div>'
+          +  '<div style="display: table; height: 215px; overflow: hidden;  margin: 0 auto">'
+          +    '<p xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; vertical-align: middle; text-align: center;">'
+          +      content2
+          +    '</p></div>'
+          +  '<div class="molarity" style="text-align: center;">0</div>'
+          +'</foreignObject>';
+      break;
+      case 'dd':
+        shape1 = '<polygon points="5,1 235,1 235,294" fill="transparent" style="stroke:black;stroke-width:2" />';
+        shape2 = '<polygon points="259,1 494,1 259,294" fill="transparent" style="stroke:black;stroke-width:2" />';
+        content1 = '<foreignObject x="50" y="13" width="170" height="185">'
+          +  '<div style="display: table; height: 185px; overflow: hidden;  margin: 0 auto">'
+          +    '<p xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; vertical-align: top; text-align: right;">'
+          +      content1
+          +    '</p></div>'
+          +'</foreignObject>'
+        content2 = '<foreignObject x="274" y="13" width="170" height="185">'
+          +  '<div style="display: table; height: 185px; overflow: hidden;  margin: 0 auto">'
+          +    '<p xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; vertical-align: top; text-align: left;">'
+          +      content2
+          +    '</p></div>'
+          +'</foreignObject>';
+      break;
+      case 'idd':
+        shape1 = '<polygon points="15,1 489,1 15,274" fill="transparent" style="stroke:black;stroke-width:2" />'
+        shape2 = '<polygon points="489,21 489,294 15,294" fill="transparent" style="stroke:black;stroke-width:2" />'
+        content1 = ''
+          +'<foreignObject x="30" y="13" width="250" height="185">'
+          +  '<div style="display: table; height: 185px; overflow: hidden;  margin: 0 auto">'
+          +    '<p xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; vertical-align: top; text-align: left;">'
+          +      content1
+          +    '</p></div>'
+          +'</foreignObject>'
+        content2 = ''
+          +'<foreignObject x="224" y="100" width="250" height="185">'
+          +  '<div style="display: table; height: 185px; overflow: hidden;  margin: 0 auto">'
+          +    '<p xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; vertical-align: bottom; text-align: right;">'
+          +      content2
+          +    '</p></div>'
+          +'</foreignObject>';
+      break;
+    }
+    if ("{{link}}" == 'pp') {
+      articulated = '<path d="M170 30 H 330" stroke="green" stroke-width="2"/>'
+        +'<path d="M170 270 H 330" stroke="green" stroke-width="2"/>';
+      negative = '<path stroke-dasharray="10,10" d="M170 30 330 270" stroke="red"  stroke-width="2"/>'
+      +'<path id="situation" stroke-dasharray="10,10" d="M170 270 330 30" stroke="red"  stroke-width="2"/>';
+    }
+    if ("{{link}}" == 'ipp') {
+      articulated = '<path d="M170 30 330 270" stroke="red" stroke-width="2"/>'
+        +'<path d="M170 270 330 30" stroke="red" stroke-width="2"/>';
+      negative = '<path id="situation" stroke-dasharray="10,10"  d="M170 30 H 330" stroke="green" stroke-width="2"/>'
+        +'<path stroke-dasharray="10,10" d="M170 270 H 330" stroke="green" stroke-width="2"/>';
+    }
+    if ("{{negative}}") {
+      articulated += negative
+      +'<text fill=""><textPath href="#situation" startOffset="50%" text-anchor="middle">{{negative}}</textPath></text>';
+    }
     if ($('#groundings li').length == 1) {
       $('#create').remove();
+      $('.articulate').addClass('hidden');
       $('#add_grounding_btn').html("{{i18n.i_add_groundings}}");
-      $("#add_grounding").find('.modal-header').html("{{i18n.i_groundings}}");
+      $("#add_grounding").find('.modal-title').html("{{i18n.i_groundings}}");
       $("#add_grounding").find('select').append($('<option>', {
         text: "{{i18n.i_select_grounding}}"
       }));
+      shape2 = content2 = '';
     } else {
       $('#create').removeClass('hidden');
       $('#negative-case').removeClass('hidden');
-      $('#add_grounding_btn').html("{{i18n.i_diagram_type}}");
-      $("#add_grounding").find('.modal-header').html("{{i18n.i_diagram_type}}");
-      $("#add_grounding").find('select').append($('<option>', { text: "{{i18n.i_link}}" }));
-      $("#add_grounding").find('select').append(
-        $('<option>', { value: 'pp', text: "{{i18n.i_link_properties}}" }),
-        $('<option>', { value: 'ipp', text: "{{i18n.i_inverse_link_between_properties}}" }),
-        $('<option>', { value: 'dd', text: "{{i18n.i_link_dimensions}}" }),
-        $('<option>', { value: 'idd', text: "{{i18n.i_inverse_link_between_dimensions}}" })
-      );
+      $('#add_grounding_btn').html("{{i18n.i_link}}");
+      $("#add_grounding").find('.modal-title').html("{{i18n.i_link}}");
+      $("#add_grounding").find('select').remove();
+      $('#'+'{{link}}').prop('title', '{{i18n.i_current-link}}').prop('disabled', true);
+      $('.articulate').removeClass('hidden');
     }
+    $('#diagram').html(shape1+content1+shape2+content2+articulated);
     var poller = function() {
       $.ajax("../../changes/memo/{{_id}}/{{update_seq}}").done(function(data) {
         if (data.results.length) reload();
@@ -191,6 +288,10 @@
   $('.create-leave').on('click', function() {
     var classlist = $(this)[0].classList;
     create(classlist[classlist.length - 1], '{{_id}}', $('#leave-name').val().trim());
+  });
+
+  $('.articulate').on('click', function() {
+    adapt({value: $(this).attr('id')});
   });
 
   function adapt(there) {

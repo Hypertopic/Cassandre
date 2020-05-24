@@ -36,12 +36,18 @@
           {{#authorized}}
           <h1> <img title="{{i18n.i_memo.diagram}}" src="../../style/{{type}}.svg"/> <span id="name"> {{name}} </span> </h1>
           {{>rights}}
-          <svg id="diagram" width="508" height="300" class="{{link}}"></svg>
+          <svg id="diagram" viewBox="0 0 508 300" class="{{link}}"></svg>
           <p class="spacer">&nbsp;</p>
           <div id="negative-case" class="hidden">
-            <span class="meta">{{i18n.i_name.negative-case}}: </span><span class="negative_text">{{negative}}</span>
+            <span class="meta"></span><span id="temp" class="negative_text">{{negative}}</span>
             {{#editable}}
             <input type="text" size="35" class="form-control hidden" placeHolder="{{i18n.i_content.negative-case}}" value="{{negative}}"/>
+            {{/editable}}
+          </div>
+          <div id="statement" class="hidden">
+            <span class="meta"></span><span class="statement_text">{{statement}}</span>
+            {{#editable}}
+            <input type="text" size="35" class="form-control hidden" placeHolder="{{i18n.i_content.statement}}" value="{{statement}}"/>
             {{/editable}}
           </div>
           {{>comments}}
@@ -61,8 +67,10 @@
         <div role='group'>
           {{#editable}}
           <button class='groundings btn btn-outline-light btn-sm collapse show' data-toggle="modal" data-target="#add_grounding" id="add_grounding_btn"><span>{{i18n.i_add_groundings}}</span></button>
-          <button class="btn btn-outline-light btn-sm" id="add_negative-case">{{i18n.i_add_negative-case}}</button>
-          <button class="btn btn-outline-light btn-sm hidden" id="negative-case_created">{{i18n.i_done}}</button>
+          <button class="btn btn-outline-light btn-sm hidden" id="write_statement">{{i18n.i_write_statement}}</button>
+          <button class="btn btn-outline-light btn-sm hidden" id="add_negative-case">{{i18n.i_add_negative-case}}</button>
+          <button class="btn btn-outline-light btn-sm hidden" id="negative-case_done">{{i18n.i_done}}</button>
+          <button class="btn btn-outline-light btn-sm hidden" id="statement_done">{{i18n.i_done}}</button>
           {{/editable}}
           {{#authorized}}
           {{>commentsbtn}}
@@ -97,7 +105,7 @@
             </button>
           </div>
           <div class="modal-body text-center">
-            <select onChange="adapt(this);"></select>
+            <select onChange="adapt({grounding: this.value});"></select>
             <button id="pp" type="button" class="btn btn-outline-secondary articulate">
               <svg width="70" height="44">
                 <rect x="1" y="1" width="25" height="40" stroke-width="2"/>
@@ -186,7 +194,7 @@
     {{#editable}}
     if("{{name}}".replace(/&#39;|&quot;/g, '').indexOf(content1.replace(/"|'/g, '')) == -1
     || "{{name}}".replace(/&#39;|&quot;/g, '').indexOf(content2.replace(/"|'/g, '')) == -1) {
-      adapt("{{negative}}");
+      adapt({negative: "{{negative}}"});
     }
     {{/editable}}
     switch ("{{link}}") {
@@ -274,6 +282,11 @@
     } else {
       $('#create').removeClass('hidden');
       $('#negative-case').removeClass('hidden');
+      $('#statement').removeClass('hidden');
+      if ('{{statement}}' != '') $('#statement .meta').text('{{i18n.i_name.statement}}: ');
+      if ('{{negative}}' != '') $('#negative-case .meta').text('{{i18n.i_name.negative-case}}: ');
+      $('#add_negative-case').removeClass('hidden');
+      $('#write_statement').removeClass('hidden');
       $('#add_grounding_btn').html("{{i18n.i_link}}");
       $("#add_grounding").find('.modal-title').html("{{i18n.i_link}}");
       $("#add_grounding").find('select').remove();
@@ -297,10 +310,10 @@
   });
 
   $('.articulate').on('click', function() {
-    adapt({value: $(this).attr('id')});
+    adapt({link: $(this).attr('id')});
   });
 
-  function adapt(there) {
+  function adapt(o) {
     refresh = true;
     $.ajax({
       url: "../../{{_id}}",
@@ -311,16 +324,24 @@
           if (!document.getElementById(data.groundings[i])) data.groundings.splice(i, 1);
         }
         data.name = $('#'+data.groundings[0]).find('a').html().trim() +' & ';
-        if (there.value && there.value.length == 32) {
-          if (data.groundings.indexOf(there.value) == -1) data.groundings.push(there.value);
-          data.name = data.name + $('#'+there.value).text();
-        } else if (there.value && there.value.length < 4) {
-          data.link = there.value;
-          data.name = data.name + $('#'+data.groundings[1]).find('a').html().trim();
-          $("#dialog").dialog('close');
-        } else {
-          data.negative = there;
-          data.name = data.name + $('#'+data.groundings[1]).find('a').html().trim();
+        switch(Object.keys(o)[0]) {
+          default:
+            if (data.groundings.indexOf(o.grounding) == -1) data.groundings.push(o.grounding);
+            data.name = data.name + $('#'+o.grounding).text();
+          break;
+          case('link'):
+            data.link = o.link;
+            data.name = data.name + $('#'+data.groundings[1]).find('a').html().trim();
+            $("#dialog").dialog('close');
+          break;
+          case('statement'):
+            data.statement = o.statement;
+            data.name = data.name + $('#'+data.groundings[1]).find('a').html().trim();
+          break;
+          case('negative'):
+            data.negative = o.negative;
+            data.name = data.name + $('#'+data.groundings[1]).find('a').html().trim();
+          break;
         }
         if (!data.history) data.history = [];
         data.history.push({
@@ -344,23 +365,45 @@
     });
   }
 
-  $("#add_negative-case").click(function () {
+  $("#write_statement").click(function () {
     refresh = false;
-    $(".negative_text").remove();
-    $("#add_negative-case").remove();
-    $("#negative-case").find('input').removeClass('hidden');
-    $('#negative-case_created').removeClass('hidden');
-    $("#comment_create").remove();
+    $(".statement_text").remove();
+    $('#statement .meta').text('{{i18n.i_name.statement}}: ');
+    $("#add-leaves").addClass('hidden');
+    $("#footer .btn").addClass('hidden');
+    $("#statement").find('input').removeClass('hidden');
+    $('#statement_done').removeClass('hidden');
     $('html, body').scrollTop($(document).height());
   });
 
-  $("#negative-case_created").click(function () {
-    adapt($('#negative-case').find('input').val().trim());
+  $("#add_negative-case").click(function () {
+    refresh = false;
+    $(".negative_text").remove();
+    $('#negative-case .meta').text('{{i18n.i_name.negative-case}}: ');
+    $("#add-leaves").addClass('hidden');
+    $("#footer .btn").addClass('hidden');
+    $("#negative-case").find('input').removeClass('hidden');
+    $('#negative-case_done').removeClass('hidden');
+    $('html, body').scrollTop($(document).height());
+  });
+
+  $("#statement_done").click(function () {
+    adapt({statement: $('#statement').find('input').val().trim()});
+  });
+
+  $("#negative-case_done").click(function () {
+    adapt({negative: $('#negative-case').find('input').val().trim()});
+  });
+
+  $('#statement > input').on('keypress', function(key) {
+    if (key.which == 13) {
+      adapt({statement: $('#statement').find('input').val().trim()});
+    }
   });
 
   $('#negative-case > input').on('keypress', function(key) {
     if (key.which == 13) {
-      adapt($('#negative-case').find('input').val().trim());
+      adapt({negative: $('#negative-case').find('input').val().trim()});
     }
   });
   {{/editable}}

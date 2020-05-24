@@ -148,6 +148,7 @@ div.post {
 .card>p>.moment,
 .comment>.meta,
 #negative-case>.meta,
+#statement>.meta,
 #modify_rights,
 #authorization {
   color: gray;
@@ -162,13 +163,18 @@ div.post {
   order: 3;
 }
 
-#negative-case {
+#statement {
   order: 4;
   position: static;
 }
 
-#comments {
+#negative-case {
   order: 5;
+  position: static;
+}
+
+#comments {
+  order: 6;
   position: static;
   top: 0px;
   left: 0px;

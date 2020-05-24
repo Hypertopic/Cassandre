@@ -141,6 +141,9 @@ function(head, req) {
         if (row.doc.negative) {
           data.negative = row.doc.negative;
         }
+        if (row.doc.statement) {
+          data.statement = row.doc.statement;
+        }
       }
       break;
       }

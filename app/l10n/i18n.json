@@ -107,6 +107,7 @@
     "i_updated-diary": "This diary was updated since your last visit",
     "i_leaves": "Next level",
     "i_add_negative-case": "Precise a negative case",
+    "i_write_statement": "Write a statement",
     "i_add_groundings": "Add grounds",
     "i_hide_groundings": "Hide grounds",
     "i_show_groundings": "Show grounds",
@@ -151,7 +152,8 @@
        "theoretical": "Category or relation to be sampled",
        "operational": "Planning next contact with the field",
        "storyline": "Conclusions for this study",
-       "negative-case": "Negative case"
+       "negative-case": "Negative case",
+       "statement": "Statement"
     },
     "i_content": {
       "date": {
@@ -168,7 +170,8 @@
       "operational": "Things not to forget to observe on the field",
       "theoretical": "Research question or theoretical question(s) raised when coding the material",
       "storyline": "Summarize what have learned, draw the storyline of the research project, write the draft of your next paper",
-      "negative-case": "Context making the inverted relation possible"
+      "negative-case": "Context making the inverted relation possible",
+      "statement": "Wording the articulation"
     },
     "i_link": "Linking",
     "i_link_properties": "two properties varying in the same direction",
@@ -284,6 +287,7 @@
     "i_updated-diary": "Ce journal a été mis à jour depuis votre dernière consultation",
     "i_leaves": "Étage suivant",
     "i_add_negative-case": "Préciser un cas négatif",
+    "i_write_statement": "Mettre en mots",
     "i_add_groundings": "Ajouter un ancrage",
     "i_hide_groundings": "Cacher les ancrages",
     "i_show_groundings": "Montrer les ancrages",
@@ -328,7 +332,8 @@
        "theoretical": "Question de recherche ou phénomène à échantillonner",
        "operational": "Aide-mémoire pour la suite",
        "storyline": "Résultats intermédiaires",
-       "negative-case": "Cas négatif"
+       "negative-case": "Cas négatif",
+       "statement": "Proposition"
     },
     "i_content": {
       "date": {
@@ -345,7 +350,8 @@
       "operational": "Que ne faut-il pas oublier de faire sur le terrain ?",
       "theoretical": "Reformulation de la question de recherche, nouvelles questions théoriques que suscite l'analyse du matériau, propriété ou articulation à approfondir.",
       "storyline": "Faire le point sur le déroulement de la recherche, prépaper une restitution à l'intention des acteurs de terrain ou rédiger ses premières conclusions...",
-       "negative-case": "Circonstances du renversement de l'articulation"
+       "negative-case": "Circonstances du renversement de l'articulation",
+       "statement": "Mettre en mots (phrase à trois verbes)"
     },
     "i_link": "Articuler",
     "i_link_properties": "deux propriétés variant dans le même sens",

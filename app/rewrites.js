@@ -12,7 +12,7 @@ function(req2) {
         reply.path = "_list/activity/memo_attribute";
         reply.query = {
           "startkey": '["'+diary+'", "Z", "'+start+'"]',
-          "endkey": '["'+diary+'", "Z"]',
+          "endkey":   '["'+diary+'", "Z"]',
           "descending": "true",
           "limit": "30",
           "include_docs": "true"
@@ -22,7 +22,7 @@ function(req2) {
         reply.path = "_list/activity/memo_attribute";
         reply.query = {
           "startkey": '["'+diary+'"]',
-          "endkey": '["'+diary+'", {}]',
+          "endkey":   '["'+diary+'", {}]',
           "include_docs": "true"
         };
       }
@@ -32,7 +32,7 @@ function(req2) {
       reply.path = "_view/memo_attribute";
       reply.query = {
         "startkey": '["'+diary+'", "name", '+logged+', "M"]',
-        "endkey": '["'+diary+'", "name", '+logged+', "M", {}]'
+        "endkey":   '["'+diary+'", "name", '+logged+', "M", {}]'
       };
     break;
     case 'memo':
@@ -142,7 +142,7 @@ function(req2) {
       reply.path = "_list/export/memo_attribute";
       reply.query = {
         "startkey": '["'+path[1]+'", "D"]',
-        "endkey": '["'+path[1]+'", "M", {}]',
+        "endkey":   '["'+path[1]+'", "M", {}]',
         "by": "date",
         "in": ""+path[2],
         "include_docs": "true"
@@ -300,7 +300,7 @@ function(req2) {
       reply.path = "_list/network/memo_attribute";
       reply.query = {
         "startkey": '["'+diary+'", "date", '+logged+', "M"]',
-        "endkey": '["'+diary+'", "date", '+logged+', "M", {}]'
+        "endkey":   '["'+diary+'", "date", '+logged+', "M", {}]'
       };
     break;
     case 'changes':

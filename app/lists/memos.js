@@ -13,7 +13,7 @@ function(head, req) {
     var preview = '';
     switch (row.key[3]) {
       case ('M'):
-        var name = row.value.name.replace(/"/g, '\\"').replace(/\s/g, ' ');
+        var name = row.value.name.replace(/"/g, '&#34;').replace(/\s/g, ' ');
         var date = row.value.date;
         var path = 'memo';
         switch (row.value.type) {

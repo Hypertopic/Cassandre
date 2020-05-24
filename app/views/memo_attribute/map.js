@@ -46,7 +46,7 @@ function(o) {
     var type = o.type || 'transcript';
     var groundings = o.groundings || [];
     if (o.body) {
-      var preview = o.body.replace(/\s/g, ' ');
+      var preview = o.body.replace(/[ \f\r\t\v\u00A0\u2028\u2029]/g, ' ');
     } else {
     if (o.speeches) {
       var preview = o.speeches.map(function(a) {

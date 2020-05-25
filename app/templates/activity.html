@@ -65,10 +65,15 @@
     }
     {{/activity}}
     if (Object.keys(created).length < 1) $('#only-created').hide();
-    if (Object.keys(commented).length < 1) $('#only-modified').hide();
-    if (Object.keys(modified).length < 1) $('#only-commented').hide();
+    if (Object.keys(commented).length < 1) $('#only-commented').hide();
+    if (Object.keys(modified).length < 1) $('#only-modified').hide();
     showMore("Z");
-    drawChart(all);
+    if (Object.keys(all).length < 1) {
+      $('#all-activity').parent().hide();
+      $('h1').text('{{i18n.i_sign-in_required}}');
+    } else {
+      drawChart(all);
+    }
   });
 
   $('#sort').on('change', function() {

@@ -41,7 +41,7 @@ function(req2) {
         reply.path = "_list/memo/memo";
         reply.query = {
           "startkey": '["'+memo+'"]',
-          "endkey": '["'+memo+'", {}]',
+          "endkey":   '["'+memo+'", {}]',
           "include_docs": "true"
         };
       } else if (path[1]) {
@@ -106,7 +106,7 @@ function(req2) {
         reply.path = "_list/memo/memo";
         reply.query = {
           "startkey": '["'+memo+'"]',
-          "endkey": '["'+memo+'", {}]',
+          "endkey":   '["'+memo+'", {}]',
           "include_docs": "true"
         };
       } else if (path[1]) {
@@ -133,7 +133,7 @@ function(req2) {
         reply.path = "_list/diaries/diaries";
         reply.query = {
           "startkey": '[null]',
-          "endkey": '[null, {}]',
+          "endkey":   '[null, {}]',
           "include_docs": "true"
         };
       }
@@ -153,14 +153,14 @@ function(req2) {
         reply.path = "_list/user_memo/diary";
         reply.query = {
           "startkey": '["'+logged+'", "'+path[1]+'", "D"]',
-          "endkey": '["'+logged+'", "'+path[1]+'", "Mdate", {}]',
+          "endkey":   '["'+logged+'", "'+path[1]+'", "Mdate", {}]',
           "include_docs": "true"
         };
       } else {
         reply.path = "_list/diaries/diaries";
         reply.query = {
           "startkey": '["'+path[1]+'"]',
-          "endkey": '["'+path[1]+'", {}]',
+          "endkey":   '["'+path[1]+'", {}]',
           "include_docs": "true"
         };
       }
@@ -172,7 +172,7 @@ function(req2) {
       reply.path = "_list/phrase/phrase";
       reply.query = {
         "startkey": '["'+path[1]+'"]',
-        "endkey": '["'+path[1]+'", {}]',
+        "endkey":   '["'+path[1]+'", {}]',
         "group": "true"
       };
     break;
@@ -183,7 +183,7 @@ function(req2) {
       reply.path = "_list/editable_memo/memo";
       reply.query = {
         "startkey": '["'+path[1]+'"]',
-        "endkey": '["'+path[1]+'", {}]',
+        "endkey":   '["'+path[1]+'", {}]',
         "include_docs": "true"
       };
     break;
@@ -191,7 +191,7 @@ function(req2) {
       reply.path = "_list/graph/memo";
       reply.query = {
         "startkey": '["'+path[2]+'"]',
-        "endkey": '["'+path[2]+'", {}]',
+        "endkey":   '["'+path[2]+'", {}]',
         "include_docs": "true"
       };
     break;
@@ -199,7 +199,7 @@ function(req2) {
       reply.path = "_list/diagram/memo";
       reply.query = {
         "startkey": '["'+path[2]+'"]',
-        "endkey": '["'+path[2]+'", {}]',
+        "endkey":   '["'+path[2]+'", {}]',
         "include_docs": "true"
       };
     break;
@@ -207,7 +207,7 @@ function(req2) {
       reply.path = "_list/table/memo";
       reply.query = {
         "startkey": '["'+path[2]+'"]',
-        "endkey": '["'+path[2]+'", {}]',
+        "endkey":   '["'+path[2]+'", {}]',
         "include_docs": "true"
       };
     break;
@@ -215,7 +215,7 @@ function(req2) {
       reply.path = "_list/text_attributes/attribute";
       reply.query = {
         "startkey": '["'+path[1]+'"]',
-        "endkey": '["'+path[1]+'", {}]',
+        "endkey":   '["'+path[1]+'", {}]',
         "group_level": "2"
       };
     break;
@@ -223,7 +223,7 @@ function(req2) {
       reply.path = "_view/word";
       reply.query = {
         "startkey": '["'+path[1]+'"]',
-        "endkey": '["'+path[1]+'", {}]',
+        "endkey":   '["'+path[1]+'", {}]',
         "group": "true"
       };
     break;
@@ -231,7 +231,7 @@ function(req2) {
       reply.path = "_view/word";
       reply.query = {
         "startkey": '["'+path[1]+'"]',
-        "endkey": '["'+path[1]+'", {}]',
+        "endkey":   '["'+path[1]+'", {}]',
         "reduce": "false"
       };
     break;
@@ -247,7 +247,7 @@ function(req2) {
           reply.path = '_list/kwic/kwic';
           reply.query = {
             "startkey": toJSON([path[1], path[2]]),
-            "endkey": toJSON([path[1], path[2]+'\ufff0']),
+            "endkey":   toJSON([path[1], path[2]+'\ufff0']),
             "include_docs": 'true'
           };
         break;
@@ -264,7 +264,7 @@ function(req2) {
       reply.path = "_list/user/user";
       reply.query = {
         "startkey": '["'+path[1]+'", {}]',
-        "endkey": '["'+path[1]+'"]',
+        "endkey":   '["'+path[1]+'"]',
         "descending": "true",
         "include_docs": "true"
       };
@@ -277,7 +277,7 @@ function(req2) {
       reply.path = "_list/tasklist/tasklist";
       reply.query = {
         "startkey": '["'+path[1]+'"]',
-        "endkey": '["'+path[1]+'", {}]',
+        "endkey":   '["'+path[1]+'", {}]',
         "include_docs": "true"
       };
     break;
@@ -285,7 +285,7 @@ function(req2) {
       reply.path = "_view/tasklist";
       reply.query = {
         "startkey": '["'+path[1]+'"]',
-        "endkey": '["'+path[1]+'", {}]'
+        "endkey":   '["'+path[1]+'", {}]'
       };
     break;
     case 'userlist':

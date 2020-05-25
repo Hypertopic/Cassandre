@@ -253,6 +253,9 @@
     $('.preview').html(function(i, text) {
       return converter.makeHtml(text.trim());
     });
+    var nothing_to_show = '{{i18n.i_nothing-to-show}}';
+    {{^logged}}nothing_to_show +='. {{i18n.i_sign-in-for-more}}';{{/logged}}
+    if ({{size}} == 0) $('#memos').text(nothing_to_show);
     if (document.getElementById("memos").childNodes.length >= {{size}}) $('#more').addClass("d-none");
   }
 

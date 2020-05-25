@@ -17,7 +17,7 @@
         <h1>{{i18n.i_activity}}</h1>
         <fieldset class="form-group">
           <legend class="col-form-label">
-            <span class="navbar-text">{{i18n.i_filter}}</span>
+            <span class="navbar-text">{{i18n.i_show}}</span>
             <a id="all-activity">{{i18n.i_all}}</a>
             <a id="only-created">{{i18n.i_creations}}</a>
             <a id="only-modified">{{i18n.i_modifications}}</a>
@@ -69,8 +69,10 @@
     if (Object.keys(modified).length < 1) $('#only-modified').hide();
     showMore("Z");
     if (Object.keys(all).length < 1) {
-      $('#all-activity').parent().hide();
-      $('h1').text('{{i18n.i_sign-in_required}}');
+      var nothing_to_show = '{{i18n.i_nothing-to-show}}';
+      {{^logged}}nothing_to_show +='. {{i18n.i_sign-in-for-more}}';{{/logged}}
+      $('#all-activity').prev().text(nothing_to_show);
+      $('#all-activity').hide();
     } else {
       drawChart(all);
     }
@@ -81,7 +83,7 @@
   });
 
   $('#diary').on('click', function() {
-    self.location = '../../memo/{{diary}}/?by=date';
+    self.location = '../../memo/{{diary}}/';
   });
 
   function drawChart(data) {

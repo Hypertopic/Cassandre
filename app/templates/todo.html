@@ -68,6 +68,12 @@
               <a href='../../{{type}}/{{diary}}/{{id}}'>{{name}}</a>
             </li>
           {{/ungrounded}}
+          {{#deadend}}
+            <li class='deadend'>
+              <span class="{{date}} moment"></span>&nbsp;–
+              <a href='../../{{type}}/{{diary}}/{{id}}'>{{name}}</a>
+            </li>
+          {{/deadend}}
           </ul>
         </div>
       </main>
@@ -81,6 +87,9 @@
     moment.locale('{{locale}}');
     stickToHeader();
     momentRelative('#todo');
+    var nothing_to_show = '{{i18n.i_nothing-to-show}}';
+    {{^logged}}nothing_to_show +='. {{i18n.i_sign-in-for-more}}';{{/logged}}
+    if ($('.unchecked-todo').length + $('.unchecked-comment').length + $('.editing').length + $('.unarticulated').length + $('.unnamed').length + $('.ungrounded').length + $('.unchecked-todo').length + $('.deadend').length == 0) $('#todo').text(nothing_to_show);
     if ($('.unchecked-todo').length > 0) $('#unchecked-todo').removeClass('hidden');
     if ($('.unchecked-comment').length > 0) $('#unchecked-comment').removeClass('hidden');
     if ($('.editing').length > 0) $('#editing').removeClass('hidden');

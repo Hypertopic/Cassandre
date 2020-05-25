@@ -7,6 +7,7 @@ function(head, req) {
   start({"headers":{"Content-Type":"text/html;charset=utf-8"}});
   var data = {
     comment: [],
+    deadend: [],
     diagram: [],
     editing: [],
     i18n: localized(),
@@ -33,29 +34,37 @@ function(head, req) {
       name: r.value.name,
       type: type
     };
-    switch(r.key[2]) {
-      case ('dn'):
-        data.diary = r.key[0];
-        data.diary_name = r.value.diary_name;
-      break;
-      case ('G'):
-        if (!r.doc) data.ungrounded.push(obj);
-      break;
-      case ('N'):
-        data.unnamed.push(obj);
-      break;
-      case ('D'):
-        data.editing.push(obj);
-      break;
-      case ('A'):
-        data.diagram.push(obj);
-      break;
-      case ('O'):
-        data.todo.push(obj);
-      break;
-      case ('C'):
-        if (r.doc) data.comment.push(obj);
-      break;
+    var contributors = [];
+    if (r.doc) contributors = contributors.concat(r.doc.readers, r.doc.contributors).sort();
+    var users = contributors.filter(function(item, pos, ary) {return !pos || item != ary[pos - 1];} );
+    if ((r.doc && r.doc.readers == undefined) || (r.doc && r.doc.readers.length == 0) || users.indexOf(req.userCtx.name) > -1) {
+      switch(r.key[2]) {
+        case ('dn'):
+          data.diary = r.key[0];
+          data.diary_name = r.value.diary_name;
+        break;
+        case ('G'):
+          if (!r.doc) data.ungrounded.push(obj);
+        break;
+        case ('L'):
+          if (!r.doc) data.deadend.push(obj);
+        break;
+        case ('N'):
+          data.unnamed.push(obj);
+        break;
+        case ('D'):
+          data.editing.push(obj);
+        break;
+        case ('A'):
+          data.diagram.push(obj);
+        break;
+        case ('O'):
+          data.todo.push(obj);
+        break;
+        case ('C'):
+          if (r.doc) data.comment.push(obj);
+        break;
+      }
     }
   }
   data.ungrounded.shift();
@@ -70,6 +79,3 @@ function(head, req) {
     }));
   });
 }
-
-
-

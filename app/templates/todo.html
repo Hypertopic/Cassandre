@@ -24,15 +24,6 @@
             </li>
           {{/todo}}
           </ul>
-          {{#comment}}<h2 id='unchecked-comment' class="hidden">{{i18n.i_unchecked-comment}}</h2>{{/comment}}
-          <ul>
-          {{#comment}}
-            <li class='unchecked-comment'>
-              <span class="{{date}} moment"></span>&nbsp;–
-              <a href='../../{{type}}/{{diary}}/{{id}}'>{{name}}</a>
-            </li>
-          {{/comment}}
-          </ul>
           <h2 id='editing' class="hidden">{{i18n.i_to-be-resumed}}</h2>
           <ul>
           {{#editing}}
@@ -86,12 +77,43 @@
   $(document).ready(function() {
     moment.locale('{{locale}}');
     stickToHeader();
-    momentRelative('#todo');
+    var payload = '',
+        nComments = 0;
+    {{#logged}}
+    $.ajax({
+      url: "../../{{logged}}",
+      type: "GET",
+      dataType: "json",
+      success: function(data) {
+        if(data.fullname) $('#username').text(data.fullname);
+      }
+    });
+    {{/logged}}
+    $.ajax({
+      url: "../../comments/{{diary}}",
+      type: "GET",
+      dataType: "json",
+      success: function(d) {
+        $('#diary').text(d.diary_name);
+        $('title').prepend(d.diary_name);
+        nComments = d.comments.length;
+        var data = d.comments;
+        for (var i in data) {
+          payload += "<li class='unchecked-comment'>"
+            +'<span class="'+data[i].date+' moment"></span>&nbsp;– '
+            +"<a href='../../"+data[i].type+"/"+data[i].diary+"/"+data[i].id+"'>"+data[i].name+"</a>"
+            +'</li>';
+        }
+      }
+    }).done(function(){
+      if (nComments > 0) $('#todo').append('<h2 id="unchecked-comment">{{i18n.i_unchecked-comment}}</h2><ul>'+payload+'</ul>');
+    }).then(function(){
+      momentRelative('#todo');
+    })
     var nothing_to_show = '{{i18n.i_nothing-to-show}}';
     {{^logged}}nothing_to_show +='. {{i18n.i_sign-in-for-more}}';{{/logged}}
     if ($('.unchecked-todo').length + $('.unchecked-comment').length + $('.editing').length + $('.unarticulated').length + $('.unnamed').length + $('.ungrounded').length + $('.unchecked-todo').length + $('.deadend').length == 0) $('#todo').text(nothing_to_show);
     if ($('.unchecked-todo').length > 0) $('#unchecked-todo').removeClass('hidden');
-    if ($('.unchecked-comment').length > 0) $('#unchecked-comment').removeClass('hidden');
     if ($('.editing').length > 0) $('#editing').removeClass('hidden');
     if ($('.unarticulated').length > 0) $('#unarticulated').removeClass('hidden');
     if ($('.unnamed').length > 0) $('#unnamed').removeClass('hidden');

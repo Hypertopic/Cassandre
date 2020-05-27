@@ -188,7 +188,11 @@
       engine: 'dot',
       format: 'svg'
     };
-    viz.renderSVGElement(graphviz, options)
+    if (nodes.length == 0) {
+      var nothing_to_show = '{{i18n.i_nothing-to-show}}';
+      {{^logged}}nothing_to_show +='. {{i18n.i_sign-in-for-more}}';{{/logged}}
+      $('#graph').prev().text(nothing_to_show);
+    } else viz.renderSVGElement(graphviz, options)
     .then(function(element) {
       main.insertBefore(element, container);
     })

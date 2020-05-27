@@ -122,15 +122,26 @@
     $('#sort').text('{{i18n.i_by}} '+sort_by.toLowerCase());
     resetUI();
     {{#list}}
-    $.ajax({
-      url: "../../tasklist/{{diary}}",
-      type: "GET",
-      dataType: "json",
-      success: function(todo) {
-        if (todo.pending > 0) $('#tasklist-alert').removeClass("hidden");
-        if (todo.comments > 0) $('#comments').prepend(todo.comments);
-      }
-    });
+    var pendingtasks = function() {
+      return $.ajax({
+        url: "../../tasklist/{{diary}}",
+        type: "GET",
+        async: false,
+        dataType: "json"
+      })
+    }
+    var uncheckedcomments = function() {
+      return $.ajax({
+        url: "../../comments/{{diary}}",
+        type: "GET",
+        async: false,
+        dataType: "json"
+      })
+    }
+    pendingtasks().success(tasks => a = tasks.pending);
+    uncheckedcomments().success(data => b = data.comments.length);
+    if (b > 0) $('#comments').prepend(b);
+    if (b + a > 0) $('#tasklist-alert').removeClass("hidden");
     {{/list}}
     $.ajax({
       url: "../../kwic/{{diary}}",

@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <title>{{diary_name}} - {{name}}</title>
+    <title>{{diary_name}} - {{#authorized}}{{name}}{{/authorized}}{{^authorized}}{{i18n.i_nothing-to-show}}{{/authorized}}</title>
     {{>links}}
   </head>
   <body>
@@ -9,7 +9,8 @@
       <div id="memo" class='row h-100'>
         <main class="col pb-0 pb-sm-5 order-2" id="content">
         {{^authorized}}
-          <h1 id="name">{{i18n.i_sign-in_required}}</h1>
+          <h1 id="name">{{i18n.i_nothing-to-show}}</h1>
+          <div>{{^logged}}{{i18n.i_sign-in-for-more}}{{/logged}}</div>
         {{/authorized}}
         {{#authorized}}
           <h1><img src="../../style/{{type}}.svg"/> {{name}}</h1>

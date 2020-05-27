@@ -276,8 +276,17 @@ function(req2) {
     case 'tasklist':
       reply.path = "_list/tasklist/tasklist";
       reply.query = {
-        "startkey": '["'+path[1]+'"]',
-        "endkey":   '["'+path[1]+'", {}]',
+        "startkey": '["'+path[1]+'", '+logged+']',
+        "endkey":   '["'+path[1]+'", '+logged+', {}]',
+        "include_docs": "true"
+      };
+    break;
+    case 'comments':
+      reply.path = "_list/comments/tasklist";
+      reply.query = {
+        "startkey": '["'+path[1]+'", null, "C", {}]',
+        "endkey":   '["'+path[1]+'", null, "B"]',
+        "descending": "true",
         "include_docs": "true"
       };
     break;

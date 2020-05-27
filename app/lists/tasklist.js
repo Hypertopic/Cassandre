@@ -6,6 +6,7 @@ function(head, req) {
 
   start({"headers":{"Content-Type":"text/html;charset=utf-8"}});
   var data = {
+    diary: req.query.startkey[0],
     comment: [],
     deadend: [],
     diagram: [],
@@ -30,7 +31,7 @@ function(head, req) {
     var obj = {
       id: r.value.id,
       diary: r.key[0],
-      date: r.key[1],
+      date: r.key[3],
       name: r.value.name,
       type: type
     };
@@ -39,10 +40,6 @@ function(head, req) {
     var users = contributors.filter(function(item, pos, ary) {return !pos || item != ary[pos - 1];} );
     if ((r.doc && r.doc.readers == undefined) || (r.doc && r.doc.readers.length == 0) || users.indexOf(req.userCtx.name) > -1) {
       switch(r.key[2]) {
-        case ('dn'):
-          data.diary = r.key[0];
-          data.diary_name = r.value.diary_name;
-        break;
         case ('G'):
           if (!r.doc) data.ungrounded.push(obj);
         break;
@@ -61,9 +58,6 @@ function(head, req) {
         case ('O'):
           data.todo.push(obj);
         break;
-        case ('C'):
-          if (r.doc) data.comment.push(obj);
-        break;
       }
     }
   }
@@ -72,9 +66,8 @@ function(head, req) {
     return Mustache.to_html(templates.todo, data, shared);
   });
   provides("json", function() {
-    var number = data.ungrounded.length + data.unnamed.length + data.editing.length + data.diagram.length + data.todo.length + data.comment.length;
+    var number = data.ungrounded.length + data.unnamed.length + data.editing.length + data.diagram.length + data.todo.length;
     send(toJSON({
-      comments: data.comment.length,
       pending: number
     }));
   });

@@ -320,12 +320,6 @@ a.dropdown-item, .create-leave, a.dropdown-toggle,
   font-size: 2.5em;
 }
 
-#tasklist-alert img{
-  position: absolute;
-  bottom: .4rem;
-  right: .55rem;
-}
-
 #network {
   margin-left: 10px;
   margin-right: 10px;

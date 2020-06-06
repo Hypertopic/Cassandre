@@ -35,30 +35,25 @@ function(head, req) {
       name: r.value.name,
       type: type
     };
-    var contributors = [];
-    if (r.doc) contributors = contributors.concat(r.doc.readers, r.doc.contributors).sort();
-    var users = contributors.filter(function(item, pos, ary) {return !pos || item != ary[pos - 1];} );
-    if ((r.doc && r.doc.readers == undefined) || (r.doc && r.doc.readers.length == 0) || users.indexOf(req.userCtx.name) > -1) {
-      switch(r.key[2]) {
-        case ('G'):
-          if (!r.doc) data.ungrounded.push(obj);
-        break;
-        case ('L'):
-          if (!r.doc) data.deadend.push(obj);
-        break;
-        case ('N'):
-          data.unnamed.push(obj);
-        break;
-        case ('D'):
-          data.editing.push(obj);
-        break;
-        case ('A'):
-          data.diagram.push(obj);
-        break;
-        case ('O'):
-          data.todo.push(obj);
-        break;
-      }
+    switch(r.key[2]) {
+      case ('G'):
+        if (!r.doc) data.ungrounded.push(obj);
+      break;
+      case ('L'):
+        if (!r.doc) data.deadend.push(obj);
+      break;
+      case ('N'):
+        data.unnamed.push(obj);
+      break;
+      case ('D'):
+        data.editing.push(obj);
+      break;
+      case ('A'):
+        data.diagram.push(obj);
+      break;
+      case ('O'):
+        data.todo.push(obj);
+      break;
     }
   }
   data.ungrounded.shift();
@@ -66,9 +61,12 @@ function(head, req) {
     return Mustache.to_html(templates.todo, data, shared);
   });
   provides("json", function() {
-    var number = data.ungrounded.length + data.unnamed.length + data.editing.length + data.diagram.length + data.todo.length;
     send(toJSON({
-      pending: number
+      diagram: data.diagram.length,
+      editing: data.editing.length,
+      pending: data.todo.length,
+      ungrounded: data.ungrounded.length,
+      unnamed: data.unnamed.length
     }));
   });
 }

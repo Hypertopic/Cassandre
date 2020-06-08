@@ -1,15 +1,19 @@
 function(o) {
   // !code lib/shared.js
-  var diary = o.diary || o.corpus || o._id;
-  var type = o.type || 'transcript';
-  var name = o.name || '...';
-  var date = o.date;
-  var update = o.date;
+  var diary = o.diary || o.corpus || o._id,
+      type = o.type || 'transcript',
+      name = o.name || '...',
+      date = o.date,
+      update = o.date,
+      contributors = [].concat(o.readers, o.contributors).sort(),
+      users = contributors.filter(function(item, pos, ary) {return !pos || item != ary[pos - 1];} );
+  if (o.readers == undefined || o.readers.length == 0) users.push(null);
   if (o.history) {
     date = o.history[0].date;
     update = o.history[o.history.length-1].date;
     for (var id in o.history) {
       var value = {
+        user: o.history[id].user,
         _id: o.history[id].user
       }
       if (id < 1) {
@@ -27,14 +31,16 @@ function(o) {
       if (o.comment) {
         value.comment = 1;
       }
+      value.users = users;
       emit([diary, 'Z', o.history[id].date], value);
     }
   }
   if (o.commented) {
     emit([diary, 'Z', date], {
-      _id: o.user,
+      _id: o.commented,
       comment: o.text,
-      modified_id: o.commented
+      modified_id: o.commented,
+      user: o.user
     });
   }
 
@@ -59,9 +65,6 @@ function(o) {
       var preview = ' ';
       }
     }
-    var contributors = [].concat(o.readers, o.contributors).sort();
-    var users = contributors.filter(function(item, pos, ary) {return !pos || item != ary[pos - 1];} );
-    if (o.readers == undefined || o.readers.length == 0) users.push(null);
     for (var i in users) {
       var user = users[i];
       var obj = {

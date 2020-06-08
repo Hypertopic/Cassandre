@@ -5,26 +5,32 @@ function(req2) {
       reply = {};
   if (logged != null) logged = '"'+logged+'"';
   switch(path[0]) {
+    case 'activity_chart':
+      var diary = path[1];
+      reply.path = "_list/activity_chart/memo_attribute";
+      reply.query = {
+        "startkey": '["'+diary+'", "Z"]',
+        "endkey":   '["'+diary+'", "Z", {}]',
+        "include_docs": "true"
+      };
+    break;
     case 'activity':
-      if (path[2]) {
-        var diary = path[1];
-        var start = path[2];
-        reply.path = "_list/activity/memo_attribute";
-        reply.query = {
-          "startkey": '["'+diary+'", "Z", "'+start+'"]',
-          "endkey":   '["'+diary+'", "Z"]',
-          "descending": "true",
-          "limit": "30",
-          "include_docs": "true"
-        };
-      } else if (path[1]) {
-        var diary = path[1];
-        reply.path = "_list/activity/memo_attribute";
-        reply.query = {
-          "startkey": '["'+diary+'"]',
-          "endkey":   '["'+diary+'", {}]',
-          "include_docs": "true"
-        };
+      switch (path.length) {
+        case 3:
+          var diary = path[1];
+          var start = path[2];
+          reply.path = "_list/activity/memo_attribute";
+          reply.query = {
+            "startkey": '["'+diary+'", "Z", "'+start+'"]',
+            "endkey":   '["'+diary+'", "Z"]',
+            "descending": "true",
+            "limit": "30",
+            "include_docs": "true"
+          };
+        break;
+        case 2:
+          reply.path = "_show/activity/"+path[1];
+        break;
       }
     break;
     case 'memo_attribute':

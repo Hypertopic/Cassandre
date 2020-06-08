@@ -9,13 +9,14 @@
     <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item"><a class="text-light nav-link" id="diary">{{diary_name}}</a></li>
+        <li class="nav-item"><a class="nav-link disabled" id="drawChart">{{i18n.i_draw-chart}}</a></li>
       </ul>
       {{>log}}
     </nav>
     <div id="container" class='container-fluid h-100'>
       <main class="col pb-5" id="content">
         <h1>{{i18n.i_activity}}</h1>
-        <fieldset class="form-group">
+        <fieldset class="form-group d-none">
           <legend class="col-form-label">
             <span class="navbar-text">{{i18n.i_show}}</span>
             <a id="all-activity">{{i18n.i_all}}</a>
@@ -28,10 +29,11 @@
         <div id="activity" title="{{i18n.i_activity}}">
         <div id="contributors">
           <span class="all">&nbsp;</span>
-          <span class="commented d-none">{{#ncommented}}{{user}}&nbsp;({{n}}) {{/ncommented}}</span>
-          <span class="created d-none">{{#ncreated}}{{user}}&nbsp;({{n}}) {{/ncreated}}</span>
-          <span class="modified d-none">{{#nmodified}}{{user}}&nbsp;({{n}}) {{/nmodified}}</span>
+          <span class="commented d-none"></span>
+          <span class="created d-none"></span>
+          <span class="modified d-none"></span>
         </div>
+        <div id="alert">{{i18n.i_loading}}</div>
         <ul>
         </ul></div>
       </main>
@@ -48,62 +50,78 @@
       all = {},
       created = {},
       commented = {},
+      fullnames = [],
       modified = {},
       pathes = [],
-      end = new Date('{{end}}'),
-      start = new Date(end.setFullYear(end.getFullYear() - 1));
+      end,
+      start;
   $(document).ready(function() {
     moment.locale('{{locale}}');
-    stickToHeader();
-    {{#activity}}
-    if('{{date}}' > start.toJSON()) {
-      all[moment('{{date}}').format('X')] = 1;
-      {{#commented}}commented[moment('{{date}}').format('X')] = 1;{{/commented}}
-      {{#created}}created[moment('{{date}}').format('X')] = 1;{{/created}}
-      {{#modified}}modified[moment('{{date}}').format('X')] = 1;{{/modified}}
-      if (pathes['{{modified_id}}'] == null) pathes['{{modified_id}}'] = "{{modified_path}}";
-    }
-    {{/activity}}
-    if (Object.keys(created).length < 1) $('#only-created').hide();
-    if (Object.keys(commented).length < 1) $('#only-commented').hide();
-    if (Object.keys(modified).length < 1) $('#only-modified').hide();
+    {{#logged}}
+    getFullname('{{logged}}');
+    $('#username').text(fullnames['{{logged}}']);
+    {{/logged}}
     showMore("Z");
-    if (Object.keys(all).length < 1) {
-      var nothing_to_show = '{{i18n.i_nothing-to-show}}';
-      {{^logged}}nothing_to_show +='. {{i18n.i_sign-in-for-more}}';{{/logged}}
-      $('#all-activity').prev().text(nothing_to_show);
-      $('#all-activity').hide();
-    } else {
-      drawChart(all);
-    }
-  });
-
-  $('#sort').on('change', function() {
-    self.location = '?by=' + $('#sort').val();
+    stickToHeader();
   });
 
   $('#diary').on('click', function() {
     self.location = '../../memo/{{diary}}/';
   });
 
-  function drawChart(data) {
-    cal.init({
-      domain: "week",
-      subDomain: "day",
-      subDomainDateFormat: function(date) {
-        return moment(date).format("LL");
-      },
-      subDomainTitleFormat: {
-        filled: "{count} {name}, {date}"
-      },
-      data: data,
-      range: 53,
-      start: start,
-      end: end,
-      itemName: ["contribution", "contributions"],
-      domainLabelFormat: ""
+  $('#drawChart').on('click', function() {
+    $('#drawChart').addClass('disabled');
+    $('#cal-heatmap').append('<div id="loading" class="progress-bar progress-bar-striped progress-bar-animated alert" role="progressbar">{{i18n.i_loading}}</div>');
+    $.ajax({
+      url: "../../activity_chart/{{diary}}/",
+      type: "GET",
+      dataType: "json"
+    }).done(function(data) {
+      for (u in data.fullnames) {
+        if (fullnames[data.fullnames[u].user] == null) fullnames[data.fullnames[u].user] = data.fullnames[u].fullname;
+      }
+      end = new Date(data.end);
+      start = new Date(end.setFullYear(end.getFullYear() - 1));
+      for (activity in {created,commented,modified}) {
+        if (data['n'+activity].length > 0)
+          for (i in data['n'+activity]) {
+            var e = data['n'+activity][i],
+                fullname = e.user;
+            if (fullnames[e.user] == null) getFullname(e.user);
+            if (fullnames[e.user] != null) fullname = fullnames[e.user];
+            $('#contributors .'+activity).append(fullname+'&nbsp;('+e.n+') ');
+          }
+      }
+      for (var i in data.activity) {
+        var date = data.activity[i].date;
+        if(date > start.toJSON()) {
+          all[moment(date).format('X')] = 1;
+          if (data.activity[i].commented) commented[moment(date).format('X')] = 1;
+          if (data.activity[i].created)     created[moment(date).format('X')] = 1;
+          if (data.activity[i].modified)   modified[moment(date).format('X')] = 1;
+        }
+      }
+    }).done(function() {
+      $('#loading').remove();
+      $('fieldset').removeClass('d-none');
+      cal.init({
+        domain: "week",
+        subDomain: "day",
+        subDomainDateFormat: function(date) {
+          return moment(date).format("LL");
+        },
+        subDomainTitleFormat: {
+          filled: "{count} {name}, {date}"
+        },
+        data: all,
+        range: 53,
+        start: start,
+        end: end,
+        itemName: ["contribution", "contributions"],
+        domainLabelFormat: ""
+      });
     });
-  }
+  });
 
   $('#all-activity').on('click', function() {
     $('#contributors').children().removeClass('d-none');
@@ -134,6 +152,28 @@
     cal.update(modified);
   });
 
+  function type2path(type) {
+    switch (type) {
+      case 'table':
+      case 'graph':
+      case 'diagram':
+        return type;
+      break;
+      default:
+        return 'memo';
+      break;
+    }
+  }
+
+  function getFullname(o) {
+    $.ajax({
+      url: "../../userlist/"+o,
+      type: "GET",
+      async: false,
+      dataType: "json"
+    }).done(data => fullnames[data.rows[0].id] = data.rows[0].value.fullname);
+  }
+
   function showMore(start) {
     $.ajax({
       url: "../../activity/{{diary}}/"+start,
@@ -141,24 +181,42 @@
       dataType: "json",
       success: function(data) {
         for (var i in data) {
-          var li = '<li>'
-            +'<span id="'+data[i].date+'" class="'+data[i].date+' moment"></span>, '
-            +'<span class="'+data[i].user+'">'+data[i].user+'</span> ';
-          if (typeof data[i].diary_label !== 'undefined') {
-            if (typeof data[i].created   !== 'undefined') li += '{{i18n.i_created}} {{i18n.i_the-diary}}';
-            if (typeof data[i].modified  !== 'undefined') li += '{{i18n.i_modified}} {{i18n.i_the-diary}}';
-          } else {
-            if (typeof data[i].commented !== 'undefined') li += '{{i18n.i_commented}}&nbsp;: ';
-            if (typeof data[i].created   !== 'undefined') li += '{{i18n.i_created}} ';
-            if (typeof data[i].modified  !== 'undefined') li += '{{i18n.i_modified}} ';
-            li += '<a href="../../'+pathes[data[i].modified_id]+'/{{diary}}/'+data[i].modified_id+'">'+data[i].modified_name+'</a>';
+          var [date, user, user_fullname, type] = [data[i].date, data[i].user, data[i].user_fullname, data[i].modified_type];
+          if (typeof data[i].commented !== 'undefined') {
+            action = '{{i18n.i_commented}}&nbsp;: ';
           }
-          li += '</li>';
+          path = type2path(type);
+          if (typeof user_fullname !== 'undefined') fullnames[user] = user_fullname;
+          if (typeof user_fullname === 'undefined' && fullnames[user] == null) getFullname(user);
+          if (typeof user_fullname === 'undefined' && fullnames[user] !== null) user_fullname = fullnames[user];
+          if (typeof user_fullname === 'undefined' && fullnames[user] == null) user_fullname = user;
+
+          if (typeof data[i].diary_label !== 'undefined') {
+            if (typeof data[i].created   !== 'undefined') action = '{{i18n.i_created}} {{i18n.i_the-diary}}';
+            if (typeof data[i].modified  !== 'undefined') action = '{{i18n.i_modified}} {{i18n.i_the-diary}}';
+          } else {
+            if (typeof data[i].commented !== 'undefined') action = '{{i18n.i_commented}}&nbsp;: ';
+            if (typeof data[i].created   !== 'undefined') action = '{{i18n.i_created}} ';
+            if (typeof data[i].modified  !== 'undefined') action = '{{i18n.i_modified}} ';
+            action += '<a href="../../'+path+'/{{diary}}/'+data[i].modified_id+'">'+data[i].modified_name+'</a>';
+          }
+          var li = '<li>'
+            +'<span id="'+date+'" class="'+date+' moment"></span>, '
+            +'<span class="'+user+'">'+user_fullname+'</span> '
+            + action + '</li>';
           $("#activity ul").append(li);
         }
       }
-    }).done(function(){
-      momentRelative('#activity ul');
+    }).always(function(){
+      if ($('#activity ul li').length < 1) {
+        var nothing_to_show = '{{i18n.i_nothing-to-show}}';
+        {{^logged}}nothing_to_show +='. {{i18n.i_sign-in-for-more}}';{{/logged}}
+        $('#alert').text(nothing_to_show);
+      } else {
+        momentRelative('#activity ul');
+        $('#alert').remove();
+        $('#drawChart').removeClass('disabled');
+      }
     });
   }
 

@@ -76,9 +76,10 @@
   <script>
   $(document).ready(function() {
     moment.locale('{{locale}}');
-    stickToHeader();
     var payload = '',
-        nComments = 0;
+        nComments = 0,
+        nothing_to_show = '{{i18n.i_nothing-to-show}}';
+    {{^logged}}nothing_to_show +='. {{i18n.i_sign-in-for-more}}';{{/logged}}
     {{#logged}}
     $.ajax({
       url: "../../{{logged}}",
@@ -107,17 +108,18 @@
       }
     }).done(function(){
       if (nComments > 0) $('#todo').append('<h2 id="unchecked-comment">{{i18n.i_unchecked-comment}}</h2><ul>'+payload+'</ul>');
+      stickToHeader();
     }).then(function(){
-      momentRelative('#todo');
+      if ($('.unchecked-todo').length + $('.unchecked-comment').length + $('.editing').length + $('.unarticulated').length + $('.unnamed').length + $('.ungrounded').length + $('.unchecked-todo').length + $('.deadend').length == 0) {
+        $('#todo').text(nothing_to_show);
+      } else momentRelative('#todo');
     })
-    var nothing_to_show = '{{i18n.i_nothing-to-show}}';
-    {{^logged}}nothing_to_show +='. {{i18n.i_sign-in-for-more}}';{{/logged}}
-    if ($('.unchecked-todo').length + $('.unchecked-comment').length + $('.editing').length + $('.unarticulated').length + $('.unnamed').length + $('.ungrounded').length + $('.unchecked-todo').length + $('.deadend').length == 0) $('#todo').text(nothing_to_show);
     if ($('.unchecked-todo').length > 0) $('#unchecked-todo').removeClass('hidden');
     if ($('.editing').length > 0) $('#editing').removeClass('hidden');
     if ($('.unarticulated').length > 0) $('#unarticulated').removeClass('hidden');
     if ($('.unnamed').length > 0) $('#unnamed').removeClass('hidden');
     if ($('.ungrounded').length > 0) $('#ungrounded').removeClass('hidden');
+
   });
 
   {{>layoutscript}}

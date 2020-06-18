@@ -6,8 +6,9 @@ function(o) {
       date = o.date,
       update = o.date,
       contributors = [].concat(o.readers, o.contributors).sort(),
-      users = contributors.filter(function(item, pos, ary) {return !pos || item != ary[pos - 1];} );
-  if (o.readers == undefined || o.readers.length == 0) users.push(null);
+      users = [];
+  if (typeof o.readers === "undefined" || o.readers.length == 0) contributors.push(null);
+  users = contributors.filter(function(item, pos, ary) {return !pos || item != ary[pos - 1];} );
   if (o.history) {
     date = o.history[0].date;
     update = o.history[o.history.length-1].date;
@@ -35,7 +36,7 @@ function(o) {
       emit([diary, 'Z', o.history[id].date], value);
     }
   }
-  if (o.commented) {
+  if (o.commented && o.text != "") {
     emit([diary, 'Z', date], {
       _id: o.commented,
       comment: o.text,

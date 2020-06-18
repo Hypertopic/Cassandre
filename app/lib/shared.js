@@ -442,7 +442,7 @@ var shared = {
         if (!data.checked || data.checked == '') {\
           data.checked = 'checked';\
         } else {\
-          data.checked = '';\
+          delete data.checked;\
         }\
         refresh = true;\
         $.ajax({\

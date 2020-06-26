@@ -215,7 +215,7 @@
       } else {
         momentRelative('#activity ul');
         $('#alert').remove();
-        $('#drawChart').removeClass('disabled');
+        if (start == 'Z') $('#drawChart').removeClass('disabled');
       }
     });
   }

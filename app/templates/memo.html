@@ -226,8 +226,8 @@
   <script>
   var metrics = {},
       trigrams = {},
-      leaf_type = '',
-      leaf_id = '';
+      leaf_type = leaf_id = '',
+      userids = [];
   $(document).ready(function() {
     {{>render}}
     moment.locale('{{locale}}');
@@ -415,11 +415,15 @@
     source: function(request, response) {
       $.getJSON('../../userlist/' + request.term, function (data) {
         response($.map(data.rows, function (value, key) {
-          if ("{{contributors}}".split(',').indexOf(value.id) == -1) return {
-            label: value.value.fullname,
-            value: value.id
-          };
+          if ("{{contributors}}".split(',').concat(userids).indexOf(value.id) == -1) {
+            userids.push(value.id);
+            return {
+              label: value.value.fullname,
+              value: value.id
+            };
+          }
         }));
+        userids = [];
       });
     },
     select: function (event, ui) {
@@ -439,11 +443,15 @@
     source: function(request, response) {
       $.getJSON('../../userlist/' + request.term, function (data) {
         response($.map(data.rows, function (value, key) {
-          if ("{{readers}}".split(',').indexOf(value.id) == -1) return {
-            label: value.value.fullname,
-            value: value.id
-          };
+          if ("{{readers}}".split(',').concat(userids).indexOf(value.id) == -1) {
+            userids.push(value.id);
+            return {
+              label: value.value.fullname,
+              value: value.id
+            };
+          }
         }));
+        userids = [];
       });
     },
     select: function (event, ui) {

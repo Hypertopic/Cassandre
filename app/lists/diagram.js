@@ -100,11 +100,12 @@ function(head, req) {
         });
       break;
       default:
-      var username = req.userCtx.name;
-      var type = row.doc.type || 'transcript';
-      var diary = row.doc.diary || row.doc.corpus;
-      var data = {
-        i18n: localized(),
+      var username = req.userCtx.name,
+          type = row.doc.type || 'transcript',
+          diary = row.doc.diary || row.doc.corpus,
+          i18n = localized(),
+          data = {
+        i18n: i18n,
         _id: row.doc._id,
         _rev: row.doc._rev,
         authorized: !row.doc.readers || row.doc.readers.length==0 || row.doc.readers.indexOf(username)>-1 || row.doc.contributors && row.doc.contributors.indexOf(username)>-1 || req.userCtx.roles.indexOf("_admin")>-1,
@@ -143,6 +144,12 @@ function(head, req) {
         }
         if (row.doc.statement) {
           data.statement = row.doc.statement;
+          data.leaves.push({
+            href: '../../statements/'+diary,
+            id: diary,
+            name: i18n["i_name"]["statement"]+'s',
+            type: 'storyline'
+          });
         }
       }
       break;

@@ -176,10 +176,17 @@ var shared = {
   $('#diary').on('click', function() {\
     self.location = '{{>relpath}}memo/{{diary}}/';\
   });\
+  var ground = ['{{_id}}'];\
+  {{#statements}}\
+  ground = [];\
+  {{#groundings}};\
+    ground.push('{{id}}');\
+  {{/groundings}}\
+  {{/statements}}\
   $('#leave-name').on('keypress', function(key) {\
     if (['coding','diagram'].indexOf('{{type}}') < 0 && key.which == 13) {\
       var classlist = $(this)[0].nextElementSibling.childNodes[1].classList;\
-      create(classlist[classlist.length - 1], '{{_id}}', $('#leave-name').val().trim());\
+      create(classlist[classlist.length - 1], ground, $('#leave-name').val().trim());\
     }\
   });\
   function create(type, grounding, name) {\
@@ -219,7 +226,7 @@ var shared = {
           }\
         } else {\
           var data = {\
-            groundings: [grounding],\
+            groundings: ground,\
             history: [{\
               'user': user,\
               'date': new Date().toJSON()\
@@ -624,8 +631,10 @@ var shared = {
       $('#leaves').addClass('invisible d-lg-none');\
       $('#leaves').removeClass('d-sm-block d-md-block d-lg-block d-xl-block');\
     }\
+    {{^statements}}\
     {{^link}}if ($('#groundings li').length > 1) $('#remove_grounding_btn').removeClass('d-none');{{/link}}\
     {{#type}}{{#logged}}track('{{_id}}');{{/logged}}{{/type}}\
+    {{/statements}}\
   "
 };
 

@@ -35,8 +35,10 @@
           </div>
           {{/body}}
           </div>
+          {{^statements}}
           {{>comments}}
           {{>rights}}
+          {{/statements}}
         {{/authorized}}
         </main>
         {{#authorized}}
@@ -105,12 +107,12 @@
           <div class="modal-body">
             <form>
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="type-of-field-memo" id="transcript-leaf" value="interview" required>
-                <label class="form-check-label" for="transcript-leaf">{{i18n.i_memo.transcript}}</label>
-              </div>
-              <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="type-of-field-memo" id="field-leaf" value="field" required>
                 <label class="form-check-label" for="field-leaf">{{i18n.i_memo.field}}</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="type-of-field-memo" id="transcript-leaf" value="interview" required>
+                <label class="form-check-label" for="transcript-leaf">{{i18n.i_memo.transcript}}</label>
               </div><br/>
               <label for="pseudonym" class="col-sm-3 col-form-label pseudonym">{{i18n.i_name.pseudonym}}</label>
               <input id="pseudonym" class="pseudonym" type="text" placeholder="{{i18n.i_name.transcript}}" /><br class="pseudonym"/>
@@ -207,17 +209,19 @@
           <span class="d-none d-sm-block">{{i18n.i_edit}}</span>
         </button>
         {{/editable}}
+        {{^statements}}
         {{>commentsbtn}}
+        {{/statements}}
       </div>
       <div id="add-leaves" class="form-inline justify-content-between">
-        {{#editable}}
+        {{#groundable}}
         <div class="input-group input-group-sm">
           <input id="leave-name" type="search" placeholder="" class="form-control hidden" />
           <div class="input-group-append">
             <span id="add" title="" class="input-group-text create-leave hidden">+</span>
           </div>
         </div>
-        {{/editable}}
+        {{/groundable}}
       </div>
       {{/authorized}}
     </nav>
@@ -244,6 +248,34 @@
         $(this).text("{{i18n.i_on-a-date}}"+' '+mmtime.format("Do MMMM YYYY"));
       }
     });
+    {{#statements}}
+    var nothing_to_show = '{{i18n.i_nothing-to-show}}';
+    {{^logged}}nothing_to_show +='. {{i18n.i_sign-in-for-more}}';{{/logged}}
+    if ($('.post').text().trim().length == 0) $('.post').text(nothing_to_show);
+    {{#logged}}
+    $.ajax({
+      url: "../../{{logged}}",
+      type: "GET",
+      dataType: "json",
+      success: function(data) {
+        if(data.fullname) $('#username').text(data.fullname);
+      }
+    });
+    {{/logged}}
+    $.ajax({
+      url: "../../{{diary}}",
+      type: "GET",
+      dataType: "json",
+      success: function(data) {
+        if(data.diary_name) {
+          $('#diary').text(data.diary_name);
+          $('title').prepend(data.diary_name);
+        }
+      }
+    }).done(function(){
+      stickToHeader();
+    });
+    {{/statements}}
     {{#logged}}
     {{#editing}}
     {{#editable}}
@@ -400,7 +432,12 @@
       });
     }
     stickToHeader();
+    {{^statements}}
     poller('memo');
+    {{/statements}}
+    {{#statements}}
+    poller('statements');
+    {{/statements}}
   });
 
   $('#add_contributor').on('keypress', function(key) {
@@ -476,12 +513,19 @@
 
   $('#add').on('click', function() {
     var classlist = $(this)[0].classList,
+        ground = '{{_id}}',
         type = classlist[classlist.length - 1];
     if (['field', 'interview'].indexOf(type) > -1) {
       $("#field-leaf").prop("checked", true).trigger("click");
       $('#field_title_dialog').modal('show');
     } else {
-      create(type, '{{_id}}', $('#leave-name').val().trim());
+      {{#statements}}
+      ground = [];
+      {{#groundings}};
+        ground.push("{{id}}");
+      {{/groundings}}
+      {{/statements}}
+      create(type, ground, $('#leave-name').val().trim());
     }
   });
 

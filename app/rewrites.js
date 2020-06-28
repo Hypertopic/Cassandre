@@ -209,6 +209,14 @@ function(req2) {
         "include_docs": "true"
       };
     break;
+    case 'statements':
+      reply.path = "_list/statements/statements";
+      reply.query = {
+        "startkey": '["'+path[1]+'", '+logged+']',
+        "endkey":   '["'+path[1]+'", '+logged+', {}]',
+        "include_docs": "true"
+      };
+    break;
     case 'table':
       reply.path = "_list/table/memo";
       reply.query = {

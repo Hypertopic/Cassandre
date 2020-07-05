@@ -172,7 +172,7 @@ function(head, req) {
       }
     if (fullnames[username]) data.logged_fullname = fullnames[username];
   }
-
+  data.groundable = data.editable;
   if (data._id) {
     if (data.editing && data.editing.user) data.editing.user_fullname = data.editing.user;
     if (fullnames[data.editing.user]) data.editing.user_fullname = fullnames[data.editing.user];

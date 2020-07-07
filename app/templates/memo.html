@@ -13,7 +13,7 @@
           <div>{{^logged}}{{i18n.i_sign-in-for-more}}{{/logged}}</div>
         {{/authorized}}
         {{#authorized}}
-          <h1><img src="../../style/{{type}}.svg"/> {{name}}</h1>
+          <h1><img src="{{>relpath}}style/{{type}}.svg"/> {{name}}</h1>
           <input id="name" type="search" class="form-control hidden" value="{{name}}"/>
           <div class="speeches">
           {{#body}}
@@ -163,18 +163,18 @@
     </div>
     <div id="show-leaves" class="d-none d-sm-block d-lg-block d-xl-none invisible">
       <div class="reverse">{{i18n.i_leaves}}
-        <img title="{{i18n.i_leaves}}" src="../../style/chevron-down.svg" alt="{{i18n.i_leaves}}"/>
+        <img title="{{i18n.i_leaves}}" src="{{>relpath}}style/chevron-down.svg" alt="{{i18n.i_leaves}}"/>
       </div>
     </div>
     <nav id="header" class="{{>navbarstyle}} navbar-expand-lg bd-navbar fixed-top">
       <a class="text-light" id="diary">{{diary_name}}</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span><img src="../../style/three-bars.svg" /></span>
+        <span><img src="{{>relpath}}style/three-bars.svg" /></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <div class="navbar-nav btn-group justify-content-between">
           <a id="toggle-groundings" class="nav-link d-none" data-toggle="collapse" title="{{i18n.i_show_groundings}}" aria-expanded="true" href=".groundings">
-            <span class="d-block d-sm-none"><img src="../../style/screen-normal.svg" alt="{{i18n.i_show_grounding}}"></span>
+            <span class="d-block d-sm-none"><img src="{{>relpath}}style/screen-normal.svg" alt="{{i18n.i_show_grounding}}"></span>
             <span class="d-none d-sm-block">{{i18n.i_show_groundings}}</span>
           </a>
         </div>
@@ -196,16 +196,16 @@
       <div role="group">
         {{#editable}}
         <button class='groundings btn navbar-btn btn-outline-light btn-sm collapse show' data-toggle="modal" data-target="#add_grounding" title="{{i18n.i_add_groundings}}">
-          <span class="d-block d-sm-none"><img src="../../style/grounding-add.svg" alt="{{i18n.i_remove_grounding}}"></span>
+          <span class="d-block d-sm-none"><img src="{{>relpath}}style/grounding-add.svg" alt="{{i18n.i_remove_grounding}}"></span>
           <span class="d-none d-sm-block">{{i18n.i_add_groundings}}</span>
         </button>
         <button class='groundings btn navbar-btn btn-outline-light btn-sm collapse show d-none' data-toggle="modal" data-target="#remove_grounding" title="{{i18n.i_remove_grounding}}" id="remove_grounding_btn">
-          <span class="d-block d-sm-none"><img src="../../style/grounding-remove.svg" alt="{{i18n.i_remove_grounding}}"></span>
+          <span class="d-block d-sm-none"><img src="{{>relpath}}style/grounding-remove.svg" alt="{{i18n.i_remove_grounding}}"></span>
           <span class="d-none d-sm-block">{{i18n.i_remove_grounding}}</span>
         </button>
         <button class="btn navbar-btn btn-outline-light btn-sm d-none {{#editing}}disabled{{/editing}}" id="edit"
           title="{{^editing}}{{i18n.i_edit}}{{/editing}}" {{#editing}}disabled{{/editing}}>
-          <span class="d-block d-sm-none"><img src="../../style/pencil.svg" alt="{{i18n.i_edit}}"></span>
+          <span class="d-block d-sm-none"><img src="{{>relpath}}style/pencil.svg" alt="{{i18n.i_edit}}"></span>
           <span class="d-none d-sm-block">{{i18n.i_edit}}</span>
         </button>
         {{/editable}}
@@ -226,7 +226,7 @@
       {{/authorized}}
     </nav>
   {{>script}}
-  <script src="../../script/showdown.min.js"></script>
+  <script src="{{>relpath}}script/showdown.min.js"></script>
   <script>
   var metrics = {},
       trigrams = {},
@@ -254,7 +254,7 @@
     if ($('.post').text().trim().length == 0) $('.post').text(nothing_to_show);
     {{#logged}}
     $.ajax({
-      url: "../../{{logged}}",
+      url: "{{>relpath}}{{logged}}",
       type: "GET",
       dataType: "json",
       success: function(data) {
@@ -263,7 +263,7 @@
     });
     {{/logged}}
     $.ajax({
-      url: "../../{{diary}}",
+      url: "{{>relpath}}{{diary}}",
       type: "GET",
       dataType: "json",
       success: function(data) {

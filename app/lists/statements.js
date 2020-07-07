@@ -18,6 +18,7 @@ function(head, req) {
     contributors: [],
     readers: [],
     editable: false,
+    flat: true,
     groundings: [],
     leaves: [],
     type: 'storyline',
@@ -31,7 +32,7 @@ function(head, req) {
       case 'L':
         data.leaves.push({
           id: row.value.id,
-          href: '../../graph/'+ diary +'/'+ row.value.id,
+          href: '../graph/'+ diary +'/'+ row.value.id,
           type: 'graph',
           name: row.value.name
         });
@@ -39,7 +40,7 @@ function(head, req) {
       case 'S':
         data.groundings.push({
           id: row.value._id,
-          href: '../../diagram/'+ diary +'/'+ row.value._id,
+          href: '../diagram/'+ diary +'/'+ row.value._id,
           type: 'diagram',
           preview: row.doc.negative,
           name: row.doc.name

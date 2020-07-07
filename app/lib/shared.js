@@ -243,20 +243,21 @@ var shared = {
           if (readers.length > 0) {\
             data.readers = readers.split(',');\
           }\
+          var destination = '{{>relpath}}';\
           switch (type) {\
             case 'transcript':\
-              var destination = '../../editable_text/';\
+              destination += 'editable_text/';\
               data.corpus = '{{diary}}',\
               data.speeches = [{actor:'',text:''}];\
             break;\
             case 'table':\
-              var destination = '../../table/{{diary}}/';\
+              destination += 'table/{{diary}}/';\
               data.cells = [{'...':[{'{{_id}}':'...'}]}];\
               data.diary = '{{diary}}';\
               data.type = type;\
             break;\
             case 'diagram':\
-              var destination = '../../diagram/{{diary}}/';\
+              destination += 'diagram/{{diary}}/';\
               data.diary = '{{diary}}';\
               data.name = name;\
               data.link = 'pp';\
@@ -264,7 +265,7 @@ var shared = {
             break;\
             {{#link}}\
             case 'graph':\
-              var destination = '../../graph/{{diary}}/';\
+              destination += 'graph/{{diary}}/';\
               data.diary = '{{diary}}';\
               data.type = type;\
               var nodes = [];\
@@ -290,14 +291,14 @@ var shared = {
             break;\
             {{/link}}\
             default:\
-              var destination = '../../editable_memo/';\
+              destination += 'editable_memo/';\
               data.diary = '{{diary}}',\
               data.body = '';\
               data.type = type;\
           }\
           if (type) {\
             $.ajax({\
-              url: '../../',\
+              url: '{{>relpath}}',\
               type: 'POST',\
               dataType: 'json',\
               contentType: 'application/json',\

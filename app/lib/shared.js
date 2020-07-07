@@ -186,10 +186,10 @@ var shared = {
   $('#leave-name').on('keypress', function(key) {\
     if (['coding','diagram'].indexOf('{{type}}') < 0 && key.which == 13) {\
       var classlist = $(this)[0].nextElementSibling.childNodes[1].classList;\
-      create(classlist[classlist.length - 1], ground, $('#leave-name').val().trim());\
+      create(classlist[classlist.length - 1], $('#leave-name').val().trim());\
     }\
   });\
-  function create(type, grounding, name) {\
+  function create(type, name) {\
     if (name.replace(/[ ,]/g, '') == '' && type != 'diagram') {\
       switch (type) {\
         case 'transcript':\

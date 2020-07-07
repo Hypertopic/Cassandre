@@ -306,7 +306,7 @@
   {{#editable}}
   $('.create-leave').on('click', function() {
     var classlist = $(this)[0].classList;
-    create(classlist[classlist.length - 1], '{{_id}}', $('#leave-name').val().trim());
+    create(classlist[classlist.length - 1], $('#leave-name').val().trim());
   });
 
   $('.articulate').on('click', function() {

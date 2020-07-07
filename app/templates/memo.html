@@ -519,13 +519,7 @@
       $("#field-leaf").prop("checked", true).trigger("click");
       $('#field_title_dialog').modal('show');
     } else {
-      {{#statements}}
-      ground = [];
-      {{#groundings}};
-        ground.push("{{id}}");
-      {{/groundings}}
-      {{/statements}}
-      create(type, ground, $('#leave-name').val().trim());
+      create(type, $('#leave-name').val().trim());
     }
   });
 
@@ -538,7 +532,7 @@
       $("#transcript-leaf").prop("checked", true).trigger("click");
       $('#field_title_dialog').modal('show');
     } else {
-      create(type, '{{_id}}', name);
+      create(type, name);
     }
   });
 
@@ -549,7 +543,7 @@
     if ([$('#location').val().trim(), $('#date').val().trim()].indexOf('') > -1) {
       alert('{{i18n.i_enter_location_date}}');
     } else {
-      create(type, '{{_id}}', name);
+      create(type, name);
     }
   });
 
@@ -570,7 +564,7 @@
   $('#create-table').on('click', function() {
     var classlist = $(this)[0].classList;
         type = classlist[classlist.length - 1];
-    create(type, '{{_id}}', $('#leave-name').val().trim());
+    create(type, $('#leave-name').val().trim());
   });
 
   $('#link_leaf').on('click', function() {

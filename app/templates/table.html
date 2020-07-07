@@ -183,9 +183,9 @@
   {{#editable}}
   $('table')
     .on('click', '.create', function() {
+      ground = [$(this).parent().attr("id").substr(4)];
       create(
-        $(this)[0].className.split(' ')[1] ,
-        $(this).parent().attr("id").substr(4) ,
+        $(this)[0].className.split(' ').pop(),
         $(this).parent().html().split('<')[0]
       );
     })
@@ -241,7 +241,7 @@
 
   $('#add').on('click', function() {
     var classlist = $(this)[0].classList;
-    create(classlist[classlist.length - 1], '{{_id}}', $('#leave-name').val().trim());
+    create(classlist[classlist.length - 1], $('#leave-name').val().trim());
   });
 
   $('#add_grounding').on('show.bs.modal', function (event) {

@@ -67,8 +67,14 @@
         <div role='group'>
           {{#editable}}
           <button class='groundings btn btn-outline-light btn-sm collapse show' data-toggle="modal" data-target="#add_grounding" id="add_grounding_btn"><span>{{i18n.i_add_groundings}}</span></button>
-          <button class="btn btn-outline-light btn-sm hidden" id="write_statement">{{i18n.i_write_statement}}</button>
-          <button class="btn btn-outline-light btn-sm hidden" id="add_negative-case">{{i18n.i_add_negative-case}}</button>
+          <button class="btn btn-outline-light btn-sm hidden" id="write_statement" title="{{i18n.i_write_statement}}">
+            <span class="d-block d-sm-none" title="{{i18n.i_write_statement}}">3V</span>
+            <span class="d-none d-sm-block">{{i18n.i_write_statement}}</span>
+          </button>
+          <button class="btn btn-outline-light btn-sm hidden" id="add_negative-case" title="{{i18n.i_add_negative-case}}">
+            <span class="d-block d-sm-none"><img src="{{>relpath}}style/location.svg" alt="{{i18n.i_add_negative-case}}"></span>
+            <span class="d-none d-sm-block">{{i18n.i_add_negative-case}}</span>
+          </button>
           <button class="btn btn-outline-light btn-sm hidden" id="negative-case_done">{{i18n.i_done}}</button>
           <button class="btn btn-outline-light btn-sm hidden" id="statement_done">{{i18n.i_done}}</button>
           {{/editable}}

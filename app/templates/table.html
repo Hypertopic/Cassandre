@@ -57,8 +57,14 @@
       <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
         <div role="group">
           {{#editable}}
-          <button class='groundings btn btn-outline-light btn-sm collapse show' data-toggle="modal" data-target="#add_grounding"><span>{{i18n.i_add_groundings}}</span></button>
-          <button class='groundings btn btn-outline-light btn-sm collapse show d-none' data-toggle="modal" data-target="#remove_grounding" id="remove_grounding_btn">{{i18n.i_remove_grounding}}</button>
+          <button class='groundings btn btn-outline-light btn-sm collapse show' data-toggle="modal" data-target="#add_grounding" title="{{i18n.i_add_groundings}}">
+            <span class="d-block d-sm-none"><img src="{{>relpath}}style/grounding-add.svg" alt="{{i18n.i_add_groundings}}"></span>
+            <span class="d-none d-sm-block">{{i18n.i_add_groundings}}</span>
+          </button>
+          <button class='groundings btn btn-outline-light btn-sm collapse show d-none' data-toggle="modal" data-target="#remove_grounding" id="remove_grounding_btn" title="{{i18n.i_remove_grounding}}">
+            <span class="d-block d-sm-none"><img src="{{>relpath}}style/grounding-remove.svg" alt="{{i18n.i_remove_grounding}}"></span>
+            <span class="d-none d-sm-block">{{i18n.i_remove_grounding}}</span>
+          </button>
           <button id="add_row" class="btn btn-outline-light btn-sm hidden">{{i18n.i_create.row}}</button>
           {{/editable}}
           {{#authorized}}

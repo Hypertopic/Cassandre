@@ -15,7 +15,10 @@
           <h1>{{i18n.i_diaries}}</h1>
           <div class="card-columns">
             {{#logged}}
-            <div id="loading" class="progress-bar progress-bar-striped progress-bar-animated alert" role="progressbar">{{i18n.i_loading}}</div>
+            <div id="loading" class="d-flex justify-content-center progress-bar progress-bar-striped progress-bar-animated alert" title="{{i18n.i_loading}}">
+              <div class="d-none d-sm-inline-block">{{i18n.i_loading}}</div>
+              <div class="d-sm-none spinner-border spinner-border-sm ml-auto  mr-auto mr-sm-0" role="status" aria-hidden="true"></div>
+            </div>
             {{/logged}}
             {{#diaries}}
             <div class="card text-center bg-light mb-3">
@@ -65,7 +68,7 @@
     }).done(function(){
       if (added.length > 1) $("#show").removeClass('d-none');
     }).done(function(){
-      $("#loading").addClass('d-none');
+      $("#loading").addClass('d-none').removeClass('d-flex');
     });
     $.ajax({
       url: "../{{logged}}",

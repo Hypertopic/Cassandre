@@ -221,8 +221,12 @@ a.dropdown-item, .create-leave, a.dropdown-toggle,
   color: transparent;
 }
 
-.create-leave:hover {
+.spinner-border, .create-leave:hover {
   color: black;
+}
+
+.alert > .spinner-border {
+  color: white;
 }
 
 .create {

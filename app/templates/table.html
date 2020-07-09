@@ -144,7 +144,9 @@
                   var hcell = tbl_header.insertCell(created_headers.indexOf(k));
                   hcell.id = 'head'+k;
                   hcell.innerHTML = $('#'+k).find('a').html();
-                  hcell.innerHTML += '<button type="button" title="{{i18n.i_create.diagram}}" class="create create-leave diagram">+</button>';
+                  hcell.innerHTML += '<button type="button" title="{{i18n.i_create.diagram}}" class="create create-leave diagram">+';
+                  hcell.innerHTML += '<span title="{{i18n.i_loading}}" class="d-none spinner spinner-border spinner-border-sm" role="status"></span>';
+                  hcell.innerHTML += '</button>';
                 }
                 while (tbl_row.cells.length < created_headers.indexOf(k)) {
                   var cell = tbl_row.insertCell(tbl_row.cells.length);

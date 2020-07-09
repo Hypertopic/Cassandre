@@ -190,7 +190,9 @@ var shared = {
     }\
   });\
   function create(type, name) {\
+    $('.spinner').removeClass('d-none');\
     if (name.replace(/[ ,]/g, '') == '' && type != 'diagram') {\
+      $('.spinner').addClass('d-none');\
       switch (type) {\
         case 'transcript':\
         case 'field':\
@@ -217,6 +219,7 @@ var shared = {
         }\
         if (i != -1) {\
           if(existing_memos.rows[i].value.groundings.indexOf('{{_id}}') != -1) {\
+            $('.spinner').addClass('d-none');\
             alert('{{i18n.i_memo_already_linked}}');\
           } else {\
             leaf_type = existing_memos.rows[i].value.type,\

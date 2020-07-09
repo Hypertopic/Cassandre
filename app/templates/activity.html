@@ -33,7 +33,10 @@
           <span class="created d-none"></span>
           <span class="modified d-none"></span>
         </div>
-        <div id="alert">{{i18n.i_loading}}</div>
+        <div id="alert" class="d-flex justify-content-center" title="{{i18n.i_loading}}">
+          <div class="d-none d-sm-inline-flex">{{i18n.i_loading}}</div>
+          <div class="spinner-border spinner-border-sm ml-auto  mr-auto mr-sm-0" role="status" aria-hidden="true"></div>
+        </div>
         <ul>
         </ul></div>
       </main>
@@ -71,7 +74,9 @@
 
   $('#drawChart').on('click', function() {
     $('#drawChart').addClass('disabled');
-    $('#cal-heatmap').append('<div id="loading" class="progress-bar progress-bar-striped progress-bar-animated alert" role="progressbar">{{i18n.i_loading}}</div>');
+    $('#cal-heatmap').append('<div id="loading" class="d-flex justify-content-center" title="{{i18n.i_loading}}">\
+      <div class="d-none d-sm-inline-flex">{{i18n.i_loading}}</div>\
+      <div class="spinner-border spinner-border-sm ml-auto  mr-auto mr-sm-0" role="status" aria-hidden="true"></div></div>');
     $.ajax({
       url: "../../activity_chart/{{diary}}/",
       type: "GET",

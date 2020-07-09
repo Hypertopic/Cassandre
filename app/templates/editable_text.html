@@ -14,7 +14,10 @@
           {{#authorized}}
           <h1>{{#attributes}}{{value}}{{/attributes}}</h1>
           <p>{{i18n.i_patience-during-conversion}}
-          <div id="loading" class="progress-bar progress-bar-striped progress-bar-animated alert" role="progressbar">{{i18n.i_loading}}</div>
+          <div id="loading" class="d-flex justify-content-center" title="{{i18n.i_loading}}">
+            <div class="d-none d-sm-inline-flex">{{i18n.i_loading}}</div>
+            <div class="spinner-border spinner-border-sm ml-auto  mr-auto mr-sm-0" role="status" aria-hidden="true"></div>
+          </div>
           </p>
           {{/authorized}}
         </div>

@@ -145,10 +145,10 @@
         dataType: "json"
       })
     }
-    pendingtasks().success(tasks => $.each(tasks, function(k,v) {
+    pendingtasks().done(tasks => $.each(tasks, function(k,v) {
       taskreport(k,v);
     }));
-    uncheckedcomments().success(data => taskreport('comments', data.comments.length));
+    uncheckedcomments().done(data => taskreport('comments', data.comments.length));
     if (number > 0) $('#tasklist-alert').removeClass("hidden");
     {{/list}}
     $.ajax({
@@ -199,7 +199,7 @@
     })
     .on('click', '#delete', function() {
       var checked = $("input.deletable:checked");
-      var countdown = checked.size();
+      var countdown = checked.length;
       if (!countdown) {
         resetUI();
       }

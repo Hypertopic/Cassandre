@@ -185,7 +185,7 @@ var shared = {
   {{/statements}}\
   $('#leave-name').on('keypress', function(key) {\
     if (['coding','diagram'].indexOf('{{type}}') < 0 && key.which == 13) {\
-      var classlist = $(this)[0].nextElementSibling.childNodes[1].classList;\
+      var classlist = $(this)[0].nextElementSibling.childNodes[1].nextElementSibling.classList;\
       create(classlist[classlist.length - 1], $('#leave-name').val().trim());\
     }\
   });\
@@ -318,7 +318,7 @@ var shared = {
   {{/list}}\
   function poller(what) {\
     $.ajax({\
-      url: '../../changes/'+what+'/{{_id}}/{{update_seq}}'\
+      url: '{{>relpath}}changes/'+what+'/{{_id}}/{{update_seq}}'\
     }).done(function(data){\
       if (data.results.length) {\
         reload();\

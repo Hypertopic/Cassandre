@@ -1,5 +1,6 @@
 function(head, req) {
   // !json templates.diagram
+  // !json templates.deleted
   // !code lib/mustache.js
   // !code l10n/l10n.js
   // !code lib/shared.js
@@ -156,5 +157,9 @@ function(head, req) {
       }
     if (fullnames[username]) data.logged_fullname = fullnames[username];
   }
-  return Mustache.to_html(templates.diagram, data, shared);
+  if (data) {
+    return Mustache.to_html(templates.diagram, data, shared);
+  } else {
+    return Mustache.to_html(templates.deleted, {i18n: localized()}, shared);
+  }
 }

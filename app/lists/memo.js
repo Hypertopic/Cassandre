@@ -36,7 +36,7 @@ function(head, req) {
         var user = row.value._id;
         if (row.doc && !fullnames[user]) fullnames[user] = row.doc.fullname;
         if (row.doc && row.doc.fullname) user = row.doc.fullname;
-        data.comments.push({
+        if (data && data.comments) data.comments.push({
           user: user,
           date: row.value.date,
           text: row.value.text,
@@ -179,6 +179,6 @@ function(head, req) {
     data.groundings = dSort(data.groundings, data.locale);
     return Mustache.to_html(templates.memo, data, shared);
   } else {
-    return Mustache.to_html(templates.deleted, data, shared);
+    return Mustache.to_html(templates.deleted, {i18n: localized()}, shared);
   }
 }

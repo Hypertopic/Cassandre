@@ -360,9 +360,8 @@ var shared = {
   $('h1').on('click', function() {\
     $(this).hide();\
     $('#leave-name').addClass('hidden');\
-    $('#add').addClass('hidden');\
-    $('#create').addClass('hidden');\
-    $('#add-table').addClass('hidden');\
+    $('#footer > div > button').prop('disabled', true);\
+    $('#add-leaves').addClass('hidden');\
     $('#name').removeClass('hidden');\
   });\
   $('#name').on('keypress', function(key) {\
@@ -422,6 +421,8 @@ var shared = {
   $('#comment_create').click(function () {\
     refresh = false;\
     $('#comment_create').remove();\
+    $('#footer > div > button').addClass('hidden');\
+    $('#add-leaves').addClass('hidden');\
     $('#comments').find('textarea').removeClass('hidden');\
     $('#commented').removeClass('hidden');\
     $('html, body').scrollTop($(document).height());\

@@ -64,6 +64,11 @@
     element: $("#body")[0],
     showIcons: ["table"],
     hideIcons: ["quote"],
+    autosave: {
+      enabled: true,
+      uniqueId: "{{_id}}",
+      delay: 1000,
+    },
     placeholder: placeHolder["{{type}}"]["content"],
     spellChecker: false
   });

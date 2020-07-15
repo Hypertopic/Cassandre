@@ -62,13 +62,12 @@
 
   var simplemde = new SimpleMDE({
     element: $("#body")[0],
-    showIcons: ["table"],
-    hideIcons: ["quote"],
     autosave: {
       enabled: true,
       uniqueId: "{{_id}}",
       delay: 1000,
     },
+    toolbar: ["bold", "italic", "strikethrough", "|", "heading-3", "unordered-list", "horizontal-rule", "|", "link", "image", "table", "|", "guide"],
     placeholder: placeHolder["{{type}}"]["content"],
     spellChecker: false
   });

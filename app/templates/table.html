@@ -42,6 +42,9 @@
           </div>
           <p class='spacer'>&nbsp;</p>
           {{>comments}}
+          <div aria-live="polite" aria-atomic="true">
+            <div id="toasts"></div>
+          <div>
           {{/authorized}}
         </main>
         {{#authorized}}

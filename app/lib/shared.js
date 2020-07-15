@@ -597,8 +597,8 @@ var shared = {
       var maintenance_start = new Date(data.date);\
       var maintenance_end = moment(maintenance_start).add(30, 'm').toDate();\
       if (maintenance_start > new Date(Date.now())) {\
-        $('main').append('\
-          <div class=\"toast\"  style=\"position: absolute; top: 1%; right: 3%;\" role=\"alert\">\
+        $('#toasts').append('\
+          <div class=\"toast\" role=\"alert\">\
             <div class=\"toast-body alert-danger\">\
             <button type=\"button\" class=\"close\" data-dismiss=\"toast\">×</button>\
             {{i18n.i_maintenance}} '+moment(data.date).calendar().toLowerCase()+'\
@@ -607,7 +607,7 @@ var shared = {
         $('.toast').toast({autohide: false});\
         $('.toast').toast('show');\
       } else if (maintenance_end > new Date(Date.now())) {\
-        $('main').append('\
+        $('toasts').append('\
           <div class=\"toast\"  style=\"position: absolute; top: 1%; right: 3%;\" role=\"alert\">\
             <div class=\"toast-body alert-danger\">\
             <button type=\"button\" class=\"close\" data-dismiss=\"toast\">×</button>\

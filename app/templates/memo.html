@@ -39,6 +39,9 @@
           {{>comments}}
           {{>rights}}
           {{/statements}}
+          <div aria-live="polite" aria-atomic="true" class="position-0">
+            <div id="toasts"></div>
+          <div>
         {{/authorized}}
         </main>
         {{#authorized}}
@@ -290,7 +293,7 @@
       document.getElementById('edit').disabled = true
     }
     {{/editable}}
-    $('main').append('<div class="toast" style="position: absolute; top: 1%; right: 3%;" role="alert">'
+    $('#toasts').append('<div class="toast" role="alert">'
       + '<div class="toast-body alert-warning">'
       + '<button type="button" class="close" data-dismiss="toast">×</button>'
       + $('#editing').text().replace(/\s+/g, " ") + '</div></div>');

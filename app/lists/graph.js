@@ -1,5 +1,6 @@
 function(head, req) {
   // !json templates.graph
+  // !json templates.deleted
   // !code lib/mustache.js
   // !code l10n/l10n.js
   // !code lib/shared.js
@@ -157,6 +158,10 @@ function(head, req) {
       }
     if (fullnames[username]) data.logged_fullname = fullnames[username];
   }
-  data.groundings = dSort(data.groundings, data.locale);
-  return Mustache.to_html(templates.graph, data, shared);
+  if (data) {
+    data.groundings = dSort(data.groundings, data.locale);
+    return Mustache.to_html(templates.graph, data, shared);
+  } else {
+    return Mustache.to_html(templates.deleted, {i18n: localized()}, shared);
+  }
 }

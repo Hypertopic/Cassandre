@@ -83,12 +83,12 @@ function(head, req) {
         }
       break;
       case ('L'):
-        var type = row.doc.type || 'transcript';
-        var id = row.doc._id;
-        var href = row.doc._id;
-        var name = row.doc.name || '...';
+        var type = row.doc.type || 'transcript',
+            id = row.doc._id,
+            href = row.doc._id,
+            name = row.doc.name || '...';
         if (type === 'diagram' || type === 'table') href = '../../'+type+'/'+diary+'/'+href;
-        data.leaves.push({
+        if (typeof data.leaves !== 'undefined') data.leaves.push({
           href: href,
           id: id,
           name: name,

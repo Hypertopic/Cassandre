@@ -9,7 +9,9 @@
   </head>
   <body>
     <nav id="header" class="{{>navbarstyle}} navbar-expand-md fixed-top">
-      <a class="text-light" id="diaries">{{i18n.i_diaries}}</a>
+      <a class="navbar-brand" id="diaries" title="{{i18n.i_diaries}}">
+        <img src="../../style/brand.svg" width="30" height="30" alt="{{i18n.i_diaries}}" loading="lazy">
+      </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="text-light bg-dark"><img src="../../style/three-bars.svg" alt="=" /></span>
       </button>
@@ -75,7 +77,9 @@
       </div>
     </div>
     <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
-      <a class='navbar-text' href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
+      <a class='navbar-text' href="https://github.com/Hypertopic/Cassandre/wiki">
+        <img src="../../style/info.svg" width="30" height="30" alt="Cassandre" loading="lazy">
+      </a>
     </nav>
   {{>script}}
   {{#list}}<script src="../../script/showdown.min.js"></script>{{/list}}
@@ -235,7 +239,8 @@
     $("#memos>li>input").addClass("hidden");
     $("#footer").html(
       '<button class="btn navbar-btn btn-outline-light btn-sm" type="button" id="show_delete">{{i18n.i_delete}}...</button>'
-      + '<a class="navbar-text" href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>'
+      + '<a class="navbar-text" href="https://github.com/Hypertopic/Cassandre/wiki">'
+      + '<img src="../../style/info.svg" width="30" height="30" alt="Cassandre" loading="lazy"></a>'
     );
   }
 

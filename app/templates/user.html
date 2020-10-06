@@ -8,7 +8,9 @@
   <body>
     <div id="container">
       <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
-        <a class="text-light" id="diaries">{{i18n.i_diaries}}</a>
+        <a class="text-light" id="diaries">
+          <img src="../style/brand.svg" width="30" height="30" alt="{{i18n.i_diaries}}" loading="lazy">
+        </a>
         <ul class="navbar-nav mr-auto"></ul>
         {{>log}}
       </nav>
@@ -41,7 +43,9 @@
           <button class='btn navbar-btn btn-outline-light btn-sm' id="next">{{i18n.i_show-more}}</button>
         </div>
         {{/authorized}}
-        <a class='navbar-text' href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
+        <a class='navbar-text' href="https://github.com/Hypertopic/Cassandre/wiki">
+          <img src="../style/info.svg" width="30" height="30" alt="Cassandre" loading="lazy">
+        </a>
       </nav>
     </div>
   {{>script}}

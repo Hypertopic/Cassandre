@@ -15,8 +15,8 @@ body {
 }
 
 #watermark {
-  background-image: url(cassandre_background.png);
-  background-position: 100% 0%;
+  background-image: url(cassandre_background.svg);
+  background-position: 100% 20%;
   background-repeat: no-repeat;
 }
 

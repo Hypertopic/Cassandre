@@ -18,7 +18,7 @@ function(head, req) {
     contributors: [],
     readers: [],
     editable: false,
-    flat: true,
+    flat: false,
     groundings: [],
     leaves: [],
     type: 'storyline',

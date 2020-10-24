@@ -3,7 +3,7 @@
   <head>
     <title>{{diary_name}} - {{name}}</title>
     {{>links}}
-    <link rel="stylesheet" href="../style/simplemde.min.css" />
+    <link rel="stylesheet" href="../style/easymde.min.css" />
   </head>
   <body>
       <header>
@@ -48,7 +48,7 @@
       </nav>
 
   <script src="../script/jquery.js"></script>
-  <script src="../script/simplemde.min.js"></script>
+  <script src="../script/easymde.min.js"></script>
   <script>
   var placeHolder = [];
   placeHolder["field"] = {name : "{{i18n.i_name.field}}", content: "{{{i18n.i_content.field}}}"};
@@ -60,12 +60,13 @@
   placeHolder["storyline"] = {name : "{{i18n.i_name.storyline}}", content: "{{{i18n.i_content.storyline}}}"};
   $("#name").attr("placeHolder", placeHolder["{{type}}"]["name"]);
 
-  var simplemde = new SimpleMDE({
+  var easymde = new EasyMDE({
     element: $("#body")[0],
     autosave: {
       enabled: true,
       uniqueId: "{{_id}}",
       delay: 1000,
+      timeFormat: {locale: '{{locale}}'}
     },
     toolbar: ["bold", "italic", "strikethrough", "|", "heading-3", "unordered-list", "horizontal-rule", "|", "link", "image", "table", "|", "guide"],
     placeholder: placeHolder["{{type}}"]["content"],
@@ -112,7 +113,7 @@
       type: "GET",
       dataType: "json",
       success: function(data) {
-        data.body = simplemde.value().replace(/ *\n/g, " \n");
+        data.body = easymde.value().replace(/ *\n/g, " \n");
         if (!data.history) data.history = [];
         var user = "{{peer}}";
         if ("{{logged}}") user = "{{logged}}";
@@ -140,6 +141,7 @@
 
   $('#done').on('click', function() {
     save(false, function() {
+      easymde.clearAutosavedValue();
       self.location = '../memo/{{diary}}/{{_id}}';
     });
   });

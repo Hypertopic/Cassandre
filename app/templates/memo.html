@@ -73,7 +73,21 @@
         <div class="modal-content">
           <div class="modal-header">{{i18n.i_add_groundings}}</div>
           <div class="modal-body">
-            <select onChange="record('add_grounding', this.value);"><option>{{i18n.i_select_grounding}}</option></select>
+            <div id="loading" class="spinner-border spinner-border-sm ml-auto  mr-auto mr-sm-0" role="status" aria-hidden="true"></div>
+            <div id="type_filter" hidden>{{i18n.i_filter}} <select onChange="filter(this.value);">
+              <option>{{i18n.i_type}}</option>
+              <option value="theoretical" hidden>{{i18n.i_memo.theoretical}}</option>
+              <option value="operational" hidden>{{i18n.i_memo.operational}}</option>
+              <option value="field" hidden>{{i18n.i_memo.field}}</option>
+              <option value="interview" hidden>{{i18n.i_memo.transcript}}</option>
+              <option value="transcript" hidden>{{i18n.i_memo.transcript}}</option>
+              <option value="coding" hidden>{{i18n.i_memo.coding}}</option>
+              <option value="table" hidden>{{i18n.i_memo.table}}</option>
+              <option value="diagram" hidden>{{i18n.i_memo.diagram}}</option>
+              <option value="graph" hidden>{{i18n.i_memo.graph}}</option>
+              <option value="storyline" hidden>{{i18n.i_memo.storyline}}</option>
+            </select></div>
+            <select id="select_grounding" onChange="record('add_grounding', this.value);" hidden><option>{{i18n.i_select_grounding}}</option></select>
           </div>
         </div>
       </div>
@@ -598,15 +612,45 @@
         for (var i in ground_candidates.rows) {
           var r = ground_candidates.rows[i],
               id = r.value['id'],
+              type = r.value['type'],
               name = r.value['name'];
           if (name.length > 45) name = name.substr(0,45)+'...';
           if(document.getElementById(id) == null && id != "{{_id}}") {
-            $("#add_grounding").find('select').append($('<option>', {
-              value: id,
+            $('#type_filter select option[value="' + type + '"]').removeAttr("hidden");
+            $("#select_grounding").append($('<option>', {
               title: r.value['name'],
-              text: name
+              text: name,
+              class: type,
+              value: id
             }));
           }
+        }
+        $('#loading').remove();
+        $('#type_filter').removeAttr("hidden");
+        $('#select_grounding').removeAttr("hidden");
+        switch ('{{type}}') {
+          case ('field'):
+          case ('transcript'):
+          case ('interview'):
+            $('#type_filter select option[value="operational"]').prop("selected", true);
+            filter('operational');
+            break;
+          case ('coding'):
+            $('#type_filter select option[value="interview"]').prop("selected", true);
+            filter('interview');
+            break;
+          case ('theoretical'):
+            $('#type_filter select option[value="coding"]').prop("selected", true);
+            filter('coding');
+            break;
+          case ('operational'):
+            $('#type_filter select option[value="theoretical"]').prop("selected", true);
+            filter('theoretical');
+            break;
+          case ('storyline'):
+            $('#type_filter select option[value="diagram"]').prop("selected", true);
+            filter('diagram');
+            break;
         }
       }
     });
@@ -644,6 +688,10 @@
         contentType: "application/json",
         data: JSON.stringify(diagram)
       });
+  function filter(type) {
+    $('#select_grounding option').each(function() {
+      $(this).prop("hidden", false);
+      if (!$(this).hasClass(type)) $(this).prop("hidden", true);
     });
   }
 

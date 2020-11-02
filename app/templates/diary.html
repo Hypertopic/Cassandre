@@ -291,7 +291,7 @@
     momentRelative('#memos');
     converter.setFlavor('github');
     $('.preview').html(function(i, text) {
-      return converter.makeHtml(text.trim());
+      return converter.makeHtml(text.replace(/&gt;/g, '>').trim());
     });
     var nothing_to_show = '{{i18n.i_nothing-to-show}}';
     {{^logged}}nothing_to_show +='. {{i18n.i_sign-in-for-more}}';{{/logged}}

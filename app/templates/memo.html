@@ -395,7 +395,7 @@
       strikethrough: 'true'
     });
     $('.post').html(function(i, text) {
-      return converter.makeHtml(text.trim());
+      return converter.makeHtml(text.replace(/&gt;/g, '>').trim());
     });
     if ($('#groundings li').length == 1) $("#groundings").find('legend').text("{{i18n.i_grounding}}");
     if ($('#groundings li').length < 1) $("#groundings").addClass('hidden');
@@ -537,31 +537,33 @@
       $("#field-leaf").prop("checked", true).trigger("click");
       $('#field_title_dialog').modal('show');
     } else {
-      create(type, $('#leave-name').val().trim());
+      create(type, $('#leave-name').val().trim(), $('#kwic').val());
     }
   });
 
   $('#create').on('click', function() {
     var name = $('#leave-name').val().trim(),
         classlist = $(this)[0].classList,
+        highlight = $('#kwic').val(),
         type = classlist[classlist.length - 1];
     if (type == 'diagram') name = $('#name').val().trim(); 
     if (type == 'interview') {
       $("#transcript-leaf").prop("checked", true).trigger("click");
       $('#field_title_dialog').modal('show');
     } else {
-      create(type, name);
+      create(type, name, highlight);
     }
   });
 
   $('#create_field-memo').on('click', function() {
     var name = $('#location').val().trim() + ', ' + $('#date').val().trim(),
+        highlight = $('#kwic').val(),
         type = $('input[name="type-of-field-memo"]:checked').val();
     if (type != 'field') name = $('#pseudonym').val().trim() + ', ' + name;
     if ([$('#location').val().trim(), $('#date').val().trim()].indexOf('') > -1) {
       alert('{{i18n.i_enter_location_date}}');
     } else {
-      create(type, name);
+      create(type, name, highlight);
     }
   });
 
@@ -582,7 +584,7 @@
   $('#create-table').on('click', function() {
     var classlist = $(this)[0].classList;
         type = classlist[classlist.length - 1];
-    create(type, $('#leave-name').val().trim());
+    create(type, $('#leave-name').val().trim(), $('#kwic').val());
   });
 
   $('#link_leaf').on('click', function() {

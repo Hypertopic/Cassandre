@@ -9,6 +9,13 @@ body {
   margin: 0;
 }
 
+blockquote {
+  color: gray;
+  margin-left: 1rem;
+  padding-left: 1rem;
+  border-left: 3px gray solid;
+}
+
 #leaves a,
 #groundings a, #content a {
   color: gray !important;
@@ -143,6 +150,13 @@ div.post {
 
 .mytooltip:hover .preview img{
   width: 100%;
+}
+
+.mytooltip:hover .preview blockquote {
+  color: white;
+  padding-left: 1rem;
+  padding-left: 0rem;
+  border-left: 0px;
 }
 
 .card>p>.moment,

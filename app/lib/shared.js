@@ -189,7 +189,7 @@ var shared = {
       create(classlist[classlist.length - 1], $('#leave-name').val().trim());\
     }\
   });\
-  function create(type, name) {\
+  function create(type, name, highlight) {\
     $('.spinner').removeClass('d-none');\
     if (name.replace(/[ ,]/g, '') == '' && type != 'diagram') {\
       $('.spinner').addClass('d-none');\
@@ -297,6 +297,7 @@ var shared = {
               destination += 'editable_memo/';\
               data.diary = '{{diary}}',\
               data.body = '';\
+              if (type == 'coding' && highlight.length > 0) data.body += '> '+highlight+'\\n';\
               data.type = type;\
           }\
           if (type) {\

@@ -245,6 +245,26 @@ a.dropdown-item, .create-leave, a.dropdown-toggle,
   color: white;
 }
 
+.editor-toolbar {
+  border: 0px !important;
+}
+
+.editor-toolbar:before,
+.editor-toolbar:after {
+  content: none !important;
+}
+
+.editor-toolbar > button {
+  border: white;
+  color: white;
+}
+
+.editor-toolbar > button.active, 
+.editor-toolbar > button:hover {
+  background: white;
+  color: black;
+}
+
 .create {
   cursor: pointer;
   background-color: transparent;

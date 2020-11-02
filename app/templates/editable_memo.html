@@ -44,7 +44,9 @@
         {{#authorized}}
         <button type="button" class='btn btn-outline-light btn-sm' id="done">{{i18n.i_done}}</button>
         {{/authorized}}
-        <a class='navbar-text' href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>
+        <a class="navbar-text" href="https://github.com/Hypertopic/Cassandre/wiki">
+          <img src="../style/info.svg" width="30" height="30" alt="Cassandre" loading="lazy">
+        </a>
       </nav>
 
   <script src="../script/jquery.js"></script>
@@ -75,21 +77,22 @@
 
   var warning = 'Save your content';
   $(document).ready(function() {
-    stickToHeader();
     window.addEventListener("beforeunload", function (e) {
       if (warning != false) {
         (e || window.event).returnValue = warning;
         return warning;
       }
     });
-    $(".input-group").addClass('hidden');
+    $("#kwic").parent().addClass('hidden');
     if ($('#groundings li').length < 1) $("#groundings").addClass('hidden');
     $('#groundings').find('.toggle').next().slideToggle('fast');
+    stickToHeader();
     $.ajax({
       url: "../start_editing_memo/{{_id}}",
       type: "PUT",
       contentType: "application/json"
     });
+    $('#header > ul > li:first').after($('.editor-toolbar'));
   });
 
   function save(draft, toDoAfter) {

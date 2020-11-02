@@ -185,6 +185,9 @@ function(req2) {
     case 'editable_text':
       reply.path = "_show/editable_text/"+path[1];
     break;
+    case 'memo_update_seq':
+      reply.path = "_show/memo_update_seq/"+path[1];
+    break;
     case 'editable_memo':
       reply.path = "_list/editable_memo/memo";
       reply.query = {
@@ -273,6 +276,18 @@ function(req2) {
         "group": "false",
         "reduce": "false"
       };
+    break;
+    case 'save_diary_order':
+    case 'edit_name':
+    case 'start_editing_memo':
+    case 'update_memo_content':
+    case 'adapt_memo':
+    case 'checking_comment':
+    case 'update_comment_content':
+    case 'rename_diagram':
+    case 'adapt_diagram':
+    case 'track_memo':
+      reply.path = '_update/'+path[0]+'/'+path[1];
     break;
     case 'user':
       reply.path = "_list/user/user";

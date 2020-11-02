@@ -185,6 +185,7 @@
     if (isolated_nodes.length > 0) record('clean_nodes', '');
     {{/editable}}
     drawGraphViz();
+    poller('memo', '{{update_seq}}');
   });
 
   $('#add').on('click', function() {

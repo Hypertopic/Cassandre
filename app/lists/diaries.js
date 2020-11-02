@@ -32,5 +32,4 @@ function(head, req) {
     send(toJSON(data.diaries));
   });
 
-
 }

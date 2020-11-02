@@ -306,13 +306,7 @@
       $('.articulate').removeClass('hidden');
     }
     $('#diagram').html(shape1+content1+shape2+content2+articulated);
-    var poller = function() {
-      $.ajax("../../changes/memo/{{_id}}/{{update_seq}}").done(function(data) {
-        if (data.results.length) reload();
-        poller();
-      });
-    };
-    poller();
+    poller('memo', '{{update_seq}}');
   });
 
   {{#editable}}
@@ -327,53 +321,33 @@
 
   function adapt(o) {
     refresh = true;
+    var gid = [];
+    for (var i = 0; i < $('#groundings li').length; i++) {
+      gid.push($('#groundings li')[i].id);
+    }
+    $("#dialog").dialog('close');
+    var data = {
+      'action': o,
+      'name': $('#'+gid[0]).find('a').html().trim()
+    };
+    if (Object.keys(o)[0] == 'grounding') {
+      data.name += ' & '+$('#'+o.grounding).text();
+    } else {
+      data.name += ' & '+$('#'+gid[1]).find('a').html().trim();
+    }
     $.ajax({
-      url: "../../{{_id}}",
-      type: "GET",
-      dataType: "json",
-      success: function(data) {
-        for (var i in data.groundings) {
-          if (!document.getElementById(data.groundings[i])) data.groundings.splice(i, 1);
-        }
-        data.name = $('#'+data.groundings[0]).find('a').html().trim() +' & ';
-        switch(Object.keys(o)[0]) {
-          default:
-            if (data.groundings.indexOf(o.grounding) == -1) data.groundings.push(o.grounding);
-            data.name = data.name + $('#'+o.grounding).text();
-          break;
-          case('link'):
-            data.link = o.link;
-            data.name = data.name + $('#'+data.groundings[1]).find('a').html().trim();
-            $("#dialog").dialog('close');
-          break;
-          case('statement'):
-            data.statement = o.statement;
-            data.name = data.name + $('#'+data.groundings[1]).find('a').html().trim();
-          break;
-          case('negative'):
-            data.negative = o.negative;
-            data.name = data.name + $('#'+data.groundings[1]).find('a').html().trim();
-          break;
-        }
-        if (!data.history) data.history = [];
-        data.history.push({
-          "user": user,
-          "date": new Date().toJSON()
-        });
-        $.ajax({
-          type: "PUT",
-          url: "../../{{_id}}",
-          contentType: "application/json",
-          data: JSON.stringify(data),
-          error: function(request) {
-            alert(
-              (JSON.parse(request.responseText).reason || request.responseText)
-              + '\nCode ' + request.status
-            );
-          },
-          success: reload
-        });
+      url: "../../adapt_diagram/{{_id}}",
+      type: "PUT",
+      contentType: "application/json",
+      data: JSON.stringify(data),
+      error: function(request) {
+        alert(
+          (JSON.parse(request.responseText).reason || request.responseText)
+          + '\nCode ' + request.status
+        );
       }
+    }).done(function(){
+      reload;
     });
   }
 

@@ -86,56 +86,24 @@
     if ($('#groundings li').length < 1) $("#groundings").addClass('hidden');
     $('#groundings').find('.toggle').next().slideToggle('fast');
     $.ajax({
-      url: "../{{_id}}",
-      type: "GET",
-      dataType: "json",
-      success: function(data) {
-        var user = "{{peer}}";
-        if ("{{logged}}") user = "{{logged}}";
-        data.editing = {
-          "user": user,
-          "date": new Date().toJSON()
-        };
-        $.ajax({
-          type: "PUT",
-          url: "../{{_id}}",
-          contentType: "application/json",
-          data: JSON.stringify(data),
-        });
-      }
+      url: "../start_editing_memo/{{_id}}",
+      type: "PUT",
+      contentType: "application/json"
     });
   });
 
   function save(draft, toDoAfter) {
     warning = false;
     $.ajax({
-      url: "../{{_id}}",
-      type: "GET",
-      dataType: "json",
-      success: function(data) {
-        data.body = easymde.value().replace(/ *\n/g, " \n");
-        if (!data.history) data.history = [];
-        var user = "{{peer}}";
-        if ("{{logged}}") user = "{{logged}}";
-        data.history.push({
-          "user": user,
-          "date": new Date().toJSON()
-        });
-        delete data.editing;
-        $.ajax({
-          type: "PUT",
-          url: "../{{_id}}",
-          contentType: "application/json",
-          data: JSON.stringify(data),
-          error: function(request) {
-            alert(
-              (JSON.parse(request.responseText).reason || request.responseText)
-              + '\nCode ' + request.status
-            );
-          },
-          success: toDoAfter
-        });
-      }
+      url: "../update_memo_content/{{_id}}",
+      type: "PUT",
+      contentType: "application/json",
+      data: easymde.value().replace(/ *\n/g, " \n"),
+      error: function(request) {
+        if (request.status == 401) alert("{{i18n.i_lost_connection}}".replace(/&#39;/g,"'").replace(/&quot;/g,'"')); 
+        self.location = '../memo/{{diary}}/{{_id}}';
+      },
+      success: toDoAfter
     });
   }
 

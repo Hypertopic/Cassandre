@@ -213,6 +213,12 @@ button.comment {
   color: gray;
 }
 
+.checker {
+  position: absolute;
+  padding-top: 5px;
+  right: 60px;
+}
+
 #groundings>li,#memos>li,#selectable-memos>li,#leaves>li{
   list-style-type: none;
   background-repeat: no-repeat;

@@ -451,10 +451,10 @@
     }
     stickToHeader();
     {{^statements}}
-    poller('memo');
+    poller('memo', '{{update_seq}}');
     {{/statements}}
     {{#statements}}
-    poller('statements');
+    poller('statements', '{{update_seq}}');
     {{/statements}}
   });
 
@@ -587,19 +587,21 @@
 
   $('#link_leaf').on('click', function() {
     $.ajax({
-      url: '../../'+leaf_id,
-      type: "GET",
-      dataType: "json"
-    })
-    .then(function(leaf) {
-      if (leaf.groundings.indexOf('{{_id}}') == -1) leaf.groundings.push('{{_id}}');
-      $.ajax({
-        type: "PUT",
-        url: '../../'+leaf_id,
-        contentType: "application/json",
-        data: JSON.stringify(leaf),
-        success: reload
-      });
+      url: "../../adapt_memo/"+leaf_id,
+      type: "PUT",
+      contentType: "application/json",
+      data: JSON.stringify({
+       'action': 'add_grounding',
+       'highlight': $('#kwic').val(),
+       'value': '{{_id}}'
+      }),
+      error: function(request) {
+        alert(
+          (JSON.parse(request.responseText).reason || request.responseText)
+          + '\nCode ' + request.status
+        );
+      },
+      success: reload
     });
   });
 
@@ -671,23 +673,16 @@
 
   function renameDiagram(id,name) {
     $.ajax({
-      url: '../../'+id,
-      type: "GET",
-      dataType: "json"
-    })
-    .done(function(diagram) {
-      var properties = diagram.name.split('&');
-      if (diagram.groundings[0] == "{{_id}}") {
-        diagram.name = name+' & '+ properties[1].trim();
-      } else {
-        diagram.name = properties[0].trim() +' & '+name;
-      }
-      $.ajax({
-        type: "PUT",
-        url: '../../'+id,
-        contentType: "application/json",
-        data: JSON.stringify(diagram)
-      });
+      url: "../../rename_diagram/"+id,
+      type: "PUT",
+      contentType: "application/json",
+      data: JSON.stringify({
+       'id': '{{_id}}',
+       'name': name
+      })
+    });
+  }
+
   function filter(type) {
     $('#select_grounding option').each(function() {
       $(this).prop("hidden", false);
@@ -697,48 +692,18 @@
 
   function record(action, value) {
     $.ajax({
-      url: "../../{{_id}}",
-      type: "GET",
-      dataType: "json",
-      success: function(data) {
-        switch(action) {
-          case ('add_contributor'):
-            if (!data.contributors) data.contributors = [];
-            if (data.contributors.indexOf(value) == -1) data.contributors.push(value);
-          break;
-          case ('remove_contributor'):
-            var i = data.contributors.indexOf(value);
-            data.contributors.splice(i, 1);
-          break;
-          case ('add_reader'):
-            if (!data.readers) data.readers = [];
-            if (data.readers.indexOf(value) == -1) data.readers.push(value);
-          break;
-          case ('remove_reader'):
-            var i = data.readers.indexOf(value);
-            data.readers.splice(i, 1);
-          break;
-          case ('add_grounding'):
-            if (!data.groundings) data.groundings = [];
-            if (data.groundings.indexOf(value) == -1) data.groundings.push(value);
-          break;
-          case ('remove_grounding'):
-            var i = data.groundings.indexOf(value);
-            if (i > -1) data.groundings.splice(i, 1);
-          break;
-        }
-        $.ajax({
-          type: "PUT",
-          url: "../../{{_id}}",
-          contentType: "application/json",
-          data: JSON.stringify(data),
-          error: function(request) {
-            alert(
-              (JSON.parse(request.responseText).reason || request.responseText)
-              + '\nCode ' + request.status
-            );
-          }
-        });
+      url: "../../adapt_memo/{{_id}}",
+      type: "PUT",
+      contentType: "application/json",
+      data: JSON.stringify({
+       'action': action,
+       'value': value
+      }),
+      error: function(request) {
+        alert(
+          (JSON.parse(request.responseText).reason || request.responseText)
+          + '\nCode ' + request.status
+        );
       }
     });
   }

@@ -125,7 +125,8 @@ function(head, req) {
         readers: [],
         readers_fullnames: [],
         roles: req.userCtx.roles,
-        type: type
+        type: type,
+        update_seq: req.info.update_seq
       }
       data.cells = JSON.stringify(data.cells);
       data.locale = data.locale.split(',');

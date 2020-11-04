@@ -163,7 +163,7 @@
         if (kwic.pending > 0) $('#patterns').removeClass("hidden");
       }
     });
-    poller('diary');
+    poller('diary', '{{update_seq}}');
   });
 
   $('#header')

@@ -33,7 +33,7 @@
           {{/authorized}}
           {{#authorized}}
           <h1> <img title="{{i18n.i_memo.table}}" src="../../style/{{type}}.svg"/> {{name}} </h1>
-          <input id="name" type="search" class="hidden" value="{{name}}"/>
+          <input id="name" type="search" class="form-control hidden" value="{{name}}"/>
           {{>rights}}
           <div class="table-responsive">
             <table id="table" class="table-striped">
@@ -189,6 +189,7 @@
       }
     }
     if (table.rows[table.rows.length-1].cells[0].innerHTML != '...') $('#add_row').removeClass('hidden');
+    poller('memo', '{{update_seq}}');
   });
 
   {{#editable}}
@@ -201,6 +202,7 @@
       );
     })
     .on('click', '.situations', function() {
+      refresh = false;
       var inp = $(this).html($('<input>', {
         id: this.id,
         type: "text",
@@ -216,7 +218,7 @@
         var n = this.parentNode.parentNode.rowIndex-1,
             former = this.name,
             future = this.value;
-        if (former != future  && this.value.trim().length > 0) record ('situation',this);
+        if (former != future  && this.value.trim().length > 0) record ('situation', this);
       }
     })
     .on('click', '.cells', function() {
@@ -394,8 +396,10 @@
               (JSON.parse(request.responseText).reason || request.responseText)
               + '\nCode ' + request.status
             );
-          },
-          success: reload
+          }
+        }).done(function (){
+          refresh = true;
+          reload;
         });
       }
     });

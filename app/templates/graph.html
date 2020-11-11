@@ -245,6 +245,7 @@
   });
 
   $('#add_grounding').on('show.bs.modal', function (event) {
+    refresh = false;
     $.ajax({
       url: "../../memo_attribute/{{diary}}",
       type: "GET",
@@ -269,6 +270,7 @@
   })
 
   $('#remove_grounding').on('show.bs.modal', function (event) {
+    refresh = false;
     $('#groundings').children('li').each(function() {
       var id = ($(this).attr('id')),
           name = ($(this).find('a').text());
@@ -382,9 +384,9 @@
                   + '\nCode ' + request.status
                 );
               },
-              success: function() {
-                location.replace("{{_id}}")
-              }
+            }).done(function () {
+              refresh = true;
+              location.replace("{{_id}}")
             });
           }
         });

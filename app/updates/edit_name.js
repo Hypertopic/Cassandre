@@ -5,7 +5,8 @@ function (doc, req) {
   if (!doc.history) doc.history = [];
   doc.history.push({
     "user": req.userCtx.name,
-    "date": new Date().toJSON()
+    "date": new Date().toJSON(),
+    "name": req.body
   });
   return [doc, 'Name updated']
 }

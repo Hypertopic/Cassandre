@@ -232,7 +232,8 @@ var shared = {
             groundings: ground,\
             history: [{\
               'user': user,\
-              'date': new Date().toJSON()\
+              'date': new Date().toJSON(),\
+              'name': name\
             }],\
             name: name\
           };\

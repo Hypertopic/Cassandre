@@ -247,6 +247,10 @@ a.dropdown-item, .create-leave, a.dropdown-toggle,
   cursor: pointer;
 }
 
+#diary {
+  max-width: 200px;
+}
+
 .create-leave {
   color: transparent;
 }

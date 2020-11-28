@@ -173,23 +173,16 @@
       }
     });
     $.ajax({
-      url: "../../memo_attribute/{{diary}}",
+      url: "../../memo_type/{{diary}}/coding",
       type: "GET",
       dataType: "json",
         success: function(grounds) {
         for (var i in grounds.rows) {
-          var r = grounds.rows[i];
-          var diary = r.key;
-          var id = r.value['id'];
-          var ground_href = r.value['id'];
-          var ground_type = r.value['type'];
-          var ground_path = '';
-          if (ground_type != 'diagram') {
-            var ground_path = "../../memo/{{diary}}/";
-          }
-          var ground_label = r.value['name'];
-          var ground_preview = r.value['preview'];
-          if ($('#groundings li').length < 2 && document.getElementById(id) == null && ground_href != "{{_id}}" && ground_type == 'coding') {
+          var r = grounds.rows[i],
+              id = r.value['id'],
+              ground_href = r.value['id'];
+              ground_label = r.value['name'];
+          if ($('#groundings li').length < 2 && document.getElementById(id) == null && ground_href != "{{_id}}") {
             $("#add_grounding").find('select').append($('<option>', {
               id: ground_href,
               value: ground_href,
@@ -332,7 +325,7 @@
     };
     if (Object.keys(o)[0] == 'grounding') {
       data.name += ' & '+$('#'+o.grounding).text();
-    } else {
+    } else if (typeof(gid[1]) !== 'undefined') {
       data.name += ' & '+$('#'+gid[1]).find('a').html().trim();
     }
     $.ajax({

@@ -64,11 +64,11 @@
       <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
         <div role="group">
           {{#editable}}
-          <button class='groundings btn btn-outline-light btn-sm collapse show' data-toggle="modal" data-target="#add_grounding" title="{{i18n.i_add_groundings}}">
+          <button class='groundings btn btn-outline-light btn-sm collapse' data-toggle="modal" data-target="#add_grounding" title="{{i18n.i_add_groundings}}">
             <span class="d-block d-sm-none"><img src="{{>relpath}}style/grounding-add.svg" alt="{{i18n.i_add_groundings}}"></span>
             <span class="d-none d-sm-block">{{i18n.i_add_groundings}}</span>
           </button>
-          <button class='groundings btn btn-outline-light btn-sm collapse show d-none' data-toggle="modal" data-target="#remove_grounding" id="remove_grounding_btn" title="{{i18n.i_remove_grounding}}">
+          <button class='groundings btn btn-outline-light btn-sm collapse d-none' data-toggle="modal" data-target="#remove_grounding" id="remove_grounding_btn" title="{{i18n.i_remove_grounding}}">
             <span class="d-block d-sm-none"><img src="{{>relpath}}style/grounding-remove.svg" alt="{{i18n.i_remove_grounding}}"></span>
             <span class="d-none d-sm-block">{{i18n.i_remove_grounding}}</span>
           </button>
@@ -102,7 +102,8 @@
         <div class="modal-content">
           <div class="modal-header">{{i18n.i_add_groundings}}</div>
           <div class="modal-body">
-            <select onChange="record('add_grounding', this.value);"><option>{{i18n.i_select_grounding}}</option></select>
+            <div id="loading" class="spinner-border spinner-border-sm ml-auto mr-auto mr-sm-0" role="status" aria-hidden="true"></div>
+            <select id="select_grounding" onChange="record('add_grounding', this.value);" hidden><option>{{i18n.i_select_grounding}}</option></select>
           </div>
         </div>
       </div>
@@ -184,6 +185,8 @@
     var isolated_nodes = nodes.filter(function(a) { if (connected_nodes.indexOf(a.id) == -1) return a;});
     if (isolated_nodes.length > 0) record('clean_nodes', '');
     {{/editable}}
+    edges = edges.filter(o => o.to !== '');
+    nodes = nodes.filter(o => o.id !== '');
     drawGraphViz();
     poller('memo', '{{update_seq}}');
   });
@@ -247,24 +250,23 @@
   $('#add_grounding').on('show.bs.modal', function (event) {
     refresh = false;
     $.ajax({
-      url: "../../memo_attribute/{{diary}}",
+      url: "../../memo_type/{{diary}}/diagram",
       type: "GET",
       dataType: "json",
         success: function(grounds) {
         for (var i in grounds.rows) {
-          var r = grounds.rows[i];
-          var id = r.value['id'];
-          var ground_type = r.value['type'];
-          var ground_label = r.value['name'];
-          if(document.getElementById(id) == null && id != "{{_id}}" && ground_type == 'diagram') {
-            $("#add_grounding").find('select').append($('<option>', {
-              id: id,
-              value: id,
-              title: ground_label,
-              text: ground_label
+          var r = grounds.rows[i],
+              id = r.value['id'];
+          if(document.getElementById(id) == null && id != "{{_id}}") {
+            $("#select_grounding").append($('<option>', {
+              value: JSON.stringify({'id': id, 'groundings': r.value['groundings'], 'link': r.value['link']}),
+              title: r.value['name'],
+              text: r.value['name']
             }));
           };
         }
+        $('#loading').remove();
+        $('#select_grounding').removeAttr("hidden");
       }
     });
   })
@@ -276,7 +278,7 @@
           name = ($(this).find('a').text());
       if (name.length > 45) name = name.substr(0,45)+'...';
       $("#remove_grounding").find('select').append($('<option>', {
-        value: id,
+        value: JSON.stringify({'id': id}),
         text: name
       }));
     });
@@ -289,8 +291,8 @@
 
   function drawGraphViz() {
     destroyGraphViz();
-    var viz = new Viz();
-    var graphviz = 'graph "{{name}}" {overlap=false; graph [fontname = "helvetica"]; node [fontname = "helvetica" style="filled" fillcolor="white"]; edge [fontname = "helvetica"];';
+    var viz = new Viz(),
+        graphviz = 'graph "{{name}}" {overlap=false; graph [fontname = "helvetica"]; node [fontname = "helvetica" style="filled" fillcolor="white"]; edge [fontname = "helvetica"];';
     for (var i in nodes) {
       graphviz += 'node'+nodes[i].id + '[label="' + nodes[i].label.replace(/['"]/g, '\'').replace(/\n/g, '\\n') + '", shape='+nodes[i].shape+']; ';
     }
@@ -325,73 +327,28 @@
     return t.substring(0, 12)+t.substring(12, 30).replace(/\s/,"\n")+t.substring(30, 50).replace(/\s/,"\n");
   }
 
-  function record(action, what) {
-    $.ajax({
-      url: "../../"+what,
-      type: "GET",
-      dataType: "json",
-      error: function(request) {
-        alert(
-          (JSON.parse(request.responseText).reason || request.responseText)
-          + '\nCode ' + request.status
-        );
-      },
-      success: function(added) {
+  function record(action, diagram) {
+        if (diagram !== '') diagram = JSON.parse(diagram);
+        var data = {
+          'action': action,
+          'connected_nodes': connected_nodes,
+          'diagram': diagram
+        };
         $.ajax({
-          url: "../../{{_id}}",
-          type: "GET",
-          dataType: "json",
-          success: function(data) {
-            var keep_trace = true;
-            switch(action) {
-              case ('add_grounding'):
-                var nodeids = data.nodes.map(function(a) {return a.id;});
-                if (data.groundings.indexOf(what) == -1) data.groundings.push(what);
-                switch (added.link) {
-                  case ('pp'):
-                  case ('ipp'):
-                    if(nodeids.indexOf(added.groundings[0]) == -1) data.nodes.push({id: added.groundings[0], shape: 'box'});
-                    if(nodeids.indexOf(added.groundings[1]) == -1) data.nodes.push({id: added.groundings[1], shape: 'box'});
-                    break;
-                  case ('dd'):
-                  case ('idd'):
-                    if(nodeids.indexOf(added.groundings[0]) == -1) data.nodes.push({id: added.groundings[0], shape: 'diamond'});
-                    if(nodeids.indexOf(added.groundings[1]) == -1) data.nodes.push({id: added.groundings[1], shape: 'diamond'});
-                    break;
-                  case ('dp'):
-                    if(nodeids.indexOf(added.groundings[0]) == -1) data.nodes.push({id: added.groundings[0], shape: 'box'});
-                    if(nodeids.indexOf(added.groundings[1]) == -1) data.nodes.push({id: added.groundings[1], shape: 'diamond'});
-                    break;
-                }
-              break;
-              case ('remove_grounding'):
-                var i = data.groundings.indexOf(what);
-                if (i > -1) data.groundings.splice(i, 1);
-              break;
-              case ('clean_nodes'):
-                data.nodes = data.nodes.filter(function(a) { if (connected_nodes.indexOf(a.id) > -1) return a;});
-                keep_trace = false;
-              break;
-            }
-            $.ajax({
-              type: "PUT",
-              url: "../../{{_id}}",
-              contentType: "application/json",
-              data: JSON.stringify(data),
-              error: function(request) {
-                alert(
-                  (JSON.parse(request.responseText).reason || request.responseText)
-                  + '\nCode ' + request.status
-                );
-              },
-            }).done(function () {
-              refresh = true;
-              location.replace("{{_id}}")
-            });
-          }
+          type: "PUT",
+          url: "../../adapt_graph/{{_id}}",
+          contentType: "application/json",
+          data: JSON.stringify(data),
+          error: function(request) {
+            alert(
+              (JSON.parse(request.responseText).reason || request.responseText)
+              + '\nCode ' + request.status
+            );
+          },
+        }).done(function () {
+          refresh = true;
+          location.replace("{{_id}}")
         });
-      }
-    });
   }
 
   {{>commentsscript}}

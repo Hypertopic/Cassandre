@@ -41,6 +41,15 @@ function(req2) {
         "endkey":   '["'+diary+'", "name", '+logged+', "M", {}]'
       };
     break;
+    case 'memo_type':
+      var diary = path[1],
+          type = path[2];
+      reply.path = "_view/memo_type";
+      reply.query = {
+        "startkey": '["'+diary+'", '+logged+', "'+type+'"]',
+        "endkey":   '["'+diary+'", '+logged+', "'+type+'", {}]'
+      };
+    break;
     case 'memo':
       if (path[2]) {
         var memo = path[2];
@@ -286,6 +295,7 @@ function(req2) {
     case 'update_comment_content':
     case 'rename_diagram':
     case 'adapt_diagram':
+    case 'adapt_graph':
     case 'track_memo':
       reply.path = '_update/'+path[0]+'/'+path[1];
     break;

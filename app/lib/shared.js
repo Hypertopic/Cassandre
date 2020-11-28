@@ -420,7 +420,13 @@ var shared = {
   $('#comment_create').click(function () {\
     refresh = false;\
     $('#comment_create').remove();\
-    $('#footer > div > button').addClass('hidden');\
+    $('#footer > div > button').prop('disabled', true);\
+    $('#done').prop('disabled', false);\
+    $('#leave-name').addClass('hidden');\
+    $('#kwic').parent().children().addClass('hidden');\
+    $('a').removeAttr('href');\
+    $('#diary').addClass('disabled');\
+    $('#signout').prop('disabled', true);\
     $('#add-leaves').addClass('hidden');\
     $('#comments').find('textarea').removeClass('hidden');\
     $('#commented').removeClass('hidden');\

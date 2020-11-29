@@ -421,7 +421,8 @@ var shared = {
     refresh = false;\
     $('#comment_create').remove();\
     $('#footer > div > button').prop('disabled', true);\
-    $('#done').prop('disabled', false);\
+    $('#render').prop('disabled', true);\
+    $('#commented').prop('disabled', null);\
     $('#leave-name').addClass('hidden');\
     $('#kwic').parent().children().addClass('hidden');\
     $('a').removeAttr('href');\

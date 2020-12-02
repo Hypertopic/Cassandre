@@ -169,14 +169,11 @@ div.post {
   font-size:70%;
 }
 
-#toast-container {
-  position: relative;
-}
-
 #toasts {
   position: absolute;
   top: 15px;
   right: 3%;
+  z-index: +1;
 }
 
 #authorization {

@@ -100,10 +100,21 @@
     <div id="add_grounding" class="modal fade" role="dialog">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
-          <div class="modal-header">{{i18n.i_add_groundings}}</div>
+          <div class="modal-header">{{i18n.i_integrate}}</div>
           <div class="modal-body">
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="type-of-field-memo" id="one-articulation" value="one" required>
+              <label class="form-check-label" for="one-articulation">{{i18n.i_one-articulation}}</label>
+            </div>
+            <div class="form-check form-check-inline" hidden>
+              <input class="form-check-input" type="radio" name="type-of-field-memo" id="all-articulations" value="all" required>
+              <label class="form-check-label" for="all-articulations">{{i18n.i_all-articulations}}</label>
+            </div><br/>
             <div id="loading" class="spinner-border spinner-border-sm ml-auto mr-auto mr-sm-0" role="status" aria-hidden="true"></div>
             <select id="select_grounding" onChange="record('add_grounding', this.value);" hidden><option>{{i18n.i_select_grounding}}</option></select>
+          </div>
+          <div class="modal-footer">
+            <button id="integrate_all-articulations" type="button" class="d-none btn btn-secondary">Ok</button>
           </div>
         </div>
       </div>
@@ -124,6 +135,7 @@
   <script src="../../script/full.render.js"></script>
   <script>
   let connected_nodes = "{{connected_nodes}}".split(','),
+      articulations = [],
       edges = [],
       main = document.getElementById("content"),
       container = document.getElementById('graph'),
@@ -256,10 +268,12 @@
         success: function(grounds) {
         for (var i in grounds.rows) {
           var r = grounds.rows[i],
-              id = r.value['id'];
+              id = r.value['id'],
+              obj = {'id': id, 'groundings': r.value['groundings'], 'link': r.value['link']};
           if(document.getElementById(id) == null && id != "{{_id}}") {
+            articulations.push(obj);
             $("#select_grounding").append($('<option>', {
-              value: JSON.stringify({'id': id, 'groundings': r.value['groundings'], 'link': r.value['link']}),
+              value: JSON.stringify(obj),
               title: r.value['name'],
               text: r.value['name']
             }));
@@ -267,9 +281,26 @@
         }
         $('#loading').remove();
         $('#select_grounding').removeAttr("hidden");
+        $('#all-articulations').parent().removeAttr("hidden");
+        $("#one-articulation").prop("checked", true).trigger("click");
       }
     });
   })
+
+  $('#all-articulations').on('click', function() {
+    $('#integrate_all-articulations').removeClass('d-none');
+    $('#loading').addClass('d-none');
+    $('#select_grounding').addClass('d-none');
+  });
+
+  $('#one-articulation').on('click', function() {
+    $('#select_grounding').removeClass('d-none');
+    $('#integrate_all-articulations').addClass('d-none');
+  });
+
+  $('#integrate_all-articulations').on('click', function() {
+    record('integrate_everything', JSON.stringify(articulations));
+  });
 
   $('#remove_grounding').on('show.bs.modal', function (event) {
     refresh = false;

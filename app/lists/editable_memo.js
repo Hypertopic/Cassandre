@@ -49,6 +49,7 @@ function(head, req){
           _id: row.doc._id,
           _rev: row.doc._rev,
           authorized: !row.doc.readers || row.doc.readers.length==0 || row.doc.readers.indexOf(username)>-1 || row.doc.contributors && row.doc.contributors.indexOf(username)>-1 || req.userCtx.roles.indexOf("_admin")>-1,
+          editing: row.doc.editing || false,
           name: row.doc.name,
           locale: req.headers["Accept-Language"],
           logged: username,

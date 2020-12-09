@@ -32,18 +32,23 @@
             <h1>{{i18n.i_sign-in_required}}</h1>
             {{/authorized}}
             {{#authorized}}
+            {{^editing}}
+            <h1>{{i18n.i_no_back-button}}</h1><p><a href="../../memo/{{diary}}/{{_id}}">{{i18n.i_resume}}</a></p>
+            {{/editing}}
+            {{#editing}}
             <h1> <img src="../style/{{type}}.svg"/> {{name}}</h1>
             <p>
               <textarea id="body" cols="80" rows="20" type="text">{{body}}</textarea>
             </p>
+            {{/editing}}
             {{/authorized}}
           </main>
         </div>
       </div>
       <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
-        {{#authorized}}
+        {{#authorized}}{{#editing}}
         <button type="button" class='btn btn-outline-light btn-sm' id="done">{{i18n.i_done}}</button>
-        {{/authorized}}
+        {{/editing}}{{/authorized}}
         <a class="navbar-text" href="https://github.com/Hypertopic/Cassandre/wiki">
           <img src="../style/info.svg" width="30" height="30" alt="Cassandre" loading="lazy">
         </a>
@@ -87,11 +92,6 @@
     if ($('#groundings li').length < 1) $("#groundings").addClass('hidden');
     $('#groundings').find('.toggle').next().slideToggle('fast');
     stickToHeader();
-    $.ajax({
-      url: "../start_editing_memo/{{_id}}",
-      type: "PUT",
-      contentType: "application/json"
-    });
     $('#header > ul > li:first').after($('.editor-toolbar'));
   });
 

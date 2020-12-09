@@ -307,6 +307,7 @@
       document.getElementById('edit').disabled = true
     }
     {{/editable}}
+    if ("{{contributors}}".split(',').length > 1) $('#editing').append(". {{i18n.i_no-edit-by-others}}");
     $('#toasts').append('<div class="toast" role="alert">'
       + '<div class="toast-body alert-warning">'
       + '<button type="button" class="close" data-dismiss="toast">×</button>'
@@ -525,8 +526,17 @@
   });
 
   $('#edit').on('click', function() {
-    if ('{{type}}' == 'transcript') { self.location = '../../editable_text/{{_id}}';}
-    else { self.location = '../../editable_memo/{{_id}}';}
+    if ('{{type}}' == 'transcript') {
+      self.location = '../../editable_text/{{_id}}';
+    } else {
+      $.ajax({
+        url: "../../start_editing_memo/{{_id}}",
+        type: "PUT",
+        contentType: "application/json"
+      }).done(function(){
+        self.location = '../../editable_memo/{{_id}}';
+      });
+    }
   });
 
   $('#add').on('click', function() {

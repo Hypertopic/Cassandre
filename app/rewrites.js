@@ -287,6 +287,7 @@ function(req2) {
       };
     break;
     case 'save_diary_order':
+    case 'save_diary_collection':
     case 'edit_name':
     case 'start_editing_memo':
     case 'update_memo_content':

@@ -22,6 +22,7 @@
             {{/logged}}
             {{#diaries}}
             <div class="card text-center bg-light mb-3">
+              <div title="{{i18n.i_integrate}} {{i18n.i_in}} {{i18n.i_collection}}" class="in-collection d-none"><img src="../style/chevron-down.svg" alt="v" /></div>
               <h5><a href='../memo/{{id}}/'>{{name}}</a></h5>
               <p><span id="{{id}}" title="{{i18n.i_memos}}" class="badge badge-pill badge-secondary progress-bar-striped progress-bar-animated d-none">{{i18n.i_loading}}</span></p>
             </div>
@@ -38,49 +39,127 @@
         </div>
       </div>
       <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
-        <button class="btn navbar-btn btn-outline-light btn-sm d-none" id="show" type="button">{{i18n.i_last-visit}}</button>
+        <button class="btn navbar-btn btn-outline-light btn-sm d-none" id="show">{{i18n.i_last-visit}}</button>
         <a class='navbar-text ml-auto' href="https://github.com/Hypertopic/Cassandre/wiki">
           <img src="../style/info.svg" width="30" height="30" alt="Cassandre" loading="lazy">
         </a>
       </nav>
+      <div id="in_collection" class="modal fade" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">{{i18n.i_integrate}} {{i18n.i_in}} {{i18n.i_collection}}</div>
+            <div class="modal-body">
+              <p>{{i18n.i_integrate}} <span class="font-italic diary"></span> {{i18n.i_in}}<br/>
+                <input id="target_collection" type="search" placeholder="{{i18n.i_collection}}"/>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   {{>script}}
   <script>
+  let register = source = [],
+      id = '';
   $(document).ready(function() {
     stickToHeader();
     {{#logged}}
     var added = [];
-    $.ajax({
-      url: "../diaries/{{logged}}",
-      type: "GET",
-      dataType: "json",
-      success: function(data) {
-        for (var i in data) {
-          if (!$('#'+data[i].id).length) {
-            var card = '<div class="card text-center bg-light mb-3">'
-              +'<h5><a href="../memo/'+data[i].id+'/">'+data[i].name+'</a></h5>'
-              +'<div title="{{i18n.i_restricted-access}}" class="card-icons"><img src="../style/lock.svg" alt="" /></div>'
-              +'<p><span id="'+data[i].id+'" title="{{i18n.i_memos}}" class="badge badge-pill badge-secondary progress-bar-striped progress-bar-animated d-none">{{i18n.i_loading}}</span></p>'
-              +'</div>';
-            $('#loading').after(card);
-            added.push(data[i].id);
-          }
-        }
-      }
-    }).done(function(){
-      if (added.length > 1) $("#show").removeClass('d-none');
-    }).done(function(){
-      $("#loading").addClass('d-none').removeClass('d-flex');
-    });
     $.ajax({
       url: "../{{logged}}",
       type: "GET",
       dataType: "json",
       success: function(data) {
         if(data.fullname) $('#username').text(data.fullname);
+        for (var o in data.order) {
+          if (typeof data.order[o].collection !== 'undefined') {
+            let collection = data.order[o].collection,
+                diary = data.order[o].diary;
+            if (document.getElementById(collection) == null) $("#content").append("<h3 class='collection d-none'>"+collection+"</h3><div id='"+collection+"' class='card-columns'></div>");
+            if (document.getElementById(diary) !== null) {
+              $('#'+collection).append($('#'+diary).parent().parent());
+              $('#'+collection).prev().removeClass('d-none');
+            }
+            register[diary] = collection;
+            if (source.indexOf(collection) < 0) source.push(collection);
+          }
+        }
       }
     });
+    $.ajax({
+      url: "../diaries/{{logged}}",
+      type: "GET",
+      dataType: "json",
+      success: function(data) {
+        for (var i in data) {
+          let id = data[i].id;
+          if (!$('#'+id).length) {
+            var card = '<div class="card text-center bg-light mb-3">'
+              +'<div title="{{i18n.i_integrate}} {{i18n.i_in}} {{i18n.i_collection}}" class="in-collection d-none"><img src="../style/chevron-down.svg" alt="v" /></div>'
+              +'<h5><a href="../memo/'+id+'/">'+data[i].name+'</a></h5>'
+              +'<div title="{{i18n.i_restricted-access}}" class="card-icons"><img src="../style/lock.svg" alt="" /></div>'
+              +'<p><span id="'+id+'" title="{{i18n.i_memos}}" class="badge badge-pill badge-secondary progress-bar-striped progress-bar-animated d-none">{{i18n.i_loading}}</span></p>'
+              +'</div>';
+            if (register[id]) {
+              $('#'+register[id]).append(card);
+            } else {
+              $('#loading').after(card);
+            }
+            added.push(data[i].id);
+          }
+        }
+      }
+    }).done(function(){
+      if (added.length > 1) $("#show").removeClass('d-none');
+      if (added.length > 3) $(".in-collection").removeClass('d-none');
+      $(".collection").removeClass('d-none');
+    }).done(function(){
+      $("#loading").addClass('d-none').removeClass('d-flex');
+    });
     {{/logged}}
+  });
+
+  $('#target_collection').autocomplete({
+    minLength: 1,
+    appendTo: '#in_collection',
+    select: function (event, ui) {
+      save_diary_collection(ui.item.value);
+    },
+    source: source.sort()
+  });
+
+  function save_diary_collection (collection) {
+    $.ajax({
+      url: '../save_diary_collection/'+user,
+      type: 'PUT',
+      contentType: 'application/json',
+      data: JSON.stringify({
+        'diary': id,
+        'collection': collection
+      })
+    }).done(function(){
+      $('#in_collection').modal('hide');
+      if (collection.length > 0) {
+        if (document.getElementById(collection) == null) $("#content").append("<h3 class='collection'>"+collection+"</h3><div id='"+collection+"' class='card-columns'></div>");
+        $('#'+collection).append($('#'+id).parent().parent());
+      } else {
+        $('h1').next().prepend($('#'+id).parent().parent());
+      }
+    });
+  }
+
+  $('#target_collection').on('keypress', function(key) {
+    if (key.which == 13) {
+      save_diary_collection($('#target_collection').val().trim());
+    }
+  });
+
+  $('div').on('click', '.in-collection', function(event) {
+    let name = $(this).parent().find('a').text();
+    id = $(this).parent().find('span').attr("id");
+    $('#in_collection').find('.diary').text(name);
+    $('#in_collection').modal('show');
+    return false;
   });
 
   $('#show').on('click', function() {

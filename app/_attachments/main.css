@@ -368,6 +368,14 @@ a.dropdown-item, .create-leave, a.dropdown-toggle,
   margin-top:  1rem;
 }
 
+.in-collection{
+  position: absolute;
+  top: -1rem;
+  left: .55rem;
+  font-size: 2.5em;
+  cursor: pointer;
+}
+
 .card-icons{
   position: absolute;
   bottom: -.35rem;

@@ -145,11 +145,13 @@
         </div>
       </div>
     </div>
+    {{/editable}}
     <div id="modify_rights_dialog" class="modal fade" role="dialog">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
-          <div class="modal-header">{{i18n.i_modify_rights}}</div>
+          <div class="modal-header">{{#editable}}{{i18n.i_modify_rights}}{{/editable}}{{^editable}}{{i18n.i_reader_unsubscribe}}{{/editable}}</div>
           <div class="modal-body">
+            {{#editable}}
             <table><tr><th>{{i18n.i_contributors}}</th><th>{{i18n.i_readers}}</th></tr><tr><td>
               <input id="add_contributor" type="search" placeholder="{{i18n.i_add_contributor}}"/><br/>
               <p>{{i18n.i_editable-by}}</p>
@@ -167,11 +169,20 @@
               {{/readers_fullnames}}
               </div>
             </td></tr></table>
+            {{/editable}}
+            {{^editable}}
+            <div class="alert alert-danger" role="alert">{{i18n.i_irreversible}}</div>
+            {{/editable}}
           </div>
+          {{^editable}}
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">{{i18n.i_cancel}}</button>
+            <button id="unsubscribe" type="button" class="btn btn-secondary linkLeaf">{{i18n.i_reader_unsubscribe}}</button>
+          </div>
+          {{/editable}}
         </div>
       </div>
     </div>
-    {{/editable}}
     <div id="editing" class="hidden">
       {{#editing}}
       <span class="user">{{user_fullname}}</span> {{i18n.i_started_editing}}
@@ -523,6 +534,14 @@
   $('.remove_contributor').on('click', function() {
     var i = "{{contributors_fullnames}}".split(',').indexOf($(this).val());
     record('remove_contributor', "{{contributors}}".split(',')[i]);
+  });
+
+  $('#unsubscribe').on('click', function() {
+    $.ajax({
+      url: "../../reader_unsubscribe/{{_id}}",
+      type: "PUT",
+      contentType: "application/json"
+    });
   });
 
   $('#edit').on('click', function() {

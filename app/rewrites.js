@@ -298,6 +298,7 @@ function(req2) {
     case 'adapt_diagram':
     case 'adapt_graph':
     case 'track_memo':
+    case 'reader_unsubscribe':
       reply.path = '_update/'+path[0]+'/'+path[1];
     break;
     case 'user':

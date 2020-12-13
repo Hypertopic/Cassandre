@@ -78,11 +78,11 @@ var shared = {
       {{i18n.i_editable-by}} <span class='contributors'>{{contributors_fullnames}}</span><br/>\
       {{i18n.i_readable-by}} <span class='readers'>{{readers_fullnames}}</span>\
       {{^link}}{{^cells}}{{^edges}}\
-        {{#editable}}\
+        {{#logged}}\
         <span id='modify_rights' data-toggle='modal' data-target='#modify_rights_dialog' title='{{i18n.i_modify_rights}}'>\
           <img src='../../style/gear.svg' alt='{{i18n.i_modify_rights}}'>\
         </span>\
-        {{/editable}}\
+        {{/logged}}\
       {{/edges}}{{/cells}}{{/link}}\
     </div>",
   comments:"\
@@ -581,6 +581,7 @@ var shared = {
     }\
     if ($('.readers').text().trim().length < 1) {\
       $('.readers').before('{{i18n.i_everyone}}');\
+      {{^editable}}$('#modify_rights').remove();{{/editable}}\
     }\
     if ($('#leaves li').length > 0) {\
       $('#show-leaves').removeClass('invisible');\

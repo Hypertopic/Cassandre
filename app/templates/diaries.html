@@ -112,6 +112,13 @@
     }).done(function(){
       if (added.length > 1) $("#show").removeClass('d-none');
       if (added.length > 3) $(".in-collection").removeClass('d-none');
+      $(".collection").each(function() {
+        if($(this).next().children().length < 1 && $(this).text().length > 0) {
+          $(this).next().remove();
+          $(this).remove();
+          source.splice(source.indexOf($(this).attr('id')), 1);
+        }
+      });
       $(".collection").removeClass('d-none');
     }).done(function(){
       $("#loading").addClass('d-none').removeClass('d-flex');
@@ -129,6 +136,7 @@
   });
 
   function save_diary_collection (collection) {
+    var origin_collection = $('#'+id).parent().parent().parent().attr("id");
     $.ajax({
       url: '../save_diary_collection/'+user,
       type: 'PUT',
@@ -140,17 +148,26 @@
     }).done(function(){
       $('#in_collection').modal('hide');
       if (collection.length > 0) {
-        if (document.getElementById(collection) == null) $("#content").append("<h3 class='collection'>"+collection+"</h3><div id='"+collection+"' class='card-columns'></div>");
+        if (document.getElementById(collection) == null) {
+          $("#content").append("<h3 class='collection'>"+collection+"</h3><div id='"+collection+"' class='card-columns'></div>");
+          source.push(collection);
+        }
         $('#'+collection).append($('#'+id).parent().parent());
       } else {
         $('h1').next().prepend($('#'+id).parent().parent());
+      }
+    }).done(function(){
+      if($('#'+origin_collection).children().length < 1 && origin_collection !== collection) {
+        $('#'+origin_collection).prev().remove();
+        $('#'+origin_collection).remove();
+        source.splice(source.indexOf(origin_collection), 1);
       }
     });
   }
 
   $('#target_collection').on('keypress', function(key) {
     if (key.which == 13) {
-      save_diary_collection($('#target_collection').val().trim());
+      save_diary_collection($('#target_collection').val().trim().replace(/\s/g, '_'));
     }
   });
 

@@ -298,6 +298,10 @@ var shared = {
               destination += 'editable_memo/';\
               data.diary = '{{diary}}',\
               data.body = '';\
+              data.editing = {\
+                'user': user,\
+                'date': new Date().toJSON()\
+              };\
               if (type == 'coding' && highlight.length > 0) data.body += '> '+highlight+'\\n';\
               data.type = type;\
           }\

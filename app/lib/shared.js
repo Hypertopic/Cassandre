@@ -77,13 +77,49 @@ var shared = {
       {{i18n.i_created-by}} {{creator}} <span class='moment'>{{date}}</span><br/>\
       {{i18n.i_editable-by}} <span class='contributors'>{{contributors_fullnames}}</span><br/>\
       {{i18n.i_readable-by}} <span class='readers'>{{readers_fullnames}}</span>\
-      {{^link}}{{^cells}}{{^edges}}\
-        {{#logged}}\
-        <span id='modify_rights' data-toggle='modal' data-target='#modify_rights_dialog' title='{{i18n.i_modify_rights}}'>\
-          <img src='../../style/gear.svg' alt='{{i18n.i_modify_rights}}'>\
-        </span>\
-        {{/logged}}\
-      {{/edges}}{{/cells}}{{/link}}\
+      {{#logged}}\
+      <span id='modify_rights' data-toggle='modal' data-target='#modify_rights_dialog' title='{{i18n.i_modify_rights}}'>\
+        <img src='../../style/gear.svg' alt='{{i18n.i_modify_rights}}'>\
+      </span>\
+      {{/logged}}\
+    </div>",
+  modify_rights_dialog:"\
+    <div id='modify_rights_dialog' class='modal fade' role='dialog'>\
+      <div class='modal-dialog' role='document'>\
+        <div class='modal-content'>\
+          <div class='modal-header'>{{#editable}}{{i18n.i_modify_rights}}{{/editable}}{{^editable}}{{i18n.i_reader_unsubscribe}}{{/editable}}</div>\
+          <div class='modal-body'>\
+            {{#editable}}\
+            <table><tr><th>{{i18n.i_contributors}}</th><th>{{i18n.i_readers}}</th></tr><tr><td>\
+              <input id='add_contributor' type='search' placeholder='{{i18n.i_add_contributor}}'/><br/>\
+              <p>{{i18n.i_editable-by}}</p>\
+              <div class='contributors'>\
+              {{#contributors_fullnames}}\
+                <p>{{.}}<button class='remove_contributor' value='{{.}}'>x</button></p>\
+              {{/contributors_fullnames}}\
+              </div>\
+            </td><td>\
+              <input id='add_reader' type='search' placeholder='{{i18n.i_add_reader}}'/><br/>\
+              <p>{{i18n.i_readable-by}}</p>\
+              <div class='readers'>\
+              {{#readers_fullnames}}\
+                <p>{{.}}<button class='remove_reader' value='{{.}}'>x</button></p>\
+              {{/readers_fullnames}}\
+              </div>\
+            </td></tr></table>\
+            {{/editable}}\
+            {{^editable}}\
+            <div class='alert alert-danger' role='alert'>{{i18n.i_irreversible}}</div>\
+            {{/editable}}\
+          </div>\
+          {{^editable}}\
+          <div class='modal-footer'>\
+            <button type='button' class='btn btn-primary' data-dismiss='modal'>{{i18n.i_cancel}}</button>\
+            <button id='unsubscribe' type='button' class='btn btn-secondary linkLeaf'>{{i18n.i_reader_unsubscribe}}</button>\
+          </div>\
+          {{/editable}}\
+        </div>\
+      </div>\
     </div>",
   comments:"\
     <div id='comments'>\
@@ -420,6 +456,91 @@ var shared = {
       }\
     }\
   });",
+  rightsscript: "\
+  $('#add_contributor').on('keypress', function(key) {\
+    if (key.which == 13) {\
+      modify_rights('add_contributor', $('#add_contributor').val().trim().toLowerCase());\
+    }\
+  });\
+  $('#add_contributor').autocomplete({\
+    minLength: 3,\
+    appendTo: '#modify_rights_dialog',\
+    source: function(request, response) {\
+      $.getJSON('../../userlist/' + request.term, function (data) {\
+        response($.map(data.rows, function (value, key) {\
+          if ('{{contributors}}'.split(',').concat(userids).indexOf(value.id) == -1) {\
+            userids.push(value.id);\
+            return {\
+              label: value.value.fullname,\
+              value: value.id\
+            };\
+          }\
+        }));\
+        userids = [];\
+      });\
+    },\
+    select: function (event, ui) {\
+      modify_rights('add_contributor', ui.item.value);\
+    }\
+  });\
+  $('#add_reader').on('keypress', function(key) {\
+    if (key.which == 13) {\
+      modify_rights('add_reader', $('#add_reader').val().trim().toLowerCase());\
+    }\
+  });\
+  $('#add_reader').autocomplete({\
+    minLength: 3,\
+    appendTo: '#modify_rights_dialog',\
+    source: function(request, response) {\
+      $.getJSON('../../userlist/' + request.term, function (data) {\
+        response($.map(data.rows, function (value, key) {\
+          if ('{{readers}}'.split(',').concat(userids).indexOf(value.id) == -1) {\
+            userids.push(value.id);\
+            return {\
+              label: value.value.fullname,\
+              value: value.id\
+            };\
+          }\
+        }));\
+        userids = [];\
+      });\
+    },\
+    select: function (event, ui) {\
+      modify_rights('add_reader', ui.item.value);\
+    }\
+  });\
+  $('.remove_reader').on('click', function() {\
+    var i = '{{readers_fullnames}}'.split(',').indexOf($(this).val());\
+    modify_rights('remove_reader', '{{readers}}'.split(',')[i]);\
+  });\
+  $('.remove_contributor').on('click', function() {\
+    var i = '{{contributors_fullnames}}'.split(',').indexOf($(this).val());\
+    modify_rights('remove_contributor', '{{contributors}}'.split(',')[i]);\
+  });\
+  $('#unsubscribe').on('click', function() {\
+    $.ajax({\
+      url: '../../reader_unsubscribe/{{_id}}',\
+      type: 'PUT',\
+      contentType: 'application/json'\
+    });\
+  });\
+  function modify_rights(action, value) {\
+    $.ajax({\
+      url: '../../modify_rights/{{_id}}',\
+      type: 'PUT',\
+      contentType: 'application/json',\
+      data: JSON.stringify({\
+       'action': action,\
+       'value': value\
+      }),\
+      error: function(request) {\
+        alert(\
+          (JSON.parse(request.responseText).reason || request.responseText)\
+          + '\\nCode ' + request.status\
+        );\
+      }\
+    });\
+  }",
   commentsscript: "\
   $('#comment_create').click(function () {\
     refresh = false;\

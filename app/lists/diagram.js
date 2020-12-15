@@ -13,7 +13,7 @@ function(head, req) {
         var id = row.value._id;
         var fullname = id;
         data.contributors.push(id);
-        if (row.doc) fullname = row.doc.fullname;
+        if (row.doc && row.doc.fullname) fullname = row.doc.fullname;
         if (row.doc && !fullnames[id]) fullnames[id] = fullname;
         data.contributors_fullnames.push(fullname);
       break;
@@ -24,7 +24,7 @@ function(head, req) {
         var id = row.value._id;
         var fullname = id;
         data.readers.push(id);
-        if (row.doc) fullname = row.doc.fullname;
+        if (row.doc && row.doc.fullname) fullname = row.doc.fullname;
         if (row.doc && !fullnames[id]) fullnames[id] = fullname;
         data.readers_fullnames.push(fullname);
       break;

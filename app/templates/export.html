@@ -3,6 +3,11 @@
   <head>
     <title>{{diary_name}}</title>
     {{>links}}
+    <style>
+    ul {
+      list-style-type: disclosure-closed;
+    }
+    </style>
   </head>
   <body>
     <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
@@ -18,28 +23,43 @@
       <main id="content" class='col'>
         <h1></h1>
         <ul id="memos">
-          {{#memos}}
-          <table border="1">
-            <tr><td>Author</td><td>{{author}}</td></tr>
-            <tr><td>Date</td><td><span class="moment" id="{{date}}"></span> (rev: <span class="moment" id="{{update}}"></span>)</td></tr>
-            <tr><td>Type</td><td>{{type}}</td></tr>
-            <tr><td>Grounding</td><td>{{#groundings}}{{name}}{{/groundings}}</td></tr>
-            <tr><td>Title</td><td>{{name}}</td></tr>
-          </table>
+        {{#memos}}
+          <p><strong>{{i18n.i_title}}</strong>: <span id="{{id}}">{{name}}</span><br/>
+          <strong>{{i18n.i_created-by}}</strong>: <span data="{{author}}" class="user"></span><br/>
+          <strong>{{i18n.i_date}}</strong>: <span class="{{date}} moment" data="{{date}}"></span> {{#update}}<strong>({{i18n.i_update}}</strong>: <span class="{{update}} moment" data="{{update}}"></span>){{/update}}<br/>
+          <strong>Type</strong>: <span class="type" data="{{type}}"></span><br/>
+          <strong>{{i18n.i_grounding}}</strong>: {{#groundings}}<span class="grounding" data="{{id}}"><a href="#{{id}}">{{name}}</a></span>{{/groundings}}</p>
           {{#body}}<span class="content">{{body}}</span>{{/body}}
-          {{/memos}}
+          {{#statement}}{{statement}}{{/statement}}
+        {{/memos}}
         </ul>
       </main>
     </div>
-    <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
-      <a class='navbar-text' href="https://github.com/Hypertopic/Cassandre/wiki">
-        <img src="../../style/info.svg" width="30" height="30" alt="Cassandre" loading="lazy">
-      </a>
-    </nav>
   {{>script}}
   {{#list}}<script src="../../script/showdown.min.js"></script>{{/list}}
+  <script src="../../script/jspdf.umd.min.js"></script>
+  <script src="../../script/html2canvas.min.js"></script>
   <script>
-  var refresh = true;
+  const ansi = [
+    {char: '->', base: /\u2192/g},
+    {char: '...', base: /\u2026/g},
+    {char: 'oe', base: /\u0153/g},
+    {char: '-', base: /\u2013/g},
+    {char: "'", base: /[\u2018-\u2019]/g},
+    {char: 'EUR', base: /\u20AC/g}
+  ];
+  var refresh = true,
+      fullnames = types = [];
+  types["field"] = "{{i18n.i_memo.field}}";
+  types["interview"] = "{{i18n.i_memo.transcript}}";
+  types["transcript"] = "{{i18n.i_memo.transcript}}";
+  types["coding"] = "{{i18n.i_memo.coding}}";
+  types["theoretical"] = "{{i18n.i_memo.theoretical}}";
+  types["table"] = "{{i18n.i_memo.table}}";
+  types["diagram"] = "{{i18n.i_memo.diagram}}";
+  types["graph"] = "{{i18n.i_memo.graph}}";
+  types["operational"] = "{{i18n.i_memo.operational}}";
+  types["storyline"] = "{{i18n.i_memo.storyline}}";
   $(document).ready(function() {
     moment.locale('{{locale}}');
     {{#list}}
@@ -67,6 +87,9 @@
           $('#xml').prop('href', $('#xml').prop('href')+data.diary_name);
         }
       }
+    }).done(function(){
+      $('#pdf').removeClass('disabled');
+    });
     $('.type').each(function() {
       let i = $(this).attr('data');
       $(this).text(types[i].replace('&#39;', "'"));
@@ -96,6 +119,11 @@
   $('#header')
     .on('click', '#diary', function() {
       self.location = '../../memo/{{diary}}/?by=date';
+    })
+    .on('click', '#pdf', function() {
+      printPDF();
+    });
+
   function getFullname(o) {
     $.ajax({
       url: "../../userlist/"+o,
@@ -104,15 +132,45 @@
       dataType: "json"
     }).done(data => fullnames[data.rows[0].id] = data.rows[0].value.fullname);
   }
-    });
 
-      }
+  function printPDF() {
+    const { jsPDF } = window.jspdf;
+    var doc = new jsPDF('p', 'mm', [297, 210]);
+    var content = document.body;
+    $("#memos").children().each(function () {
+      $(this).html(replaceUnicode($(this).html()));
     });
-    var contributions = $('ul li .moment');
-    contributions.each(function() {
-      $(this).text($(this).text().replace(/./, function(x) { return x.toUpperCase(); }));
+    const diary_name = $('#diary').text()
+    doc.html(document.getElementById("memos"),{
+      html2canvas: {
+          allowTaint: true,
+          useCORS: true,
+          scale: 200 / document.body.scrollWidth
+      },
+      callback: function(){
+        const pageCount = doc.internal.getNumberOfPages()
+        doc.setTextColor("black");
+        doc.setFontSize(8)
+        for (var i = 1; i <= pageCount; i++) {
+          doc.setPage(i)
+          doc.text('Page ' + String(i) , doc.internal.pageSize.width - 10, doc.internal.pageSize.height - 10, {
+            align: 'right'
+          })
+          doc.text(diary_name, doc.internal.pageSize.width - 10, 10, null, 270)
+        }
+        doc.save();
+      },
+      x: 0,
+      y: 10
     });
   }
+
+  function replaceUnicode(str){
+    ansi.forEach(function(letter){
+      str = str.replace(letter.base, letter.char);
+    });
+    return str;
+  };
 
   {{>layoutscript}}
   {{>logscript}}

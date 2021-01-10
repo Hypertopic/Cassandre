@@ -15,5 +15,4 @@ function(o2, o, userCtx) {
         + ' is not authorized to edit this document!'
     });
   }
-
 }

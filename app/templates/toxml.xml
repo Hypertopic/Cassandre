@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <diary name="{{diary_name}}">
-{{#sections}}
   {{#memos}}
-  <memo id="{{id}}" type="{{type}}" author="{{author}}" created="{{date}}" update="{{update}}">
+  <memo id="{{id}}" type="{{type}}" author="{{author}}" created="{{date}}" {{#update}} update="{{update}}"{{/update}}>
     <groundings>
       {{#groundings}}
       <grounding id="{{id}}">{{name}}</grounding>
       {{/groundings}}
     </groundings>
-    {{#preview}}<content>{{preview}}</content>{{/preview}}
+    {{#body}}<content>{{body}}</content>{{/body}}
   </memo>
   {{/memos}}
-{{/sections}}
 </diary>
 

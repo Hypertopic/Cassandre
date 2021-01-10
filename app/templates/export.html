@@ -7,17 +7,17 @@
   <body>
     <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item"><a class="nav-link" id="diary">{{diary_name}}</a></li>
-        <li class="nav-item"><a class="nav-link" href="../../export/{{diary}}/json">json</a></li>
-        <li class="nav-item"><a class="nav-link" href="../../export/{{diary}}/xml">xml</a></li>
+        <li class="nav-item"><a class="nav-link btn navbar-btn text-truncate" id="diary">{{diary_name}}</a></li>
+        <li class="nav-item"><a class="nav-link btn-sm" id="json" href="../../export/{{diary}}/json/">json</a></li>
+        <li class="nav-item"><a class="nav-link btn-sm" id="xml" href="../../export/{{diary}}/xml/">xml</a></li>
+        <li class="nav-item"><a class="nav-link btn-sm disabled" id='pdf'>pdf</a></li>
       </ul>
       {{>log}}
     </nav>
     <div id="container" class='container-fluid'>
-      <div id="content" class='col'>
-        <h1>{{diary_name}}</h1>
+      <main id="content" class='col'>
+        <h1></h1>
         <ul id="memos">
-        {{#sections}}
           {{#memos}}
           <table border="1">
             <tr><td>Author</td><td>{{author}}</td></tr>
@@ -26,12 +26,10 @@
             <tr><td>Grounding</td><td>{{#groundings}}{{name}}{{/groundings}}</td></tr>
             <tr><td>Title</td><td>{{name}}</td></tr>
           </table>
-          {{#preview}}<span class="content">{{preview}}</span>{{/preview}}
-          </li>
+          {{#body}}<span class="content">{{body}}</span>{{/body}}
           {{/memos}}
-        {{/sections}}
         </ul>
-      </div>
+      </main>
     </div>
     <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
       <a class='navbar-text' href="https://github.com/Hypertopic/Cassandre/wiki">
@@ -44,7 +42,6 @@
   var refresh = true;
   $(document).ready(function() {
     moment.locale('{{locale}}');
-    stickToHeader();
     {{#list}}
     momentRelative('#memos');
     var converter = new showdown.Converter({
@@ -56,41 +53,59 @@
     $('.content').html(function(i, text) {
       return converter.makeHtml(text.trim());
     });
-    if ('{{logged}}') $.ajax({
-      url: "../../{{logged}}",
+    getFullname('{{logged}}');
+    $('#username').text(fullnames['{{logged}}']);
+    if ('{{diary}}') $.ajax({
+      url: "../../{{diary}}",
       type: "GET",
       dataType: "json",
       success: function(data) {
-        if(data.fullname) $('#username').text(data.fullname);
-        for (i in data.activity) {
-          var id = '#'+data.activity[i].doc;
-          if (data.activity[i].date > $(id).parent().find('.moment').attr('name')) {
-            $(id).parent().find('.unread').removeClass('unread');
-          }
+        if(data.diary_name) {
+          $('title').text(data.diary_name);
+          $('#diary').text(data.diary_name);
+          $('#json').prop('href', $('#json').prop('href')+data.diary_name);
+          $('#xml').prop('href', $('#xml').prop('href')+data.diary_name);
         }
       }
+    $('.type').each(function() {
+      let i = $(this).attr('data');
+      $(this).text(types[i].replace('&#39;', "'"));
+    });
+    $('.user').each(function() {
+      let user_fullname = user = $(this).attr('data');
+      if (fullnames[user] == null) getFullname(user);
+      user_fullname = fullnames[user]
+      $(this).text(user_fullname);
+    });
+    $('.grounding').each(function() {
+      let id = $(this).attr('data'),
+          text = $('#'+id).text();
+      if ($(this).text().length == 0) {
+        if (text.length > 0) {
+          $(this).find('a').html(text);
+        } else {
+          $(this).find('a').html("{{i18n.i_nothing-to-show}}");
+        }
+      }
+      if (document.getElementById(id) == null) $(this).find('a').prop('href', "../../memo/{{diary}}/"+id);
     });
     {{/list}}
+    stickToHeader();
   });
 
   $('#header')
     .on('click', '#diary', function() {
       self.location = '../../memo/{{diary}}/?by=date';
+  function getFullname(o) {
+    $.ajax({
+      url: "../../userlist/"+o,
+      type: "GET",
+      async: false,
+      dataType: "json"
+    }).done(data => fullnames[data.rows[0].id] = data.rows[0].value.fullname);
+  }
     });
 
-  {{#list}}
-  function momentRelative(what) {
-    var moments = $(what+' .moment');
-    moments.each(function() {
-      var now = moment();
-      var jstime = $(this).attr('id');
-      var mmtime = moment(jstime);
-      if(now.diff(mmtime, 'days') <= 2) {
-        $(this).text(mmtime.fromNow());
-      } else if(now.diff(mmtime, 'years') < 1) {
-        $(this).text("{{i18n.i_on-a-date}}"+' '+mmtime.format("Do MMMM"));
-      } else {
-        $(this).text("{{i18n.i_on-a-date}}"+' '+mmtime.format("Do MMMM YYYY"));
       }
     });
     var contributions = $('ul li .moment');
@@ -98,11 +113,9 @@
       $(this).text($(this).text().replace(/./, function(x) { return x.toUpperCase(); }));
     });
   }
-  {{/list}}
 
   {{>layoutscript}}
   {{>logscript}}
-  {{>editname}}
   </script>
   </body>
 </html>

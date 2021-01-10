@@ -156,12 +156,13 @@ function(req2) {
     case 'export':
       reply.path = "_list/export/memo_attribute";
       reply.query = {
-        "startkey": '["'+path[1]+'", "D"]',
-        "endkey":   '["'+path[1]+'", "M", {}]',
+        "startkey": '["'+path[1]+'", "date", '+logged+', "M"]',
+        "endkey":   '["'+path[1]+'", "date", '+logged+', "M", {}]',
         "by": "date",
         "in": ""+path[2],
         "include_docs": "true"
       };
+      if (path[3]) reply.query.diary_name = path[3];
     break;
     case 'diaries':
       if (path[2]) {

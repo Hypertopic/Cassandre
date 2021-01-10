@@ -4,19 +4,16 @@ function(head, req) {
   // !code lib/mustache.js
   // !code l10n/l10n.js
   // !code lib/shared.js
-  var memos_name = [];
-  var items = [];
-  var nodes = [];
-  var edges = [];
-  var data = {
+  var memos_name = [],
+      data = {
     i18n: localized(),
     by: req.query.by,
     logged: req.userCtx.name,
     diary: req.query.startkey[0],
-    sections: [],
+    memos: [],
+    docs: [],
     locale: req.headers["Accept-Language"],
-    peer: req.peer,
-    tables: []
+    peer: req.peer
   };
   data.locale = data.locale.split(',');
   data.locale = data.locale[0].substring(0,2);
@@ -26,34 +23,19 @@ function(head, req) {
       if (ips[n].trim() != '127.0.0.1') data.peer = ips[n].trim();
     }
   }
-  var section;
-  var sort_key;
-  var alphabetical = ("name"==req.query.by);
-  if (alphabetical) {
-    data.sections.push({
-      memos: []
-    });
-  }
   while (row = getRow()) {
     var preview = '';
     var groundings = [];
-    sort_key = row.value.date;
-    switch (row.key[1]) {
+    switch (row.key[3]) {
       case ('M'):
-        var name = row.value.name.replace(/"/g, '\\"').replace(/\s/g, ' ');
-        var date = row.value.date;
+        var name = row.value.name.replace(/"/g, '\\"').replace(/\s/g, ' '),
+            date = row.value.date,
+            author = row.doc.user || '';
+        if (row.doc.history) author = row.doc.history[0].user;
         memos_name[row.value.id] = row.value.name;
-        if (!alphabetical && (!section || sort_key != section.value)) {
-          section = {
-            value: sort_key,
-            memos: []
-          };
-        } else {
-          section = data.sections.pop();
-        }
         var authorized = [];
-        var authorized = authorized.concat(row.doc.contributors,row.doc.readers);
-        if (authorized.indexOf(req.userCtx.name) != -1) {
+        authorized = authorized.concat(row.doc.contributors,row.doc.readers);
+        if (authorized.indexOf(req.userCtx.name) > -1 || !row.doc.readers) {
           if (row.doc.body) preview = row.doc.body.replace(/\n\n/g, '\n \n');
           if (row.doc.speeches) {
             preview = row.doc.speeches.map(function(a) {
@@ -61,9 +43,8 @@ function(head, req) {
               if (a.actor) turn = '**'+a.actor.trim()+'** '+turn;
               return turn;
             });
-            var preview = preview.join('\n \n');
+            preview = preview.join('\n \n');
           }
-          if (row.doc.history) var author = row.doc.history[0].user;
           for (i in row.value.groundings) {
             var id = row.value.groundings[i];
             groundings.push({
@@ -71,19 +52,37 @@ function(head, req) {
               'name': memos_name[id]
             });
           }
-          section.memos.push({
-            preview: preview,
+          var obj = {
             diary: row.key[0],
             id: row.value.id,
             name: name,
-//            rev: row.value.rev,
             date: date,
             author: author,
             update: row.value.update,
             groundings: groundings,
-            type: row.value.type
-          });
-          data.sections.push(section);
+            type: row.value.type // || 'transcript'
+          };
+          if (obj.date.substring(0, 10) === obj.update.substring(0, 10)) delete obj.update;
+          switch (obj.type) {
+            case 'graph':
+              obj.nodes = row.doc.nodes;
+              obj.edges = row.doc.edges;
+              obj.graph = true;
+            break;
+            case 'diagram':
+              obj.link = row.doc.link;
+              obj.negative = row.doc.negative;
+              obj.statement = row.doc.statement;
+            break;
+            default:
+              obj.body = preview;
+            break;
+          }
+          data.memos.push(obj);
+          var p = row.doc;
+          delete p._rev;
+          delete p.comments;
+          data.docs.push(p);
         }
       break;
       case ('D'):
@@ -95,21 +94,38 @@ function(head, req) {
     default:
       data._id = data.diary;
       data.list = true;
-      data.sections = data.sections.sort(function(a,b){return (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0);});
-      break;
+      data.memos.sort(function(a,b){
+        return a.date > b.date ? 1 : -1;
+      });
+    break;
   }
   switch(req.query.in) {
     case('xml'):
-      delete data.i18n;
-      delete data.by;
+      data.diary_name = req.query.diary_name;
       start({"headers":{"Content-Type":"application/xml;charset=utf-8"}});
       return Mustache.to_html(templates.toxml, data);
     break;
     case('json'):
-      delete data.i18n;
-      delete data.by;
+      var json = data;
+      delete json.i18n;
+      delete json.by;
+      delete json.diary;
+      delete json.list;
+      delete json.logged;
+      delete json.locale;
+      delete json.peer;
+      delete json.memos;
+      delete json._id;
+      json.docs.unshift({
+        '_id': req.query.startkey[0],
+        'diary_name': req.query.diary_name
+      })
       start({"headers":{"Content-Type":"application/json;charset=utf-8"}});
       send(toJSON(data));
+    break;
+    case('pdf'):
+      start({"headers":{"Content-Type":"text/html;charset=utf-8"}});
+      return Mustache.to_html(templates.topdf, data);
     break;
     default:
       start({"headers":{"Content-Type":"text/html;charset=utf-8"}});

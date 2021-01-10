@@ -7,7 +7,7 @@
   <body>
     <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item"><a class="nav-link text-light" id="diary">&nbsp;</a></li>
+        <li class="nav-item"><a class="nav-link text-{{>contrastcolor}} text-truncate" id="diary">&nbsp;</a></li>
         <li class="dropdown d-none">
           <a class="nav-link dropdown-toggle" href="#" id="filter" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           {{i18n.i_filter}}
@@ -46,7 +46,7 @@
         {{/occurrences}}
       </div>
       <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
-        <input type="button" id="new_pattern" class='btn btn-outline-light btn-sm' value="{{i18n.i_new_pattern}}" />
+        <input type="button" id="new_pattern" class='btn btn-outline-{{>contrastcolor}} btn-sm' value="{{i18n.i_new_pattern}}" />
         <a class='navbar-brand' href="https://github.com/Hypertopic/Cassandre/wiki">
           <img src="../../style/info.svg" width="30" height="30" alt="Cassandre" loading="lazy">
         </a>

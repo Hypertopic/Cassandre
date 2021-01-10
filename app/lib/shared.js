@@ -52,7 +52,7 @@ var shared = {
         </div>\
         <button class='btn navbar-btn' title='{{i18n.i_sign-in}}' type='submit'>\
           <img class='d-block d-sm-none' src='{{>relpath}}style/sign-in.svg' alt='{{i18n.i_sign-in}}'>\
-          <span class='d-none d-sm-block text-light'>{{i18n.i_sign-in}}</span>\
+          <span class='d-none d-sm-block text-{{>contrastcolor}}'>{{i18n.i_sign-in}}</span>\
         </button>\
       </form>\
       {{/logged}}\
@@ -62,12 +62,13 @@ var shared = {
         {{^logged_fullname}}{{logged}}{{/logged_fullname}}\
       </span>\
       <button class='btn navbar-btn' title='{{i18n.i_sign-out}}' id='signout'>\
-        <span class='d-none d-sm-block text-light'>{{i18n.i_sign-out}}</span>\
+        <span class='d-none d-sm-block text-{{>contrastcolor}}'>{{i18n.i_sign-out}}</span>\
         <img class='d-block d-sm-none' src='{{>relpath}}style/sign-out.svg' alt='{{i18n.i_sign-out}}'>\
       </button>\
       {{/logged}}\
     </div></li></ul>",
-  navbarstyle:"navbar navbar-dark bg-dark",
+  contrastcolor:"light",
+  navbarstyle:"navbar navbar-dark bg-dark text-{{>contrastcolor}}",
   readrights:"\
     <p id='authorization'>\
       {{i18n.i_readable-by}} <span class='readers'>{{readers_fullnames}}</span>\
@@ -134,11 +135,11 @@ var shared = {
       <textarea rows='5' type='text' class='form-control hidden' placeHolder='{{i18n.i_enter_comment}}'></textarea>\
     </div>",
   commentsbtn:"\
-    <button class='btn navbar-btn btn-outline-light btn-sm' id='comment_create' title='{{i18n.i_comment}}'>\
+    <button class='btn navbar-btn btn-outline-{{>contrastcolor}} btn-sm' id='comment_create' title='{{i18n.i_comment}}'>\
       <span class='d-block d-sm-none'><img src='../../style/comment.svg' alt='{{i18n.i_comment}}'></span>\
       <span class='d-none d-sm-block'>{{i18n.i_comment}}</span>\
     </button>\
-    <button class='btn navbar-btn btn-outline-light btn-sm hidden' type='button' id='commented'>{{i18n.i_done}}</button>",
+    <button class='btn navbar-btn btn-outline-{{>contrastcolor}} btn-sm hidden' type='button' id='commented'>{{i18n.i_done}}</button>",
   script: "<script src='{{>relpath}}script/jquery.js'></script>\
     <script src='{{>relpath}}script/jquery-ui.min.js'></script>\
     <script src='{{>relpath}}style/bootstrap.min.js'></script>\

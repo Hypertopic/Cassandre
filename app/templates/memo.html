@@ -27,7 +27,7 @@
               {{#timestamp}}
               <div class="timestamp">{{timestamp}}</div>
               {{/timestamp}}
-              <div class="post">
+              <div class="post begin">
                 {{#words}}<font>{{.}}</font>{{/words}}
                 {{#text}}{{text}}{{/text}}
               </div>
@@ -590,6 +590,10 @@
         text: name
       }));
     });
+  });
+
+  $(window).scroll(function(){
+    $('.post').removeClass("begin");
   });
 
   function renameDiagram(id,name) {

@@ -159,6 +159,11 @@ div.post {
   border-left: 0px;
 }
 
+.begin {
+  overflow: hidden;
+  max-height: 60em;
+}
+
 .card>p>.moment,
 .comment>.meta,
 #negative-case>.meta,

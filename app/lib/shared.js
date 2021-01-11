@@ -139,7 +139,7 @@ var shared = {
       <span class='d-block d-sm-none'><img src='../../style/comment.svg' alt='{{i18n.i_comment}}'></span>\
       <span class='d-none d-sm-block'>{{i18n.i_comment}}</span>\
     </button>\
-    <button class='btn navbar-btn btn-outline-{{>contrastcolor}} btn-sm hidden' type='button' id='commented'>{{i18n.i_done}}</button>",
+    <button class='btn navbar-btn btn-outline-{{>contrastcolor}} btn-sm hidden' type='button' id='commented'>{{i18n.i_save}}</button>",
   script: "<script src='{{>relpath}}script/jquery.js'></script>\
     <script src='{{>relpath}}script/jquery-ui.min.js'></script>\
     <script src='{{>relpath}}style/bootstrap.min.js'></script>\

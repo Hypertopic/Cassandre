@@ -435,6 +435,7 @@
   });
 
   $('#edit').on('click', function() {
+    refresh = false;
     if ('{{type}}' == 'transcript') {
       self.location = '../../editable_text/{{_id}}';
     } else {

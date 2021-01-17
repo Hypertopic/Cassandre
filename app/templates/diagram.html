@@ -301,6 +301,22 @@
       $('.articulate').removeClass('hidden');
     }
     $('#diagram').html(shape1+content1+shape2+content2+articulated);
+    if ($('.statement_text').text().length < 1) {
+      $('#toasts').append('<div class="toast" role="alert">'
+        + '<div class="toast-body alert-warning">'
+        + '<button type="button" class="close" data-dismiss="toast">×</button>'
+        + "{{{i18n.i_next.statement}}} <strong>{{i18n.i_write_statement}}</strong>" + '</div></div>');
+      $('.toast').toast({autohide: false});
+      $('.toast').toast('show');
+    }
+    if ($('.negative_text').text().length < 1 && $('#leaves li').length < 1) {
+      $('#toasts').append('<div class="toast" role="alert">'
+        + '<div class="toast-body alert-info">'
+        + '<button type="button" class="close" data-dismiss="toast">×</button>'
+        + "{{i18n.i_next.negative-case}} {{i18n.i_hereunder_button}}" + '</div></div>');
+      $('.toast').toast({autohide: false});
+      $('.toast').toast('show');
+    }
     poller('memo', '{{update_seq}}');
   });
 

@@ -22,6 +22,8 @@
     <div id="container" class='container-fluid'>
       <main id="content" class='col'>
         <h1></h1>
+        <div class="alert alert-secondary" role="alert">{{i18n.i_export.text-only}}</div>
+        <p></p>
         <ul id="memos">
         {{#memos}}
           <p><strong>{{i18n.i_title}}</strong>: <span id="{{id}}">{{name}}</span><br/>
@@ -133,7 +135,14 @@
     }).done(data => fullnames[data.rows[0].id] = data.rows[0].value.fullname);
   }
 
+  function inform(type, msg){
+    $('.alert-primary').remove();
+    $('.alert-success').remove();
+    $('<div class="alert alert-'+type+'" role="alert">'+msg+'</div>').insertAfter($('.alert').last());
+  }
+
   function printPDF() {
+    inform('primary', '{{i18n.i_export.in-progress}}<div class="spinner-border spinner-border-sm"></div>');
     const { jsPDF } = window.jspdf;
     var doc = new jsPDF('p', 'mm', [297, 210]);
     var content = document.body;
@@ -158,6 +167,7 @@
           })
           doc.text(diary_name, doc.internal.pageSize.width - 10, 10, null, 270)
         }
+        inform('success', "{{i18n.i_export.done}}");
         doc.save();
       },
       x: 0,

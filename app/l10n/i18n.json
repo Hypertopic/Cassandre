@@ -132,6 +132,8 @@
     "i_ground": "Grounding here",
     "i_comment": "Comment",
     "i_enter_comment": "Enter your comment",
+    "i_fill-this-memo": "Fill this memo",
+    "i_hereunder_button": "(through the button, hereunder)",
     "i_memo": {
        "field": "Field memo",
        "transcript": "Interview transcript",
@@ -186,7 +188,23 @@
       "theoretical": "Research question or theoretical question(s) raised when coding the material",
       "storyline": "Summarize what have learned, draw the storyline of the research project, write the draft of your next paper",
       "negative-case": "Context making the inverted relation possible",
-      "statement": "Wording the articulation"
+      "statement": "Put the articulation into words"
+    },
+    "i_next": {
+       "field": "How can you interpret your observations ? What dimension of the phenomenon is attested ? Create a coding memo to formulate it",
+       "transcript": "How can you interpret what was told ? What dimension of the phenomenon is expressed ? Create a coding memo to formulate it",
+       "coding": "If the empirical material indicates that this dimension varies according to another dimensions, represent this articulation with a diagram. If this dimension suggests a new question, it deserves a new theoretical memo",
+       "theoretical": "How can you investigate these questions on the field. Prepare your next contact to the field through an operational memo !",
+       "negative-case": "What determines this articulation ? In what context would it differ ? If this occurs in the material, fill the \"negative case\" field. If not, this hypothesis or research lead deserves a theoretical memo",
+       "operational": "This memo enumerates what should be investigated on the field. Once you will come back from the field, do not put back (field) memo creation",
+       "resume": "To proceed, use the button named",
+       "statement": "This relation deserves to be put into words. To do so, use the button named",
+       "storyline": "If not, do not hesitate to refine this memo... Or to formulate new question in a theoretical memo"
+    },
+    "i_export": {
+       "text-only": "Only textual memos are included here. Diagrams (articulations) and graphs are excluded from the export to HTML, to PDF or to XML; they are only included in the JSON export.",
+       "in-progress": "Conversion to PDF in progress...",
+       "done": "Your PDF is ready"
     },
     "i_link": "Linking",
     "i_link_properties": "two properties varying in the same direction",
@@ -327,6 +345,8 @@
     "i_ground": "Ancrer",
     "i_comment": "Commenter",
     "i_enter_comment": "Saisissez un commentaire",
+    "i_fill-this-memo": "Complétez ce compte-rendu",
+    "i_hereunder_button": "(via le bouton ci-dessous)",
     "i_memo": {
        "field": "Compte-rendu d'observation",
        "transcript": "Transcription d'entretien",
@@ -373,14 +393,30 @@
         "field": "Lieu de l'observation",
         "transcript": "Lieu de la rencontre"
       },
-      "field": "Qu'ai je observé ?",
+      "field": "Qu'avez-vous observé ?",
       "transcript": "**Caracole** : Quoi de neuf, docteur ?\\n \\n**Sov** : Élementaire, mon cher !",
       "coding": "Comment se définit tel processus, telle action ou telle activité ?",
       "operational": "Que ne faut-il pas oublier de faire sur le terrain ?",
-      "theoretical": "Reformulation de la question de recherche, nouvelles questions théoriques que suscite l'analyse du matériau, propriété ou articulation à approfondir.",
-      "storyline": "Faire le point sur le déroulement de la recherche, prépaper une restitution à l'intention des acteurs de terrain ou rédiger ses premières conclusions...",
-       "negative-case": "Circonstances du renversement de l'articulation",
+      "theoretical": "Formulez (ou reformulez) la question de recherche ou les questions théoriques que suscite l'analyse du matériau. Identifiez la dimension à approfondir ou la situation à explorer",
+      "storyline": "Faites le point sur le déroulement de la recherche, prépapez une restitution à l'intention des acteurs de terrain ou rédigez vos premières conclusions",
+       "negative-case": "Quelles circonstances inversent cette articulation ?",
        "statement": "Mettre en mots (phrase à trois verbes)"
+    },
+    "i_next": {
+       "field": "Quelle analyse suggèrent ces observations ? Quelle dimension y est attestée ? Formulez-la dans un compte-rendu de codage",
+       "transcript": "Quelle interprétation soutiennent ces propos ? Quelle dimension est exprimée ? Créez un compte-rendu de codage pour la formuler",
+       "coding": "Si cette dimension suggère une nouvelle question, celle-ci mérite d'être consignée dans un nouveau compte-rendu théorique",
+       "theoretical": "Comment ces questions peuvent-elles être explorées sur le terrain ? Préparez votre prochain contact avec le terrain dans un compte-rendu opérationnel",
+       "negative-case": "À quelles conditions cette articulation s'inverserait-elle ? Si celles-ci sont documentées dans le matériau, complétez le cas négatif. Sinon, consignez cette hypothèse dans un compte-rendu théorique",
+       "operational": "Ce compte-rendu prépare le terrain. Créez un compte-rendu de terrain dès que vous reviendrez du terrain",
+       "resume": "Pour l'enregistrer, utilisez le bouton",
+       "storyline": "N'hésitez pas à améliorer ce compte-rendu",
+       "statement": "Cette articulation mériterait d'être mise en mots. Pour ce faire, utilsez le bouton"
+    },
+    "i_export": {
+       "text-only": "Seuls les comptes-rendus (textes) sont intégrés ci-dessous. Les diagrammes (articulations et schématisations intégratives) sont exclus des exportations en HTML, en PDF ou XML; ils ne figurent que dans l'exportation en JSON.",
+       "in-progress": "Votre PDF est en préparation...",
+       "done": "Votre PDF est prêt"
     },
     "i_link": "Articuler",
     "i_link_properties": "deux propriétés variant dans le même sens",

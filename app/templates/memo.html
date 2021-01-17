@@ -223,8 +223,16 @@
   <script>
   var metrics = {},
       trigrams = {},
-      leaf_type = leaf_id = '',
-      userids = [];
+      leaf_type = leaf_id = resume = '',
+      userids = [],
+      help = [];
+  help["field"] = {init: "{{{i18n.i_content.field}}}", next: "{{{i18n.i_next.field}}}"};
+  help["interview"] = {init: "{{{i18n.i_content.transcript}}}", next: "{{{i18n.i_next.transcript}}}"};
+  help["transcript"] = {init: "{{{i18n.i_content.transcript}}}", next: "{{{i18n.i_next.transcript}}}"};
+  help["coding"] = {init: "{{{i18n.i_content.coding}}}", next: "{{{i18n.i_next.coding}}}"};
+  help["theoretical"] = {init: "{{{i18n.i_content.theoretical}}}", next: "{{{i18n.i_next.theoretical}}}"};
+  help["operational"] = {init: "{{{i18n.i_content.operational}}}", next: "{{{i18n.i_next.operational}}}"};
+  help["storyline"] = {init: "{{{i18n.i_content.storyline}}}", next: "{{{i18n.i_next.storyline}}}"};
   $(document).ready(function() {
     {{>render}}
     moment.locale('{{locale}}');
@@ -277,6 +285,7 @@
       $('#edit').removeClass("disabled");
       $('#edit').text("{{i18n.i_resume}}");
       $('#edit').attr("title", $('#editing').text().replace(/\s+/g, " "));
+      resume = ". {{i18n.i_next.resume}} <strong>{{i18n.i_resume}}</strong>"
     } else {
       $('#edit').attr("title", $('#editing').text().replace(/\s+/g, " "));
       document.getElementById('edit').disabled = true
@@ -286,12 +295,28 @@
     $('#toasts').append('<div class="toast" role="alert">'
       + '<div class="toast-body alert-warning">'
       + '<button type="button" class="close" data-dismiss="toast">×</button>'
-      + $('#editing').text().replace(/\s+/g, " ") + '</div></div>');
+      + $('#editing').text().replace(/\s+/g, " ") + resume + '</div></div>');
     $('.toast').toast({autohide: false});
     $('.toast').toast('show');
     {{/editing}}
     $('#edit').removeClass('d-none');
     {{/logged}}
+    {{#editable}}
+    if ($('#leaves li').length < 1) {
+      var tip = '';
+      if($('.post').text().trim().length == 0) {
+        tip = "{{i18n.i_fill-this-memo}}. " + help["{{type}}"]["init"];
+      } else {
+        tip = help["{{type}}"]["next"] + " {{i18n.i_hereunder_button}}";
+      }
+      $('#toasts').append('<div class="toast" role="alert">'
+        + '<div class="toast-body alert-info">'
+        + '<button type="button" class="close" data-dismiss="toast">×</button>'
+        + tip + '</div></div>');
+      $('.toast').toast({autohide: false});
+      $('.toast').toast('show');
+    }
+    {{/editable}}
     switch ('{{type}}') {
       case ('field'):
         $("h1>img").attr("title", "{{i18n.i_memo.field}}".replace('&#39;',"'"));

@@ -139,7 +139,9 @@ var shared = {
       <span class='d-block d-sm-none'><img src='../../style/comment.svg' alt='{{i18n.i_comment}}'></span>\
       <span class='d-none d-sm-block'>{{i18n.i_comment}}</span>\
     </button>\
-    <button class='btn navbar-btn btn-outline-{{>contrastcolor}} btn-sm hidden' type='button' id='commented'>{{i18n.i_save}}</button>",
+    <button class='btn navbar-btn btn-outline-{{>contrastcolor}} btn-sm hidden' type='button' id='commented'>{{i18n.i_save}}</button>\
+    <button class='btn navbar-btn btn-outline-{{>contrastcolor}} btn-sm hidden' type='button' id='comment_updated'>{{i18n.i_save}}</button>\
+    <button class='btn navbar-btn btn-outline-{{>contrastcolor}} btn-sm hidden' type='button' id='renamed'>{{i18n.i_save}}</button>",
   script: "<script src='{{>relpath}}script/jquery.js'></script>\
     <script src='{{>relpath}}script/jquery-ui.min.js'></script>\
     <script src='{{>relpath}}style/bootstrap.min.js'></script>\
@@ -415,48 +417,56 @@ var shared = {
     $('a').removeAttr('href');\
     $('#diary').addClass('disabled');\
     $('#signout').prop('disabled', true);\
+    $('.toast').toast('hide');\
+    $('#modify_rights').remove();\
+    $('#renamed').removeClass('hidden');\
+    $('#renamed').prop('disabled', false);\
     $('#name').removeClass('hidden');\
   });\
+  $('#renamed').on('click', function() {\
+    rename();\
+  });\
   $('#name').on('keypress', function(key) {\
-    if (key.which == 13) {\
-      if ($('#name').val().trim() == '') {\
-        {{^link}}\
-          {{^list}}alert('{{i18n.i_enter_memo_name}}');{{/list}}\
-          {{#list}}alert('{{i18n.i_enter_diary_name}}');{{/list}}\
-        {{/link}}\
-        {{#link}}\
-          alert('{{i18n.i_enter_graph_name}}');\
-        {{/link}}\
-      } else {\
-        var todos = [];\
-        {{#type}}\
-        if ('{{type}}' == 'coding') {\
-          {{#leaves}}\
-          if ('{{type}}' == 'diagram') {\
-            todos.push(renameDiagram('{{href}}'.split('/').pop(),$('#name').val().trim()));\
+    if (key.which == 13) rename();\
+  });\
+  function rename() {\
+    if ($('#name').val().trim() == '') {\
+      {{^link}}\
+        {{^list}}alert('{{i18n.i_enter_memo_name}}');{{/list}}\
+        {{#list}}alert('{{i18n.i_enter_diary_name}}');{{/list}}\
+      {{/link}}\
+      {{#link}}\
+        alert('{{i18n.i_enter_graph_name}}');\
+      {{/link}}\
+    } else {\
+      var todos = [];\
+      {{#type}}\
+      if ('{{type}}' == 'coding') {\
+        {{#leaves}}\
+        if ('{{type}}' == 'diagram') {\
+          todos.push(renameDiagram('{{href}}'.split('/').pop(),$('#name').val().trim()));\
+        }\
+        {{/leaves}}\
+      }{{/type}}\
+      $.when(...todos).then(function(){\
+        $.ajax({\
+          url: '../../edit_name/{{_id}}',\
+          type: 'PUT',\
+          contentType: 'application/json',\
+          data: $('#name').val().trim(),\
+          error: function(request) {\
+            alert(\
+              (JSON.parse(request.responseText).reason || request.responseText)\
+              + '\\nCode ' + request.status\
+            );\
           }\
-          {{/leaves}}\
-        }{{/type}}\
-        $.when(...todos).then(function(){\
-          $.ajax({\
-            url: '../../edit_name/{{_id}}',\
-            type: 'PUT',\
-            contentType: 'application/json',\
-            data: $('#name').val().trim(),\
-            error: function(request) {\
-              alert(\
-                (JSON.parse(request.responseText).reason || request.responseText)\
-                + '\\nCode ' + request.status\
-              );\
-            }\
-          }).done(function(){\
-            refresh = true;\
-            reload;\
-          });\
+        }).done(function(){\
+          refresh = true;\
+          reload;\
         });\
-      }\
+      });\
     }\
-  });",
+  };",
   rightsscript: "\
   $('#add_contributor').on('keypress', function(key) {\
     if (key.which == 13) {\
@@ -551,10 +561,12 @@ var shared = {
     $('#commented').prop('disabled', null);\
     $('#leave-name').addClass('hidden');\
     $('#kwic').parent().children().addClass('hidden');\
+    $('#modify_rights').remove();\
     $('a').removeAttr('href');\
     $('#diary').addClass('disabled');\
     $('#signout').prop('disabled', true);\
     $('#add-leaves').addClass('hidden');\
+    $('.toast').toast('hide');\
     $('#comments').find('textarea').removeClass('hidden');\
     $('#commented').removeClass('hidden');\
     $('html, body').scrollTop($(document).height());\
@@ -566,18 +578,24 @@ var shared = {
       comment();\
     }\
   });\
+  var comment_id;\
   $('.comment').click(function(event) {\
     refresh = false;\
     var user = $(this).find('.user').text();\
+    comment_id = $(this).closest('.comment').attr('id');\
     if ('{{logged_fullname}}' == user && !$(event.target).is('input')) {\
       $(this).find('.comment_text').hide();\
       $(this).find('.comment_edit').removeClass('hidden');\
       $('#commented').remove();\
       $('#footer > div > button').prop('disabled', true);\
       $('#add-leaves').addClass('hidden');\
+      $('#comment_updated').removeClass('hidden');\
+      $('#comment_updated').prop('disabled', false);\
       $('#kwic').parent().children().addClass('hidden');\
       $('#signout').prop('disabled', true);\
       $('#diary').addClass('disabled');\
+      $('#modify_rights').remove();\
+      $('.toast').toast('hide');\
       $('a').removeAttr('href');\
     }\
   });\
@@ -590,17 +608,21 @@ var shared = {
     }).done(function(){refresh = true});\
   });\
   $('.comment_edit').on('keypress', function(key) {\
-    if (key.which == 13) {\
-      refresh = true;\
-      $.ajax({\
-        url: '../../update_comment_content/'+$(this).closest('.comment').attr('id'),\
-        type: 'PUT',\
-        contentType: 'application/json',\
-        data: $(this).val().trim(),\
-        success: reload\
-      });\
-    }\
+    if (key.which == 13) update_comment(comment_id);\
   });\
+  $('#comment_updated').on('click', function() {\
+    update_comment(comment_id);\
+  });\
+  function update_comment(id) {\
+    refresh = true;\
+    $.ajax({\
+      url: '../../update_comment_content/'+id,\
+      type: 'PUT',\
+      contentType: 'application/json',\
+      data: $('#'+id+'>input').val().trim(),\
+      success: reload\
+    });\
+  };\
   function comment() {\
     refresh = true;\
     var data = {\

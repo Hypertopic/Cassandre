@@ -9,7 +9,10 @@
       <header>
         <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
           <ul class="navbar-nav mr-auto">
-            <li class="nav-item text-light">{{diary_name}}</li>
+            <li class="nav-item text-{{>contrastcolor}}">{{diary_name}}</li>
+            {{#authorized}}
+            <li><button title="{{i18n.i_double}}" class="btn text-{{>contrastcolor}}" id="double">¶²</button></li>
+            {{/authorized}}
           </ul>
           {{>log}}
         </nav>
@@ -47,7 +50,9 @@
       </div>
       <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
         {{#authorized}}{{#editing}}
-        <button type="button" class='btn btn-outline-light btn-sm' id="done">{{i18n.i_save}}</button>
+        <div role="group">
+          <button type="button" class="btn btn-outline-{{>contrastcolor}} btn-sm" id="done">{{i18n.i_save}}</button>
+        </div>
         {{/editing}}{{/authorized}}
         <a class="navbar-text" href="https://github.com/Hypertopic/Cassandre/wiki">
           <img src="../style/info.svg" width="30" height="30" alt="Cassandre" loading="lazy">
@@ -66,7 +71,7 @@
   placeHolder["operational"] = {name : "{{i18n.i_name.operational}}", content: "{{{i18n.i_content.operational}}}"};
   placeHolder["storyline"] = {name : "{{i18n.i_name.storyline}}", content: "{{{i18n.i_content.storyline}}}"};
   $("#name").attr("placeHolder", placeHolder["{{type}}"]["name"]);
-
+  {{#authorized}}
   var easymde = new EasyMDE({
     element: $("#body")[0],
     autosave: {
@@ -79,7 +84,7 @@
     placeholder: placeHolder["{{type}}"]["content"],
     spellChecker: false
   });
-
+  {{/authorized}}
   var warning = 'Save your content';
   $(document).ready(function() {
     window.addEventListener("beforeunload", function (e) {
@@ -91,9 +96,15 @@
     $("#kwic").parent().addClass('hidden');
     if ($('#groundings li').length < 1) $("#groundings").addClass('hidden');
     $('#groundings').find('.toggle').next().slideToggle('fast');
+    {{#authorized}}
     $('#header > ul > li:first').after($('.editor-toolbar'));
+    {{/authorized}}
     stickToHeader();
   });
+
+  function double() {
+    easymde.value(easymde.value().replace(/\n/g, "\n \n"))
+  }
 
   function save(draft, toDoAfter) {
     warning = false;
@@ -109,6 +120,10 @@
       success: toDoAfter
     });
   }
+
+  $('#double').on('click', function() {
+    double();
+  });
 
   $('#done').on('click', function() {
     save(false, function() {

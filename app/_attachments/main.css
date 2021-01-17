@@ -267,6 +267,8 @@ a.dropdown-item, .create-leave, a.dropdown-toggle,
 
 .editor-toolbar {
   border: 0px !important;
+  margin-top: auto !important;
+  margin-bottom: auto !important;
 }
 
 .editor-toolbar:before,
@@ -280,6 +282,7 @@ a.dropdown-item, .create-leave, a.dropdown-toggle,
 }
 
 #header a:hover,
+#double:hover,
 .editor-toolbar > button.active, 
 .editor-toolbar > button:hover {
   background: white;

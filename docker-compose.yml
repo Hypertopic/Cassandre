@@ -3,7 +3,7 @@ version: '3'
 services:
 
   couchdb:
-    image: couchdb
+    image: couchdb:2
     ports:
       - 5984:5984
     volumes:
@@ -25,7 +25,7 @@ services:
     working_dir: /app
 
   ldap_proxy:
-    image: benel/aaaforrest
+    image: benel/aaaforrest:1.0.0
     ports:
       - 80:80 #
     volumes:

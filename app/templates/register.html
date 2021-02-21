@@ -1,0 +1,128 @@
+<html>
+  <head>
+    <title>{{i18n.i_register}}</title>
+     {{>links}}
+  </head>
+  <body>
+    <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
+      <a class="navbar-brand btn text-light" title="{{i18n.i_diaries}}" href="/memo/">{{i18n.i_diaries}}</a>
+    </nav>
+    <div id="container" class='container-fluid h-100'>
+      <main class="col pb-5" id="content">
+        <h1>{{i18n.i_register}}</h1>
+        <div class="alert" id="message" role="alert">Le bouton pour soumettre ce formulaire figure dans la barre du bas</div>
+        <a id="diaries" class="d-none" title="{{i18n.i_diaries}}" href="/memo/">{{i18n.i_diaries}}</a>
+        <form class="row g-3 align-items-center">
+          <div class="col-md-6 mb-3">
+            <label for="fullname">{{i18n.i_fullname}}</label>
+            <input class="form-control" id="fullname" name="fullname" type="text" placeholder="Jack London" />
+            <small class="form-text text-info">Nom sous lequel apparaîtra votre activité</small>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="email">Email</label>
+            <input class="form-control" id="email" name="email" type="email" required="required" placeholder="user@example.net" />
+            <small class="form-text text-info">Cet email sera votre identifiant</small>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="password">{{i18n.i_password}}</label>
+            <input class="form-control" id="password" name="password" type="password" required="required" placeholder="{{i18n.i_password}}" />
+            <small class="form-text text-info">Choisisez un mot de passe sûr</small>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="confirm">{{i18n.i_confirm-password}}</label>
+            <input class="form-control" id="confirm" name="confirm" type="password" required="required" placeholder="{{i18n.i_password}}" />
+            <small class="form-text text-info">
+            Retenez bien ce mot de passe
+            </small>
+          </div>
+        </form>
+      </main>
+      <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
+        <div><button class="btn navbar-btn btn-outline-{{>contrastcolor}} btn-sm" id="register">{{i18n.i_register}}</button></div>
+        <a class='navbar-text' href="https://github.com/Hypertopic/Cassandre/wiki">
+          <img src="../../style/info.svg" width="30" height="30" alt="Cassandre" loading="lazy">
+        </a>
+      </nav>
+    </div>
+  {{>script}}
+  <script>
+  var user = fullname = "";
+  $(document).ready(function() {
+    $.ajax({
+      type: 'DELETE',
+      url: '/_session'
+    }).done(function() {
+      stickToHeader();
+    });
+  });
+
+  $('#register').on('click', function() {
+    register();
+    return false;
+  });
+
+  function register() {
+    if($("#password").val() == $("#confirm").val()) {
+      try {
+        $("#register").attr("disabled", "disabled");
+        user = $("#email").val().trim();
+        fullname = $("#fullname").val().trim();
+        $.ajax({
+          type: "PUT",
+          url: "../../create_user/" + user,
+          contentType: "application/json",
+          data: JSON.stringify({
+            name: user,
+            password: $("#password").val(),
+            fullname: $("#fullname").val(),
+            email: $("#email").val(),
+            roles: [],
+            type: "user"
+          })
+        }).done(onRegistred).fail(registerFail);
+      } catch(err) {
+        $("#register").removeAttr("disabled");
+        onError(err);
+      }
+    } else {
+      onError("{{i18n.i_unmatch-password}}");
+    }
+  }
+
+  function onError(message) {
+    $("#message").addClass("alert-danger");
+    $("#message").html(message);
+  }
+
+  function registerFail(message) {
+    $("#register").removeAttr("disabled");
+    onError(message.status == 409 ? "\"" + $("#login").val() + "\"" + " {{i18n.i_existing-username}}" 
+      : "Your request produced an error. " + message.responseText);
+  }
+
+  function onRegistred() {
+    $.ajax({
+      url: '../../'+user,
+      type: 'PUT',
+      contentType: 'application/json',
+      data: JSON.stringify({
+        '_id': user,
+        'fullname': fullname,
+        'contributors': [user],
+        'readers': ['charlene.crahay@uclouvain.be'],
+      })
+    }).done(function(){
+      $("#message").html("{{i18n.i_successful-registration}} ");
+      $("#message").removeClass("alert-danger");
+      $("#diaries").removeClass("d-none");
+      $("#register").addClass("d-none");
+      $("#message").addClass("alert-success");
+      $('#message').append($('#diaries'));
+      $("form").slideUp();
+    });
+  }
+
+  {{>layoutscript}}
+  </script>
+  </body>
+</html>

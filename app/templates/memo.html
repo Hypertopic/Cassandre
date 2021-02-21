@@ -291,12 +291,7 @@
     }
     {{/editable}}
     if ("{{contributors}}".split(',').length > 1) $('#editing').append(". {{i18n.i_no-edit-by-others}}");
-    $('#toasts').append('<div class="toast" role="alert">'
-      + '<div class="toast-body alert-warning">'
-      + '<button type="button" class="close" data-dismiss="toast">×</button>'
-      + $('#editing').text().replace(/\s+/g, " ") + resume + '</div></div>');
-    $('.toast').toast({autohide: false});
-    $('.toast').toast('show');
+    inform('warning', $('#editing').text().replace(/\s+/g, " ") + resume);
     {{/editing}}
     $('#edit').removeClass('d-none');
     {{/logged}}
@@ -308,12 +303,7 @@
       } else {
         tip = help["{{type}}"]["next"] + " {{i18n.i_hereunder_button}}";
       }
-      $('#toasts').append('<div class="toast" role="alert">'
-        + '<div class="toast-body alert-info">'
-        + '<button type="button" class="close" data-dismiss="toast">×</button>'
-        + tip + '</div></div>');
-      $('.toast').toast({autohide: false});
-      $('.toast').toast('show');
+      inform('info', tip);
     }
     {{/editable}}
     switch ('{{type}}') {

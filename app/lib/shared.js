@@ -361,6 +361,13 @@ var shared = {
       });\
     }\
   }\
+  function inform(type, msg){\
+    $('#toasts').append('<div class=\"toast\" role=\"alert\">'\
+      + '<div class=\"toast-body alert-'+type+'\">'\
+      + '<button type=\"button\" class=\"close\" data-dismiss=\"toast\">×</button>'+ msg +'</div></div>');\
+    $('.toast').toast({autohide: false});\
+    $('.toast').toast('show');\
+  }\
   {{/list}}\
   function poller(what, since) {\
     $.ajax({\
@@ -701,25 +708,9 @@ var shared = {
       var maintenance_start = new Date(data.date);\
       var maintenance_end = moment(maintenance_start).add(30, 'm').toDate();\
       if (maintenance_start > new Date(Date.now())) {\
-        $('#toasts').append('\
-          <div class=\"toast\" role=\"alert\" aria-live=\"assertive\">\
-            <div class=\"toast-body alert-danger\">\
-            <button type=\"button\" class=\"close\" data-dismiss=\"toast\">×</button>\
-            {{i18n.i_maintenance}} '+moment(data.date).calendar().toLowerCase()+'\
-            </div>\
-          </div>');\
-        $('.toast').toast({autohide: false});\
-        $('.toast').toast('show');\
+        inform('danger', '{{i18n.i_maintenance}} '+moment(data.date).calendar().toLowerCase());\
       } else if (maintenance_end > new Date(Date.now())) {\
-        $('#toasts').append('\
-          <div class=\"toast\" role=\"alert\" aria-live=\"assertive\">\
-            <div class=\"toast-body alert-danger\">\
-            <button type=\"button\" class=\"close\" data-dismiss=\"toast\">×</button>\
-            {{i18n.i_maintenance-in-progress}} '+moment(data.date).add(30, 'm').fromNow()+'\
-            </div>\
-          </div>');\
-        $('.toast').toast({autohide: false});\
-        $('.toast').toast('show');\
+        inform('danger', '{{i18n.i_maintenance-in-progress}} '+moment(data.date).add(30, 'm').fromNow());\
       }\
     });\
     stickToHeader();\

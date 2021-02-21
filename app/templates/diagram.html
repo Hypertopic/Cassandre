@@ -112,7 +112,7 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">{{i18n.i_add_groundings}}</h5>
+            <h5 class="modal-title">{{i18n.i_link}}</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">×</span>
             </button>
@@ -281,7 +281,7 @@
       $('#create').remove();
       $('.articulate').addClass('hidden');
       $('#add_grounding_btn').html("{{i18n.i_add_groundings}}");
-      $("#add_grounding").find('.modal-title').html("{{i18n.i_groundings}}");
+      $("#add_grounding").find('.modal-title').append(" <em>{{#groundings}}{{name}}{{/groundings}}</em> {{i18n.i_in}}");
       $("#add_grounding").find('select').append($('<option>', {
         text: "{{i18n.i_select_grounding}}"
       }));
@@ -295,33 +295,24 @@
       $('#add_negative-case').removeClass('hidden');
       $('#write_statement').removeClass('hidden');
       $('#add_grounding_btn').html("{{i18n.i_link}}");
-      $("#add_grounding").find('.modal-title').html("{{i18n.i_link}}");
       $("#add_grounding").find('select').remove();
       $('#'+'{{link}}').prop('title', '{{i18n.i_current-link}}').prop('disabled', true);
       $('.articulate').removeClass('hidden');
     }
     $('#diagram').html(shape1+content1+shape2+content2+articulated);
-    if ($('.statement_text').text().length < 1) {
-      $('#toasts').append('<div class="toast" role="alert">'
-        + '<div class="toast-body alert-warning">'
-        + '<button type="button" class="close" data-dismiss="toast">×</button>'
-        + "{{{i18n.i_next.statement}}} <strong>{{i18n.i_write_statement}}</strong>" + '</div></div>');
-      $('.toast').toast({autohide: false});
-      $('.toast').toast('show');
-    }
-    if ($('.negative_text').text().length < 1 && $('#leaves li').length < 1) {
-      $('#toasts').append('<div class="toast" role="alert">'
-        + '<div class="toast-body alert-info">'
-        + '<button type="button" class="close" data-dismiss="toast">×</button>'
-        + "{{i18n.i_next.negative-case}} {{i18n.i_hereunder_button}}" + '</div></div>');
-      $('.toast').toast({autohide: false});
-      $('.toast').toast('show');
     var converter = new showdown.Converter({strikethrough: 'true'});
     $('.comment_text').html(function(i, text) {
       var md = converter.makeHtml(text.replace(/&gt;/g, '>').trim())
       if (md.substring(0,3) == '<p>') md = md.replace(/<\/?p>/g, '');
       return md;
     });
+    if ($('#groundings li').length == 1) {
+      $('#add_grounding').modal('show')
+    } else if ($('.statement_text').text().length < 1) {
+      inform('warning', "{{{i18n.i_next.statement}}} <strong>{{i18n.i_write_statement}}</strong>");
+      if ($('.negative_text').text().length < 1 && $('#leaves li').length < 1) {
+        inform('info', "{{i18n.i_next.negative-case}} {{i18n.i_hereunder_button}}");
+      }
     }
     poller('memo', '{{update_seq}}');
   });

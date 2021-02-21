@@ -40,7 +40,7 @@
           <div class="d-none d-sm-inline-flex">{{i18n.i_loading}}</div>
           <div class="spinner-border spinner-border-sm ml-auto  mr-auto mr-sm-0" role="status" aria-hidden="true"></div>
         </div>
-        <ul>
+        <ul id="activities">
         </ul></div>
       </main>
       <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
@@ -58,6 +58,7 @@
       all = {},
       created = {},
       commented = {},
+      converter = new showdown.Converter({strikethrough: 'true'}),
       fullnames = [],
       modified = {},
       pathes = [],
@@ -214,7 +215,7 @@
             +'<span id="'+date+'" class="'+date+' moment"></span>, '
             +'<span class="'+user+'">'+user_fullname+'</span> '
             + action + '</li>';
-          $("#activity ul").append(li);
+          $("#activities").append(li);
         }
       }
     }).always(function(){
@@ -224,6 +225,11 @@
         $('#alert').text(nothing_to_show);
       } else {
         momentRelative('#activity ul');
+        $('#activities li a').html(function(i, text) {
+          var md = converter.makeHtml(text.replace(/&gt;/g, '>').trim());
+          if (md.substring(0,3) == '<p>') md = md.replace(/<\/?p>/g, '');
+          return md;
+        });
         $('#alert').remove();
         if (start == 'Z') $('#drawChart').removeClass('disabled');
       }

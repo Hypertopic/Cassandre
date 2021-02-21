@@ -129,10 +129,10 @@ var shared = {
         <span class='meta'><span class='user'>{{user}}</span> (<span class='moment'>{{date}}</span>)</span>:\
         {{#logged}}<span class='meta checker d-none d-sm-inline'>{{#checked}}{{i18n.i_checked_by}} {{checked}}{{/checked}}</span><div class='checkbox'><input type='checkbox' class='form-check-input position-static comment_check' {{#checked}}checked{{/checked}}></div>{{/logged}}<br/>\
         <span class='comment_text'>{{text}}</span>\
-        <input size='80' height='50' type='text' class='form-control comment_edit hidden' value='{{text}}'/>\
+        <div class='comment_edit hidden'>{{text}}</div>\
       </div>\
       {{/comments}}\
-      <textarea rows='5' type='text' class='form-control hidden' placeHolder='{{i18n.i_enter_comment}}'></textarea>\
+      <textarea rows='5' type='text' class='form-control hidden' autocomplete='off' placeHolder='{{i18n.i_enter_comment}}'></textarea>\
     </div>",
   commentsbtn:"\
     <button class='btn navbar-btn btn-outline-{{>contrastcolor}} btn-sm' id='comment_create' title='{{i18n.i_comment}}'>\
@@ -146,6 +146,7 @@ var shared = {
     <script src='{{>relpath}}script/jquery-ui.min.js'></script>\
     <script src='{{>relpath}}style/bootstrap.min.js'></script>\
     <script src='{{>relpath}}script/moment.min.js'></script>\
+    <script src='{{>relpath}}script/showdown.min.js'></script>\
     <link rel='stylesheet' href='{{>relpath}}style/jquery-ui.min.css' />",
   layoutscript:"function stickToHeader() {\
     var h = document.getElementById('header').offsetHeight;\
@@ -585,12 +586,17 @@ var shared = {
     comment_id = $(this).closest('.comment').attr('id');\
     if ('{{logged_fullname}}' == user && !$(event.target).is('input')) {\
       $(this).find('.comment_text').hide();\
-      $(this).find('.comment_edit').removeClass('hidden');\
+      $('#comments').find('textarea').text($('#'+comment_id).find('.comment_edit').text());\
+      $('#'+comment_id).append($('#comments').find('textarea'));\
+      $('#comments').find('textarea').attr('id', 'input'+comment_id);\
+      $('#comments').find('textarea').attr('name', 'input'+comment_id);\
+      $('#input'+comment_id).removeClass('hidden');\
       $('#commented').remove();\
       $('#footer > div > button').prop('disabled', true);\
       $('#add-leaves').addClass('hidden');\
       $('#comment_updated').removeClass('hidden');\
       $('#comment_updated').prop('disabled', false);\
+      $('.comment').off('click');\
       $('#kwic').parent().children().addClass('hidden');\
       $('#signout').prop('disabled', true);\
       $('#diary').addClass('disabled');\
@@ -607,9 +613,6 @@ var shared = {
       data: '{{logged_fullname}}'\
     }).done(function(){refresh = true});\
   });\
-  $('.comment_edit').on('keypress', function(key) {\
-    if (key.which == 13) update_comment(comment_id);\
-  });\
   $('#comment_updated').on('click', function() {\
     update_comment(comment_id);\
   });\
@@ -619,7 +622,7 @@ var shared = {
       url: '../../update_comment_content/'+id,\
       type: 'PUT',\
       contentType: 'application/json',\
-      data: $('#'+id+'>input').val().trim(),\
+      data: $('#'+id+'>textarea').val().trim(),\
       success: reload\
     });\
   };\

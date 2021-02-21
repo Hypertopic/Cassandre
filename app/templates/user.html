@@ -58,6 +58,7 @@
   {{#authorized}}
   moment.locale('{{locale}}');
   let cal = new CalHeatMap(),
+      converter = new showdown.Converter({strikethrough: 'true'}),
       all = {},
       created = {},
       commented = {},
@@ -105,7 +106,7 @@
       dataType: "json",
       success: function(data) {
         for (var i in data) {
-          $("#content ul").append('<li class="'+data[i].action+'">'
+          $("#events").append('<li class="'+data[i].action+'">'
             +'<span id="'+data[i].date+'" class="'+data[i].date+' moment"></span>&nbsp;– '
             +'<a href="../'+data[i].type+'/'+data[i].diary+'/'+data[i].id+'">'+data[i].name+'</a>'
             +'</li>');
@@ -113,6 +114,11 @@
       }
     }).done(function(){
       momentRelative('#events');
+      $('.commented a').html(function(i, text) {
+        var md = converter.makeHtml(text.replace(/&gt;/g, '>').trim())
+        if (md.substring(0,3) == '<p>') md = md.replace(/<\/?p>/g, '');
+        return md;
+      });
     });
   }
 

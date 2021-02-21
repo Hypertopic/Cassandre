@@ -219,7 +219,6 @@
       {{/authorized}}
     </nav>
   {{>script}}
-  <script src="{{>relpath}}script/showdown.min.js"></script>
   <script>
   var metrics = {},
       trigrams = {},
@@ -397,6 +396,11 @@
     });
     $('.post').html(function(i, text) {
       return converter.makeHtml(text.replace(/&gt;/g, '>').trim());
+    });
+    $('.comment_text').html(function(i, text) {
+      var md = converter.makeHtml(text.replace(/&gt;/g, '>').trim())
+      if (md.substring(0,3) == '<p>') md = md.replace(/<\/?p>/g, '');
+      return md;
     });
     if ($('#groundings li').length == 1) $("#groundings").find('legend').text("{{i18n.i_grounding}}");
     if ($('#groundings li').length < 1) $("#groundings").addClass('hidden');

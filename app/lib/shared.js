@@ -67,8 +67,9 @@ var shared = {
       </button>\
       {{/logged}}\
     </div></li></ul>",
+  menucolor:"dark",
   contrastcolor:"light",
-  navbarstyle:"navbar navbar-dark bg-dark text-{{>contrastcolor}}",
+  navbarstyle:"navbar navbar-{{>menucolor}} bg-{{>menucolor}} text-{{>contrastcolor}}",
   readrights:"\
     <p id='authorization'>\
       {{i18n.i_readable-by}} <span class='readers'>{{readers_fullnames}}</span>\

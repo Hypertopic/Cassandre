@@ -21,14 +21,14 @@
             </div>
             {{/logged}}
             {{#diaries}}
-            <div class="card text-center bg-light mb-3">
+            <div class="card text-center bg-{{>contrastcolor}} mb-3">
               <div title="{{i18n.i_integrate}} {{i18n.i_in}} {{i18n.i_collection}}" class="in-collection d-none"><img src="../style/chevron-down.svg" alt="v" /></div>
               <h5><a href='../memo/{{id}}/'>{{name}}</a></h5>
               <p><span id="{{id}}" title="{{i18n.i_memos}}" class="badge badge-pill badge-secondary progress-bar-striped progress-bar-animated d-none">{{i18n.i_loading}}</span></p>
             </div>
             {{/diaries}}
             {{#logged}}
-            <div class="card text-center bg-light mb-3">
+            <div class="card text-center bg-{{>contrastcolor}} mb-3">
               <div class="card-body">
                 <h5 class="card-title">{{i18n.i_create.diary}}</h5>
                 <input id="my_diary" placeholder="{{i18n.i_my_diary}}" class="form-control input-sm" />
@@ -39,7 +39,7 @@
         </div>
       </div>
       <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
-        <button class="btn navbar-btn btn-outline-light btn-sm d-none" id="show">{{i18n.i_last-visit}}</button>
+        <button class="btn navbar-btn btn-outline-{{>contrastcolor}} btn-sm d-none" id="show">{{i18n.i_last-visit}}</button>
         <a class='navbar-text ml-auto' href="https://github.com/Hypertopic/Cassandre/wiki">
           <img src="../style/info.svg" width="30" height="30" alt="Cassandre" loading="lazy">
         </a>
@@ -50,7 +50,7 @@
             <div class="modal-header">{{i18n.i_integrate}} {{i18n.i_in}} {{i18n.i_collection}}</div>
             <div class="modal-body">
               <p>{{i18n.i_integrate}} <span class="font-italic diary"></span> {{i18n.i_in}}<br/>
-                <input id="target_collection" type="search" placeholder="{{i18n.i_collection}}"/>
+                <input id="target_collection" class="form-control input-sm" placeholder="{{i18n.i_collection}}"/>
               </p>
             </div>
           </div>
@@ -94,7 +94,7 @@
         for (var i in data) {
           let id = data[i].id;
           if (!$('#'+id).length) {
-            var card = '<div class="card text-center bg-light mb-3">'
+            var card = '<div class="card text-center bg-{{>contrastcolor}} mb-3">'
               +'<div title="{{i18n.i_integrate}} {{i18n.i_in}} {{i18n.i_collection}}" class="in-collection d-none"><img src="../style/chevron-down.svg" alt="v" /></div>'
               +'<h5><a href="../memo/'+id+'/">'+data[i].name+'</a></h5>'
               +'<div title="{{i18n.i_restricted-access}}" class="card-icons"><img src="../style/lock.svg" alt="" /></div>'
@@ -191,7 +191,7 @@
           $('#'+data[i].id).text(data[i].size);
           if (data[i].news) {
             $('#'+data[i].id).prepend(data[i].news+' / ');
-            $('#'+data[i].id).parent().parent().removeClass('bg-light');
+            $('#'+data[i].id).parent().parent().removeClass('bg-{{>contrastcolor}}');
             $('#'+data[i].id).parent().parent().addClass('alert-success');
             $('#'+data[i].id).parent().parent().attr("title", "{{i18n.i_updated-diary}}");
             $('#'+data[i].id).removeClass('badge-secondary');

@@ -203,11 +203,8 @@
     nodes = nodes.filter(o => o.id !== '');
     drawGraphViz();
     var converter = new showdown.Converter({strikethrough: 'true'});
-    $('.comment_text').html(function(i, text) {
-      var md = converter.makeHtml(text.replace(/&gt;/g, '>').trim())
-      if (md.substring(0,3) == '<p>') md = md.replace(/<\/?p>/g, '');
-      return md;
-    });
+    renderComments();
+    renderPreviews();
     poller('memo', '{{update_seq}}');
   });
 

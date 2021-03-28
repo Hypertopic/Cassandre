@@ -57,7 +57,7 @@ function(head, req) {
           if (row.doc.body) preview = row.doc.body;
           if (row.doc.speeches) preview = row.doc.speeches[0].text;
           if (row.doc.negative) preview = row.doc.negative;
-          if (preview != null) preview = preview.substr(0, 200).replace(/\s/g, ' ');
+          if (preview != null) preview = preview.substr(0, 200);
           var ground_type = row.doc.type || 'transcript';
           switch (ground_type) {
             case ('diagram'):

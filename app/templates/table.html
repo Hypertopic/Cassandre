@@ -193,11 +193,9 @@
     }
     if (table.rows[table.rows.length-1].cells[0].innerHTML != '...') $('#add_row').removeClass('hidden');
     var converter = new showdown.Converter({strikethrough: 'true'});
-    $('.comment_text').html(function(i, text) {
-      var md = converter.makeHtml(text.replace(/&gt;/g, '>').trim())
-      if (md.substring(0,3) == '<p>') md = md.replace(/<\/?p>/g, '');
-      return md;
-    });
+    converter.setFlavor('github');
+    renderComments();
+    renderPreviews();
     poller('memo', '{{update_seq}}');
   });
 

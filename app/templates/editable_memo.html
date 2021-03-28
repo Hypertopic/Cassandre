@@ -61,6 +61,7 @@
 
   <script src="../script/jquery.js"></script>
   <script src="../script/easymde.min.js"></script>
+  <script src="../script/showdown.min.js"></script>
   <script>
   var placeHolder = [];
   placeHolder["field"] = {name : "{{i18n.i_name.field}}", content: "{{{i18n.i_content.field}}}"};
@@ -94,6 +95,18 @@
       }
     });
     $("#kwic").parent().addClass('hidden');
+    var converter = new showdown.Converter({
+      parseImgDimensions: 'true',
+      tables: 'true',
+      tasklists: 'true',
+      strikethrough: 'true'
+    });
+    converter.setFlavor('github');
+    $('.preview').html(function(i, text) {
+      var md = converter.makeHtml(text.replace(/&gt;/g, '>').trim())
+      md = md.replace(/<\/?p>/g, '');
+      return md;
+    });
     if ($('#groundings li').length < 1) $("#groundings").addClass('hidden');
     $('#groundings').find('.toggle').next().slideToggle('fast');
     {{#authorized}}

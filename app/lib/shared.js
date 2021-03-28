@@ -386,6 +386,25 @@ var shared = {
       }\
     });\
   }\
+  function renderComments(converter){\
+    $('.comment_text').html(function(i, text) {\
+      var md = converter.makeHtml(text.replace(/&gt;/g, '>').trim());\
+      if (md.substring(0,3) == '<p>') md = md.substring(3);\
+      if (md.substring(md.length - 4, md.length) == '</p>') md = md.substring(0, md.length - 4);\
+      md = md.replace(/<blockquote>\\s+<p>/g, '<blockquote>');\
+      md = md.replace(/<\\/blockquote>\\s+<p>/g, '<\\/blockquote>');\
+      md = md.replace(/<\\/p>\\s+<\\/blockquote>/g, '<\\/blockquote>');\
+      md = md.replace(/<\\/?p>/g, '<br/>');\
+      return md;\
+    });\
+  };\
+  function renderPreviews(converter){\
+    $('.preview').html(function(i, text) {\
+      var md = converter.makeHtml(text.replace(/&gt;/g, '>').trim());\
+      md = md.replace(/<\\/?p>/g, '');\
+      return md;\
+    });\
+  };\
   {{#list}}\
   $(window).scroll(function(){\
     if ($(window).scrollTop() == $(document).height() - $(window).height()){\

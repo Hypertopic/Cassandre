@@ -21,6 +21,11 @@ blockquote {
   color: gray !important;
 }
 
+#groundings .preview h1, #groundings .preview h2, #groundings .preview h3 {
+  font-size: 100%;
+  font-weight: bold;
+}
+
 #watermark {
   background-image: url(cassandre_background.svg);
   background-position: 100% 20%;
@@ -222,6 +227,10 @@ button.comment {
   right: 36px;
   display: inline-block;
   vertical-align: 20px;
+}
+
+.comment_text > blockquote {
+  margin-bottom: 0px;
 }
 
 .checked {

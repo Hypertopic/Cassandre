@@ -184,7 +184,7 @@
               id = r.value['id'],
               ground_href = r.value['id'];
               ground_label = r.value['name'];
-          if ($('#groundings li').length < 2 && document.getElementById(id) == null && ground_href != "{{_id}}") {
+          if ($('#groundings>li').length < 2 && document.getElementById(id) == null && ground_href != "{{_id}}") {
             $("#add_grounding").find('select').append($('<option>', {
               id: ground_href,
               value: ground_href,
@@ -196,8 +196,8 @@
       }
     });
     var shape1 = shape2 = articulated = negative = '',
-        content1 = $('#groundings li').first().find('a').html(),
-        content2 = $('#groundings li').last().find('a').html();
+        content1 = $('#groundings>li').first().find('a').html(),
+        content2 = $('#groundings>li').last().find('a').html();
     {{#editable}}
     if("{{name}}".replace(/&#39;|&quot;/g, '').indexOf(content1.replace(/"|'/g, '')) == -1
     || "{{name}}".replace(/&#39;|&quot;/g, '').indexOf(content2.replace(/"|'/g, '')) == -1) {
@@ -277,7 +277,7 @@
       articulated += negative
       +'<text fill=""><textPath href="#situation" startOffset="50%" text-anchor="middle">{{negative}}</textPath></text>';
     }
-    if ($('#groundings li').length == 1) {
+    if ($('#groundings>li').length == 1) {
       $('#create').remove();
       $('.articulate').addClass('hidden');
       $('#add_grounding_btn').html("{{i18n.i_add_groundings}}");
@@ -301,12 +301,10 @@
     }
     $('#diagram').html(shape1+content1+shape2+content2+articulated);
     var converter = new showdown.Converter({strikethrough: 'true'});
-    $('.comment_text').html(function(i, text) {
-      var md = converter.makeHtml(text.replace(/&gt;/g, '>').trim())
-      if (md.substring(0,3) == '<p>') md = md.replace(/<\/?p>/g, '');
-      return md;
-    });
-    if ($('#groundings li').length == 1) {
+    converter.setFlavor('github');
+    renderComments(converter);
+    renderPreviews(converter);
+    if ($('#groundings>li').length == 1) {
       $('#add_grounding').modal('show')
     } else if ($('.statement_text').text().length < 1) {
       inform('warning', "{{{i18n.i_next.statement}}} <strong>{{i18n.i_write_statement}}</strong>");
@@ -330,8 +328,8 @@
   function adapt(o) {
     refresh = true;
     var gid = [];
-    for (var i = 0; i < $('#groundings li').length; i++) {
-      gid.push($('#groundings li')[i].id);
+    for (var i = 0; i < $('#groundings>li').length; i++) {
+      gid.push($('#groundings>li')[i].id);
     }
     $("#dialog").dialog('close');
     var data = {
@@ -341,7 +339,7 @@
     if (Object.keys(o)[0] == 'grounding') {
       data.name += ' & '+$('#'+o.grounding).text();
     } else if (typeof(gid[1]) !== 'undefined') {
-      data.name += ' & '+$('#'+gid[1]).find('a').html().trim();
+      data.name += ' & '+$('#'+gid[1]+' > a').html().trim();
     }
     $.ajax({
       url: "../../adapt_diagram/{{_id}}",

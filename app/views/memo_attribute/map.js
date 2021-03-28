@@ -50,20 +50,22 @@ function(o) {
       emit([o._id, order, null, 'D'], { diary_name: o.diary_name });
     });
   } else if (!o.commented) {
-    var type = o.type || 'transcript';
-    var groundings = o.groundings || [];
+    var type = o.type || 'transcript',
+        groundings = o.groundings || [],
+        preview = ' ';
+    if (o.statement) {
+      preview = o.statement;
+    }
     if (o.body) {
-      var preview = o.body.replace(/[ \f\r\t\v\u00A0\u2028\u2029]/g, ' ');
+      preview = o.body.replace(/[ \f\r\t\v\u00A0\u2028\u2029]/g, ' ');
     } else {
-    if (o.speeches) {
-      var preview = o.speeches.map(function(a) {
-        var turn = a.text;
-        if (a.actor) turn = '**'+a.actor.trim()+'** '+turn;
-        return turn;
-      });
-      preview = preview.join('\n \n');
-      } else {
-      var preview = ' ';
+      if (o.speeches) {
+        preview = o.speeches.map(function(a) {
+          var turn = a.text;
+          if (a.actor) turn = '**'+a.actor.trim()+'** '+turn;
+          return turn;
+        });
+        preview = preview.join('\n \n');
       }
     }
     for (var i in users) {

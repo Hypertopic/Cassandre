@@ -65,7 +65,7 @@
     if($("#password").val() == $("#confirm").val()) {
       try {
         $("#register").attr("disabled", "disabled");
-        user = $("#email").val().trim();
+        user = $("#email").val().trim().toLowerCase();
         fullname = $("#fullname").val().trim();
         $.ajax({
           type: "PUT",
@@ -74,8 +74,8 @@
           data: JSON.stringify({
             name: user,
             password: $("#password").val(),
-            fullname: $("#fullname").val(),
-            email: $("#email").val(),
+            fullname: fullname,
+            email: user,
             roles: [],
             type: "user"
           })
@@ -109,7 +109,6 @@
         '_id': user,
         'fullname': fullname,
         'contributors': [user],
-        'readers': ['charlene.crahay@uclouvain.be'],
       })
     }).done(function(){
       $("#message").html("{{i18n.i_successful-registration}} ");

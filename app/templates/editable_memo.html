@@ -10,9 +10,9 @@
         <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item text-{{>contrastcolor}}">{{diary_name}}</li>
-            {{#authorized}}
+            {{#editing}}
             <li><button title="{{i18n.i_double}}" class="btn text-{{>contrastcolor}}" id="double">¶²</button></li>
-            {{/authorized}}
+            {{/editing}}
           </ul>
           {{>log}}
         </nav>
@@ -36,7 +36,8 @@
             {{/authorized}}
             {{#authorized}}
             {{^editing}}
-            <h1>{{i18n.i_no_back-button}}</h1><p><a href="../../memo/{{diary}}/{{_id}}">{{i18n.i_resume}}</a></p>
+            <h1>{{i18n.i_loading}}</h1>
+            <p id="loading" class="spinner-border spinner-border-sm ml-auto mr-auto ml-sm-0" role="status" aria-hidden="true"></p>
             {{/editing}}
             {{#editing}}
             <h1> <img src="../style/{{type}}.svg"/> {{name}}</h1>
@@ -73,6 +74,7 @@
   placeHolder["storyline"] = {name : "{{i18n.i_name.storyline}}", content: "{{{i18n.i_content.storyline}}}"};
   $("#name").attr("placeHolder", placeHolder["{{type}}"]["name"]);
   {{#authorized}}
+  {{#editing}}
   var easymde = new EasyMDE({
     element: $("#body")[0],
     autosave: {
@@ -85,9 +87,14 @@
     placeholder: placeHolder["{{type}}"]["content"],
     spellChecker: false
   });
+  {{/editing}}
   {{/authorized}}
   var warning = 'Save your content';
   $(document).ready(function() {
+    {{^editing}}
+    self.location = '../../memo/{{diary}}/{{_id}}';
+    {{/editing}}
+    {{#editing}}
     window.addEventListener("beforeunload", function (e) {
       if (warning != false) {
         (e || window.event).returnValue = warning;
@@ -108,9 +115,11 @@
     {{#authorized}}
     $('#header > ul > li:first').after($('.editor-toolbar'));
     {{/authorized}}
+    {{/editing}}
     stickToHeader();
   });
 
+  {{#editing}}
   function double() {
     easymde.value(easymde.value().replace(/\n/g, "\n \n"))
   }
@@ -140,6 +149,7 @@
       self.location = '../memo/{{diary}}/{{_id}}';
     });
   });
+  {{/editing}}
 
   {{>layoutscript}}
   {{>logscript}}

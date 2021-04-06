@@ -203,8 +203,8 @@
     nodes = nodes.filter(o => o.id !== '');
     drawGraphViz();
     var converter = new showdown.Converter({strikethrough: 'true'});
-    renderComments();
-    renderPreviews();
+    renderComments(converter);
+    renderPreviews(converter);
     poller('memo', '{{update_seq}}');
   });
 

@@ -194,8 +194,8 @@
     if (table.rows[table.rows.length-1].cells[0].innerHTML != '...') $('#add_row').removeClass('hidden');
     var converter = new showdown.Converter({strikethrough: 'true'});
     converter.setFlavor('github');
-    renderComments();
-    renderPreviews();
+    renderComments(converter);
+    renderPreviews(converter);
     poller('memo', '{{update_seq}}');
   });
 

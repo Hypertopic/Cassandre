@@ -393,6 +393,8 @@ var shared = {
       if (md.substring(md.length - 4, md.length) == '</p>') md = md.substring(0, md.length - 4);\
       md = md.replace(/<blockquote>\\s+<p>/g, '<blockquote>');\
       md = md.replace(/<\\/blockquote>\\s+<p>/g, '<\\/blockquote>');\
+      md = md.replace(/<\\/ol>\\s+<p>/g, '<\\/ol>');\
+      md = md.replace(/<\\/ul>\\s+<p>/g, '<\\/ul>');\
       md = md.replace(/<\\/p>\\s+<\\/blockquote>/g, '<\\/blockquote>');\
       md = md.replace(/<\\/?p>/g, '<br/>');\
       return md;\

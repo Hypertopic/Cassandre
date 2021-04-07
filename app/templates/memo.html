@@ -598,13 +598,18 @@
   })
 
   $('#remove_grounding').on('show.bs.modal', function (event) {
+    var options = [];
+    $('#remove_grounding select').children("option").each(function(){
+      options.push($(this).val());
+    })
     $('#groundings').children('li').each(function() {
       var id = ($(this).attr('id')),
-          name = ($(this).find('a').text());
+          name = ($(this).find('a:first').text());
       if (name.length > 45) name = name.substr(0,45)+'...';
+      if (options.indexOf(id) < 0)
       $("#remove_grounding").find('select').append($('<option>', {
         value: id,
-        title: ($(this).find('a').text()),
+        title: ($(this).find('a:first').text()),
         text: name
       }));
     });

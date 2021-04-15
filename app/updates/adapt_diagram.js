@@ -16,6 +16,7 @@ function (doc, req) {
     break;
   }
   doc.name = body.name;
+  doc.groundings = doc.groundings.sort();
   if (!doc.history) doc.history = [];
   doc.history.push({
     "user": req.userCtx.name,

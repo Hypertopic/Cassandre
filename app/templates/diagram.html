@@ -337,9 +337,20 @@
       'name': $('#'+gid[0]).find('a').html().trim()
     };
     if (Object.keys(o)[0] == 'grounding') {
-      data.name += ' & '+$('#'+o.grounding).text();
+      var second = {
+        id: o.grounding,
+        text: $('#'+o.grounding).text()
+      }
     } else if (typeof(gid[1]) !== 'undefined') {
-      data.name += ' & '+$('#'+gid[1]+' > a').html().trim();
+      var second = {
+        id: gid[1],
+        text: $('#'+gid[1]+' > a').html().trim()
+      }
+    }
+    if (gid[0].localeCompare(second.id) < 0) {
+      data.name += ' & '+second.text;
+    } else {
+      data.name = second.text+' & '+ data.name;
     }
     $.ajax({
       url: "../../adapt_diagram/{{_id}}",

@@ -304,16 +304,33 @@ function(req2) {
       reply.path = '_update/'+path[0]+'/'+path[1];
     break;
     case 'user':
-      reply.path = "_list/user/user";
-      reply.query = {
-        "startkey": '["'+path[1]+'", {}]',
-        "endkey":   '["'+path[1]+'"]',
-        "descending": "true",
-        "include_docs": "true"
-      };
-      if (path[2]) {
-        reply.query.startkey = '["'+path[1]+'", "'+path[2]+'"]';
-        reply.query.limit = "30";
+      switch (path.length) {
+        case 3:
+          reply.path = "_list/user/user";
+          reply.query = {
+            "startkey": '["'+path[1]+'", "'+path[2]+'"]',
+            "endkey":   '["'+path[1]+'"]',
+            "descending": "true",
+            "include_docs": "true",
+            "limit": "30"
+          };
+        break;
+        case 2:
+          reply.path = "_list/user/user";
+          reply.query = {
+            "startkey": '["'+path[1]+'", {}]',
+            "endkey":   '["'+path[1]+'"]',
+            "descending": "true",
+            "include_docs": "true"
+          };
+        break;
+        case 1:
+          reply.path = "_list/users/users";
+          reply.query = {
+            "startkey": '['+logged+']',
+            "endkey":   '['+logged+', {}]'
+          };
+        break;
       }
     break;
     case 'tasklist':

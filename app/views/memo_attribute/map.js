@@ -85,6 +85,22 @@ function(o) {
       emit([diary, 'update', user, 'M', update], obj);
       var sortkey = replaceDiacritics(name.substr(0,10)).toLowerCase().replace(/\W/g, '_');
       emit([diary, 'type', user, 'M', type+sortkey+o._id], obj);
+      if (o.statement) {
+        var ov = {
+          id: diary,
+          rev: 'statement',
+          name: 'P³',
+          type: 'statement',
+          date: date,
+          update: update,
+          groundings: groundings,
+          preview: o.statement
+        };
+        emit([diary, 'name', user, 'M', 'P³'], ov);
+        emit([diary, 'date', user, 'M', date], ov);
+        emit([diary, 'update', user, 'M', update], ov);
+        emit([diary, 'type', user, 'M', 'storyline'+sortkey], ov);
+      }
     }
   }
 }

@@ -47,6 +47,7 @@ function(head, req) {
             'date': row.key[4],
             'name': row.value.name.replace(/[\n\r]+/g,' ')
           });
+          if (row.value.type != 'statement')
           for (i in row.value.groundings) {
             data.edges.push({
               'from': row.value.groundings[i],

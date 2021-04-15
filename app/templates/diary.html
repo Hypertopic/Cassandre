@@ -288,6 +288,8 @@
         $("#memos").append(li);
       }
     }
+    $('#{{diary}}').next('.moment').removeClass('unread');
+    $('#{{diary}}').next('.moment').next('.mytooltip').find('.unread').removeClass('unread');
     momentRelative('#memos');
     converter.setFlavor('github');
     $('.preview').html(function(i, text) {

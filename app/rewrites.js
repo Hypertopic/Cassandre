@@ -101,7 +101,7 @@ function(req2) {
             reply.query = {
               "startkey": '["'+diary+'", "'+order+'", '+logged+', "M", "'+start+'"]',
               "endkey":   '["'+diary+'", "'+order+'", '+logged+', "M", {}]',
-              "limit": '30',
+              "limit": '40',
               "include_docs": 'true'
             };
           break;

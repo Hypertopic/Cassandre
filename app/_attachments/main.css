@@ -229,6 +229,9 @@ button.comment {
   vertical-align: 20px;
 }
 
+#activities li a p, #activities li a blockquote,
+.commented a p, .commented a blockquote,
+.unchecked-comment a p, .unchecked-comment a blockquote,
 .comment_text > ul, .comment_text > ol,
 .comment_text > blockquote {
   margin-bottom: 0px;

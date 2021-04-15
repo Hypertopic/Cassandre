@@ -114,7 +114,7 @@
       }
     }).done(function(){
       momentRelative('#events');
-      $('.commented a').html(function(i, text) {
+      $('.commented>a').html(function(i, text) {
         var md = converter.makeHtml(text.replace(/&gt;/g, '>').trim())
         if (md.substring(0,3) == '<p>') md = md.replace(/<\/?p>/g, '');
         return md;

@@ -315,6 +315,7 @@
       if (name.length > 45) name = name.substr(0,45)+'...';
       $("#remove_grounding").find('select').append($('<option>', {
         value: JSON.stringify({'id': id}),
+        title: ($(this).find('a').text()),
         text: name
       }));
     });

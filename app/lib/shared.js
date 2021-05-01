@@ -232,6 +232,7 @@ var shared = {
   });\
   function create(type, name, highlight) {\
     $('.spinner').removeClass('d-none');\
+    name = name.replace(/\t/g, ' ');\
     if (name.replace(/[ ,]/g, '') == '' && type != 'diagram') {\
       $('.spinner').addClass('d-none');\
       switch (type) {\

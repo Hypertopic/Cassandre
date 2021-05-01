@@ -199,9 +199,9 @@
         content1 = $('#groundings>li').first().find('a').html(),
         content2 = $('#groundings>li').last().find('a').html();
     {{#editable}}
-    if("{{name}}".replace(/&#39;|&quot;/g, '').indexOf(content1.replace(/"|'/g, '')) == -1
-    || "{{name}}".replace(/&#39;|&quot;/g, '').indexOf(content2.replace(/"|'/g, '')) == -1) {
-      adapt({negative: "{{negative}}"});
+    if("{{name}}".replace(/&#39;|&quot;/g, '').replace(/\t/g, ' ').trim().indexOf(content1.replace(/"|'/g, '').replace(/\s/g, ' ').trim()) == -1
+    || "{{name}}".replace(/&#39;|&quot;/g, '').replace(/\t/g, ' ').trim().indexOf(content2.replace(/"|'/g, '').replace(/\s/g, ' ').trim()) == -1) {
+      if ($('#groundings>li').length == 2) adapt({rename: true});
     }
     {{/editable}}
     switch ("{{link}}") {
@@ -281,7 +281,7 @@
       $('#create').remove();
       $('.articulate').addClass('hidden');
       $('#add_grounding_btn').html("{{i18n.i_add_groundings}}");
-      $("#add_grounding").find('.modal-title').append(" <em>{{#groundings}}{{name}}{{/groundings}}</em> {{i18n.i_in}}");
+      $("#add_grounding").find('.modal-title').append(" <em>"+$('#groundings>li').first().find('a').html()+"</em> {{i18n.i_in}}");
       $("#add_grounding").find('select').append($('<option>', {
         text: "{{i18n.i_select_grounding}}"
       }));
@@ -334,6 +334,7 @@
     $("#dialog").dialog('close');
     var data = {
       'action': o,
+      'gid': gid,
       'name': $('#'+gid[0]).find('a').html().trim()
     };
     if (Object.keys(o)[0] == 'grounding') {

@@ -168,6 +168,9 @@ var shared = {
     stickToHeader();\
   });\
   var reload = function() {\
+    var here = '{{_id}}';\
+    if (anchor > 0) here += '#'+anchor;\
+    self.location = here;\
     if (refresh) location.reload();\
   };\
   String.prototype.trimLeft = String.prototype.trimLeft || function() {\
@@ -230,7 +233,7 @@ var shared = {
       create(classlist[classlist.length - 1], $('#leave-name').val().trim(), $('#kwic').val());\
     }\
   });\
-  function create(type, name, highlight) {\
+  function create(type, name, highlight, anchor) {\
     $('.spinner').removeClass('d-none');\
     name = name.replace(/\t/g, ' ');\
     if (name.replace(/[ ,]/g, '') == '' && type != 'diagram') {\
@@ -260,7 +263,7 @@ var shared = {
           i = existing_memos.rows.map(function(e) { return e.value.name; }).indexOf(name);\
         }\
         if (i != -1) {\
-          if(existing_memos.rows[i].value.groundings.indexOf('{{_id}}') != -1) {\
+          if(existing_memos.rows[i].value.groundings.indexOf('{{_id}}') != -1 && highlight.length < 1) {\
             $('.spinner').addClass('d-none');\
             alert('{{i18n.i_memo_already_linked}}');\
           } else {\
@@ -344,7 +347,10 @@ var shared = {
                 'user': user,\
                 'date': new Date().toJSON()\
               };\
-              if (type == 'coding' && highlight.length > 0) data.body += '> '+highlight+'\\n';\
+              if (type == 'coding' && highlight.length > 0) {\
+                if (anchor > 0) highlight = '['+highlight+']({{_id}}#'+anchor+')';\
+                data.body += '> '+highlight+'\\n \\n';\
+              }\
               data.type = type;\
           }\
           if (type) {\

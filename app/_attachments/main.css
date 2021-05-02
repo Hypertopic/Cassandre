@@ -385,6 +385,21 @@ a.dropdown-item, .create-leave, a.dropdown-toggle,
   color: transparent;
 }
 
+.highlight {
+  background-color: yellow;
+  color: red;
+  -webkit-transition: 2s all ease-in-out;
+  -moz-transition: 2s all ease-in-out;
+  -o-transition: 2s all ease-in-out;
+  transition: 2s all ease-in-out;
+  transition-delay: 2s;
+}
+
+.fadeout {
+  background-color: transparent;
+  color: black;
+}
+
 .card>h5{
   color: blue;
   margin-top:  1rem;

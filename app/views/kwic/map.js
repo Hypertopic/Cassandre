@@ -12,7 +12,7 @@ function (o) {
       body = body.concat(o.speeches);
     } else if (o.body) {
       body = body.concat(o.body.split("\n \n").map(function(i){
-        return {'text': i};
+        return {'text': i+'  '};
       }));
     }
     for (var p in body) {
@@ -36,6 +36,7 @@ function (o) {
           context: speech_text.substr(context_begin, context_length),
           begin: speech_begin,
           end: speech_end,
+          par: p,
           match: speech_begin + match.index
         };
         emit([diary, keyword], value);

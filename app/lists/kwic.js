@@ -39,6 +39,7 @@ function(head, req) {
         path: path,
         corpus: row.key[0],
         id: row.id,
+        par: v.par,
         context: concord
       });
     }

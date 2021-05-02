@@ -223,6 +223,7 @@
   var metrics = {},
       trigrams = {},
       leaf_type = leaf_id = resume = '',
+      anchor = 0,
       userids = [],
       help = [];
   help["field"] = {init: "{{{i18n.i_content.field}}}", next: "{{{i18n.i_next.field}}}"};
@@ -441,6 +442,8 @@
           $('#repeated').removeClass('disabled');
         }
       });
+      const par = window.location.hash.substring(1);
+      if (par !== '') highlight(par);
     }
     stickToHeader();
     {{^statements}}
@@ -450,6 +453,14 @@
     poller('statements', '{{update_seq}}');
     {{/statements}}
   });
+
+  function highlight(p) {
+    $('.post p').eq(p-1).addClass('highlight');
+    var prev = document.querySelector(".highlight").previousSibling;
+    if (prev == null) prev = document.getElementById('authorization');
+    prev.scrollIntoView({ behavior: 'smooth', block: 'center'});
+    $('.highlight').addClass('fadeout');
+  }
 
   $('#edit').on('click', function() {
     refresh = false;
@@ -474,8 +485,15 @@
       $("#field-leaf").prop("checked", true).trigger("click");
       $('#field_title_dialog').modal('show');
     } else {
-      create(type, $('#leave-name').val().trim(), $('#kwic').val());
+      create(type, $('#leave-name').val().trim(), $('#kwic').val(), anchor);
     }
+  });
+
+  $('#content').on('mouseup', function() {
+    var posts = document.getElementsByClassName('post'),
+        selected = window.getSelection().anchorNode.parentNode.parentNode,
+        p = [].indexOf.call(posts[0].childNodes, selected);
+    if (p > -1) anchor = (p/2) + 1;
   });
 
   $('#create').on('click', function() {
@@ -488,7 +506,7 @@
       $("#transcript-leaf").prop("checked", true).trigger("click");
       $('#field_title_dialog').modal('show');
     } else {
-      create(type, name, highlight);
+      create(type, name, highlight, anchor);
     }
   });
 
@@ -532,6 +550,7 @@
       data: JSON.stringify({
        'action': 'add_grounding',
        'highlight': $('#kwic').val(),
+       'anchor': anchor,
        'value': '{{_id}}'
       }),
       error: function(request) {

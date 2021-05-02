@@ -20,7 +20,11 @@ function (doc, req) {
     case ('add_grounding'):
       if (!doc.groundings) doc.groundings = [];
       if (doc.groundings.indexOf(obj.value) == -1) doc.groundings.push(obj.value);
-      if (doc.type == 'coding' && obj.highlight) doc.body = doc.body + '\n \n>'+obj.highlight+' \n \n';
+      if (doc.type == 'coding' && obj.highlight) {
+        var highlight = obj.highlight;
+        if (obj.anchor > 0) highlight = '['+highlight+']('+obj.value+'#'+obj.anchor+')';
+        doc.body = doc.body + '\n \n>'+highlight+' \n \n';
+      }
     break;
     case ('remove_grounding'):
       var i = doc.groundings.indexOf(obj.value);

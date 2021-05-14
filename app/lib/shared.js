@@ -620,7 +620,7 @@ var shared = {
     refresh = false;\
     var user = $(this).find('.user').text();\
     comment_id = $(this).closest('.comment').attr('id');\
-    if ('{{logged_fullname}}' == user && !$(event.target).is('input')) {\
+    if ('{{logged_fullname}}'.replace('&#39;','\\'') == user && !$(event.target).is('input')) {\
       $(this).find('.comment_text').hide();\
       $('#comments').find('textarea').text($('#'+comment_id).find('.comment_edit').text());\
       $('#'+comment_id).append($('#comments').find('textarea'));\
@@ -646,7 +646,7 @@ var shared = {
       url: '../../checking_comment/'+$(this).closest('.comment').attr('id'),\
       type: 'PUT',\
       contentType: 'application/json',\
-      data: '{{logged_fullname}}'\
+      data: '{{logged_fullname}}'.replace('&#39;','\\'')\
     }).done(function(){refresh = true});\
   });\
   $('#comment_updated').on('click', function() {\

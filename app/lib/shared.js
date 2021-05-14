@@ -169,7 +169,7 @@ var shared = {
   });\
   var reload = function() {\
     var here = '{{_id}}';\
-    if (anchor > 0) here += '#'+anchor;\
+    if (typeof (anchor) !== 'undefined' && anchor > 0) here += '#'+anchor;\
     self.location = here;\
     if (refresh) location.reload();\
   };\

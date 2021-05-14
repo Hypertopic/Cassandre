@@ -490,6 +490,7 @@
   });
 
   $('#content').on('mouseup', function() {
+    if (window.getSelection().anchorNode !== null)
     var posts = document.getElementsByClassName('post'),
         selected = window.getSelection().anchorNode.parentNode.parentNode,
         p = [].indexOf.call(posts[0].childNodes, selected);

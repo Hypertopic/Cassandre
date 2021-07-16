@@ -23,7 +23,9 @@ function(o) {
     if (o.groundings && o.groundings.length < 1)
       emit([diary, user, 'G', o.history[0].date], {'id': o._id, '_id': null, 'name': o.name});
     if (o.groundings && o.groundings.length == 1)
-      emit([diary, user, 'G', o.history[0].date], {'id': o._id, '_id': o.groundings[0], 'name': o.name});
+      var gid = o.groundings[0];
+      if (typeof gid._id === 'string') gid = gid._id;
+      emit([diary, user, 'G', o.history[0].date], {'id': o._id, '_id': gid, 'name': o.name});
     if (o.type == 'diagram' && o.groundings && o.groundings.length == 1)
       emit([diary, user, 'A', o.history[0].date], {'id': o._id, '_id': o._id, 'name': o.name});
   }

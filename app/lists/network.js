@@ -49,8 +49,10 @@ function(head, req) {
           });
           if (row.value.type != 'statement')
           for (i in row.value.groundings) {
+            var from = row.value.groundings[i];
+            if (typeof from._id === 'string') from = from._id;
             data.edges.push({
-              'from': row.value.groundings[i],
+              'from': from,
               'to': row.value.id,
               'color': color
             });

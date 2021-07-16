@@ -53,28 +53,33 @@ function(head, req) {
       break;
       case ('G'):
         if (row.doc)  {
-          var preview = null;
-          if (row.doc.body) preview = row.doc.body;
-          if (row.doc.speeches) preview = row.doc.speeches[0].text;
-          if (row.doc.negative) preview = row.doc.negative;
-          if (preview != null) preview = preview.substr(0, 200);
-          var ground_type = row.doc.type || 'transcript';
+          var ground_type = row.doc.type || 'transcript',
+              ground_path = '',
+              preview = null;
+          if (row.value.preview) {
+            preview = [];
+            for (var p in row.value.preview) {
+              preview.push('['+row.value.preview[p].text+']('+row.value._id+'#'+row.value.preview[p].anchor+')');
+            }
+            preview = preview.join('\n \n---\n');
+          } else {
+            if (row.doc.body) preview = row.doc.body;
+            if (row.doc.speeches) preview = row.doc.speeches[0].text;
+            if (row.doc.negative) preview = row.doc.negative;
+            if (preview != null) preview = preview.substr(0, 200);
+          }
           switch (ground_type) {
             case ('diagram'):
-            var ground_path = '../../diagram/'+diary+'/';
-            break;
             case ('table'):
-            var ground_path = '../../table/'+diary+'/';
-            break;
             case ('graph'):
-            var ground_path = '../../graph/'+diary+'/';
+              ground_path = '../../'+ground_type+'/'+diary+'/';
             break;
-            default:
-            var ground_path = '';
           }
+          ground_path += row.value._id;
+          if (row.value.anchor) ground_path += '#'+row.value.anchor;
           data.groundings.push({
             id: row.value._id,
-            href: ground_path + row.value._id,
+            href: ground_path,
             type: ground_type,
             preview: preview,
             name: row.doc.name

@@ -24,7 +24,13 @@ function(head, req){
       break;
       case ('G'):
         if (row.doc)  {
-          if (row.doc.body) {
+          if (row.value.preview) {
+            preview = [];
+            for (var p in row.value.preview) {
+              preview.push(row.value.preview[p].text);
+            }
+            preview = preview.join('\n \n---\n');
+          } else if (row.doc.body) {
             var preview = row.doc.body.substr(0, 200);
           } else {
             if (row.doc.speeches) {

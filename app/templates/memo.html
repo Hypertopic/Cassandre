@@ -27,7 +27,7 @@
               {{#timestamp}}
               <div class="timestamp">{{timestamp}}</div>
               {{/timestamp}}
-              <div class="post begin">
+              <div class="post">
                 {{#words}}<font>{{.}}</font>{{/words}}
                 {{#text}}{{text}}{{/text}}
               </div>
@@ -224,6 +224,7 @@
       trigrams = {},
       leaf_type = leaf_id = resume = '',
       anchor = 0,
+      options = [],
       userids = [],
       help = [];
   help["field"] = {init: "{{{i18n.i_content.field}}}", next: "{{{i18n.i_next.field}}}"};
@@ -618,26 +619,31 @@
   })
 
   $('#remove_grounding').on('show.bs.modal', function (event) {
-    var options = [];
+    options = [];
     $('#remove_grounding select').children("option").each(function(){
       options.push($(this).val());
     })
     $('#groundings').children('li').each(function() {
       var id = ($(this).attr('id')),
           name = ($(this).find('a:first').text());
-      if (name.length > 45) name = name.substr(0,45)+'...';
-      if (options.indexOf(id) < 0)
-      $("#remove_grounding").find('select').append($('<option>', {
-        value: id,
-        title: ($(this).find('a:first').text()),
-        text: name
-      }));
+      addOptions(id, name);
+      $('#'+id).find('.preview a').each(function() {
+        var href = $(this).attr('href');
+        if (href.includes(id)) addOptions(href, '> '+$(this).text());
+      });
     });
   });
 
-  $(window).scroll(function(){
-    $('.post').removeClass("begin");
-  });
+  function addOptions(id, name) {
+    var shortname = name;
+    if (name.length > 45) shortname = name.substr(0,45)+'...';
+    if (options.indexOf(id) < 0)
+    $("#remove_grounding").find('select').append($('<option>', {
+      value: id,
+      title: name,
+      text: shortname
+    }));
+  }
 
   function renameDiagram(id,name) {
     $.ajax({

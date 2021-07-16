@@ -44,9 +44,12 @@
   <script>
   const ansi = [
     {char: '->', base: /\u2192/g},
-    {char: '...', base: /\u2026/g},
+    {char: '*', base: /\u2022/g},
+    {char: '... ', base: /\u2026/g},
+    {char: ':-|', base: /[\ud800-\udbff][\udc00-\udfff]/g},
     {char: 'oe', base: /\u0153/g},
     {char: '-', base: /\u2013/g},
+    {char: '"', base: /[\u201C-\u201F]/g},
     {char: "'", base: /[\u2018-\u2019]/g},
     {char: 'EUR', base: /\u20AC/g}
   ];
@@ -57,6 +60,7 @@
   types["transcript"] = "{{i18n.i_memo.transcript}}";
   types["coding"] = "{{i18n.i_memo.coding}}";
   types["theoretical"] = "{{i18n.i_memo.theoretical}}";
+  types["statement"] = "{{i18n.i_name.statement}}";
   types["table"] = "{{i18n.i_memo.table}}";
   types["diagram"] = "{{i18n.i_memo.diagram}}";
   types["graph"] = "{{i18n.i_memo.graph}}";

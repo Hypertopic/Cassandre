@@ -10,9 +10,9 @@
         <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item text-{{>contrastcolor}}">{{diary_name}}</li>
-            {{#editing}}
+            {{#authorized}}{{#editing}}
             <li><button title="{{i18n.i_double}}" class="btn text-{{>contrastcolor}}" id="double">¶²</button></li>
-            {{/editing}}
+            {{/editing}}{{/authorized}}
           </ul>
           {{>log}}
         </nav>
@@ -20,7 +20,20 @@
       <div id="container" class='container-fluid h-100'>
         <div id="memo" class='row h-100'>
           {{#authorized}}
-          <div class="col-3" id="groundings">
+            <div id="cherrypick" class="col-12 alert-danger d-none">{{i18n.i_concurrent_versions}}
+              <div class="row col-12">
+                <div class="col-6"> {{i18n.i_autosaved_version}}
+                  <textarea style="width: 100%" id="local" disabled></textarea>
+                  <button type="button" class="btn btn-primary" id="edit-local">{{i18n.i_edit}} {{i18n.i_this-one}}</button>
+                </div>
+                <div class="col-6"> {{i18n.i_remote_version}}
+                  <textarea style="width: 100%" id="remote" disabled>{{body}}</textarea>
+                  <button type="button" class="btn btn-primary" id="edit-remote">{{i18n.i_edit}} {{i18n.i_this-one}}</button>
+                </div>
+              </div>
+              <br /><div class="w-100"></div>
+            </div>
+            <div class="col-3" id="groundings">
             <legend>{{i18n.i_groundings}}</legend>
             {{#groundings}}
             <li id="{{.}}" class="{{type}}">
@@ -53,6 +66,7 @@
         {{#authorized}}{{#editing}}
         <div role="group">
           <button type="button" class="btn btn-outline-{{>contrastcolor}} btn-sm" id="done">{{i18n.i_save}}</button>
+          <button type="button" class="btn btn-outline-{{>contrastcolor}} btn-sm" id="cancel">{{i18n.i_cancel}}</button>
         </div>
         {{/editing}}{{/authorized}}
         <a class="navbar-text" href="https://github.com/Hypertopic/Cassandre/wiki">
@@ -80,7 +94,6 @@
     autosave: {
       enabled: true,
       uniqueId: "{{_id}}",
-      delay: 1000,
       timeFormat: {locale: '{{locale}}'}
     },
     toolbar: ["bold", "italic", "strikethrough", "|", "heading-3", "unordered-list", "horizontal-rule", "|", "link", "image", "table", "|", "guide"],
@@ -114,6 +127,12 @@
     $('#groundings').find('.toggle').next().slideToggle('fast');
     {{#authorized}}
     $('#header > ul > li:first').after($('.editor-toolbar'));
+    if (easymde.value() == $('#remote').text()) {
+      easymde.clearAutosavedValue();
+    } else {
+      cherrypick()
+    }
+
     {{/authorized}}
     {{/editing}}
     stickToHeader();
@@ -124,13 +143,42 @@
     easymde.value(easymde.value().replace(/\n/g, "\n \n"))
   }
 
-  function save(draft, toDoAfter) {
+  function cherrypick(){
+    $("#groundings").addClass('hidden');
+    $('.editor-toolbar').addClass('hidden');
+    $('#double').addClass('hidden');
+    $('#local').attr("rows", easymde.value().split(/\r\n|\r|\n/).length + 2);
+    $('#remote').attr("rows", $("#remote").val().split(/\r\n|\r|\n/).length + 2);
+    $("#local").val(easymde.value());
+    $("#cherrypick").removeClass('d-none');
+  }
+
+  $('#edit-local').on('click', function() {
+    leaveChoice();
+  });
+
+  $('#edit-remote').on('click', function() {
+    easymde.clearAutosavedValue();
+    easymde.value($("#remote").val());
+    leaveChoice();
+  });
+
+  function leaveChoice() {
+    $("#groundings").removeClass('hidden');
+    $('.editor-toolbar').removeClass('hidden');
+    $('#double').removeClass('hidden');
+    $("#cherrypick").addClass('d-none');
+  }
+
+  function save(modify, toDoAfter) {
     warning = false;
+    var data = 'false';
+    if (modify) data = easymde.value().replace(/ *\n/g, " \n");
     $.ajax({
       url: "../update_memo_content/{{_id}}",
       type: "PUT",
       contentType: "application/json",
-      data: easymde.value().replace(/ *\n/g, " \n"),
+      data: data,
       error: function(request) {
         if (request.status == 401) alert("{{i18n.i_lost_connection}}".replace(/&#39;/g,"'").replace(/&quot;/g,'"')); 
         self.location = '../memo/{{diary}}/{{_id}}';
@@ -143,11 +191,17 @@
     double();
   });
 
+  var toDoAfter = function() {
+    easymde.clearAutosavedValue();
+    self.location = '../memo/{{diary}}/{{_id}}';
+  };
+
+  $('#cancel').on('click', function() {
+    save(false, toDoAfter);
+  });
+
   $('#done').on('click', function() {
-    save(false, function() {
-      easymde.clearAutosavedValue();
-      self.location = '../memo/{{diary}}/{{_id}}';
-    });
+    save(true, toDoAfter);
   });
   {{/editing}}
 

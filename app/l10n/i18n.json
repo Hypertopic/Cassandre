@@ -116,7 +116,7 @@
     "i_memo_already_exists": "This memo name already exists",
     "i_memo_already_linked": "A memo with this name is already grounded here",
     "i_concurrent_versions": "Be aware : this memo exists in two concurrent versions. Take time to compare before editing",
-    "i_autosaved_version": "Version localy saved on your computer",
+    "i_autosaved_version": "Version locally saved on your computer",
     "i_remote_version": "Version on the server",
     "i_this-one": "this one",
     "i_link_leaf": "Do you want to ground it here ?",
@@ -144,6 +144,16 @@
     "i_enter_comment": "Enter your comment",
     "i_fill-this-memo": "Fill this memo",
     "i_hereunder_button": "(through the button, hereunder)",
+    "i_register_prompt": {
+       "academic_staff": "I am a staff member of ULiege",
+       "academic_staff_prompt": "You do not need to register : simply user the usual ULiege username and password on the page listing ",
+       "not_academic_staff": "I do not belong to ULiege",
+       "submit_button_in_footer": "Submit this form with the button in the footer",
+       "fullname": "Your activity will be listed under this name",
+       "email_as_username": "This email will be your username",
+       "safe_password": "Choose a safe password",
+       "record_password": "Memorise your password"
+    },
     "i_memo": {
        "field": "Field memo",
        "transcript": "Interview transcript",
@@ -367,6 +377,16 @@
     "i_enter_comment": "Saisissez un commentaire",
     "i_fill-this-memo": "Complétez ce compte-rendu",
     "i_hereunder_button": "(via le bouton ci-dessous)",
+    "i_register_prompt": {
+       "academic_staff": "Je fais partie de l'université de Liège",
+       "academic_staff_prompt": "Pas besoin de créer de compte : connectez-vous simplement avec votre identifiant et votre mot de passe habituels via la page des ",
+       "not_academic_staff": "Je ne fais pas partie de l'université de Liège",
+       "submit_button_in_footer": "Le bouton pour soumettre ce formulaire figure dans la barre du bas",
+       "fullname": "Nom sous lequel apparaîtra votre activité",
+       "email_as_username": "Cet email sera votre identifiant",
+       "safe_password": "Choisisez un mot de passe sûr",
+       "memorise_password": "Retenez bien ce mot de passe"
+    },
     "i_memo": {
        "field": "Compte-rendu d'observation",
        "transcript": "Transcription d'entretien",

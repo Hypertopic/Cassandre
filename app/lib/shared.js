@@ -37,7 +37,9 @@ var shared = {
       {{/diary}}\
     <div id='logged' class='order-3 justify-content-end pl-1'>\
       {{^logged}}\
-      <form id='signin' class='form-inline'>\
+      <button class='btn navbar-btn text-{{>contrastcolor}}' title='{{i18n.i_sign-in}}' id='sign-in'>{{i18n.i_sign-in}}</button>\
+      <button class='btn navbar-btn btn-outline-{{>contrastcolor}}' title='{{i18n.i_register}}' id='register'>{{i18n.i_register}}</button>\
+      <form id='signin' class='form-inline hidden'>\
         <div class='input-group input-group-sm'>\
           <div class='input-group-prepend'>\
             <span class='input-group-text'><img src='{{>relpath}}style/person.svg' alt='' /></span>\
@@ -273,6 +275,7 @@ var shared = {
             $('#existing_memo').modal('show');\
           }\
         } else {\
+          if (anchor > 1) ground = [{'_id': '{{_id}}', 'preview':[{'text': highlight, 'anchor': anchor}]}];\
           var data = {\
             groundings: ground,\
             history: [{\
@@ -689,6 +692,14 @@ var shared = {
   var refresh = true;\
   var user = '{{peer}}';\
   if ('{{logged}}') user = '{{logged}}';\
+  $('#sign-in').on('click', function() {\
+    $('#signin').removeClass('hidden');\
+    $('#sign-in').addClass('hidden');\
+    $('#register').addClass('hidden');\
+  });\
+  $('#register').on('click', function() {\
+    self.location = '{{>relpath}}register/';\
+  });\
   $('#signin').on('submit', function(e) {\
     e.preventDefault();\
     $(this).find('input').first().val($(this).find('input').first().val().toLowerCase());\

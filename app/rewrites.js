@@ -364,6 +364,12 @@ function(req2) {
         "limit": '5'
       };
     break;
+    case 'userfullname':
+      reply.path = "_view/userfullname/";
+      reply.query = {
+        "key": '"'+path[1]+'"'
+      };
+    break;
     case 'network':
       var diary = path[1];
       reply.path = "_list/network/memo_attribute";

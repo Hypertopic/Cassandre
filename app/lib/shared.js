@@ -125,6 +125,22 @@ var shared = {
         </div>\
       </div>\
     </div>",
+  storing_fullname_dialog:"\
+    <div id='storing_fullname_dialog' class='modal fade' role='dialog'>\
+      <div class='modal-dialog' role='document'>\
+        <div class='modal-content'>\
+          <div class='modal-body'>\
+            <p><label for='user_fullname'>{{i18n.i_fullname}}</label><br/>\
+              <input id='user_fullname' class='form-control input-sm' placeholder='Jack London'/>\
+              <small class='form-text text-info'>{{i18n.i_register_prompt.fullname}}</small>\
+            </p>\
+          </div>\
+          <div class='modal-footer'>\
+            <button id='storing_fullname' type='button' class='btn btn-secondary'>Ok</button>\
+          </div>\
+        </div>\
+      </div>\
+    </div>",
   comments:"\
     <div id='comments'>\
       {{#comments}}\
@@ -737,8 +753,34 @@ var shared = {
         'by': memo\
       }),\
       {{/list}}\
-    }).done({{#list}}reload{{/list}});\
-  }",
+    }).done({{#list}}reload{{/list}})\
+    .fail({{#list}}function(data){$('#storing_fullname_dialog').modal('show')}{{/list}});\
+  }\
+  {{^logged_fullname}}\
+  $('#storing_fullname').on('click', function() {\
+    var fullname = $('#user_fullname').val().trim();\
+    $.ajax({\
+      url: '{{>relpath}}userfullname/'+fullname,\
+      type: 'GET'\
+    }).done(function(u){\
+      if (u.rows.length > 0) fullname += ' ({{logged}})';\
+      createUserDoc(fullname);\
+    });\
+  });\
+  function createUserDoc(fullname) {\
+    $.ajax({\
+      url: '{{>relpath}}{{logged}}',\
+      type: 'PUT',\
+      contentType: 'application/json',\
+      data: JSON.stringify({\
+        '_id': '{{logged}}',\
+        'contributors': ['{{logged}}'],\
+        'readers': ['u221250'],\
+        'fullname': fullname\
+      })\
+    }).done(reload);\
+  }\
+  {{/logged_fullname}}",
   render: "\
     $.ajax({\
       type: 'GET',\

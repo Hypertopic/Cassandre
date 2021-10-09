@@ -44,6 +44,7 @@
           <img src="../style/info.svg" width="30" height="30" alt="Cassandre" loading="lazy">
         </a>
       </nav>
+      {{^logged_fullname}}{{>storing_fullname_dialog}}{{/logged_fullname}}
       <div id="in_collection" class="modal fade" role="dialog">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
@@ -60,7 +61,7 @@
   {{>script}}
   <script>
   let register = source = [],
-      nothing_to_show = '{{i18n.i_nothing-to-show}}';
+      nothing_to_show = '{{i18n.i_nothing-to-show}}',
       id = '';
   {{^logged}}nothing_to_show +='. {{i18n.i_sign-in-for-more}}';{{/logged}}
   $(document).ready(function() {
@@ -71,6 +72,9 @@
       url: "../{{logged}}",
       type: "GET",
       dataType: "json",
+      error: function() {
+        $('#storing_fullname_dialog').modal('show');
+      },
       success: function(data) {
         if(data.fullname) $('#username').text(data.fullname);
         for (var o in data.order) {

@@ -382,7 +382,7 @@
        "academic_staff_prompt": "Pas besoin de créer de compte : connectez-vous simplement avec votre identifiant et votre mot de passe habituels via la page des ",
        "not_academic_staff": "Je ne fais pas partie de l'université de Liège",
        "submit_button_in_footer": "Le bouton pour soumettre ce formulaire figure dans la barre du bas",
-       "fullname": "Nom sous lequel apparaîtra votre activité",
+       "fullname": "Précisez le nom sous lequel apparaîtra votre activité",
        "email_as_username": "Cet email sera votre identifiant",
        "safe_password": "Choisisez un mot de passe sûr",
        "memorise_password": "Retenez bien ce mot de passe"

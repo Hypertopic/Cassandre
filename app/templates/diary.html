@@ -81,6 +81,7 @@
         <img src="../../style/info.svg" width="30" height="30" alt="Cassandre" loading="lazy">
       </a>
     </nav>
+    {{^logged_fullname}}{{>storing_fullname_dialog}}{{/logged_fullname}}
   {{>script}}
   {{#list}}<script src="../../script/showdown.min.js"></script>{{/list}}
   {{^list}}<script src="../../script/vis.min.js"></script>{{/list}}

@@ -719,12 +719,16 @@ var shared = {
   $('#signin').on('submit', function(e) {\
     e.preventDefault();\
     $(this).find('input').first().val($(this).find('input').first().val().toLowerCase());\
+    var username = $(this).find('input').first().val().toLowerCase();\
     $.ajax({\
       url: '/_session',\
       type: 'POST',\
       data: $(this).serialize(),\
       success: reload,\
-      error: function() {alert('{{i18n.i_wrong-password}}')}\
+      error: function(request) {\
+        var mismatch = '{{i18n.i_wrong-password}}'.replace('&#39;','\\'');\
+        alert(mismatch);\
+      }\
     });\
   });\
   $('#signout').on('click', function() {\
@@ -759,14 +763,23 @@ var shared = {
   {{^logged_fullname}}\
   $('#storing_fullname').on('click', function() {\
     var fullname = $('#user_fullname').val().trim();\
-    $.ajax({\
+    preventingHomonyms(fullname);\
+  });\
+  $('#user_fullname').on('keypress', function(key) {\
+    if (key.which == 13) {\
+      var fullname = $('#user_fullname').val().trim();\
+      preventingHomonyms(fullname);\
+    }\
+  });\
+  function preventingHomonyms(fullname) {\
+    if (fullname.length > 0) $.ajax({\
       url: '{{>relpath}}userfullname/'+fullname,\
       type: 'GET'\
     }).done(function(u){\
       if (u.rows.length > 0) fullname += ' ({{logged}})';\
       createUserDoc(fullname);\
     });\
-  });\
+  };\
   function createUserDoc(fullname) {\
     $.ajax({\
       url: '{{>relpath}}{{logged}}',\
@@ -778,7 +791,15 @@ var shared = {
         'readers': ['u221250'],\
         'fullname': fullname\
       })\
-    }).done(reload);\
+    }).done(reload)\
+    .fail(function(data){\
+      $.ajax({\
+        url: '{{>relpath}}username/{{logged}}',\
+        type: 'PUT',\
+        contentType: 'application/json',\
+        data: fullname\
+      }).done(reload)\
+    });\
   }\
   {{/logged_fullname}}",
   render: "\

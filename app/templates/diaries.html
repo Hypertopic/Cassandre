@@ -44,7 +44,7 @@
           <img src="../style/info.svg" width="30" height="30" alt="Cassandre" loading="lazy">
         </a>
       </nav>
-      {{^logged_fullname}}{{>storing_fullname_dialog}}{{/logged_fullname}}
+      {{>storing_fullname_dialog}}
       <div id="in_collection" class="modal fade" role="dialog">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
@@ -76,6 +76,7 @@
         $('#storing_fullname_dialog').modal('show');
       },
       success: function(data) {
+        if(data.fullname.length == 0) $('#storing_fullname_dialog').modal('show');
         if(data.fullname) $('#username').text(data.fullname);
         for (var o in data.order) {
           if (typeof data.order[o].collection !== 'undefined') {

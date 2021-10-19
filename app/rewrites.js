@@ -301,6 +301,7 @@ function(req2) {
     case 'track_memo':
     case 'modify_rights':
     case 'reader_unsubscribe':
+    case 'username':
       reply.path = '_update/'+path[0]+'/'+path[1];
     break;
     case 'user':

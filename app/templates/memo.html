@@ -389,8 +389,15 @@
     converter.setFlavor('github');
     renderComments(converter);
     renderPreviews(converter);
+    if ("{{type}}" == 'interview') {
+      $('.post').children('font').wrapAll('<p></p>');;
+    }
     $('.post').html(function(i, text) {
-      return converter.makeHtml(text.replace(/&gt;/g, '>').trim());
+      if ("{{type}}" == 'interview') {
+        return text.replace(/\n \n/g, '</font></p><p><font>');
+      } else {
+        return converter.makeHtml(text.replace(/&gt;/g, '>').trim());
+      }
     });
     if ($('#groundings li').length == 1) $("#groundings").find('legend').text("{{i18n.i_grounding}}");
     if ($('#groundings li').length < 1) $("#groundings").addClass('hidden');
@@ -495,7 +502,7 @@
     var posts = document.getElementsByClassName('post'),
         selected = window.getSelection().anchorNode.parentNode.parentNode,
         p = [].indexOf.call(posts[0].childNodes, selected);
-    if (p > -1) anchor = (p/2) + 1;
+    if (p > -1) anchor = p;
   });
 
   $('#create').on('click', function() {

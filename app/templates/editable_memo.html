@@ -127,6 +127,7 @@
     $('#groundings').find('.toggle').next().slideToggle('fast');
     {{#authorized}}
     $('#header > ul > li:first').after($('.editor-toolbar'));
+    if ("{{type}}" == 'interview') $('.editor-toolbar').remove ();
     if (easymde.value() == $('#remote').text()) {
       easymde.clearAutosavedValue();
     } else {

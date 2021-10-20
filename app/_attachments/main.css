@@ -387,7 +387,6 @@ a.dropdown-item, .create-leave, a.dropdown-toggle,
 
 .highlight {
   background-color: yellow;
-  color: red;
   -webkit-transition: 2s all ease-in-out;
   -moz-transition: 2s all ease-in-out;
   -o-transition: 2s all ease-in-out;

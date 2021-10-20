@@ -47,6 +47,7 @@ function(head, req) {
           }
           for (i in row.value.groundings) {
             var id = row.value.groundings[i];
+            if (typeof id._id === 'string') id = id._id;
             groundings.push({
               'id': id,
               'name': memos_name[id]
@@ -78,7 +79,7 @@ function(head, req) {
               obj.body = preview;
             break;
           }
-          data.memos.push(obj);
+          if (obj.type !== 'statement') data.memos.push(obj);
           var p = row.doc;
           delete p._rev;
           delete p.comments;

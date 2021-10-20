@@ -21,6 +21,11 @@ blockquote {
   color: gray !important;
 }
 
+#groundings .preview h1, #groundings .preview h2, #groundings .preview h3 {
+  font-size: 100%;
+  font-weight: bold;
+}
+
 #watermark {
   background-image: url(cassandre_background.svg);
   background-position: 100% 20%;
@@ -224,6 +229,14 @@ button.comment {
   vertical-align: 20px;
 }
 
+#activities li a p, #activities li a blockquote,
+.commented a p, .commented a blockquote,
+.unchecked-comment a p, .unchecked-comment a blockquote,
+.comment_text > ul, .comment_text > ol,
+.comment_text > blockquote {
+  margin-bottom: 0px;
+}
+
 .checked {
   background-color: lightgray;
   color: gray;
@@ -370,6 +383,20 @@ a.dropdown-item, .create-leave, a.dropdown-toggle,
   cursor: pointer;
   background-image: url('search.svg');
   color: transparent;
+}
+
+.highlight {
+  background-color: yellow;
+  -webkit-transition: 2s all ease-in-out;
+  -moz-transition: 2s all ease-in-out;
+  -o-transition: 2s all ease-in-out;
+  transition: 2s all ease-in-out;
+  transition-delay: 2s;
+}
+
+.fadeout {
+  background-color: transparent;
+  color: black;
 }
 
 .card>h5{

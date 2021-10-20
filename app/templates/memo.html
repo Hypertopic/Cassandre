@@ -27,7 +27,7 @@
               {{#timestamp}}
               <div class="timestamp">{{timestamp}}</div>
               {{/timestamp}}
-              <div class="post begin">
+              <div class="post">
                 {{#words}}<font>{{.}}</font>{{/words}}
                 {{#text}}{{text}}{{/text}}
               </div>
@@ -165,7 +165,7 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <div class="navbar-nav btn-group justify-content-between">
-          <a id="toggle-groundings" class="nav-link btn d-none" data-toggle="collapse" title="{{i18n.i_show_groundings}}" aria-expanded="true" href=".groundings">
+          <a id="toggle-groundings" class="nav-link btn text-{{>contrastcolor}} d-none" data-toggle="collapse" title="{{i18n.i_show_groundings}}" aria-expanded="true" href=".groundings">
             <span class="d-block d-sm-none"><img src="{{>relpath}}style/screen-normal.svg" alt="{{i18n.i_show_grounding}}"></span>
             <span class="d-none d-sm-block">{{i18n.i_show_groundings}}</span>
           </a>
@@ -219,11 +219,12 @@
       {{/authorized}}
     </nav>
   {{>script}}
-  <script src="{{>relpath}}script/showdown.min.js"></script>
   <script>
   var metrics = {},
       trigrams = {},
       leaf_type = leaf_id = resume = '',
+      anchor = 0,
+      options = [],
       userids = [],
       help = [];
   help["field"] = {init: "{{{i18n.i_content.field}}}", next: "{{{i18n.i_next.field}}}"};
@@ -234,8 +235,8 @@
   help["operational"] = {init: "{{{i18n.i_content.operational}}}", next: "{{{i18n.i_next.operational}}}"};
   help["storyline"] = {init: "{{{i18n.i_content.storyline}}}", next: "{{{i18n.i_next.storyline}}}"};
   $(document).ready(function() {
-    {{>render}}
     moment.locale('{{locale}}');
+    {{>render}}
     var moments = $('.moment');
     moments.each(function() {
       var now = moment();
@@ -292,12 +293,7 @@
     }
     {{/editable}}
     if ("{{contributors}}".split(',').length > 1) $('#editing').append(". {{i18n.i_no-edit-by-others}}");
-    $('#toasts').append('<div class="toast" role="alert">'
-      + '<div class="toast-body alert-warning">'
-      + '<button type="button" class="close" data-dismiss="toast">×</button>'
-      + $('#editing').text().replace(/\s+/g, " ") + resume + '</div></div>');
-    $('.toast').toast({autohide: false});
-    $('.toast').toast('show');
+    inform('warning', $('#editing').text().replace(/\s+/g, " ") + resume);
     {{/editing}}
     $('#edit').removeClass('d-none');
     {{/logged}}
@@ -309,12 +305,7 @@
       } else {
         tip = help["{{type}}"]["next"] + " {{i18n.i_hereunder_button}}";
       }
-      $('#toasts').append('<div class="toast" role="alert">'
-        + '<div class="toast-body alert-info">'
-        + '<button type="button" class="close" data-dismiss="toast">×</button>'
-        + tip + '</div></div>');
-      $('.toast').toast({autohide: false});
-      $('.toast').toast('show');
+      inform('info', tip);
     }
     {{/editable}}
     switch ('{{type}}') {
@@ -395,8 +386,18 @@
       tasklists: 'true',
       strikethrough: 'true'
     });
+    converter.setFlavor('github');
+    renderComments(converter);
+    renderPreviews(converter);
+    if ("{{type}}" == 'interview') {
+      $('.post').children('font').wrapAll('<p></p>');;
+    }
     $('.post').html(function(i, text) {
-      return converter.makeHtml(text.replace(/&gt;/g, '>').trim());
+      if ("{{type}}" == 'interview') {
+        return text.replace(/\n \n/g, '</font></p><p><font>');
+      } else {
+        return converter.makeHtml(text.replace(/&gt;/g, '>').trim());
+      }
     });
     if ($('#groundings li').length == 1) $("#groundings").find('legend').text("{{i18n.i_grounding}}");
     if ($('#groundings li').length < 1) $("#groundings").addClass('hidden');
@@ -449,6 +450,8 @@
           $('#repeated').removeClass('disabled');
         }
       });
+      const par = window.location.hash.substring(1);
+      if (par !== '') highlight(par);
     }
     stickToHeader();
     {{^statements}}
@@ -458,6 +461,14 @@
     poller('statements', '{{update_seq}}');
     {{/statements}}
   });
+
+  function highlight(p) {
+    $('.post p').eq(p-1).addClass('highlight');
+    var prev = document.querySelector(".highlight").previousSibling;
+    if (prev == null) prev = document.getElementById('authorization');
+    prev.scrollIntoView({ behavior: 'smooth', block: 'center'});
+    $('.highlight').addClass('fadeout');
+  }
 
   $('#edit').on('click', function() {
     refresh = false;
@@ -482,8 +493,16 @@
       $("#field-leaf").prop("checked", true).trigger("click");
       $('#field_title_dialog').modal('show');
     } else {
-      create(type, $('#leave-name').val().trim(), $('#kwic').val());
+      create(type, $('#leave-name').val().trim(), $('#kwic').val(), anchor);
     }
+  });
+
+  $('#content').on('mouseup', function() {
+    if (window.getSelection().anchorNode !== null)
+    var posts = document.getElementsByClassName('post'),
+        selected = window.getSelection().anchorNode.parentNode.parentNode,
+        p = [].indexOf.call(posts[0].childNodes, selected);
+    if (p > -1) anchor = p;
   });
 
   $('#create').on('click', function() {
@@ -496,7 +515,7 @@
       $("#transcript-leaf").prop("checked", true).trigger("click");
       $('#field_title_dialog').modal('show');
     } else {
-      create(type, name, highlight);
+      create(type, name, highlight, anchor);
     }
   });
 
@@ -540,6 +559,7 @@
       data: JSON.stringify({
        'action': 'add_grounding',
        'highlight': $('#kwic').val(),
+       'anchor': anchor,
        'value': '{{_id}}'
       }),
       error: function(request) {
@@ -606,21 +626,31 @@
   })
 
   $('#remove_grounding').on('show.bs.modal', function (event) {
+    options = [];
+    $('#remove_grounding select').children("option").each(function(){
+      options.push($(this).val());
+    })
     $('#groundings').children('li').each(function() {
       var id = ($(this).attr('id')),
-          name = ($(this).find('a').text());
-      if (name.length > 45) name = name.substr(0,45)+'...';
-      $("#remove_grounding").find('select').append($('<option>', {
-        value: id,
-        title: ($(this).find('a').text()),
-        text: name
-      }));
+          name = ($(this).find('a:first').text());
+      addOptions(id, name);
+      $('#'+id).find('.preview a').each(function() {
+        var href = $(this).attr('href');
+        if (href.includes(id)) addOptions(href, '> '+$(this).text());
+      });
     });
   });
 
-  $(window).scroll(function(){
-    $('.post').removeClass("begin");
-  });
+  function addOptions(id, name) {
+    var shortname = name;
+    if (name.length > 45) shortname = name.substr(0,45)+'...';
+    if (options.indexOf(id) < 0)
+    $("#remove_grounding").find('select').append($('<option>', {
+      value: id,
+      title: name,
+      text: shortname
+    }));
+  }
 
   function renameDiagram(id,name) {
     $.ajax({

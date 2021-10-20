@@ -13,7 +13,7 @@
         <img src="../../style/brand.svg" width="30" height="30" alt="{{i18n.i_diaries}}" loading="lazy">
       </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="text-light bg-dark"><img src="../../style/three-bars.svg" alt="=" /></span>
+        <span class="text-{{>contrastcolor}} bg-{{>menucolor}}"><img src="../../style/three-bars.svg" alt="=" /></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
@@ -81,6 +81,7 @@
         <img src="../../style/info.svg" width="30" height="30" alt="Cassandre" loading="lazy">
       </a>
     </nav>
+    {{^logged_fullname}}{{>storing_fullname_dialog}}{{/logged_fullname}}
   {{>script}}
   {{#list}}<script src="../../script/showdown.min.js"></script>{{/list}}
   {{^list}}<script src="../../script/vis.min.js"></script>{{/list}}
@@ -186,9 +187,9 @@
       $("#memos>li>input").removeClass("hidden");
       $("#footer").html(
         '<div role="group" class="form-check-inline">'
-        + '<button class="btn navbar-btn btn-outline-light btn-sm" id="cancel" type="button">{{i18n.i_cancel}}</button>'
+        + '<button class="btn navbar-btn btn-outline-{{>contrastcolor}} btn-sm" id="cancel" type="button">{{i18n.i_cancel}}</button>'
         + '<div class="custom-control custom-switch"><input id="toggle" type="checkbox" class="custom-control-input"></input><label class="navbar-text custom-control-label" for="toggle">{{i18n.i_select}}</label></div>'
-        + '<button class="btn navbar-btn btn-outline-light btn-sm" id="delete" type="button">{{i18n.i_delete}}</button>'
+        + '<button class="btn navbar-btn btn-outline-{{>contrastcolor}} btn-sm" id="delete" type="button">{{i18n.i_delete}}</button>'
         + '</div>'
       );
     })
@@ -238,7 +239,7 @@
   function resetUI() {
     $("#memos>li>input").addClass("hidden");
     $("#footer").html(
-      '<button class="btn navbar-btn btn-outline-light btn-sm" type="button" id="show_delete">{{i18n.i_delete}}...</button>'
+      '<button class="btn navbar-btn btn-outline-{{>contrastcolor}} btn-sm" type="button" id="show_delete">{{i18n.i_delete}}...</button>'
       + '<a class="navbar-text" href="https://github.com/Hypertopic/Cassandre/wiki">'
       + '<img src="../../style/info.svg" width="30" height="30" alt="Cassandre" loading="lazy"></a>'
     );
@@ -283,11 +284,13 @@
           +'<span class="mytooltip">'
           +'<a href="../../'+data[i].path+'/'+data[i].diary+'/'+data[i].id+'" class="'+unread+'">'+data[i].name+'</a>';
         if (typeof data[i].preview !== 'undefined' && data[i].preview.trim().length > 0)
-          li += '<span class="preview text-light bg-dark">'+data[i].preview+'</span>';
+          li += '<span class="preview text-{{>contrastcolor}} bg-{{>menucolor}}">'+data[i].preview+'</span>';
         li += '</span></li>';
         $("#memos").append(li);
       }
     }
+    $('#{{diary}}').next('.moment').removeClass('unread');
+    $('#{{diary}}').next('.moment').next('.mytooltip').find('.unread').removeClass('unread');
     momentRelative('#memos');
     converter.setFlavor('github');
     $('.preview').html(function(i, text) {

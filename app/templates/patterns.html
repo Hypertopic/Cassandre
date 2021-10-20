@@ -57,9 +57,9 @@
   $('#footer')
     .on('click', '#show_delete', function() {
       $("#footer").html(
-        '<div role="group"><button id="cancel" type="button" class="btn btn-outline-light navbar-btn btn-sm">{{i18n.i_cancel}}</button>'
+        '<div role="group"><button id="cancel" type="button" class="btn btn-outline-{{>contrastcolor}} navbar-btn btn-sm">{{i18n.i_cancel}}</button>'
         + '<input id="toggle" type="checkbox"><span class="navbar-text">{{i18n.i_select}}</span></button>'
-        + '<button id="delete" type="button" class="btn btn-outline-light navbar-btn btn-sm">{{i18n.i_delete}}</button></div>'
+        + '<button id="delete" type="button" class="btn btn-outline-{{>contrastcolor}} navbar-btn btn-sm">{{i18n.i_delete}}</button></div>'
       );
       $(".kwic>span").prepend("<input type='checkbox' />");
     })
@@ -122,7 +122,7 @@
 
   function resetUI() {
     $('#footer').html(
-      '<button type="button" id="show_delete" class="btn btn-outline-light navbar-btn btn-sm">{{i18n.i_delete}}...</button>'
+      '<button type="button" id="show_delete" class="btn btn-outline-{{>contrastcolor}} navbar-btn btn-sm">{{i18n.i_delete}}...</button>'
       + '<a class="navbar-text" href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>'
     );
     $('input[type="checkbox"]').remove();

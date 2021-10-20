@@ -39,18 +39,19 @@
         </div>
       </div>
       <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
-        <button class="btn navbar-btn btn-outline-light btn-sm d-none" id="show">{{i18n.i_last-visit}}</button>
+        <button class="btn navbar-btn btn-outline-{{>contrastcolor}} btn-sm d-none" id="show">{{i18n.i_last-visit}}</button>
         <a class='navbar-text ml-auto' href="https://github.com/Hypertopic/Cassandre/wiki">
           <img src="../style/info.svg" width="30" height="30" alt="Cassandre" loading="lazy">
         </a>
       </nav>
+      {{>storing_fullname_dialog}}
       <div id="in_collection" class="modal fade" role="dialog">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">{{i18n.i_integrate}} {{i18n.i_in}} {{i18n.i_collection}}</div>
             <div class="modal-body">
               <p>{{i18n.i_integrate}} <span class="font-italic diary"></span> {{i18n.i_in}}<br/>
-                <input id="target_collection" type="search" placeholder="{{i18n.i_collection}}"/>
+                <input id="target_collection" class="form-control input-sm" placeholder="{{i18n.i_collection}}"/>
               </p>
             </div>
           </div>
@@ -60,7 +61,9 @@
   {{>script}}
   <script>
   let register = source = [],
+      nothing_to_show = '{{i18n.i_nothing-to-show}}',
       id = '';
+  {{^logged}}nothing_to_show +='. {{i18n.i_sign-in-for-more}}';{{/logged}}
   $(document).ready(function() {
     stickToHeader();
     {{#logged}}
@@ -69,7 +72,11 @@
       url: "../{{logged}}",
       type: "GET",
       dataType: "json",
+      error: function() {
+        $('#storing_fullname_dialog').modal('show');
+      },
       success: function(data) {
+        if(data.fullname.length == 0) $('#storing_fullname_dialog').modal('show');
         if(data.fullname) $('#username').text(data.fullname);
         for (var o in data.order) {
           if (typeof data.order[o].collection !== 'undefined') {
@@ -122,7 +129,11 @@
       $(".collection").removeClass('d-none');
     }).done(function(){
       $("#loading").addClass('d-none').removeClass('d-flex');
+      if ($(".card").length == 0) $('h1').after(nothing_to_show);
     });
+    {{/logged}}
+    {{^logged}}
+    if ($(".card").length == 0) $('h1').after(nothing_to_show);
     {{/logged}}
   });
 

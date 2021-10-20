@@ -1,5 +1,6 @@
 function (doc, req) {
-  doc.body = req.body;
+  if (req.body !== 'false') doc.body = req.body;
+  if (!doc.history) doc.history = [];
   doc.history.push({
     "user": req.userCtx.name,
     "date": new Date().toJSON()

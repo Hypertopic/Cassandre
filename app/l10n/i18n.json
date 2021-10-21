@@ -162,7 +162,7 @@
        "operational": "Operational memo",
        "storyline": "Storyline memo",
        "table": "Properties table",
-       "diagram": "Diagram",
+       "diagram": "Connection",
        "graph": "Graph"
     },
     "i_create": {
@@ -176,7 +176,7 @@
        "storyline": "Create a storyline memo",
        "table": "Create a properties table",
        "row": "Add a row",
-       "diagram": "Create a diagram",
+       "diagram": "Create a connection",
        "graph": "Create a graph"
     },
     "i_name": {
@@ -213,7 +213,7 @@
     "i_next": {
        "field": "How can you interpret your observations ? What dimension of the phenomenon is attested ? Create a coding memo to formulate it",
        "transcript": "How can you interpret what was told ? What dimension of the phenomenon is expressed ? Create a coding memo to formulate it",
-       "coding": "If the empirical material indicates that this dimension varies according to another dimensions, represent this articulation with a diagram. If this dimension suggests a new question, it deserves a new theoretical memo",
+       "coding": "If the empirical material indicates that this dimension varies according to another dimensions, represent this connection with a diagram. If this dimension suggests a new question, it deserves a new theoretical memo",
        "theoretical": "How can you investigate these questions on the field. Prepare your next contact to the field through an operational memo !",
        "negative-case": "What determines this articulation ? In what context would it differ ? If this occurs in the material, fill the \"negative case\" field. If not, this hypothesis or research lead deserves a theoretical memo",
        "operational": "This memo enumerates what should be investigated on the field. Once you will come back from the field, do not put back (field) memo creation",
@@ -222,7 +222,7 @@
        "storyline": "If not, do not hesitate to refine this memo... Or to formulate new question in a theoretical memo"
     },
     "i_export": {
-       "text-only": "Only textual memos are included here. Diagrams (articulations) and graphs are excluded from the export to HTML, to PDF or to XML; they are only included in the JSON export.",
+       "text-only": "Only textual memos are included here. Connections and graphs are excluded from the export to HTML, to PDF or to XML; they are only included in the JSON export.",
        "in-progress": "Conversion to PDF in progress...",
        "done": "Your PDF is ready"
     },
@@ -395,7 +395,7 @@
        "operational": "Compte-rendu opérationnel",
        "storyline": "Compte-rendu de scénario",
        "table": "Table des propriétés",
-       "diagram": "Diagramme",
+       "diagram": "Articulation",
        "graph": "Schématisation"
     },
     "i_create": {
@@ -408,7 +408,7 @@
        "storyline": "Créer un compte-rendu de scénario",
        "table": "Créer une table des propriétés",
        "row": "Ajouter une ligne",
-       "diagram": "Créer un diagramme",
+       "diagram": "Créer une articulation",
        "graph": "Créer une schématisation"
     },
     "i_name": {
@@ -454,7 +454,7 @@
        "statement": "Cette articulation mériterait d'être mise en mots. Pour ce faire, utilsez le bouton"
     },
     "i_export": {
-       "text-only": "Seuls les comptes-rendus (textes) sont intégrés ci-dessous. Les diagrammes (articulations et schématisations intégratives) sont exclus des exportations en HTML, en PDF ou XML; ils ne figurent que dans l'exportation en JSON.",
+       "text-only": "Seuls les comptes-rendus (textes) sont intégrés ci-dessous. Les articulations et les schématisations intégratives sont exclues des exportations en HTML, en PDF ou XML; ils ne figurent que dans l'exportation en JSON.",
        "in-progress": "Votre PDF est en préparation...",
        "done": "Votre PDF est prêt"
     },

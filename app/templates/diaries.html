@@ -178,7 +178,7 @@
 
   $('#target_collection').on('keypress', function(key) {
     if (key.which == 13) {
-      save_diary_collection($('#target_collection').val().trim().replace(/\s/g, '_'));
+      save_diary_collection($('#target_collection').val().trim().replace(/[^0-9A-Za-zÀ-ȕ-]/g, '_'));
     }
   });
 

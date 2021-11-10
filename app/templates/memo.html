@@ -465,7 +465,7 @@
   function highlight(p) {
     $('.post p').eq(p-1).addClass('highlight');
     var prev = document.querySelector(".highlight").previousSibling;
-    if (prev == null) prev = document.getElementById('authorization');
+    if (p == "1") prev = document.getElementById('authorization');
     prev.scrollIntoView({ behavior: 'smooth', block: 'center'});
     $('.highlight').addClass('fadeout');
   }

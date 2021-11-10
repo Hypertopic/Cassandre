@@ -639,6 +639,7 @@
         if (href.includes(id)) addOptions(href, '> '+$(this).text());
       });
     });
+    if ($('#groundings li').length < 2) $("#remove_grounding").find('option').eq('1').attr("disabled", "disabled");
   });
 
   function addOptions(id, name) {

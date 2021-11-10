@@ -836,7 +836,8 @@ var shared = {
     }\
     let refresh = true;\
     {{^statements}}\
-    {{^link}}if ($('#groundings li').length > 1) $('#remove_grounding_btn').removeClass('d-none');{{/link}}\
+    {{^link}}if (($('#groundings li').length > 1) || ('{{type}}' == 'coding' && $('#groundings li').first().find('.preview').text().indexOf('---') > -1))\
+        $('#remove_grounding_btn').removeClass('d-none');{{/link}}\
     {{#type}}{{#logged}}track('{{_id}}');{{/logged}}{{/type}}\
     {{/statements}}\
   "

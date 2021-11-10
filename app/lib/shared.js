@@ -291,7 +291,7 @@ var shared = {
             $('#existing_memo').modal('show');\
           }\
         } else {\
-          if (anchor > 1) ground = [{'_id': '{{_id}}', 'preview':[{'text': highlight, 'anchor': anchor}]}];\
+          if (anchor > 0) ground = [{'_id': '{{_id}}', 'preview':[{'text': highlight, 'anchor': anchor}]}];\
           var data = {\
             groundings: ground,\
             history: [{\

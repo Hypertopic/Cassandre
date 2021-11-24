@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+  <head>
+    <title></title>
+    {{>links}}
+  </head>
+  <body>
+    <div id="container">
+      <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
+        <a class="text-{{>contrastcolor}}" id="diaries">
+          <img src="../style/brand.svg" width="30" height="30" alt="{{i18n.i_diaries}}" loading="lazy">
+        </a>
+        <ul class="navbar-nav mr-auto"></ul>
+        {{>log}}
+      </nav>
+      <main id="content" class="col pb-5">
+        {{^logged}}
+          <h1>{{i18n.i_sign-in_required}}</h1>
+        {{/logged}}
+        {{#logged}}
+        <h1> {{i18n.i_username}}</h1>
+	<div class="card-columns mb-3 pb-3">
+        <ul>
+        {{#users}}<li><a href="../user/{{id}}">{{fullname}}</a></li>{{/users}}
+        </ul>
+	</div>
+        {{/logged}}
+      </main>
+      <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
+        <a class='navbar-text' href="https://github.com/Hypertopic/Cassandre/wiki">
+          <img src="../style/info.svg" width="30" height="30" alt="Cassandre" loading="lazy">
+        </a>
+      </nav>
+    </div>
+  {{>script}}
+  <script>
+  $(document).ready(function() {
+    stickToHeader();
+    {{#logged}}
+    {{#users}}
+    if ('{{id}}' === $('#username').text().trim()) $('#username').text('{{fullname}}');
+    {{/users}}
+    var n = $('#content ul>li').length;
+    $('h1').prepend(n);
+    if (n > 1) $('h1').append('s');
+    if (n == 0) $('h1').text('{{i18n.i_nothing-to-show}}');
+    {{/logged}}
+  });
+
+  $('#diaries').on('click', function() {
+    self.location = '../memo/';
+  });
+
+  {{>layoutscript}}
+  {{>logscript}}
+  </script>
+  </body>
+</html>
+

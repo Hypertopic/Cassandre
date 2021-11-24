@@ -26,7 +26,7 @@ function(head, req) {
         if (req.userCtx.name == row.key[2]) {
           data.by = row.value.by;
           if (row.value.activity) data.activity = row.value.activity;
-          if (row.value.fullname) data.logged_fullname = row.value.fullname;
+          if (row.value.fullname && row.value.fullname.length > 0) data.logged_fullname = row.value.fullname;
         }
       break;
       case 'M':

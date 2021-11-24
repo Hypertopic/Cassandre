@@ -1,0 +1,163 @@
+<!doctype html>
+<html>
+  <head>
+    <title>{{i18n.i_register}}</title>
+     {{>links}}
+  </head>
+  <body>
+    <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
+      <a class="navbar-brand btn text-{{>contrastcolor}}" title="{{i18n.i_diaries}}" href="/memo/">{{i18n.i_diaries}}</a>
+    </nav>
+    <div id="container" class='container-fluid h-100'>
+      <main class="col pb-5" id="content">
+        <h1>{{i18n.i_register}}</h1>
+        <div id="uliege" class="alert shadow my-5" style="cursor: pointer"> <img src="../style/uliege.svg" style="height:3rem" class="mr-2" alt="(ULiege)"/>{{i18n.i_register_prompt.academic_staff}}</div>
+        <p class="d-none">{{i18n.i_register_prompt.academic_staff_prompt}}</p>
+        <div id="newaccount" class="alert shadow py-4" style="cursor: pointer">{{i18n.i_register_prompt.not_academic_staff}}</div>
+        <div class="alert d-none" id="message" role="alert">{{i18n.i_register_prompt.submit_button_in_footer}}</div>
+        <a id="diaries" class="d-none" title="{{i18n.i_diaries}}" href="/memo/">{{i18n.i_diaries}}</a>
+        <form class="d-none row g-3 align-items-center">
+          <div class="col-md-6 mb-3">
+            <label for="fullname">{{i18n.i_fullname}}</label>
+            <input class="form-control" id="fullname" name="fullname" type="text" placeholder="Jack London" />
+            <small class="form-text text-info">{{i18n.i_register_prompt.fullname}}</small>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="email">Email</label>
+            <input class="form-control" id="email" name="email" type="email" required="required" placeholder="user@example.net" />
+            <small class="form-text text-info">{{i18n.i_register_prompt.email_as_username}}</small>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="password">{{i18n.i_password}}</label>
+            <input class="form-control" id="password" name="password" type="password" required="required" placeholder="{{i18n.i_password}}" />
+            <small class="form-text text-info">{{i18n.i_register_prompt.safe_password}}</small>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="confirm">{{i18n.i_confirm-password}}</label>
+            <input class="form-control" id="confirm" name="confirm" type="password" required="required" placeholder="{{i18n.i_password}}" />
+            <small class="form-text text-info">
+            {{i18n.i_register_prompt.memorise_password}}
+            </small>
+          </div>
+        </form>
+      </main>
+      <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
+        <div><button class="btn navbar-btn btn-outline-{{>contrastcolor}} btn-sm d-none" id="register">{{i18n.i_register}}</button></div>
+        <a class='navbar-text' href="https://github.com/Hypertopic/Cassandre/wiki">
+          <img src="../../style/info.svg" width="30" height="30" alt="Cassandre" loading="lazy">
+        </a>
+      </nav>
+    </div>
+  {{>script}}
+  <script>
+  var user = fullname = "";
+  $(document).ready(function() {
+    $.ajax({
+      type: 'DELETE',
+      url: '/_session'
+    }).done(function() {
+      stickToHeader();
+    });
+  });
+
+  $('#uliege').on('click', function() {
+    $("#utt").addClass("d-none");
+    $("#uliege").addClass("d-none");
+    $("#newaccount").addClass("d-none");
+    $("#message").html($("#uliege").next().text());
+    $("#message").addClass("alert-info");
+    $('#message').append($('#diaries'));
+    $("#message").removeClass("d-none");
+    $("#diaries").addClass("alert-link");
+    $("#diaries").removeClass("d-none");
+  });
+
+  $('#newaccount').on('click', function() {
+    $("#uliege").addClass("d-none");
+    $("#utt").addClass("d-none");
+    $("#newaccount").addClass("d-none");
+    $("#message").removeClass("d-none");
+    $("form").removeClass("d-none");
+    $("message").removeClass("d-none");
+    $("#register").removeClass("d-none");
+  });
+
+  $('#register').on('click', function() {
+    register();
+    return false;
+  });
+
+  function register() {
+    if($("#password").val() == $("#confirm").val()) {
+      try {
+        $("#register").attr("disabled", "disabled");
+        user = $("#email").val().trim().toLowerCase();
+        fullname = $("#fullname").val().trim();
+        $.ajax({
+          type: "PUT",
+          url: "../../create_user/" + user,
+          contentType: "application/json",
+          data: JSON.stringify({
+            name: user,
+            password: $("#password").val(),
+            fullname: fullname,
+            email: user,
+            roles: [],
+            type: "user"
+          })
+        }).done(onRegistred).fail(registerFail);
+      } catch(err) {
+        $("#register").removeAttr("disabled");
+        onError(err);
+      }
+    } else {
+      onError("{{i18n.i_unmatch-password}}");
+    }
+  }
+
+  function onError(message) {
+    $("#message").addClass("alert-danger");
+    $("#message").html(message);
+  }
+
+  function registerFail(message) {
+    $("#register").removeAttr("disabled");
+    onError(message.status == 409 ? "\"" + user + "\"" + " {{i18n.i_existing-username}}"
+      : "Your request produced an error. " + message.responseText);
+  }
+
+  function onRegistred() {
+    $.ajax({
+      url: '../../userfullname/'+fullname,
+      type: 'GET'
+    }).done(function(u){
+      if (u.rows.length > 0) fullname += ' ('+user+')';
+      createUserDoc();
+    });
+  }
+
+  function createUserDoc() {
+    $.ajax({
+      url: '../../'+user,
+      type: 'PUT',
+      contentType: 'application/json',
+      data: JSON.stringify({
+        '_id': user,
+        'fullname': fullname,
+        'contributors': [user],
+      })
+    }).done(function(){
+      $("#message").html("{{i18n.i_successful-registration}} ");
+      $("#message").removeClass("alert-danger");
+      $("#diaries").removeClass("d-none");
+      $("#register").addClass("d-none");
+      $("#message").addClass("alert-success");
+      $('#message').append($('#diaries'));
+      $("form").slideUp();
+    });
+  }
+
+  {{>layoutscript}}
+  </script>
+  </body>
+</html>

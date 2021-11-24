@@ -8,7 +8,7 @@
   <body>
     <div id="container">
       <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
-        <a class="text-light" id="diaries">
+        <a class="text-{{>contrastcolor}}" id="diaries">
           <img src="../style/brand.svg" width="30" height="30" alt="{{i18n.i_diaries}}" loading="lazy">
         </a>
         <ul class="navbar-nav mr-auto"></ul>
@@ -40,7 +40,7 @@
       <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
         {{#authorized}}
         <div class='pagination'>
-          <button class='btn navbar-btn btn-outline-light btn-sm' id="next">{{i18n.i_show-more}}</button>
+          <button class='btn navbar-btn btn-outline-{{>contrastcolor}} btn-sm' id="next">{{i18n.i_show-more}}</button>
         </div>
         {{/authorized}}
         <a class='navbar-text' href="https://github.com/Hypertopic/Cassandre/wiki">
@@ -58,6 +58,7 @@
   {{#authorized}}
   moment.locale('{{locale}}');
   let cal = new CalHeatMap(),
+      converter = new showdown.Converter({strikethrough: 'true'}),
       all = {},
       created = {},
       commented = {},
@@ -105,7 +106,7 @@
       dataType: "json",
       success: function(data) {
         for (var i in data) {
-          $("#content ul").append('<li class="'+data[i].action+'">'
+          $("#events").append('<li class="'+data[i].action+'">'
             +'<span id="'+data[i].date+'" class="'+data[i].date+' moment"></span>&nbsp;– '
             +'<a href="../'+data[i].type+'/'+data[i].diary+'/'+data[i].id+'">'+data[i].name+'</a>'
             +'</li>');
@@ -113,6 +114,11 @@
       }
     }).done(function(){
       momentRelative('#events');
+      $('.commented>a').html(function(i, text) {
+        var md = converter.makeHtml(text.replace(/&gt;/g, '>').trim())
+        if (md.substring(0,3) == '<p>') md = md.replace(/<\/?p>/g, '');
+        return md;
+      });
     });
   }
 

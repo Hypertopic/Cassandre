@@ -8,8 +8,8 @@
   <body>
     <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item"><a class="d-inline-block text-truncate btn navbar-btn text-light" id="diary">{{diary_name}}</a></li>
-        <a id="toggle-groundings" class="nav-link d-none" data-toggle="collapse" aria-expanded="true" href="#groundings">{{i18n.i_show_groundings}}</a>
+        <li class="nav-item"><a class="d-inline-block text-truncate btn navbar-btn text-{{>contrastcolor}}" id="diary">{{diary_name}}</a></li>
+        <a id="toggle-groundings" class="nav-link btn text-{{>contrastcolor}} d-none" data-toggle="collapse" aria-expanded="true" href="#groundings">{{i18n.i_show_groundings}}</a>
       </ul>
       <ul class="navbar-nav justify-content-between">
         <li class="form-inline justify-content-between">{{>log}}</li>
@@ -69,17 +69,17 @@
       <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
         <div role='group'>
           {{#editable}}
-          <button class='groundings btn btn-outline-light btn-sm collapse show' data-toggle="modal" data-target="#add_grounding" id="add_grounding_btn"><span>{{i18n.i_add_groundings}}</span></button>
-          <button class="btn btn-outline-light btn-sm hidden" id="write_statement" title="{{i18n.i_write_statement}}">
+          <button class='groundings btn btn-outline-{{>contrastcolor}} btn-sm collapse show' data-toggle="modal" data-target="#add_grounding" id="add_grounding_btn"><span>{{i18n.i_add_groundings}}</span></button>
+          <button class="btn btn-outline-{{>contrastcolor}} btn-sm hidden" id="write_statement" title="{{i18n.i_write_statement}}">
             <span class="d-block d-sm-none" title="{{i18n.i_write_statement}}">3V</span>
             <span class="d-none d-sm-block">{{i18n.i_write_statement}}</span>
           </button>
-          <button class="btn btn-outline-light btn-sm hidden" id="add_negative-case" title="{{i18n.i_add_negative-case}}">
+          <button class="btn btn-outline-{{>contrastcolor}} btn-sm hidden" id="add_negative-case" title="{{i18n.i_add_negative-case}}">
             <span class="d-block d-sm-none"><img src="{{>relpath}}style/location.svg" alt="{{i18n.i_add_negative-case}}"></span>
             <span class="d-none d-sm-block">{{i18n.i_add_negative-case}}</span>
           </button>
-          <button class="btn btn-outline-light btn-sm hidden" id="negative-case_done">{{i18n.i_save}}</button>
-          <button class="btn btn-outline-light btn-sm hidden" id="statement_done">{{i18n.i_save}}</button>
+          <button class="btn btn-outline-{{>contrastcolor}} btn-sm hidden" id="negative-case_done">{{i18n.i_save}}</button>
+          <button class="btn btn-outline-{{>contrastcolor}} btn-sm hidden" id="statement_done">{{i18n.i_save}}</button>
           {{/editable}}
           {{#authorized}}
           {{>commentsbtn}}
@@ -112,7 +112,7 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">{{i18n.i_add_groundings}}</h5>
+            <h5 class="modal-title">{{i18n.i_link}}</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">×</span>
             </button>
@@ -184,7 +184,7 @@
               id = r.value['id'],
               ground_href = r.value['id'];
               ground_label = r.value['name'];
-          if ($('#groundings li').length < 2 && document.getElementById(id) == null && ground_href != "{{_id}}") {
+          if ($('#groundings>li').length < 2 && document.getElementById(id) == null && ground_href != "{{_id}}") {
             $("#add_grounding").find('select').append($('<option>', {
               id: ground_href,
               value: ground_href,
@@ -196,12 +196,12 @@
       }
     });
     var shape1 = shape2 = articulated = negative = '',
-        content1 = $('#groundings li').first().find('a').html(),
-        content2 = $('#groundings li').last().find('a').html();
+        content1 = $('#groundings>li').first().find('a').html(),
+        content2 = $('#groundings>li').last().find('a').html();
     {{#editable}}
-    if("{{name}}".replace(/&#39;|&quot;/g, '').indexOf(content1.replace(/"|'/g, '')) == -1
-    || "{{name}}".replace(/&#39;|&quot;/g, '').indexOf(content2.replace(/"|'/g, '')) == -1) {
-      adapt({negative: "{{negative}}"});
+    if("{{name}}".replace(/&#39;|&quot;/g, '').replace(/\t/g, ' ').trim().indexOf(content1.replace(/"|'/g, '').replace(/\s/g, ' ').trim()) == -1
+    || "{{name}}".replace(/&#39;|&quot;/g, '').replace(/\t/g, ' ').trim().indexOf(content2.replace(/"|'/g, '').replace(/\s/g, ' ').trim()) == -1) {
+      if ($('#groundings>li').length == 2) adapt({rename: true});
     }
     {{/editable}}
     switch ("{{link}}") {
@@ -277,11 +277,11 @@
       articulated += negative
       +'<text fill=""><textPath href="#situation" startOffset="50%" text-anchor="middle">{{negative}}</textPath></text>';
     }
-    if ($('#groundings li').length == 1) {
+    if ($('#groundings>li').length == 1) {
       $('#create').remove();
       $('.articulate').addClass('hidden');
       $('#add_grounding_btn').html("{{i18n.i_add_groundings}}");
-      $("#add_grounding").find('.modal-title').html("{{i18n.i_groundings}}");
+      $("#add_grounding").find('.modal-title').append(" <em>"+$('#groundings>li').first().find('a').html()+"</em> {{i18n.i_in}}");
       $("#add_grounding").find('select').append($('<option>', {
         text: "{{i18n.i_select_grounding}}"
       }));
@@ -295,27 +295,22 @@
       $('#add_negative-case').removeClass('hidden');
       $('#write_statement').removeClass('hidden');
       $('#add_grounding_btn').html("{{i18n.i_link}}");
-      $("#add_grounding").find('.modal-title').html("{{i18n.i_link}}");
       $("#add_grounding").find('select').remove();
       $('#'+'{{link}}').prop('title', '{{i18n.i_current-link}}').prop('disabled', true);
       $('.articulate').removeClass('hidden');
     }
     $('#diagram').html(shape1+content1+shape2+content2+articulated);
-    if ($('.statement_text').text().length < 1) {
-      $('#toasts').append('<div class="toast" role="alert">'
-        + '<div class="toast-body alert-warning">'
-        + '<button type="button" class="close" data-dismiss="toast">×</button>'
-        + "{{{i18n.i_next.statement}}} <strong>{{i18n.i_write_statement}}</strong>" + '</div></div>');
-      $('.toast').toast({autohide: false});
-      $('.toast').toast('show');
-    }
-    if ($('.negative_text').text().length < 1 && $('#leaves li').length < 1) {
-      $('#toasts').append('<div class="toast" role="alert">'
-        + '<div class="toast-body alert-info">'
-        + '<button type="button" class="close" data-dismiss="toast">×</button>'
-        + "{{i18n.i_next.negative-case}} {{i18n.i_hereunder_button}}" + '</div></div>');
-      $('.toast').toast({autohide: false});
-      $('.toast').toast('show');
+    var converter = new showdown.Converter({strikethrough: 'true'});
+    converter.setFlavor('github');
+    renderComments(converter);
+    renderPreviews(converter);
+    if ($('#groundings>li').length == 1) {
+      $('#add_grounding').modal('show')
+    } else if ($('.statement_text').text().length < 1) {
+      inform('warning', "{{{i18n.i_next.statement}}} <strong>{{i18n.i_write_statement}}</strong>");
+      if ($('.negative_text').text().length < 1 && $('#leaves li').length < 1) {
+        inform('info', "{{i18n.i_next.negative-case}} {{i18n.i_hereunder_button}}");
+      }
     }
     poller('memo', '{{update_seq}}');
   });
@@ -333,18 +328,30 @@
   function adapt(o) {
     refresh = true;
     var gid = [];
-    for (var i = 0; i < $('#groundings li').length; i++) {
-      gid.push($('#groundings li')[i].id);
+    for (var i = 0; i < $('#groundings>li').length; i++) {
+      gid.push($('#groundings>li')[i].id);
     }
     $("#dialog").dialog('close');
     var data = {
       'action': o,
+      'gid': gid,
       'name': $('#'+gid[0]).find('a').html().trim()
     };
     if (Object.keys(o)[0] == 'grounding') {
-      data.name += ' & '+$('#'+o.grounding).text();
+      var second = {
+        id: o.grounding,
+        text: $('#'+o.grounding).text()
+      }
     } else if (typeof(gid[1]) !== 'undefined') {
-      data.name += ' & '+$('#'+gid[1]).find('a').html().trim();
+      var second = {
+        id: gid[1],
+        text: $('#'+gid[1]+' > a').html().trim()
+      }
+    }
+    if (gid[0].localeCompare(second.id) < 0) {
+      data.name += ' & '+second.text;
+    } else {
+      data.name = second.text+' & '+ data.name;
     }
     $.ajax({
       url: "../../adapt_diagram/{{_id}}",

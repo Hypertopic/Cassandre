@@ -1,0 +1,82 @@
+body {
+  background: linear-gradient(to bottom, #222 0%, #444 2%);
+  font-size: 90%;
+}
+
+#main {
+  margin-top: 6%;
+  text-align: center;
+}
+
+#message {
+  color: #f33;
+  display: inline-block;
+}
+
+form {
+  text-align: left;
+  display: inline-block;
+  width: 500px;
+  max-width: 100%;
+  background: #eff4f6;
+  border: 1px solid #C3D4DB;
+	border-top: 1px;
+  border-radius: 5px;
+  box-shadow: 1px 1px 5px #111;
+}
+
+form fieldset {
+  background: #fefefe;
+  border: none;
+  border: 1px solid #dde0e8;
+  padding: 10px 20px;
+}
+
+form footer {
+  border-top: 1px solid #fff;
+  padding: 20px;
+  height: 40px;
+}
+
+form header {
+  border-radius: 5px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+  text-align: center;
+  font-size: .75em;
+  padding: 0 20px;
+  color: #444;
+}
+
+form label {
+    display: block;
+    margin: 10px 0 0 6px;
+}
+
+fieldset input {
+  display: block;
+  border: 6px solid #F7F9FA;
+  border-radius: 3px;
+  box-shadow: 2px 3px 3px rgba(0, 0, 0, 0.06) inset, 0 0 1px #95a2a7 inset;
+  margin: 3px 0 4px;
+  padding: 8px 6px;
+  width: 100%;
+  display: block;
+}
+
+input[type="submit"] {
+  width: 100px;
+  border-radius: 15px;
+  background: #a1d8f0;
+  background: -webkit-gradient(linear, left top, left bottom, from(#badff3), to(#7acbed));
+  border: 1px solid #7db0cc !important;
+  cursor: pointer;
+  text-shadow: #888 0 1px 0px; 
+  color: #fff;
+  box-shadow: inset rgba(255,255,255,0.6) 0 1px 1px, rgba(0,0,0,0.1) 0 1px 1px;
+  float: right;
+	padding: 10px;
+  font-weight: bold;
+}

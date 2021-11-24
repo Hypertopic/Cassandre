@@ -37,7 +37,9 @@ var shared = {
       {{/diary}}\
     <div id='logged' class='order-3 justify-content-end pl-1'>\
       {{^logged}}\
-      <form id='signin' class='form-inline'>\
+      <button class='btn navbar-btn text-{{>contrastcolor}}' title='{{i18n.i_sign-in}}' id='sign-in'>{{i18n.i_sign-in}}</button>\
+      <button class='btn navbar-btn btn-outline-{{>contrastcolor}}' title='{{i18n.i_register}}' id='register'>{{i18n.i_register}}</button>\
+      <form id='signin' class='form-inline hidden'>\
         <div class='input-group input-group-sm'>\
           <div class='input-group-prepend'>\
             <span class='input-group-text'><img src='{{>relpath}}style/person.svg' alt='' /></span>\
@@ -67,8 +69,9 @@ var shared = {
       </button>\
       {{/logged}}\
     </div></li></ul>",
+  menucolor:"dark",
   contrastcolor:"light",
-  navbarstyle:"navbar navbar-dark bg-dark text-{{>contrastcolor}}",
+  navbarstyle:"navbar navbar-{{>menucolor}} bg-{{>menucolor}} text-{{>contrastcolor}}",
   readrights:"\
     <p id='authorization'>\
       {{i18n.i_readable-by}} <span class='readers'>{{readers_fullnames}}</span>\
@@ -122,6 +125,22 @@ var shared = {
         </div>\
       </div>\
     </div>",
+  storing_fullname_dialog:"\
+    <div id='storing_fullname_dialog' class='modal fade' role='dialog'>\
+      <div class='modal-dialog' role='document'>\
+        <div class='modal-content'>\
+          <div class='modal-body'>\
+            <p><label for='user_fullname'>{{i18n.i_fullname}}</label><br/>\
+              <input id='user_fullname' class='form-control input-sm' placeholder='Jack London'/>\
+              <small class='form-text text-info'>{{i18n.i_register_prompt.fullname}}</small>\
+            </p>\
+          </div>\
+          <div class='modal-footer'>\
+            <button id='storing_fullname' type='button' class='btn btn-secondary'>Ok</button>\
+          </div>\
+        </div>\
+      </div>\
+    </div>",
   comments:"\
     <div id='comments'>\
       {{#comments}}\
@@ -129,10 +148,10 @@ var shared = {
         <span class='meta'><span class='user'>{{user}}</span> (<span class='moment'>{{date}}</span>)</span>:\
         {{#logged}}<span class='meta checker d-none d-sm-inline'>{{#checked}}{{i18n.i_checked_by}} {{checked}}{{/checked}}</span><div class='checkbox'><input type='checkbox' class='form-check-input position-static comment_check' {{#checked}}checked{{/checked}}></div>{{/logged}}<br/>\
         <span class='comment_text'>{{text}}</span>\
-        <input size='80' height='50' type='text' class='form-control comment_edit hidden' value='{{text}}'/>\
+        <div class='comment_edit hidden'>{{text}}</div>\
       </div>\
       {{/comments}}\
-      <textarea rows='5' type='text' class='form-control hidden' placeHolder='{{i18n.i_enter_comment}}'></textarea>\
+      <textarea rows='5' type='text' class='form-control hidden' autocomplete='off' placeHolder='{{i18n.i_enter_comment}}'></textarea>\
     </div>",
   commentsbtn:"\
     <button class='btn navbar-btn btn-outline-{{>contrastcolor}} btn-sm' id='comment_create' title='{{i18n.i_comment}}'>\
@@ -146,6 +165,7 @@ var shared = {
     <script src='{{>relpath}}script/jquery-ui.min.js'></script>\
     <script src='{{>relpath}}style/bootstrap.min.js'></script>\
     <script src='{{>relpath}}script/moment.min.js'></script>\
+    <script src='{{>relpath}}script/showdown.min.js'></script>\
     <link rel='stylesheet' href='{{>relpath}}style/jquery-ui.min.css' />",
   layoutscript:"function stickToHeader() {\
     var h = document.getElementById('header').offsetHeight;\
@@ -166,6 +186,9 @@ var shared = {
     stickToHeader();\
   });\
   var reload = function() {\
+    var here = '{{_id}}';\
+    if (typeof (anchor) !== 'undefined' && anchor > 0) here += '#'+anchor;\
+    self.location = here;\
     if (refresh) location.reload();\
   };\
   String.prototype.trimLeft = String.prototype.trimLeft || function() {\
@@ -228,8 +251,9 @@ var shared = {
       create(classlist[classlist.length - 1], $('#leave-name').val().trim(), $('#kwic').val());\
     }\
   });\
-  function create(type, name, highlight) {\
+  function create(type, name, highlight, anchor) {\
     $('.spinner').removeClass('d-none');\
+    name = name.replace(/\t/g, ' ');\
     if (name.replace(/[ ,]/g, '') == '' && type != 'diagram') {\
       $('.spinner').addClass('d-none');\
       switch (type) {\
@@ -257,7 +281,7 @@ var shared = {
           i = existing_memos.rows.map(function(e) { return e.value.name; }).indexOf(name);\
         }\
         if (i != -1) {\
-          if(existing_memos.rows[i].value.groundings.indexOf('{{_id}}') != -1) {\
+          if(existing_memos.rows[i].value.groundings.indexOf('{{_id}}') != -1 && highlight.length < 1) {\
             $('.spinner').addClass('d-none');\
             alert('{{i18n.i_memo_already_linked}}');\
           } else {\
@@ -267,6 +291,7 @@ var shared = {
             $('#existing_memo').modal('show');\
           }\
         } else {\
+          if (anchor > 0) ground = [{'_id': '{{_id}}', 'preview':[{'text': highlight, 'anchor': anchor}]}];\
           var data = {\
             groundings: ground,\
             history: [{\
@@ -341,7 +366,10 @@ var shared = {
                 'user': user,\
                 'date': new Date().toJSON()\
               };\
-              if (type == 'coding' && highlight.length > 0) data.body += '> '+highlight+'\\n';\
+              if (type == 'coding' && highlight.length > 0) {\
+                if (anchor > 0) highlight = '['+highlight+']({{_id}}#'+anchor+')';\
+                data.body += '> '+highlight+'\\n \\n';\
+              }\
               data.type = type;\
           }\
           if (type) {\
@@ -360,6 +388,13 @@ var shared = {
       });\
     }\
   }\
+  function inform(type, msg){\
+    $('#toasts').append('<div class=\"toast\" role=\"alert\">'\
+      + '<div class=\"toast-body alert-'+type+'\">'\
+      + '<button type=\"button\" class=\"close\" data-dismiss=\"toast\">×</button>'+ msg +'</div></div>');\
+    $('.toast').toast({autohide: false});\
+    $('.toast').toast('show');\
+  }\
   {{/list}}\
   function poller(what, since) {\
     $.ajax({\
@@ -377,6 +412,27 @@ var shared = {
       }\
     });\
   }\
+  function renderComments(converter){\
+    $('.comment_text').html(function(i, text) {\
+      var md = converter.makeHtml(text.replace(/&gt;/g, '>').trim());\
+      if (md.substring(0,3) == '<p>') md = md.substring(3);\
+      if (md.substring(md.length - 4, md.length) == '</p>') md = md.substring(0, md.length - 4);\
+      md = md.replace(/<blockquote>\\s+<p>/g, '<blockquote>');\
+      md = md.replace(/<\\/blockquote>\\s+<p>/g, '<\\/blockquote>');\
+      md = md.replace(/<\\/ol>\\s+<p>/g, '<\\/ol>');\
+      md = md.replace(/<\\/ul>\\s+<p>/g, '<\\/ul>');\
+      md = md.replace(/<\\/p>\\s+<\\/blockquote>/g, '<\\/blockquote>');\
+      md = md.replace(/<\\/?p>/g, '<br/>');\
+      return md;\
+    });\
+  };\
+  function renderPreviews(converter){\
+    $('.preview').html(function(i, text) {\
+      var md = converter.makeHtml(text.replace(/&gt;/g, '>').trim());\
+      md = md.replace(/<\\/?p>/g, '');\
+      return md;\
+    });\
+  };\
   {{#list}}\
   $(window).scroll(function(){\
     if ($(window).scrollTop() == $(document).height() - $(window).height()){\
@@ -583,14 +639,19 @@ var shared = {
     refresh = false;\
     var user = $(this).find('.user').text();\
     comment_id = $(this).closest('.comment').attr('id');\
-    if ('{{logged_fullname}}' == user && !$(event.target).is('input')) {\
+    if ('{{logged_fullname}}'.replace('&#39;','\\'') == user && !$(event.target).is('input')) {\
       $(this).find('.comment_text').hide();\
-      $(this).find('.comment_edit').removeClass('hidden');\
+      $('#comments').find('textarea').text($('#'+comment_id).find('.comment_edit').text());\
+      $('#'+comment_id).append($('#comments').find('textarea'));\
+      $('#comments').find('textarea').attr('id', 'input'+comment_id);\
+      $('#comments').find('textarea').attr('name', 'input'+comment_id);\
+      $('#input'+comment_id).removeClass('hidden');\
       $('#commented').remove();\
       $('#footer > div > button').prop('disabled', true);\
       $('#add-leaves').addClass('hidden');\
       $('#comment_updated').removeClass('hidden');\
       $('#comment_updated').prop('disabled', false);\
+      $('.comment').off('click');\
       $('#kwic').parent().children().addClass('hidden');\
       $('#signout').prop('disabled', true);\
       $('#diary').addClass('disabled');\
@@ -604,11 +665,8 @@ var shared = {
       url: '../../checking_comment/'+$(this).closest('.comment').attr('id'),\
       type: 'PUT',\
       contentType: 'application/json',\
-      data: '{{logged_fullname}}'\
+      data: '{{logged_fullname}}'.replace('&#39;','\\'')\
     }).done(function(){refresh = true});\
-  });\
-  $('.comment_edit').on('keypress', function(key) {\
-    if (key.which == 13) update_comment(comment_id);\
   });\
   $('#comment_updated').on('click', function() {\
     update_comment(comment_id);\
@@ -619,7 +677,7 @@ var shared = {
       url: '../../update_comment_content/'+id,\
       type: 'PUT',\
       contentType: 'application/json',\
-      data: $('#'+id+'>input').val().trim(),\
+      data: $('#'+id+'>textarea').val().trim(),\
       success: reload\
     });\
   };\
@@ -650,15 +708,27 @@ var shared = {
   var refresh = true;\
   var user = '{{peer}}';\
   if ('{{logged}}') user = '{{logged}}';\
+  $('#sign-in').on('click', function() {\
+    $('#signin').removeClass('hidden');\
+    $('#sign-in').addClass('hidden');\
+    $('#register').addClass('hidden');\
+  });\
+  $('#register').on('click', function() {\
+    self.location = '{{>relpath}}register/';\
+  });\
   $('#signin').on('submit', function(e) {\
     e.preventDefault();\
     $(this).find('input').first().val($(this).find('input').first().val().toLowerCase());\
+    var username = $(this).find('input').first().val().toLowerCase();\
     $.ajax({\
       url: '/_session',\
       type: 'POST',\
       data: $(this).serialize(),\
       success: reload,\
-      error: function() {alert('{{i18n.i_wrong-password}}')}\
+      error: function(request) {\
+        var mismatch = '{{i18n.i_wrong-password}}'.replace('&#39;','\\'');\
+        alert(mismatch);\
+      }\
     });\
   });\
   $('#signout').on('click', function() {\
@@ -687,8 +757,51 @@ var shared = {
         'by': memo\
       }),\
       {{/list}}\
-    }).done({{#list}}reload{{/list}});\
-  }",
+    }).done({{#list}}reload{{/list}})\
+    .fail({{#list}}function(data){$('#storing_fullname_dialog').modal('show')}{{/list}});\
+  }\
+  {{^logged_fullname}}\
+  $('#storing_fullname').on('click', function() {\
+    var fullname = $('#user_fullname').val().trim();\
+    preventingHomonyms(fullname);\
+  });\
+  $('#user_fullname').on('keypress', function(key) {\
+    if (key.which == 13) {\
+      var fullname = $('#user_fullname').val().trim();\
+      preventingHomonyms(fullname);\
+    }\
+  });\
+  function preventingHomonyms(fullname) {\
+    if (fullname.length > 0) $.ajax({\
+      url: '{{>relpath}}userfullname/'+fullname,\
+      type: 'GET'\
+    }).done(function(u){\
+      if (u.rows.length > 0) fullname += ' ({{logged}})';\
+      createUserDoc(fullname);\
+    });\
+  };\
+  function createUserDoc(fullname) {\
+    $.ajax({\
+      url: '{{>relpath}}{{logged}}',\
+      type: 'PUT',\
+      contentType: 'application/json',\
+      data: JSON.stringify({\
+        '_id': '{{logged}}',\
+        'contributors': ['{{logged}}'],\
+        'readers': ['u221250'],\
+        'fullname': fullname\
+      })\
+    }).done(reload)\
+    .fail(function(data){\
+      $.ajax({\
+        url: '{{>relpath}}username/{{logged}}',\
+        type: 'PUT',\
+        contentType: 'application/json',\
+        data: fullname\
+      }).done(reload)\
+    });\
+  }\
+  {{/logged_fullname}}",
   render: "\
     $.ajax({\
       type: 'GET',\
@@ -698,25 +811,9 @@ var shared = {
       var maintenance_start = new Date(data.date);\
       var maintenance_end = moment(maintenance_start).add(30, 'm').toDate();\
       if (maintenance_start > new Date(Date.now())) {\
-        $('#toasts').append('\
-          <div class=\"toast\" role=\"alert\" aria-live=\"assertive\">\
-            <div class=\"toast-body alert-danger\">\
-            <button type=\"button\" class=\"close\" data-dismiss=\"toast\">×</button>\
-            {{i18n.i_maintenance}} '+moment(data.date).calendar().toLowerCase()+'\
-            </div>\
-          </div>');\
-        $('.toast').toast({autohide: false});\
-        $('.toast').toast('show');\
+        inform('danger', '{{i18n.i_maintenance}} '+moment(data.date).calendar().toLowerCase());\
       } else if (maintenance_end > new Date(Date.now())) {\
-        $('#toasts').append('\
-          <div class=\"toast\" role=\"alert\" aria-live=\"assertive\">\
-            <div class=\"toast-body alert-danger\">\
-            <button type=\"button\" class=\"close\" data-dismiss=\"toast\">×</button>\
-            {{i18n.i_maintenance-in-progress}} '+moment(data.date).add(30, 'm').fromNow()+'\
-            </div>\
-          </div>');\
-        $('.toast').toast({autohide: false});\
-        $('.toast').toast('show');\
+        inform('danger', '{{i18n.i_maintenance-in-progress}} '+moment(data.date).add(30, 'm').fromNow());\
       }\
     });\
     stickToHeader();\
@@ -739,7 +836,8 @@ var shared = {
     }\
     let refresh = true;\
     {{^statements}}\
-    {{^link}}if ($('#groundings li').length > 1) $('#remove_grounding_btn').removeClass('d-none');{{/link}}\
+    {{^link}}if (($('#groundings li').length > 1) || ('{{type}}' == 'coding' && $('#groundings li').first().find('.preview').text().indexOf('---') > -1))\
+        $('#remove_grounding_btn').removeClass('d-none');{{/link}}\
     {{#type}}{{#logged}}track('{{_id}}');{{/logged}}{{/type}}\
     {{/statements}}\
   "

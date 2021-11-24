@@ -5,8 +5,13 @@ function(o) {
   if (o.corpus)
     emit([o._id, 'D'], {'_id': o.corpus});
   for (var key in o.groundings) {
-    emit([o._id, 'G'], {'_id': o.groundings[key]});
-    emit([o.groundings[key], 'L']);
+    if (typeof o.groundings[key] === 'string' || o.groundings[key] instanceof String) {
+      emit([o._id, 'G'], {'_id': o.groundings[key]});
+      emit([o.groundings[key], 'L']);
+    } else {
+      emit([o._id, 'G'], o.groundings[key]);
+      emit([o.groundings[key]._id, 'L']);
+    }
   }
   if (o.commented)
     emit([o.commented, 'M', o.date], {'_id': o.user, 'date': o.date, 'text': o.text, 'checked': o.checked, 'id': o._id});

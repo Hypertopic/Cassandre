@@ -7,7 +7,7 @@
   <body>
     <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item"><a class="nav-link text-{{>contrastcolor}} text-truncate" id="diary">&nbsp;</a></li>
+        <li class="nav-item"><a class="nav-link btn text-{{>contrastcolor}} text-truncate" id="diary">&nbsp;</a></li>
         <li class="dropdown d-none">
           <a class="nav-link dropdown-toggle" href="#" id="filter" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           {{i18n.i_filter}}
@@ -38,7 +38,7 @@
           <div class="context">{{pole}}</div>
           <div class="context d-none d-md-inline">{{post}}</div>
           {{/context}}
-          <a class="{{type}}" href="../../{{path}}/{{corpus}}/{{id}}" title="{{title}}">
+          <a class="{{type}}" href="../../{{path}}/{{corpus}}/{{id}}#{{par}}" title="{{title}}">
             <div class="ml-4 d-inline"></div>
             <span class="ml-1 d-none d-xl-inline">{{title}}</span>
           </a>

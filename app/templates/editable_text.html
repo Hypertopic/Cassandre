@@ -38,12 +38,13 @@
         if (!data.body) {
           var body = data.speeches.map(function(a) {
             var turn = a.text;
-            if (a.actor) turn = '**'+a.actor.trim()+'** '+turn;
+            if (a.actor) turn = a.actor.trim()+': '+turn;
             return turn;
           });
           data.body = body.join('\n \n');
           data.diary = data.corpus;
           delete data.corpus;
+          delete data.speeches;
           data.type = "interview";
         }
         $.ajax({

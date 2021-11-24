@@ -101,7 +101,7 @@ function(req2) {
             reply.query = {
               "startkey": '["'+diary+'", "'+order+'", '+logged+', "M", "'+start+'"]',
               "endkey":   '["'+diary+'", "'+order+'", '+logged+', "M", {}]',
-              "limit": '30',
+              "limit": '40',
               "include_docs": 'true'
             };
           break;
@@ -301,19 +301,37 @@ function(req2) {
     case 'track_memo':
     case 'modify_rights':
     case 'reader_unsubscribe':
+    case 'username':
       reply.path = '_update/'+path[0]+'/'+path[1];
     break;
     case 'user':
-      reply.path = "_list/user/user";
-      reply.query = {
-        "startkey": '["'+path[1]+'", {}]',
-        "endkey":   '["'+path[1]+'"]',
-        "descending": "true",
-        "include_docs": "true"
-      };
-      if (path[2]) {
-        reply.query.startkey = '["'+path[1]+'", "'+path[2]+'"]';
-        reply.query.limit = "30";
+      switch (path.length) {
+        case 3:
+          reply.path = "_list/user/user";
+          reply.query = {
+            "startkey": '["'+path[1]+'", "'+path[2]+'"]',
+            "endkey":   '["'+path[1]+'"]',
+            "descending": "true",
+            "include_docs": "true",
+            "limit": "30"
+          };
+        break;
+        case 2:
+          reply.path = "_list/user/user";
+          reply.query = {
+            "startkey": '["'+path[1]+'", {}]',
+            "endkey":   '["'+path[1]+'"]',
+            "descending": "true",
+            "include_docs": "true"
+          };
+        break;
+        case 1:
+          reply.path = "_list/users/users";
+          reply.query = {
+            "startkey": '['+logged+']',
+            "endkey":   '['+logged+', {}]'
+          };
+        break;
       }
     break;
     case 'tasklist':
@@ -347,6 +365,12 @@ function(req2) {
         "limit": '5'
       };
     break;
+    case 'userfullname':
+      reply.path = "_view/userfullname/";
+      reply.query = {
+        "key": '"'+path[1]+'"'
+      };
+    break;
     case 'network':
       var diary = path[1];
       reply.path = "_list/network/memo_attribute";
@@ -363,6 +387,12 @@ function(req2) {
         "feed": 'longpoll',
         "since": path[3]
       };
+    break;
+    case 'register':
+      reply.path = '_show/register';
+    break;
+    case 'create_user':
+      if (req2.method == 'PUT') reply.path = '../../../_users/org.couchdb.user:'+path[1];
     break;
     case 'script':
     case 'style':

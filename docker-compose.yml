@@ -17,7 +17,7 @@ services:
 
   proxy:
     image: node:lts
-    command: npm start
+    command: sh -c "npm install && npm start"
 #    ports:
 #      - 80:80
     volumes:

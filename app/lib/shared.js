@@ -248,7 +248,7 @@ var shared = {
   $('#leave-name').on('keypress', function(key) {\
     if (['coding','diagram'].indexOf('{{type}}') < 0 && key.which == 13) {\
       var classlist = $(this)[0].nextElementSibling.childNodes[1].nextElementSibling.classList;\
-      create(classlist[classlist.length - 1], $('#leave-name').val().trim(), $('#kwic').val());\
+      create(classlist[classlist.length - 1], $('#leave-name').val().trim(), $('#kwic').val(), anchor);\
     }\
   });\
   function create(type, name, highlight, anchor) {\

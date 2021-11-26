@@ -35,19 +35,8 @@ Authentication settings
 
 If you want users to be managed by CouchDB:
 
-1. Go to the CouchDB administration interface.
-2. Create a database named '_users'.
-3. In this database, create a user document. For example:
-
-```json
-{
-    "_id": "org.couchdb.user:alice",
-    "name": "alice",
-    "type": "user",
-    "roles": [],
-    "password": "myGreatPassword"
-}
-```
+1. In CouchDB, [create a database](http://localhost:5984/_utils/#/_all_dbs) named `_users`.
+2. In Cassandre, [create a user account](http://localhost/register/).
 
 ### LDAP authentication
 

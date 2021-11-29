@@ -28,26 +28,14 @@ Two services are now available:
 - Cassandre user interface at <http://localhost/>,
 - CouchDB administration interface at <http://localhost:5984/_utils/> (that should be kept accessible only to system administrators).
 
-Authentication settings
------------------------
+Security settings
+-----------------
 
-### CouchDB authentication
+By default, users are managed both by CouchDB and LDAP.
 
-If you want users to be managed by CouchDB:
+1. In CouchDB, [create an administrator account](http://localhost:5984/_utils/#createAdmin).
+2. In CouchDB, [create a database](http://localhost:5984/_utils/#/_all_dbs) named `_users`.
+3. Choose a password and set in as the `secret` in `conf/couchdb.ini` and `forwardedSecretLogin`.
+4. Set LDAP settings to fit your own LDAP server.
 
-1. In CouchDB, [create a database](http://localhost:5984/_utils/#/_all_dbs) named `_users`.
-2. In Cassandre, [create a user account](http://localhost/register/).
-
-### LDAP authentication
-
-If you want users to be managed by the LDAP server of your organization:
-
-1. In `docker-compose.yml`
- - move `ports` section from service `proxy` to service `ldap_proxy`,
- - in the `depends_on` section of service `running_infrastructure`, add `ldap_proxy`.
-2. In `conf/couchdb.ini`
-  - uncomment the `authentication_handlers` directive with `proxy_auth`,
-  - change the `secret` with a secure password.
-3. In `aaaforrest.json`
-  - change the `forwardedSecretLogin` with the secure password chosen in step #2,
-  - set LDAP settings to fit your own LDAP server.
+You can [create a user account](http://localhost/register/) from Cassandre.

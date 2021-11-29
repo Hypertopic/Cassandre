@@ -3,7 +3,8 @@
     "hostProxy": "",
     "host": "proxy",
     "authentication": [
-      {"url": "ldap://ldap.forumsys.com", "id": "uid", "dn": "dc=example,dc=com"}
+      {"url": "ldap://ldap.forumsys.com", "id": "uid", "dn": "dc=example,dc=com"},
+      {"url": "http://proxy/"}
     ],
     "forwardedLoginSecret": "TO_BE_CHANGED",
     "sessionHandler": {

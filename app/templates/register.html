@@ -95,7 +95,7 @@
         fullname = $("#fullname").val().trim();
         $.ajax({
           type: "PUT",
-          url: "../../create_user/" + user,
+          url: "/_users/org.couchdb.user:" + user,
           contentType: "application/json",
           data: JSON.stringify({
             name: user,
@@ -132,6 +132,17 @@
       type: 'GET'
     }).done(function(u){
       if (u.rows.length > 0) fullname += ' ('+user+')';
+      login();
+    });
+  }
+
+  function login() {
+    $.ajax({
+      url: '../../_session',
+      type: 'POST',
+      contentType: 'application/x-www-form-urlencoded',
+      data: "name=" + user + "&password=" + $("#password").val()
+    }).done(function(){
       createUserDoc();
     });
   }

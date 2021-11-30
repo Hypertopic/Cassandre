@@ -27,11 +27,11 @@ services:
     - couchdb
 
   ldap_proxy:
-    image: benel/aaaforrest:1.0.0
+    image: benel/aaaforrest
     ports:
       - 80:80 #
     volumes:
-      - ./conf/aaaforrest.json:/AAAforREST/conf/config.json:ro
+      - ./conf/aaaforrest.yml:/AAAforREST/conf/config.yml:ro
     working_dir: /AAAforREST
     depends_on:
       - proxy

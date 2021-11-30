@@ -724,6 +724,7 @@ var shared = {
       url: '/_session',\
       type: 'POST',\
       data: $(this).serialize(),\
+      contentType: 'application/x-www-form-urlencoded',\
       success: reload,\
       error: function(request) {\
         var mismatch = '{{i18n.i_wrong-password}}'.replace('&#39;','\\'');\

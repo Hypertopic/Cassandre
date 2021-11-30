@@ -1,0 +1,20 @@
+port: 80
+service: proxy
+path: ''
+secret: TO_BE_CHANGED
+logFormat: dev
+session:
+  proxy: true
+  cookie:
+    sameSite: none
+    secure: auto
+  secret: TO_BE_CHANGED2
+  resave: false
+  saveUninitialized: false
+  unset: destroy
+ldap:
+  url: ldap://ldap.forumsys.com
+  searchBase: dc=example,dc=com
+  searchFilter: (uId={{username}})
+#cors:
+#record:

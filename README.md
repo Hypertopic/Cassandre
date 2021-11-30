@@ -20,8 +20,7 @@ Installation requirements
 Installation procedure
 ----------------------
 
-    docker-compose up -d running_infrastructure
-    docker-compose run --rm push_app
+    docker-compose up -d
 
 Two services are now available:
 

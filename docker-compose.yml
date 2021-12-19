@@ -27,7 +27,7 @@ services:
     - couchdb
 
   ldap_proxy:
-    image: benel/aaaforrest
+    image: benel/aaaforrest:latest
     ports:
       - 80:80 #
     volumes:

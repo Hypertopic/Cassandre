@@ -120,6 +120,7 @@
   {{>script}}
   <script>
   var refresh = true,
+      candidates = [],
       userids = [];
   $(document).ready(function() {
     {{>render}}
@@ -265,6 +266,10 @@
   });
 
   $('#add_grounding').on('show.bs.modal', function (event) {
+    candidates = [];
+    $('#add_grounding select').children("option").each(function(){
+      candidates.push($(this).val());
+    })
     $.ajax({
       url: "../../memo_attribute/{{diary}}",
       type: "GET",
@@ -274,7 +279,7 @@
         var r = ground_candidates.rows[i],
             id = r.value['id'],
             ground_type = r.value['type'];
-        if(document.getElementById(id) == null && id != "{{_id}}" && ground_type == 'coding') {
+        if(document.getElementById(id) == null && id != "{{_id}}" && ground_type == 'coding' && candidates.indexOf(id) < 0) {
           $("#add_grounding").find('select').append($('<option>', {
             value: id,
             text: r.value['name']
@@ -287,12 +292,18 @@
   });
 
   $('#remove_grounding').on('show.bs.modal', function (event) {
+    candidates = [];
+    $('#remove_grounding select').children("option").each(function(){
+      candidates.push($(this).val());
+    })
     $('#groundings').children('li').each(function() {
       var id = ($(this).attr('id')),
-          name = ($(this).find('a').text());
+          name = ($(this).find('a:first').text());
       if (name.length > 45) name = name.substr(0,45)+'...';
+      if (candidates.indexOf(id) < 0)
       $("#remove_grounding").find('select').append($('<option>', {
         value: id,
+        title: ($(this).find('a:first').text()),
         text: name
       }));
     });

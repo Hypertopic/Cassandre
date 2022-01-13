@@ -137,6 +137,7 @@
   <script>
   let connected_nodes = "{{connected_nodes}}".split(','),
       articulations = [],
+      candidates = [],
       edges = [],
       main = document.getElementById("content"),
       container = document.getElementById('graph'),
@@ -265,7 +266,11 @@
   });
 
   $('#add_grounding').on('show.bs.modal', function (event) {
-    refresh = false;
+    refresh = false,
+    candidates = [];
+    $('#select_grounding').children("option").each(function(){
+      if($(this).val() != "{{i18n.i_select_grounding}}") candidates.push(JSON.parse($(this).val()).id);
+    })
     $.ajax({
       url: "../../memo_type/{{diary}}/diagram",
       type: "GET",
@@ -275,7 +280,7 @@
           var r = grounds.rows[i],
               id = r.value['id'],
               obj = {'id': id, 'groundings': r.value['groundings'], 'link': r.value['link']};
-          if(document.getElementById(id) == null && id != "{{_id}}") {
+          if(document.getElementById(id) == null && id != "{{_id}}" && candidates.indexOf(id) < 0) {
             articulations.push(obj);
             $("#select_grounding").append($('<option>', {
               value: JSON.stringify(obj),

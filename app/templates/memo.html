@@ -224,7 +224,7 @@
       trigrams = {},
       leaf_type = leaf_id = resume = '',
       anchor = 0,
-      options = [],
+      candidates = [],
       userids = [],
       help = [];
   help["field"] = {init: "{{{i18n.i_content.field}}}", next: "{{{i18n.i_next.field}}}"};
@@ -573,6 +573,10 @@
   });
 
   $('#add_grounding').on('show.bs.modal', function (event) {
+    candidates = [];
+    $('#select_grounding').children("option").each(function(){
+      candidates.push($(this).val());
+    })
     $.ajax({
       url: "../../memo_attribute/{{diary}}",
       type: "GET",
@@ -584,7 +588,7 @@
               type = r.value['type'],
               name = r.value['name'];
           if (name.length > 45) name = name.substr(0,45)+'...';
-          if(document.getElementById(id) == null && id != "{{_id}}") {
+          if(document.getElementById(id) == null && id != "{{_id}}" && candidates.indexOf(id) < 0) {
             $('#type_filter select option[value="' + type + '"]').removeAttr("hidden");
             $("#select_grounding").append($('<option>', {
               title: r.value['name'],
@@ -626,9 +630,9 @@
   })
 
   $('#remove_grounding').on('show.bs.modal', function (event) {
-    options = [];
+    candidates = [];
     $('#remove_grounding select').children("option").each(function(){
-      options.push($(this).val());
+      candidates.push($(this).val());
     })
     $('#groundings').children('li').each(function() {
       var id = ($(this).attr('id')),
@@ -645,7 +649,7 @@
   function addOptions(id, name) {
     var shortname = name;
     if (name.length > 45) shortname = name.substr(0,45)+'...';
-    if (options.indexOf(id) < 0)
+    if (candidates.indexOf(id) < 0)
     $("#remove_grounding").find('select').append($('<option>', {
       value: id,
       title: name,

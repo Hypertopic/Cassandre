@@ -23,25 +23,25 @@ services:
     volumes:
       - .:/app
     working_dir: /app
+    depends_on:
+    - couchdb
 
   ldap_proxy:
-    image: benel/aaaforrest:1.0.0
+    image: benel/aaaforrest:latest
     ports:
       - 80:80 #
     volumes:
-      - ./conf/aaaforrest.json:/AAAforREST/conf/config.json:ro
+      - ./conf/aaaforrest.yml:/AAAforREST/conf/config.yml:ro
     working_dir: /AAAforREST
-
-  running_infrastructure:
-    image: dadarek/wait-for-dependencies
-    command: couchdb:5984
     depends_on:
-      - couchdb
       - proxy
-      - ldap_proxy #
 
   push_app:
     image: benel/couchapp
-    command: push . http://cassandre_couchdb_1:5984/cassandre
+    command: push .
+    environment:
+      - URI=http://couchdb:5984/cassandre
     volumes:
       - ./app:/app
+    depends_on:
+      - couchdb

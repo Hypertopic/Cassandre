@@ -391,8 +391,8 @@ function(req2) {
     case 'register':
       reply.path = '_show/register';
     break;
-    case 'create_user':
-      if (req2.method == 'PUT') reply.path = '../../../_users/org.couchdb.user:'+path[1];
+    case '_users':
+      reply.path = '../../../_users/' + path[1];
     break;
     case 'script':
     case 'style':

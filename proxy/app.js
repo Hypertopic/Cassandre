@@ -1,5 +1,6 @@
 var app = require('express')(),
   proxy = require('express-http-proxy'),
+  logger = require('morgan'),
   url = require('url'),
   http = require('http'),
   async = require('async');
@@ -25,6 +26,8 @@ function getJSON(url, callback) {
     });
   });
 }
+
+app.use(logger('dev'));
 
 function path(module, key, pattern) {
   var encodedPattern = encodeURIComponent(pattern);

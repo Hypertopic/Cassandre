@@ -219,6 +219,7 @@
       {{/authorized}}
     </nav>
   {{>script}}
+  <script src="{{>relpath}}script/grounding.js"></script>
   <script>
   var metrics = {},
       trigrams = {},
@@ -227,6 +228,9 @@
       candidates = [],
       userids = [],
       help = [];
+  var diary_id = "{{diary}}",
+      this_id = "{{_id}}",
+      this_type = "{{type}}";
   help["field"] = {init: "{{{i18n.i_content.field}}}", next: "{{{i18n.i_next.field}}}"};
   help["interview"] = {init: "{{{i18n.i_content.transcript}}}", next: "{{{i18n.i_next.transcript}}}"};
   help["transcript"] = {init: "{{{i18n.i_content.transcript}}}", next: "{{{i18n.i_next.transcript}}}"};
@@ -571,63 +575,6 @@
       success: reload
     });
   });
-
-  $('#add_grounding').on('show.bs.modal', function (event) {
-    candidates = [];
-    $('#select_grounding').children("option").each(function(){
-      candidates.push($(this).val());
-    })
-    $.ajax({
-      url: "../../memo_attribute/{{diary}}",
-      type: "GET",
-      dataType: "json",
-      success: function(ground_candidates) {
-        for (var i in ground_candidates.rows) {
-          var r = ground_candidates.rows[i],
-              id = r.value['id'],
-              type = r.value['type'],
-              name = r.value['name'];
-          if (name.length > 45) name = name.substr(0,45)+'...';
-          if(document.getElementById(id) == null && id != "{{_id}}" && candidates.indexOf(id) < 0) {
-            $('#type_filter select option[value="' + type + '"]').removeAttr("hidden");
-            $("#select_grounding").append($('<option>', {
-              title: r.value['name'],
-              text: name,
-              class: type,
-              value: id
-            }));
-          }
-        }
-        $('#loading').remove();
-        $('#type_filter').removeAttr("hidden");
-        $('#select_grounding').removeAttr("hidden");
-        switch ('{{type}}') {
-          case ('field'):
-          case ('transcript'):
-          case ('interview'):
-            $('#type_filter select option[value="operational"]').prop("selected", true);
-            filter('operational');
-            break;
-          case ('coding'):
-            $('#type_filter select option[value="interview"]').prop("selected", true);
-            filter('interview');
-            break;
-          case ('theoretical'):
-            $('#type_filter select option[value="coding"]').prop("selected", true);
-            filter('coding');
-            break;
-          case ('operational'):
-            $('#type_filter select option[value="theoretical"]').prop("selected", true);
-            filter('theoretical');
-            break;
-          case ('storyline'):
-            $('#type_filter select option[value="diagram"]').prop("selected", true);
-            filter('diagram');
-            break;
-        }
-      }
-    });
-  })
 
   $('#remove_grounding').on('show.bs.modal', function (event) {
     candidates = [];

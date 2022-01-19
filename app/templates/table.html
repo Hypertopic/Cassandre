@@ -118,10 +118,14 @@
       </select>
     </div>
   {{>script}}
+  <script src="{{>relpath}}script/grounding.js"></script>
   <script>
   var refresh = true,
       candidates = [],
       userids = [];
+  var diary_id = "{{diary}}",
+      this_id = "{{_id}}",
+      this_type = "{{type}}";
   $(document).ready(function() {
     {{>render}}
     moment.locale('{{locale}}');
@@ -263,32 +267,6 @@
   $('#add').on('click', function() {
     var classlist = $(this)[0].classList;
     create(classlist[classlist.length - 1], $('#leave-name').val().trim());
-  });
-
-  $('#add_grounding').on('show.bs.modal', function (event) {
-    candidates = [];
-    $('#add_grounding select').children("option").each(function(){
-      candidates.push($(this).val());
-    })
-    $.ajax({
-      url: "../../memo_attribute/{{diary}}",
-      type: "GET",
-      dataType: "json"
-    }).done(function (ground_candidates){
-      for (var i in ground_candidates.rows) {
-        var r = ground_candidates.rows[i],
-            id = r.value['id'],
-            ground_type = r.value['type'];
-        if(document.getElementById(id) == null && id != "{{_id}}" && ground_type == 'coding' && candidates.indexOf(id) < 0) {
-          $("#add_grounding").find('select').append($('<option>', {
-            value: id,
-            text: r.value['name']
-          }));
-        }
-      }
-      $('#loading').remove();
-      $('#select_grounding').removeAttr("hidden");
-    });
   });
 
   $('#remove_grounding').on('show.bs.modal', function (event) {

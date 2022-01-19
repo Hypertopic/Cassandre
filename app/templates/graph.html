@@ -134,6 +134,7 @@
   <script src="../../script/vis.min.js"></script>
   <script src="../../script/viz.js"></script>
   <script src="../../script/full.render.js"></script>
+  <script src="{{>relpath}}script/grounding.js"></script>
   <script>
   let connected_nodes = "{{connected_nodes}}".split(','),
       articulations = [],
@@ -143,6 +144,9 @@
       container = document.getElementById('graph'),
       userids = [],
       nodes = [];
+  var diary_id = "{{diary}}",
+      this_id = "{{_id}}",
+      this_type = "{{type}}";
   $(document).ready(function() {
     {{>render}}
     $('#groundings').collapse({toggle: false});
@@ -264,38 +268,6 @@
     drawGraphViz();
     $('#graph').addClass('d-none');
   });
-
-  $('#add_grounding').on('show.bs.modal', function (event) {
-    refresh = false,
-    candidates = [];
-    $('#select_grounding').children("option").each(function(){
-      if($(this).val() != "{{i18n.i_select_grounding}}") candidates.push(JSON.parse($(this).val()).id);
-    })
-    $.ajax({
-      url: "../../memo_type/{{diary}}/diagram",
-      type: "GET",
-      dataType: "json",
-        success: function(grounds) {
-        for (var i in grounds.rows) {
-          var r = grounds.rows[i],
-              id = r.value['id'],
-              obj = {'id': id, 'groundings': r.value['groundings'], 'link': r.value['link']};
-          if(document.getElementById(id) == null && id != "{{_id}}" && candidates.indexOf(id) < 0) {
-            articulations.push(obj);
-            $("#select_grounding").append($('<option>', {
-              value: JSON.stringify(obj),
-              title: r.value['name'],
-              text: r.value['name']
-            }));
-          };
-        }
-        $('#loading').remove();
-        $('#select_grounding').removeAttr("hidden");
-        $('#all-articulations').parent().removeAttr("hidden");
-        $("#one-articulation").prop("checked", true).trigger("click");
-      }
-    });
-  })
 
   $('#all-articulations').on('click', function() {
     $('#integrate_all-articulations').removeClass('d-none');

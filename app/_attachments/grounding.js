@@ -68,3 +68,33 @@ $('#add_grounding').on('show.bs.modal', function (event) {
   });
 })
 
+$('#remove_grounding').on('show.bs.modal', function (event) {
+  if (this_type == "graph") refresh = false;
+  candidates = [];
+  $('#remove_grounding select').children("option").each(function(){
+    candidates.push($(this).val());
+  })
+  $('#groundings').children('li').each(function() {
+    var id = ($(this).attr('id')),
+        name = ($(this).find('a:first').text());
+    addOptions(id, name);
+    if (["graph","table"].indexOf(this_type) == -1) $('#'+id).find('.preview a').each(function() {
+      var href = $(this).attr('href');
+      if (href.includes(id)) addOptions(href, '> '+$(this).text());
+    });
+  });
+  if ($('#groundings li').length < 2) $("#remove_grounding").find('option').eq('1').attr("disabled", "disabled");
+});
+
+function addOptions(id, name) {
+  var shortname = name;
+  if (name.length > 45) shortname = name.substr(0,45)+'...';
+  if (this_type == "graph") id = JSON.stringify({'id': id})
+  if (candidates.indexOf(id) < 0) {
+    $("#remove_grounding").find('select').append($('<option>', {
+      value: id,
+      title: name,
+      text: shortname
+    }));
+  }
+}

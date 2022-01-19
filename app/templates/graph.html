@@ -143,8 +143,8 @@
       main = document.getElementById("content"),
       container = document.getElementById('graph'),
       userids = [],
-      nodes = [];
-  var diary_id = "{{diary}}",
+      nodes = [],
+      diary_id = "{{diary}}",
       this_id = "{{_id}}",
       this_type = "{{type}}";
   $(document).ready(function() {
@@ -284,20 +284,6 @@
     record('integrate_everything', JSON.stringify(articulations));
   });
 
-  $('#remove_grounding').on('show.bs.modal', function (event) {
-    refresh = false;
-    $('#groundings').children('li').each(function() {
-      var id = ($(this).attr('id')),
-          name = ($(this).find('a').text());
-      if (name.length > 45) name = name.substr(0,45)+'...';
-      $("#remove_grounding").find('select').append($('<option>', {
-        value: JSON.stringify({'id': id}),
-        title: ($(this).find('a').text()),
-        text: name
-      }));
-    });
-  });
-
   function destroyGraphViz() {
     var svg = document.getElementsByTagName("svg");
     if (svg.length > 0) main.removeChild(svg[0]);
@@ -342,27 +328,27 @@
   }
 
   function record(action, diagram) {
-        if (diagram !== '') diagram = JSON.parse(diagram);
-        var data = {
-          'action': action,
-          'connected_nodes': connected_nodes,
-          'diagram': diagram
-        };
-        $.ajax({
-          type: "PUT",
-          url: "../../adapt_graph/{{_id}}",
-          contentType: "application/json",
-          data: JSON.stringify(data),
-          error: function(request) {
-            alert(
-              (JSON.parse(request.responseText).reason || request.responseText)
-              + '\nCode ' + request.status
-            );
-          },
-        }).done(function () {
-          refresh = true;
-          location.replace("{{_id}}")
-        });
+    if (diagram !== '') diagram = JSON.parse(diagram);
+    var data = {
+      'action': action,
+      'connected_nodes': connected_nodes,
+      'diagram': diagram
+    };
+    $.ajax({
+      type: "PUT",
+      url: "../../adapt_graph/{{_id}}",
+      contentType: "application/json",
+      data: JSON.stringify(data),
+      error: function(request) {
+        alert(
+          (JSON.parse(request.responseText).reason || request.responseText)
+          + '\nCode ' + request.status
+        );
+      },
+    }).done(function () {
+      refresh = true;
+      location.replace("{{_id}}")
+    });
   }
 
   {{>rightsscript}}

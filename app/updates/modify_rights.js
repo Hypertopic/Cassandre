@@ -26,5 +26,16 @@ function (doc, req) {
       }
     break;
   }
+  if (doc.contributors && doc.readers && doc.readers.length > 1) {
+    for (var r = 0; r < doc.readers.length; r++) {
+      if(doc.contributors.indexOf(doc.readers[r]) > -1) doc.readers.splice(r, 1);
+    }
+  }
+  if (doc.contributors && doc.readers) {
+    for (var c = 0; c < doc.contributors.length; c++) {
+      var r = doc.readers.indexOf(doc.contributors[c]);
+      if (r > -1 && doc.readers.length > 1) doc.readers.splice(r, 1);
+    }
+  }
   return [doc, 'Rights updated']
 }

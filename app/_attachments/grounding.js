@@ -39,8 +39,6 @@ $('#add_grounding').on('show.bs.modal', function (event) {
     $('#loading').remove();
     $('#type_filter').removeAttr("hidden");
     $('#select_grounding').removeAttr("hidden");
-    $('#all-articulations').parent().removeAttr("hidden");
-    $("#one-articulation").prop("checked", true).trigger("click");
     switch (this_type) {
       case ('field'):
       case ('transcript'):
@@ -64,6 +62,10 @@ $('#add_grounding').on('show.bs.modal', function (event) {
         $('#type_filter select option[value="diagram"]').prop("selected", true);
         filter('diagram');
         break;
+      case ('graph'):
+        $('#all-articulations').parent().removeAttr("hidden");
+        $("#one-articulation").prop("checked", true).trigger("click");
+        break;        
     }
   });
 })

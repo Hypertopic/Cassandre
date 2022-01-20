@@ -74,13 +74,17 @@ var shared = {
   navbarstyle:"navbar navbar-{{>menucolor}} bg-{{>menucolor}} text-{{>contrastcolor}}",
   readrights:"\
     <p id='authorization'>\
-      {{i18n.i_readable-by}} <span class='readers'>{{readers_fullnames}}</span>\
+      {{i18n.i_readable-by}} <span class='readers'>\
+      {{#readers_fullnames}}{{fullname}} {{/readers_fullnames}}</span>\
     </p>",
   rights:"\
     <div id='authorization'>\
       {{i18n.i_created-by}} {{creator}} <span class='moment'>{{date}}</span><br/>\
-      {{i18n.i_editable-by}} <span class='contributors'>{{contributors_fullnames}}</span><br/>\
-      {{i18n.i_readable-by}} <span class='readers'>{{readers_fullnames}}</span>\
+      {{i18n.i_editable-by}} <span class='contributors'>\
+      {{#contributors_fullnames}}{{fullname}} {{/contributors_fullnames}}</span>\
+      </span><br/>\
+      {{i18n.i_readable-by}} <span class='readers'>\
+      {{#readers_fullnames}}{{fullname}} {{/readers_fullnames}}</span></span>\
       {{#logged}}\
       <span id='modify_rights' data-toggle='modal' data-target='#modify_rights_dialog' title='{{i18n.i_modify_rights}}'>\
         <img src='../../style/gear.svg' alt='{{i18n.i_modify_rights}}'>\
@@ -99,7 +103,7 @@ var shared = {
               <p>{{i18n.i_editable-by}}</p>\
               <div class='contributors'>\
               {{#contributors_fullnames}}\
-                <p>{{.}}<button class='remove_contributor' value='{{.}}'>x</button></p>\
+                <p>{{fullname}}<button class='remove_contributor' value='{{id}}'>x</button></p>\
               {{/contributors_fullnames}}\
               </div>\
             </td><td>\
@@ -107,7 +111,7 @@ var shared = {
               <p>{{i18n.i_readable-by}}</p>\
               <div class='readers'>\
               {{#readers_fullnames}}\
-                <p>{{.}}<button class='remove_reader' value='{{.}}'>x</button></p>\
+                <p>{{fullname}}<button class='remove_reader' value='{{id}}'>x</button></p>\
               {{/readers_fullnames}}\
               </div>\
             </td></tr></table>\
@@ -577,12 +581,10 @@ var shared = {
     }\
   });\
   $('.remove_reader').on('click', function() {\
-    var i = '{{readers_fullnames}}'.split(',').indexOf($(this).val());\
-    modify_rights('remove_reader', '{{readers}}'.split(',')[i]);\
+    modify_rights('remove_reader', $(this).val());\
   });\
   $('.remove_contributor').on('click', function() {\
-    var i = '{{contributors_fullnames}}'.split(',').indexOf($(this).val());\
-    modify_rights('remove_contributor', '{{contributors}}'.split(',')[i]);\
+    modify_rights('remove_contributor', $(this).val());\
   });\
   $('#unsubscribe').on('click', function() {\
     $.ajax({\

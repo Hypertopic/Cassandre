@@ -13,7 +13,7 @@ function(head, req) {
         data.contributors.push(id);
         if (row.doc) fullname = row.doc.fullname;
         if (row.doc && !fullnames[id]) fullnames[id] = fullname;
-        data.contributors_fullnames.push(fullname);
+        data.contributors_fullnames.push({'id': id, 'fullname': fullname});
       break;
       case ('D'):
         if (row.doc) data.diary_name = row.doc.diary_name;
@@ -24,7 +24,7 @@ function(head, req) {
         data.readers.push(id);
         if (row.doc) fullname = row.doc.fullname;
         if (row.doc && !fullnames[id]) fullnames[id] = fullname;
-        data.readers_fullnames.push(fullname);
+        data.readers_fullnames.push({'id': id, 'fullname': fullname});
       break;
       case ('M'):
         var user = row.value._id;

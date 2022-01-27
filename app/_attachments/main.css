@@ -16,6 +16,10 @@ blockquote {
   border-left: 3px gray solid;
 }
 
+nav, #header, #footer {
+  background-color: #8b0000;
+}
+
 #leaves a,
 #groundings a, #content a {
   color: gray !important;
@@ -271,7 +275,7 @@ a.dropdown-item, .create-leave, a.dropdown-toggle,
 }
 
 .spinner-border, .create-leave:hover {
-  color: black;
+  color: black !important;
 }
 
 .alert > .spinner-border {
@@ -295,7 +299,7 @@ a.dropdown-item, .create-leave, a.dropdown-toggle,
 }
 
 #header a:hover,
-#double:hover,
+#double:hover, #sign-in:hover,
 .editor-toolbar > button.active, 
 .editor-toolbar > button:hover {
   background: white;

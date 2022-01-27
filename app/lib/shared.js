@@ -71,7 +71,7 @@ var shared = {
     </div></li></ul>",
   menucolor:"dark",
   contrastcolor:"light",
-  navbarstyle:"navbar navbar-{{>menucolor}} bg-{{>menucolor}} text-{{>contrastcolor}}",
+  navbarstyle:"navbar navbar-{{>menucolor}} text-{{>contrastcolor}}",
   readrights:"\
     <p id='authorization'>\
       {{i18n.i_readable-by}} <span class='readers'>\

@@ -85,11 +85,11 @@ var shared = {
       </span><br/>\
       {{i18n.i_readable-by}} <span class='readers'>\
       {{#readers_fullnames}}{{fullname}} {{/readers_fullnames}}</span></span>\
-      {{#logged}}\
+      {{#logged}}{{#editable}}\
       <span id='modify_rights' data-toggle='modal' data-target='#modify_rights_dialog' title='{{i18n.i_modify_rights}}'>\
         <img src='../../style/gear.svg' alt='{{i18n.i_modify_rights}}'>\
       </span>\
-      {{/logged}}\
+      {{/editable}}{{/logged}}\
     </div>",
   modify_rights_dialog:"\
     <div id='modify_rights_dialog' class='modal fade' role='dialog'>\
@@ -170,6 +170,7 @@ var shared = {
     <script src='{{>relpath}}style/bootstrap.min.js'></script>\
     <script src='{{>relpath}}script/moment.min.js'></script>\
     <script src='{{>relpath}}script/showdown.min.js'></script>\
+    <script src='{{>relpath}}script/render.js'></script>\
     <link rel='stylesheet' href='{{>relpath}}style/jquery-ui.min.css' />",
   layoutscript:"function stickToHeader() {\
     var h = document.getElementById('header').offsetHeight;\
@@ -707,7 +708,11 @@ var shared = {
     });\
   }",
   logscript: "\
-  var refresh = true;\
+  const nothing_to_show = '{{i18n.i_nothing-to-show}}',\
+      everyone = '{{i18n.i_everyone}}',\
+      maintenance = '{{i18n.i_maintenance}}',\
+      maintenance_in_progress = '{{i18n.i_maintenance-in-progress}}';\
+  let refresh = true;\
   var user = '{{peer}}';\
   if ('{{logged}}') user = '{{logged}}';\
   $('#sign-in').on('click', function() {\
@@ -806,38 +811,7 @@ var shared = {
   }\
   {{/logged_fullname}}",
   render: "\
-    $.ajax({\
-      type: 'GET',\
-      url: '{{>relpath}}maintenance',\
-      dataType: 'json'\
-    }).done(function(data){\
-      var maintenance_start = new Date(data.date);\
-      var maintenance_end = moment(maintenance_start).add(30, 'm').toDate();\
-      if (maintenance_start > new Date(Date.now())) {\
-        inform('danger', '{{i18n.i_maintenance}} '+moment(data.date).calendar().toLowerCase());\
-      } else if (maintenance_end > new Date(Date.now())) {\
-        inform('danger', '{{i18n.i_maintenance-in-progress}} '+moment(data.date).add(30, 'm').fromNow());\
-      }\
-    });\
-    stickToHeader();\
-    if ($('#name').val().length > 0) {\
-      $('#add').removeClass('hidden');\
-      $('#leave-name').removeClass('hidden');\
-    }\
-    if ($('.contributors').text().trim().length < 1) {\
-      $('.contributors').before('{{i18n.i_everyone}}');\
-    }\
-    if ($('.readers').text().trim().length < 1) {\
-      $('.readers').before('{{i18n.i_everyone}}');\
-      {{^editable}}$('#modify_rights').remove();{{/editable}}\
-    }\
-    if ($('#leaves li').length > 0) {\
-      $('#show-leaves').removeClass('invisible');\
-    } else {\
-      $('#leaves').addClass('invisible d-lg-none');\
-      $('#leaves').removeClass('d-sm-block d-md-block d-lg-block d-xl-block');\
-    }\
-    let refresh = true;\
+    render();\
     {{^statements}}\
     {{^link}}if (($('#groundings li').length > 1) || ('{{type}}' == 'coding' && $('#groundings li').first().find('.preview').text().indexOf('---') > -1))\
         $('#remove_grounding_btn').removeClass('d-none');{{/link}}\

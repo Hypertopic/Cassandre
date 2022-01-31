@@ -708,11 +708,11 @@ var shared = {
     });\
   }",
   logscript: "\
-  const nothing_to_show = '{{i18n.i_nothing-to-show}}',\
-      everyone = '{{i18n.i_everyone}}',\
+  const everyone = '{{i18n.i_everyone}}',\
       maintenance = '{{i18n.i_maintenance}}',\
       maintenance_in_progress = '{{i18n.i_maintenance-in-progress}}';\
-  let refresh = true;\
+  let refresh = true,\
+      nothing_to_show = '{{i18n.i_nothing-to-show}}';\
   var user = '{{peer}}';\
   if ('{{logged}}') user = '{{logged}}';\
   $('#sign-in').on('click', function() {\

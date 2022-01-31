@@ -255,7 +255,6 @@
       }
     });
     {{#statements}}
-    var nothing_to_show = '{{i18n.i_nothing-to-show}}';
     {{^logged}}nothing_to_show +='. {{i18n.i_sign-in-for-more}}';{{/logged}}
     if ($('.post').text().trim().length == 0) $('.post').text(nothing_to_show);
     {{#logged}}

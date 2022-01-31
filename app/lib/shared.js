@@ -38,7 +38,7 @@ var shared = {
     <div id='logged' class='order-3 justify-content-end pl-1'>\
       {{^logged}}\
       <button class='btn navbar-btn text-{{>contrastcolor}}' title='{{i18n.i_sign-in}}' id='sign-in'>{{i18n.i_sign-in}}</button>\
-      <button class='btn navbar-btn btn-outline-{{>contrastcolor}}' title='{{i18n.i_register}}' id='register'>{{i18n.i_register}}</button>\
+      <button class='btn navbar-btn btn-outline-{{>contrastcolor}}' title='{{i18n.i_register}}' id='to-register'>{{i18n.i_register}}</button>\
       <form id='signin' class='form-inline hidden'>\
         <div class='input-group input-group-sm'>\
           <div class='input-group-prepend'>\
@@ -171,6 +171,7 @@ var shared = {
     <script src='{{>relpath}}script/moment.min.js'></script>\
     <script src='{{>relpath}}script/showdown.min.js'></script>\
     <script src='{{>relpath}}script/render.js'></script>\
+    <script src='{{>relpath}}script/log.js'></script>\
     <link rel='stylesheet' href='{{>relpath}}style/jquery-ui.min.css' />",
   layoutscript:"function stickToHeader() {\
     var h = document.getElementById('header').offsetHeight;\
@@ -710,42 +711,13 @@ var shared = {
   logscript: "\
   const everyone = '{{i18n.i_everyone}}',\
       maintenance = '{{i18n.i_maintenance}}',\
-      maintenance_in_progress = '{{i18n.i_maintenance-in-progress}}';\
+      maintenance_in_progress = '{{i18n.i_maintenance-in-progress}}',\
+      relpath = '{{>relpath}}',\
+      wrong_password = '{{i18n.i_wrong-password}}'.replace('&#39;','\\'');\
   let refresh = true,\
       nothing_to_show = '{{i18n.i_nothing-to-show}}';\
   var user = '{{peer}}';\
   if ('{{logged}}') user = '{{logged}}';\
-  $('#sign-in').on('click', function() {\
-    $('#signin').removeClass('hidden');\
-    $('#sign-in').addClass('hidden');\
-    $('#register').addClass('hidden');\
-  });\
-  $('#register').on('click', function() {\
-    self.location = '{{>relpath}}register/';\
-  });\
-  $('#signin').on('submit', function(e) {\
-    e.preventDefault();\
-    $(this).find('input').first().val($(this).find('input').first().val().toLowerCase());\
-    var username = $(this).find('input').first().val().toLowerCase();\
-    $.ajax({\
-      url: '/_session',\
-      type: 'POST',\
-      data: $(this).serialize(),\
-      contentType: 'application/x-www-form-urlencoded',\
-      success: reload,\
-      error: function(request) {\
-        var mismatch = '{{i18n.i_wrong-password}}'.replace('&#39;','\\'');\
-        alert(mismatch);\
-      }\
-    });\
-  });\
-  $('#signout').on('click', function() {\
-    $.ajax({\
-      type: 'DELETE',\
-      url: '/_session',\
-      success: reload\
-    });\
-  });\
   function track(memo) {\
     $.ajax({\
       {{^list}}\

@@ -170,81 +170,13 @@ var shared = {
     <script src='{{>relpath}}style/bootstrap.min.js'></script>\
     <script src='{{>relpath}}script/moment.min.js'></script>\
     <script src='{{>relpath}}script/showdown.min.js'></script>\
+    <script src='{{>relpath}}script/layout.js'></script>\
     <script src='{{>relpath}}script/render.js'></script>\
     <script src='{{>relpath}}script/log.js'></script>\
     <script src='{{>relpath}}script/comment.js'></script>\
     <link rel='stylesheet' href='{{>relpath}}style/jquery-ui.min.css' />",
-  layoutscript:"function stickToHeader() {\
-    var h = document.getElementById('header').offsetHeight;\
-    $('#container>#memo').css({'padding-top': h});\
-    $('#container>#content>h1').css({'padding-top': h+5});\
-    $('#container>#content #name').css({'margin-top': h+5});\
-    $('#top-right').css({'top': h+5});\
-    if (h > 36) $('#show-leaves').css({'top': h-36});\
-    $('.mytooltip .preview').css({'top': h});\
-  }\
-  $(window).resize(function() {\
-    stickToHeader();\
-  });\
-  $('#navbarSupportedContent').on('hidden.bs.collapse', function () {\
-    stickToHeader();\
-  });\
-  $('#navbarSupportedContent').on('shown.bs.collapse', function () {\
-    stickToHeader();\
-  });\
-  var reload = function() {\
-    var here = '{{_id}}';\
-    if (typeof (anchor) !== 'undefined' && anchor > 0) here += '#'+anchor;\
-    self.location = here;\
-    if (refresh) location.reload();\
-  };\
-  String.prototype.trimLeft = String.prototype.trimLeft || function() {\
-    return this.replace(/^\s+/,'');\
-  };\
-  $('#content').on('mouseup', function() {\
-    $('#kwic').val(\
-      document.getSelection().toString().trimLeft()\
-    );\
-  });\
-  $('.search').on('click', function() {\
-    if ($('#kwic').val().length > 0) {\
-      self.location = '{{>relpath}}kwic/{{diary}}/' + $('#kwic').val().toLowerCase();\
-    }\
-  });\
-  $('#kwic').on('keypress', function(key) {\
-    if (key.which == 13) {\
-      self.location = '{{>relpath}}kwic/{{diary}}/' + $('#kwic').val().toLowerCase();\
-    }\
-  });\
+  layoutscript:"\
   {{^list}}\
-  $('.groundings')\
-    .on('hidden.bs.collapse', function() {\
-      $('#toggle-groundings').removeClass('d-none');\
-      stickToHeader();\
-  })\
-    .on('shown.bs.collapse', function() {\
-      $('#toggle-groundings').addClass('d-none');\
-      stickToHeader();\
-  });\
-  $('#show-leaves').click(function () {\
-    $('#leaves').removeClass('invisible d-lg-none');\
-    $('#leaves').addClass('d-sm-block d-md-block d-lg-block');\
-    $('#show-leaves').removeClass('d-sm-block d-lg-block');\
-    $('#show-leaves').addClass('d-xl-none');\
-  });\
-  $('#leaves > .close').on('click', function() {\
-    $('#leaves').addClass('invisible d-lg-none');\
-    $('#leaves').removeClass('d-sm-block d-md-block d-lg-block d-xl-block');\
-    $('#show-leaves').addClass('d-sm-block d-lg-block');\
-    $('#show-leaves').removeClass('d-xl-none');\
-  });\
-  $('#groundings').find('.toggle').click(function(){\
-    $(this).next().slideToggle('fast');\
-    $('.preview').not($(this).next()).slideUp('fast');\
-  });\
-  $('#diary').on('click', function() {\
-    self.location = '{{>relpath}}memo/{{diary}}/';\
-  });\
   var ground = ['{{_id}}'];\
   {{#statements}}\
   ground = [];\
@@ -252,223 +184,13 @@ var shared = {
     ground.push('{{id}}');\
   {{/groundings}}\
   {{/statements}}\
-  $('#leave-name').on('keypress', function(key) {\
-    if (['coding','diagram'].indexOf('{{type}}') < 0 && key.which == 13) {\
-      var classlist = $(this)[0].nextElementSibling.childNodes[1].nextElementSibling.classList;\
-      create(classlist[classlist.length - 1], $('#leave-name').val().trim(), $('#kwic').val(), anchor);\
-    }\
-  });\
-  function create(type, name, highlight, anchor) {\
-    $('.spinner').removeClass('d-none');\
-    name = name.replace(/\t/g, ' ');\
-    if (name.replace(/[ ,]/g, '') == '' && type != 'diagram') {\
-      $('.spinner').addClass('d-none');\
-      switch (type) {\
-        case 'transcript':\
-        case 'field':\
-          alert('{{i18n.i_enter_location_date}}');\
-        break;\
-        case 'graph':\
-          alert('{{i18n.i_enter_graph_name}}');\
-        break;\
-        default:\
-          alert('{{i18n.i_enter_memo_name}}');\
-        break;\
-      }\
-    } else {\
-      let i = 0;\
-      $.ajax({\
-        url: '{{>relpath}}memo_attribute/{{diary}}',\
-        type: 'GET',\
-        dataType: 'json',\
-      }).done(function(existing_memos) {\
-        if (type == 'diagram') {\
-          i = -1;\
-        } else {\
-          i = existing_memos.rows.map(function(e) { return e.value.name; }).indexOf(name);\
-        }\
-        if (i != -1) {\
-          if(existing_memos.rows[i].value.groundings.indexOf('{{_id}}') != -1 && highlight.length < 1) {\
-            $('.spinner').addClass('d-none');\
-            alert('{{i18n.i_memo_already_linked}}');\
-          } else {\
-            leaf_type = existing_memos.rows[i].value.type,\
-            leaf_id = existing_memos.rows[i].value.id;\
-            if (['diagram','graph','table'].indexOf(leaf_type) > -1) $('.linkLeaf').addClass('d-none');\
-            $('#existing_memo').modal('show');\
-          }\
-        } else {\
-          if (anchor > 0) ground = [{'_id': '{{_id}}', 'preview':[{'text': highlight, 'anchor': anchor}]}];\
-          var data = {\
-            groundings: ground,\
-            history: [{\
-              'user': user,\
-              'date': new Date().toJSON(),\
-              'name': name\
-            }],\
-            name: name\
-          };\
-          var contributors = '{{contributors}}';\
-          if (contributors.length > 0) {\
-            data.contributors = contributors.split(',');\
-          } else if ('{{logged}}') {\
-            data.contributors = ['{{logged}}'];\
-          }\
-          var readers = '{{readers}}';\
-          if (readers.length > 0) {\
-            data.readers = readers.split(',');\
-          }\
-          var destination = '{{>relpath}}';\
-          switch (type) {\
-            case 'transcript':\
-              destination += 'editable_text/';\
-              data.corpus = '{{diary}}',\
-              data.speeches = [{actor:'',text:''}];\
-            break;\
-            case 'table':\
-              destination += 'table/{{diary}}/';\
-              data.cells = [{'...':[{'{{_id}}':'...'}]}];\
-              data.diary = '{{diary}}';\
-              data.type = type;\
-            break;\
-            case 'diagram':\
-              destination += 'diagram/{{diary}}/';\
-              data.diary = '{{diary}}';\
-              data.name = name;\
-              data.link = 'pp';\
-              data.type = type;\
-            break;\
-            {{#link}}\
-            case 'graph':\
-              destination += 'graph/{{diary}}/';\
-              data.diary = '{{diary}}';\
-              data.type = type;\
-              var nodes = [];\
-              var from = $('#groundings').children('li').first().attr('id');\
-              var to = $('#groundings').children('li').last().attr('id');\
-              switch ('{{link}}') {\
-                case ('pp'):\
-                case ('ipp'):\
-                  nodes.push({id: from, shape: 'box'});\
-                  nodes.push({id: to, shape: 'box'});\
-                  break;\
-                case ('dd'):\
-                case ('idd'):\
-                  nodes.push({id: from, shape: 'diamond'});\
-                  nodes.push({id: to, shape: 'diamond'});\
-                  break;\
-                case ('dp'):\
-                  nodes.push({id: from, shape: 'box'});\
-                  nodes.push({id: to, shape: 'diamond'});\
-                  break;\
-              }\
-              data.nodes = nodes;\
-            break;\
-            {{/link}}\
-            default:\
-              destination += 'editable_memo/';\
-              data.diary = '{{diary}}',\
-              data.body = '';\
-              data.editing = {\
-                'user': user,\
-                'date': new Date().toJSON()\
-              };\
-              if (type == 'coding' && highlight.length > 0) {\
-                if (anchor > 0) highlight = '['+highlight+']({{_id}}#'+anchor+')';\
-                data.body += '> '+highlight+'\\n \\n';\
-              }\
-              data.type = type;\
-          }\
-          if (type) {\
-            $.ajax({\
-              url: '{{>relpath}}',\
-              type: 'POST',\
-              dataType: 'json',\
-              contentType: 'application/json',\
-              data: JSON.stringify(data),\
-              success: function(data) {\
-                self.location = destination+data.id;\
-              }\
-            });\
-          }\
-        }\
-      });\
-    }\
-  }\
-  function inform(type, msg){\
-    $('#toasts').append('<div class=\"toast\" role=\"alert\">'\
-      + '<div class=\"toast-body alert-'+type+'\">'\
-      + '<button type=\"button\" class=\"close\" data-dismiss=\"toast\">×</button>'+ msg +'</div></div>');\
-    $('.toast').toast({autohide: false});\
-    $('.toast').toast('show');\
-  }\
   {{/list}}\
-  function poller(what, since) {\
-    $.ajax({\
-      url: '{{>relpath}}changes/'+what+'/{{_id}}/'+since\
-    }).done(function(data){\
-      if (data.results.length && refresh == true) {\
-        reload();\
-      } else {\
-        $.ajax({\
-          url: '{{>relpath}}memo_update_seq/{{_id}}'\
-        }).done(function(o){\
-          var memo_seq = JSON.parse(o);\
-          poller(what, memo_seq.update_seq);\
-        });\
-      }\
-    });\
-  }\
-  function renderComments(converter){\
-    $('.comment_text').html(function(i, text) {\
-      var md = converter.makeHtml(text.replace(/&gt;/g, '>').trim());\
-      if (md.substring(0,3) == '<p>') md = md.substring(3);\
-      if (md.substring(md.length - 4, md.length) == '</p>') md = md.substring(0, md.length - 4);\
-      md = md.replace(/<blockquote>\\s+<p>/g, '<blockquote>');\
-      md = md.replace(/<\\/blockquote>\\s+<p>/g, '<\\/blockquote>');\
-      md = md.replace(/<\\/ol>\\s+<p>/g, '<\\/ol>');\
-      md = md.replace(/<\\/ul>\\s+<p>/g, '<\\/ul>');\
-      md = md.replace(/<\\/p>\\s+<\\/blockquote>/g, '<\\/blockquote>');\
-      md = md.replace(/<\\/?p>/g, '<br/>');\
-      return md;\
-    });\
-  };\
-  function renderPreviews(converter){\
-    $('.preview').html(function(i, text) {\
-      var md = converter.makeHtml(text.replace(/&gt;/g, '>').trim());\
-      md = md.replace(/<\\/?p>/g, '');\
-      return md;\
-    });\
-  };\
   {{#list}}\
   $(window).scroll(function(){\
     if ($(window).scrollTop() == $(document).height() - $(window).height()){\
       showMore($('li').last().find('span').attr('id'));\
     }\
-  });\
-  function momentRelative(what) {\
-    let now = moment(),\
-        moments = $(what+' .moment');\
-    moments.each(function() {\
-      var jstime = $(this).attr('id');\
-      var jstime = $(this).attr('class').split(' ');\
-      jstime = jstime[0];\
-      var mmtime = moment(jstime);\
-      if(now.diff(mmtime, 'days') <= 2) {\
-        $(this).text(mmtime.fromNow());\
-      } else if(now.diff(mmtime, 'years') < 1) {\
-        $(this).text('{{i18n.i_on-a-date}}'+' '+mmtime.format('Do MMMM'));\
-      } else {\
-        $(this).text('{{i18n.i_on-a-date}}'+' '+mmtime.format('Do MMMM YYYY'));\
-      }\
-    });\
-    let items = $(what+' li .moment'),\
-        n = items.length / 30;\
-    if (n !== parseInt(n, 10)) $('#next').prop('disabled', true);\
-    items.each(function() {\
-      $(this).text($(this).text().replace(/./, function(x) { return x.toUpperCase(); }));\
-    });\
-  }{{/list}}",
+  });{{/list}}",
   editname: "\
   $('h1').on('click', function() {\
     refresh = false;\
@@ -615,16 +337,25 @@ var shared = {
   }",
   logscript: "\
   const everyone = '{{i18n.i_everyone}}',\
+        enter_comment ='{{i18n.i_enter_comment}}',\
+        enter_graph_name = '{{i18n.i_enter_graph_name}}',\
+        enter_location_date = '{{i18n.i_enter_location_date}}',\
+        enter_memo_name = '{{i18n.i_enter_memo_name}}',\
         maintenance = '{{i18n.i_maintenance}}',\
         maintenance_in_progress = '{{i18n.i_maintenance-in-progress}}',\
+        memo_already_linked = '{{i18n.i_memo_already_linked}}',\
+        on_a_date = '{{i18n.i_on-a-date}}',\
         relpath = '{{>relpath}}',\
-        enter_comment ='{{i18n.i_enter_comment}}';\
         wrong_password = '{{i18n.i_wrong-password}}'.replace('&#39;','\\'');\
   let refresh = true,\
       fullname = null,\
       logged_fullname = '{{logged_fullname}}'.replace('&#39;','\\''),\
       nothing_to_show = '{{i18n.i_nothing-to-show}}';\
   var user = '{{peer}}';\
+  {{^list}}\
+  var contributors = '{{contributors}}',\
+      readers = '{{readers}}';\
+  {{/list}}\
   if ('{{logged}}') user = '{{logged}}';\
   function track(memo) {\
     $.ajax({\

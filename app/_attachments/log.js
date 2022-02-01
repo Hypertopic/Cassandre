@@ -29,3 +29,47 @@ $('#signout').on('click', function() {
     success: reload
   });
 });
+$('#storing_fullname').on('click', function() {
+  toUserDoc();
+});
+$('#user_fullname').on('keypress', function(key) {
+  if (key.which == 13) toUserDoc();
+});
+
+function toUserDoc() {
+  fullname = $('#user_fullname').val().trim();
+  var sponsor = 'u221250';
+  if (fullname.length > 0) 
+    createUserDoc(user, sponsor, reload, updateUserDoc);
+}
+
+function createUserDoc(user, sponsor, success, error) {
+  $.ajax({
+    url: relpath+'userfullname/'+fullname,
+    type: 'GET'
+  }).done(function(u){
+    if (u.rows.length > 0) fullname += ' ('+user+')';
+    var obj = {
+      '_id': user,
+      'contributors': [user],
+      'fullname': fullname
+    };
+    if (sponsor && sponsor.length > 0) obj.readers = [sponsor];
+    $.ajax({
+      url: '../../'+user,
+      type: 'PUT',
+      contentType: 'application/json',
+      data: JSON.stringify(obj)
+    }).done(success)
+    .fail(error);
+  });
+}
+
+var updateUserDoc = function() {
+  $.ajax({
+    url: relpath+'username/'+user,
+    type: 'PUT',
+    contentType: 'application/json',
+    data: fullname
+  }).done(reload)
+};

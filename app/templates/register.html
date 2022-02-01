@@ -50,7 +50,8 @@
     </div>
   {{>script}}
   <script>
-  var user = fullname = "";
+  var email = fullname = "";
+  const relpath = '{{>relpath}}';
   $(document).ready(function() {
     $.ajax({
       type: 'DELETE',
@@ -91,21 +92,21 @@
     if($("#password").val() == $("#confirm").val()) {
       try {
         $("#register").attr("disabled", "disabled");
-        user = $("#email").val().trim().toLowerCase();
+        email = $("#email").val().trim().toLowerCase();
         fullname = $("#fullname").val().trim();
         $.ajax({
           type: "PUT",
-          url: "/_users/org.couchdb.user:" + user,
+          url: "/_users/org.couchdb.user:" + email,
           contentType: "application/json",
           data: JSON.stringify({
-            name: user,
+            name: email,
             password: $("#password").val(),
             fullname: fullname,
-            email: user,
+            email: email,
             roles: [],
             type: "user"
           })
-        }).done(onRegistred).fail(registerFail);
+        }).done(login).fail(registerFail);
       } catch(err) {
         $("#register").removeAttr("disabled");
         onError(err);
@@ -122,18 +123,8 @@
 
   function registerFail(message) {
     $("#register").removeAttr("disabled");
-    onError(message.status == 409 ? "\"" + user + "\"" + " {{i18n.i_existing-username}}"
+    onError(message.status == 409 ? "\"" + email + "\"" + " {{i18n.i_existing-username}}"
       : "Your request produced an error. " + message.responseText);
-  }
-
-  function onRegistred() {
-    $.ajax({
-      url: '../../userfullname/'+fullname,
-      type: 'GET'
-    }).done(function(u){
-      if (u.rows.length > 0) fullname += ' ('+user+')';
-      login();
-    });
   }
 
   function login() {
@@ -141,31 +132,20 @@
       url: '../../_session',
       type: 'POST',
       contentType: 'application/x-www-form-urlencoded',
-      data: "name=" + user + "&password=" + $("#password").val()
+      data: "name=" + email + "&password=" + $("#password").val()
     }).done(function(){
-      createUserDoc();
+      createUserDoc(email, 'crahay', successfulRegistration, console.log('ko'));
     });
   }
 
-  function createUserDoc() {
-    $.ajax({
-      url: '../../'+user,
-      type: 'PUT',
-      contentType: 'application/json',
-      data: JSON.stringify({
-        '_id': user,
-        'fullname': fullname,
-        'contributors': [user],
-      })
-    }).done(function(){
-      $("#message").html("{{i18n.i_successful-registration}} ");
-      $("#message").removeClass("alert-danger");
-      $("#diaries").removeClass("d-none");
-      $("#register").addClass("d-none");
-      $("#message").addClass("alert-success");
-      $('#message').append($('#diaries'));
-      $("form").slideUp();
-    });
+  var successfulRegistration = function (){
+    $("#message").html("{{i18n.i_successful-registration}} ");
+    $("#message").removeClass("alert-danger");
+    $("#diaries").removeClass("d-none");
+    $("#register").addClass("d-none");
+    $("#message").addClass("alert-success");
+    $('#message').append($('#diaries'));
+    $("form").slideUp();
   }
 
   {{>layoutscript}}

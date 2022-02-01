@@ -715,6 +715,7 @@ var shared = {
       relpath = '{{>relpath}}',\
       wrong_password = '{{i18n.i_wrong-password}}'.replace('&#39;','\\'');\
   let refresh = true,\
+      fullname = null,\
       nothing_to_show = '{{i18n.i_nothing-to-show}}';\
   var user = '{{peer}}';\
   if ('{{logged}}') user = '{{logged}}';\
@@ -739,49 +740,7 @@ var shared = {
       {{/list}}\
     }).done({{#list}}reload{{/list}})\
     .fail({{#list}}function(data){$('#storing_fullname_dialog').modal('show')}{{/list}});\
-  }\
-  {{^logged_fullname}}\
-  $('#storing_fullname').on('click', function() {\
-    var fullname = $('#user_fullname').val().trim();\
-    preventingHomonyms(fullname);\
-  });\
-  $('#user_fullname').on('keypress', function(key) {\
-    if (key.which == 13) {\
-      var fullname = $('#user_fullname').val().trim();\
-      preventingHomonyms(fullname);\
-    }\
-  });\
-  function preventingHomonyms(fullname) {\
-    if (fullname.length > 0) $.ajax({\
-      url: '{{>relpath}}userfullname/'+fullname,\
-      type: 'GET'\
-    }).done(function(u){\
-      if (u.rows.length > 0) fullname += ' ({{logged}})';\
-      createUserDoc(fullname);\
-    });\
-  };\
-  function createUserDoc(fullname) {\
-    $.ajax({\
-      url: '{{>relpath}}{{logged}}',\
-      type: 'PUT',\
-      contentType: 'application/json',\
-      data: JSON.stringify({\
-        '_id': '{{logged}}',\
-        'contributors': ['{{logged}}'],\
-        'readers': ['u221250'],\
-        'fullname': fullname\
-      })\
-    }).done(reload)\
-    .fail(function(data){\
-      $.ajax({\
-        url: '{{>relpath}}username/{{logged}}',\
-        type: 'PUT',\
-        contentType: 'application/json',\
-        data: fullname\
-      }).done(reload)\
-    });\
-  }\
-  {{/logged_fullname}}",
+  }",
   render: "\
     render();\
     {{^statements}}\

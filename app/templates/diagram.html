@@ -158,6 +158,10 @@
   {{>script}}
   <script>
   var userids = [];
+  let candidates = [],
+      diary_id = "{{diary}}",
+      this_id = "{{_id}}",
+      this_type = "{{type}}";
   $(document).ready(function() {
     {{>render}}
     moment.locale('{{locale}}');
@@ -413,7 +417,6 @@
   {{/editable}}
 
   {{>rightsscript}}
-  {{>commentsscript}}
   {{>layoutscript}}
   {{>logscript}}
   </script>

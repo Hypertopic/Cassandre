@@ -172,6 +172,7 @@ var shared = {
     <script src='{{>relpath}}script/showdown.min.js'></script>\
     <script src='{{>relpath}}script/render.js'></script>\
     <script src='{{>relpath}}script/log.js'></script>\
+    <script src='{{>relpath}}script/comment.js'></script>\
     <link rel='stylesheet' href='{{>relpath}}style/jquery-ui.min.css' />",
   layoutscript:"function stickToHeader() {\
     var h = document.getElementById('header').offsetHeight;\
@@ -612,110 +613,16 @@ var shared = {
       }\
     });\
   }",
-  commentsscript: "\
-  $('#comment_create').click(function () {\
-    refresh = false;\
-    $('#comment_create').remove();\
-    $('#footer > div > button').prop('disabled', true);\
-    $('#render').prop('disabled', true);\
-    $('#commented').prop('disabled', null);\
-    $('#leave-name').addClass('hidden');\
-    $('#kwic').parent().children().addClass('hidden');\
-    $('#modify_rights').remove();\
-    $('a').removeAttr('href');\
-    $('#diary').addClass('disabled');\
-    $('#signout').prop('disabled', true);\
-    $('#add-leaves').addClass('hidden');\
-    $('.toast').toast('hide');\
-    $('#comments').find('textarea').removeClass('hidden');\
-    $('#commented').removeClass('hidden');\
-    $('html, body').scrollTop($(document).height());\
-  });\
-  $('#commented').on('click', function() {\
-    if ($('#comments').find('textarea').val().trim() == '') {\
-      alert('{{i18n.i_enter_comment}}')\
-    } else {\
-      comment();\
-    }\
-  });\
-  var comment_id;\
-  $('.comment').click(function(event) {\
-    refresh = false;\
-    var user = $(this).find('.user').text();\
-    comment_id = $(this).closest('.comment').attr('id');\
-    if ('{{logged_fullname}}'.replace('&#39;','\\'') == user && !$(event.target).is('input')) {\
-      $(this).find('.comment_text').hide();\
-      $('#comments').find('textarea').text($('#'+comment_id).find('.comment_edit').text());\
-      $('#'+comment_id).append($('#comments').find('textarea'));\
-      $('#comments').find('textarea').attr('id', 'input'+comment_id);\
-      $('#comments').find('textarea').attr('name', 'input'+comment_id);\
-      $('#input'+comment_id).removeClass('hidden');\
-      $('#commented').remove();\
-      $('#footer > div > button').prop('disabled', true);\
-      $('#add-leaves').addClass('hidden');\
-      $('#comment_updated').removeClass('hidden');\
-      $('#comment_updated').prop('disabled', false);\
-      $('.comment').off('click');\
-      $('#kwic').parent().children().addClass('hidden');\
-      $('#signout').prop('disabled', true);\
-      $('#diary').addClass('disabled');\
-      $('#modify_rights').remove();\
-      $('.toast').toast('hide');\
-      $('a').removeAttr('href');\
-    }\
-  });\
-  $('.comment_check').click(function() {\
-    $.ajax({\
-      url: '../../checking_comment/'+$(this).closest('.comment').attr('id'),\
-      type: 'PUT',\
-      contentType: 'application/json',\
-      data: '{{logged_fullname}}'.replace('&#39;','\\'')\
-    }).done(function(){refresh = true});\
-  });\
-  $('#comment_updated').on('click', function() {\
-    update_comment(comment_id);\
-  });\
-  function update_comment(id) {\
-    refresh = true;\
-    $.ajax({\
-      url: '../../update_comment_content/'+id,\
-      type: 'PUT',\
-      contentType: 'application/json',\
-      data: $('#'+id+'>textarea').val().trim(),\
-      success: reload\
-    });\
-  };\
-  function comment() {\
-    refresh = true;\
-    var data = {\
-      commented: '{{_id}}',\
-      diary: '{{diary}}',\
-      user: user,\
-      date: new Date().toJSON(),\
-      text: $('#comments').find('textarea').val().trim()\
-    };\
-    $.ajax({\
-      type: 'POST',\
-      url: '../../',\
-      contentType: 'application/json',\
-      data: JSON.stringify(data),\
-      error: function(request) {\
-        alert(\
-          (JSON.parse(request.responseText).reason || request.responseText)\
-          + '\\nCode ' + request.status\
-        );\
-      },\
-      success: reload\
-    });\
-  }",
   logscript: "\
   const everyone = '{{i18n.i_everyone}}',\
-      maintenance = '{{i18n.i_maintenance}}',\
-      maintenance_in_progress = '{{i18n.i_maintenance-in-progress}}',\
-      relpath = '{{>relpath}}',\
-      wrong_password = '{{i18n.i_wrong-password}}'.replace('&#39;','\\'');\
+        maintenance = '{{i18n.i_maintenance}}',\
+        maintenance_in_progress = '{{i18n.i_maintenance-in-progress}}',\
+        relpath = '{{>relpath}}',\
+        enter_comment ='{{i18n.i_enter_comment}}';\
+        wrong_password = '{{i18n.i_wrong-password}}'.replace('&#39;','\\'');\
   let refresh = true,\
       fullname = null,\
+      logged_fullname = '{{logged_fullname}}'.replace('&#39;','\\''),\
       nothing_to_show = '{{i18n.i_nothing-to-show}}';\
   var user = '{{peer}}';\
   if ('{{logged}}') user = '{{logged}}';\

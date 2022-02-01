@@ -38,9 +38,14 @@ $('#user_fullname').on('keypress', function(key) {
 
 function toUserDoc() {
   fullname = $('#user_fullname').val().trim();
-  var sponsor = 'u221250';
-  if (fullname.length > 0) 
-    createUserDoc(user, sponsor, reload, updateUserDoc);
+  $.ajax({
+    type: 'GET',
+    url: relpath+'config',
+    dataType: 'json'
+  }).done(function(data){
+    if (fullname.length > 0) 
+      createUserDoc(user, data.sponsors.ldap, reload, updateUserDoc);
+  });
 }
 
 function createUserDoc(user, sponsor, success, error) {
@@ -54,7 +59,7 @@ function createUserDoc(user, sponsor, success, error) {
       'contributors': [user],
       'fullname': fullname
     };
-    if (sponsor && sponsor.length > 0) obj.readers = [sponsor];
+    if (sponsor && sponsor.length > 0) obj.readers = sponsor;
     $.ajax({
       url: '../../'+user,
       type: 'PUT',

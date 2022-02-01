@@ -50,13 +50,20 @@
     </div>
   {{>script}}
   <script>
-  var email = fullname = "";
+  var email = fullname = sponsor = "";
   const relpath = '{{>relpath}}';
   $(document).ready(function() {
     $.ajax({
       type: 'DELETE',
       url: '/_session'
     }).done(function() {
+      $.ajax({
+        type: 'GET',
+        url: relpath+'config',
+        dataType: 'json'
+      }).done(function(data){
+        sponsor = data.sponsors.local;
+      });
       stickToHeader();
     });
   });
@@ -134,7 +141,7 @@
       contentType: 'application/x-www-form-urlencoded',
       data: "name=" + email + "&password=" + $("#password").val()
     }).done(function(){
-      createUserDoc(email, 'crahay', successfulRegistration, console.log('ko'));
+      createUserDoc(email, sponsor, successfulRegistration, console.log('ko'));
     });
   }
 

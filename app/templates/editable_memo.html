@@ -9,7 +9,7 @@
       <header>
         <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
           <ul class="navbar-nav mr-auto">
-            <li class="nav-item text-{{>contrastcolor}}">{{diary_name}}</li>
+            <li style="max-width: 200px;" class="nav-item text-{{>contrastcolor}} text-truncate">{{diary_name}}</li>
             {{#authorized}}{{#editing}}
             <li><button title="{{i18n.i_double}}" class="btn text-{{>contrastcolor}}" id="double">¶²</button></li>
             {{/editing}}{{/authorized}}

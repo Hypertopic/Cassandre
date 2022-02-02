@@ -39,6 +39,7 @@
   <script src="../../script/viz.js"></script>
   <script src="../../script/full.render.js"></script>
   <script>
+  const diary_id = '{{diary}}';
   let from = '0',
       list = [],
       origin = '0',
@@ -61,7 +62,7 @@
       }
     });
     $.ajax({
-      url: "../{{diary}}",
+      url: '../'+diary_id,
       type: "GET",
       dataType: "json",
       success: function(data) {
@@ -133,7 +134,7 @@
     {{/edges}}
 
     nodes.forEach(function(e, i) {
-      var style = 'href="../../'+e.path+'/{{diary}}/'+e.id+'", label="'+moment(e.date).format("Do MMMM YYYY")+': '+e.name+'"';
+      var style = 'href="../../'+e.path+'/'+diary_id+'/'+e.id+'", label="'+moment(e.date).format("Do MMMM YYYY")+': '+e.name+'"';
       if (e.ids.length > 1) style = 'fillcolor="white", width=.2, penwidth=3, '+style;
       node = 'node'+e.id+' ['+style+'];';
       switch(e.type) {
@@ -203,10 +204,6 @@
       console.error(error);
     });
   }
-
-  $('#header').on('click', '#diary', function() {
-    self.location = '../../memo/{{diary}}/';
-  });
 
   {{>layoutscript}}
   {{>logscript}}

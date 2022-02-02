@@ -58,6 +58,7 @@
       created = {},
       commented = {},
       converter = new showdown.Converter({strikethrough: 'true'}),
+      diary_id = '{{diary}}',
       fullnames = [],
       modified = {},
       pathes = [],
@@ -73,17 +74,13 @@
     stickToHeader();
   });
 
-  $('#diary').on('click', function() {
-    self.location = '../../memo/{{diary}}/';
-  });
-
   $('#drawChart').on('click', function() {
     $('#drawChart').addClass('disabled');
     $('#cal-heatmap').append('<div id="loading" class="d-flex justify-content-center" title="{{i18n.i_loading}}">\
       <div class="d-none d-sm-inline-flex">{{i18n.i_loading}}</div>\
       <div class="spinner-border spinner-border-sm ml-auto  mr-auto mr-sm-0" role="status" aria-hidden="true"></div></div>');
     $.ajax({
-      url: "../../activity_chart/{{diary}}/",
+      url: '../../activity_chart/'+diary_id+'/',
       type: "GET",
       dataType: "json"
     }).done(function(data) {
@@ -186,7 +183,7 @@
 
   function showMore(start) {
     $.ajax({
-      url: "../../activity/{{diary}}/"+start,
+      url: '../../activity/'+diary_id+'/'+start,
       type: "GET",
       dataType: "json",
       success: function(data) {
@@ -208,7 +205,7 @@
             if (typeof data[i].commented !== 'undefined') action = '{{i18n.i_commented}}&nbsp;: ';
             if (typeof data[i].created   !== 'undefined') action = '{{i18n.i_created}} ';
             if (typeof data[i].modified  !== 'undefined') action = '{{i18n.i_modified}} ';
-            action += '<a href="../../'+path+'/{{diary}}/'+data[i].modified_id+'">'+data[i].modified_name+'</a>';
+            action += '<a href="../../'+path+'/'+diary_id+'/'+data[i].modified_id+'">'+data[i].modified_name+'</a>';
           }
           var li = '<li>'
             +'<span id="'+date+'" class="'+date+' moment"></span>, '

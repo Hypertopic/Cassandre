@@ -17,8 +17,8 @@ $('#navbarSupportedContent').on('shown.bs.collapse', function () {
   stickToHeader();
 });
 var reload = function() {
-  if (typeof (anchor) !== 'undefined' && anchor > 0) this_id += '#'+anchor;
-  self.location = this_id;
+  if (typeof (this_id) !== 'undefined') self.location = this_id;
+  if (typeof (anchor) !== 'undefined' && anchor > 0) self.location += '#'+anchor;
   if (refresh) location.reload();
 };
 String.prototype.trimLeft = String.prototype.trimLeft || function() {

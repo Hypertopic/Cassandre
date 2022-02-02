@@ -142,7 +142,9 @@ function create(type, name, highlight, anchor) {
           break;
           case 'table':
             destination += 'table/'+diary_id+'/';
-            data.cells = [{'...':[{this_id:'...'}]}];
+            var obj = {};
+            obj[this_id] = '...';
+            data.cells = [{'...':[obj]}];
             data.diary = diary_id;
             data.type = type;
           break;

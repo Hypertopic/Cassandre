@@ -69,6 +69,7 @@
             <span class="d-none d-sm-block">{{i18n.i_remove_grounding}}</span>
           </button>
           <button id="add_row" class="btn btn-outline-{{>contrastcolor}} btn-sm hidden">{{i18n.i_create.row}}</button>
+          <button id="save_row" class="btn btn-outline-{{>contrastcolor}} btn-sm hidden">{{i18n.i_save}}</button>
           {{/editable}}
           {{#authorized}}
           {{>commentsbtn}}
@@ -122,6 +123,7 @@
   <script>
   let candidates = [],
       userids = [],
+      selected = '',
       diary_id = "{{diary}}",
       this_id = "{{_id}}",
       this_type = "{{type}}";
@@ -214,6 +216,21 @@
     })
     .on('click', '.situations', function() {
       refresh = false;
+      $('#leave-name').addClass('hidden');
+      $('.create-leave').addClass('hidden');
+      $('.close').prop('disabled', true);
+      $('#footer > div > button').prop('disabled', true);
+      $('#kwic').parent().children().addClass('hidden');
+      $('a').removeAttr('href');
+      $('#diary').addClass('disabled');
+      $('#signout').prop('disabled', true);
+      $('.toast').toast('hide');
+      $('#modify_rights').remove();
+      $('#save_row').removeClass('hidden');
+      $('h1').unbind("click");   
+      $('h1').click(false);
+      $('#save_row').prop('disabled', false);
+      selected = this.innerHTML;
       var inp = $(this).html($('<input>', {
         id: this.id,
         type: "text",
@@ -263,6 +280,16 @@
     record('add-row', table.rows[table.rows.length-1].cells[0].innerHTML);
   });
 
+  $('#save_row').on('click', function() {
+    var obj = {};
+    obj.name = selected;
+    obj.value = $("td.situations input").val();
+    obj.parentNode = {};
+    obj.parentNode.parentNode = {};
+    obj.parentNode.parentNode.rowIndex = $("td.situations input").parent().parent().parent().children().index($("td.situations input").parent().parent());
+    if (obj.value.length > 0) record ('situation', obj);
+  });
+  
   $('#add').on('click', function() {
     var classlist = $(this)[0].classList;
     create(classlist[classlist.length - 1], $('#leave-name').val().trim());

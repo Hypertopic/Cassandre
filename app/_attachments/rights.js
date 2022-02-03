@@ -61,7 +61,7 @@ $('#unsubscribe').on('click', function() {
     url: '../../reader_unsubscribe/'+this_id,
     type: 'PUT',
     contentType: 'application/json'
-  });
+  }).done(reload)
 });
 function modify_rights(action, value) {
   $.ajax({
@@ -78,5 +78,5 @@ function modify_rights(action, value) {
         + '\\nCode ' + request.status
       );
     }
-  });
+  }).done(reload)
 }

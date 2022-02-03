@@ -250,8 +250,7 @@ var shared = {
           }\
         }).done(function(){\
           refresh = true;\
-          reload;\
-        });\
+        }).done(reload);\
       });\
     }\
   };",

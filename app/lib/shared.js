@@ -85,11 +85,11 @@ var shared = {
       </span><br/>\
       {{i18n.i_readable-by}} <span class='readers'>\
       {{#readers_fullnames}}{{fullname}} {{/readers_fullnames}}</span></span>\
-      {{#logged}}{{#editable}}\
+      {{#logged}}\
       <span id='modify_rights' data-toggle='modal' data-target='#modify_rights_dialog' title='{{i18n.i_modify_rights}}'>\
         <img src='../../style/gear.svg' alt='{{i18n.i_modify_rights}}'>\
       </span>\
-      {{/editable}}{{/logged}}\
+      {{/logged}}\
     </div>",
   modify_rights_dialog:"\
     <div id='modify_rights_dialog' class='modal fade' role='dialog'>\

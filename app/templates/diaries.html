@@ -39,7 +39,10 @@
         </div>
       </div>
       <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
-        <button class="btn navbar-btn btn-outline-{{>contrastcolor}} btn-sm d-none" id="show">{{i18n.i_last-visit}}</button>
+        <div role="group">
+          <button class="btn navbar-btn btn-outline-{{>contrastcolor}} btn-sm d-none" id="show">{{i18n.i_last-visit}}</button>
+          <button class="btn navbar-btn btn-outline-{{>contrastcolor}} btn-sm d-none" type='button' id='create_diary'>{{i18n.i_create.diary}}</button>
+        </div>
         <a class='navbar-text ml-auto' href="https://github.com/Hypertopic/Cassandre/wiki">
           <img src="../style/info.svg" width="30" height="30" alt="Cassandre" loading="lazy">
         </a>
@@ -167,9 +170,20 @@
   });
 
   $('#my_diary').on('keypress', function(key) {
+    if ($('#my_diary').val().length > 0) {
+      $('a').removeAttr('href');
+      $('.in-collection').remove();
+      $('#signout').prop('disabled', true);
+      $('#show').prop('disabled', true);
+      $('#create_diary').removeClass("d-none");
+    }
     if (key.which == 13) {
       createDiary($('#my_diary').val().trim());
     }
+  });
+
+  $('#create_diary').on('click', function() {
+    createDiary($('#my_diary').val().trim());
   });
 
   function createDiary(diary_name) {

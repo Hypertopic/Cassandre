@@ -510,6 +510,10 @@
   });
 
   $('#create_field-memo').on('click', function() {
+    $('#create_field-memo').append($('<span>', {
+      class: 'spinner-border spinner-border-sm ml-1',
+      role: 'status'
+    }));
     var name = $('#location').val().trim() + ', ' + $('#date').val().trim(),
         highlight = $('#kwic').val(),
         type = $('input[name="type-of-field-memo"]:checked').val();

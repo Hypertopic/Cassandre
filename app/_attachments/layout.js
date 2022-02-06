@@ -75,6 +75,26 @@ $('#leave-name').on('keypress', function(key) {
     create(classlist[classlist.length - 1], $('#leave-name').val().trim(), $('#kwic').val(), anchor);
   }
 });
+$('#link_leaf').on('click', function() {
+  $.ajax({
+    url: "../../adapt_memo/"+leaf_id,
+    type: "PUT",
+    contentType: "application/json",
+    data: JSON.stringify({
+     'action': 'add_grounding',
+     'highlight': $('#kwic').val(),
+     'anchor': anchor,
+     'value': this_id
+    }),
+    error: function(request) {
+      alert(
+        (JSON.parse(request.responseText).reason || request.responseText)
+        + '\nCode ' + request.status
+      );
+    },
+    success: reload
+  });
+});
 function create(type, name, highlight, anchor) {
   $('.spinner').removeClass('d-none');
   name = name.replace(/\t/g, ' ');

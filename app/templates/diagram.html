@@ -103,6 +103,7 @@
       </nav>
     </div>
     {{>modify_rights_dialog}}
+    {{>existing_memo_dialog}}
     <div id="show-leaves" class="d-none d-sm-block d-lg-block d-xl-none invisible">
       <div class="reverse">{{i18n.i_leaves}}
         <img title="{{i18n.i_leaves}}" src="../../style/chevron-down.svg" alt="{{i18n.i_leaves}}"/>
@@ -323,7 +324,7 @@
   {{#editable}}
   $('.create-leave').on('click', function() {
     var classlist = $(this)[0].classList;
-    create(classlist[classlist.length - 1], $('#leave-name').val().trim());
+    create(classlist[classlist.length - 1], $('#leave-name').val().trim(), '', 0);
   });
 
   $('.articulate').on('click', function() {

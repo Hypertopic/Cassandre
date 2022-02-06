@@ -91,6 +91,21 @@ var shared = {
       </span>\
       {{/logged}}\
     </div>",
+  existing_memo_dialog:"\
+    <div id='existing_memo' class='modal fade' role='dialog'>\
+      <div class='modal-dialog' role='document'>\
+        <div class='modal-content'>\
+          <div class='modal-body'>\
+            <p>{{i18n.i_memo_already_exists}}</p>\
+            <p class='linkLeaf'>{{i18n.i_link_leaf}}</p>\
+            <div class='modal-footer'>\
+              <button type='button' class='btn btn-primary' data-dismiss='modal'>{{i18n.i_cancel}}</button>\
+              <button id='link_leaf' type='button' class='btn btn-secondary linkLeaf'>{{i18n.i_ground}}</button>\
+            </div>\
+          </div>\
+        </div>\
+      </div>\
+    </div>",
   modify_rights_dialog:"\
     <div id='modify_rights_dialog' class='modal fade' role='dialog'>\
       <div class='modal-dialog' role='document'>\

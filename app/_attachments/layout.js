@@ -291,11 +291,13 @@ function momentRelative(what) {
       $(this).text(on_a_date+' '+mmtime.format('Do MMMM YYYY'));
     }
   });
-  let items = $(what+' li .moment'),
-      n = items.length / 30;
-  if (n !== parseInt(n, 10)) $('#next').prop('disabled', true);
-  items.each(function() {
-    $(this).text($(this).text().replace(/./, function(x) { return x.toUpperCase(); }));
-  });
+  if (what != '') {
+    let items = $(what+' li .moment'),
+        n = items.length / 30;
+    if (n !== parseInt(n, 10)) $('#next').prop('disabled', true);
+    items.each(function() {
+      $(this).text($(this).text().replace(/./, function(x) { return x.toUpperCase(); }));
+    });
+  }
 }
 

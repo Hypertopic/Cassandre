@@ -130,21 +130,8 @@
       this_id = "{{_id}}",
       this_type = "{{type}}";
   $(document).ready(function() {
-    {{>render}}
     moment.locale('{{locale}}');
-    var moments = $('.moment');
-    moments.each(function() {
-      var now = moment();
-      var jstime = $(this).text();
-      var mmtime = moment(jstime);
-      if(now.diff(mmtime, 'days') <= 2) {
-        $(this).text(mmtime.fromNow());
-      } else if(now.diff(mmtime, 'years') <= 1) {
-        $(this).text("{{i18n.i_on-a-date}}"+' '+mmtime.format("Do MMMM"));
-      } else {
-        $(this).text("{{i18n.i_on-a-date}}"+' '+mmtime.format("Do MMMM YYYY"));
-      }
-    });
+    {{>render}}
     var cells = {{{cells}}};
     var tbl_body = document.getElementById("table");
     var tbl_header = tbl_body.tHead.children[0];

@@ -79,7 +79,7 @@ var shared = {
     </p>",
   rights:"\
     <div id='authorization'>\
-      {{i18n.i_created-by}} {{creator}} <span class='moment'>{{date}}</span><br/>\
+      {{i18n.i_created-by}} {{creator}} <span class='{{date}} moment'></span><br/>\
       {{i18n.i_editable-by}} <span class='contributors'>\
       {{#contributors_fullnames}}{{fullname}} {{/contributors_fullnames}}</span>\
       </span><br/>\
@@ -164,7 +164,7 @@ var shared = {
     <div id='comments'>\
       {{#comments}}\
       <div class='comment {{#checked}}checked{{/checked}}' id='{{id}}'>\
-        <span class='meta'><span class='user'>{{user}}</span> (<span class='moment'>{{date}}</span>)</span>:\
+        <span class='meta'><span class='user'>{{user}}</span> (<span class='{{date}} moment'></span>)</span>:\
         {{#logged}}<span class='meta checker d-none d-sm-inline'>{{#checked}}{{i18n.i_checked_by}} {{checked}}{{/checked}}</span><div class='checkbox'><input type='checkbox' class='form-check-input position-static comment_check' {{#checked}}checked{{/checked}}></div>{{/logged}}<br/>\
         <span class='comment_text'>{{text}}</span>\
         <div class='comment_edit hidden'>{{text}}</div>\

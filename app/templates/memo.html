@@ -137,7 +137,7 @@
     <div id="editing" class="hidden">
       {{#editing}}
       <span class="user">{{user_fullname}}</span> {{i18n.i_started_editing}}
-      <span class="moment">{{date}}</span>
+      <span class="{{date}} moment"></span>
       {{/editing}}
     </div>
     <div id="show-leaves" class="d-none d-sm-block d-lg-block d-xl-none invisible">
@@ -228,19 +228,6 @@
   $(document).ready(function() {
     moment.locale('{{locale}}');
     {{>render}}
-    var moments = $('.moment');
-    moments.each(function() {
-      var now = moment();
-      var jstime = $(this).text();
-      var mmtime = moment(jstime);
-      if(now.diff(mmtime, 'days') <= 2) {
-        $(this).text(mmtime.fromNow());
-      } else if(now.diff(mmtime, 'years') <= 1) {
-        $(this).text("{{i18n.i_on-a-date}}"+' '+mmtime.format("Do MMMM"));
-      } else {
-        $(this).text("{{i18n.i_on-a-date}}"+' '+mmtime.format("Do MMMM YYYY"));
-      }
-    });
     {{#statements}}
     {{^logged}}nothing_to_show +='. {{i18n.i_sign-in-for-more}}';{{/logged}}
     if ($('.post').text().trim().length == 0) $('.post').text(nothing_to_show);
@@ -298,7 +285,7 @@
       inform('info', tip);
     }
     {{/editable}}
-    switch ('{{type}}') {
+    switch (this_type) {
       case ('field'):
         $("h1>img").attr("title", "{{i18n.i_memo.field}}".replace('&#39;',"'"));
         $("#name").attr("placeHolder", "{{i18n.i_name.field}}");

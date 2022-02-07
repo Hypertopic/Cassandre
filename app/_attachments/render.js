@@ -2,6 +2,7 @@ function render(){
   announceMaintenance(maintenance, maintenance_in_progress);
   renderRights()
   renderLeaves()
+  momentRelative('')
   stickToHeader()
   let refresh = true;
 }

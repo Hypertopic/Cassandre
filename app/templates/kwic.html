@@ -53,7 +53,9 @@
       </nav>
     </div>
   {{>script}}
-  <script> 
+  <script>
+  const diary_id = '{{diary}}',
+        relpath = '{{>relpath}}';
   $(document).ready(function() {
     $.ajax({
       url: "../../{{diary}}",

@@ -213,12 +213,22 @@ var shared = {
   $('h1').on('click', function() {\
     refresh = false;\
     $(this).hide();\
+    {{#list}}\
+    $('#sort').addClass('disabled');\
+    $('#show-activity').remove();\
+    $('#tasklist-alert').off();\
+    $('#diaries').prop('disabled', true);\
+    $('#drawTimeline').prop('disabled', true);\
+    $('#toggle').prop('disabled', true);\
+    {{/list}}\
     $('#leave-name').addClass('hidden');\
     $('#footer > div > button').prop('disabled', true);\
     $('#add-leaves').addClass('hidden');\
     $('#kwic').parent().children().addClass('hidden');\
     $('a').removeAttr('href');\
     $('#diary').addClass('disabled');\
+    $('#to-register').prop('disabled', true);\
+    $('#signin').prop('disabled', true);\
     $('#signout').prop('disabled', true);\
     $('.toast').toast('hide');\
     $('#modify_rights').remove();\

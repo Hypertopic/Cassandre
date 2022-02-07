@@ -24,7 +24,7 @@
               </a>
               <div class="dropdown-menu" aria-labelledby="show">
                 <a class="dropdown-item" id="drawNetwork">{{i18n.i_network}}</a>
-                <a class="dropdown-item" id="drawTimeline">{{i18n.i_timeline}}</a>
+                <a class="dropdown-item" id="drawTimeline2">{{i18n.i_timeline}}</a>
                 {{#logged}}
                 <h6 class="dropdown-header">{{i18n.i_export}}</h6>
                 <a class="dropdown-item" href="../../export/{{diary}}/html">html</a>
@@ -60,7 +60,7 @@
         <h1>{{diary_name}}
           <span id="size" class="badge badge-pill badge-{{^unreads}}secondary{{/unreads}}{{#unreads}}success{{/unreads}}" title="{{i18n.i_memos}}">{{#unreads}}{{unreads}} / {{/unreads}}{{size}}</span>
         </h1>
-        <input id="name" type="search" class="form-control hidden" value="{{diary_name}}"/>
+        <input id="name" type="search" class="form-control hidden mb-3" value="{{diary_name}}"/>
         <div id="top-right">
           <img id="show-activity" src="../../style/history.svg" alt="{{i18n.i_activity}}" title="{{i18n.i_activity}}"/>
         </div>
@@ -77,6 +77,13 @@
       </div>
     </div>
     <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
+      <div role="group" class="form-check-inline">
+        <button class="btn navbar-btn btn-outline-{{>contrastcolor}} btn-sm" id="show_delete" type="button">{{i18n.i_delete}}...</button>
+        <button class="btn navbar-btn btn-outline-{{>contrastcolor}} btn-sm mr-1 hidden" id="cancel" type="button">{{i18n.i_cancel}}</button>
+        <div class="custom-control custom-switch hidden"><input id="toggle" type="checkbox" class="custom-control-input"></input><label class="navbar-text custom-control-label" for="toggle">{{i18n.i_select}}</label></div>
+        <button class="btn navbar-btn btn-outline-{{>contrastcolor}} btn-sm ml-1 hidden" id="delete" type="button">{{i18n.i_delete}}</button>
+        <button class="btn navbar-btn btn-outline-{{>contrastcolor}} btn-sm ml-1 hidden" type="button" id="renamed">{{i18n.i_save}}</button>
+      </div>
       <a class='navbar-text' href="https://github.com/Hypertopic/Cassandre/wiki">
         <img src="../../style/info.svg" width="30" height="30" alt="Cassandre" loading="lazy">
       </a>
@@ -185,13 +192,10 @@
     .on('click', '#show_delete', function() {
       $("#network").addClass("hidden");
       $("#memos>li>input").removeClass("hidden");
-      $("#footer").html(
-        '<div role="group" class="form-check-inline">'
-        + '<button class="btn navbar-btn btn-outline-{{>contrastcolor}} btn-sm" id="cancel" type="button">{{i18n.i_cancel}}</button>'
-        + '<div class="custom-control custom-switch"><input id="toggle" type="checkbox" class="custom-control-input"></input><label class="navbar-text custom-control-label" for="toggle">{{i18n.i_select}}</label></div>'
-        + '<button class="btn navbar-btn btn-outline-{{>contrastcolor}} btn-sm" id="delete" type="button">{{i18n.i_delete}}</button>'
-        + '</div>'
-      );
+      $("#cancel").removeClass("hidden");
+      $("#delete").removeClass("hidden");
+      $(".custom-switch").removeClass("hidden");
+      $("#show_delete").addClass("hidden");
     })
     .on('click', '#cancel', function() {
       resetUI();
@@ -238,11 +242,8 @@
 
   function resetUI() {
     $("#memos>li>input").addClass("hidden");
-    $("#footer").html(
-      '<button class="btn navbar-btn btn-outline-{{>contrastcolor}} btn-sm" type="button" id="show_delete">{{i18n.i_delete}}...</button>'
-      + '<a class="navbar-text" href="https://github.com/Hypertopic/Cassandre/wiki">'
-      + '<img src="../../style/info.svg" width="30" height="30" alt="Cassandre" loading="lazy"></a>'
-    );
+    $("#footer .form-check-inline").children().addClass("hidden");
+    $("#show_delete").removeClass("hidden");
   }
 
   function taskreport(task, count) {

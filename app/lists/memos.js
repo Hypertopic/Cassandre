@@ -32,7 +32,7 @@ function(head, req) {
           if (row.value.type == 'statement') {
             type = 'storyline';
             path = 'statements';
-            name = i18n["i_name"]["statement"]+'s';
+            name = i18n["i_name"]["statement"];
             diary = '.';
           }
           var sortkey = replaceDiacritics(name).toLowerCase().replace(/\//g, ' '); 

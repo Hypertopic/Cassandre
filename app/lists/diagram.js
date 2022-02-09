@@ -148,7 +148,7 @@ function(head, req) {
           data.leaves.push({
             href: '../../statements/'+diary,
             id: diary,
-            name: i18n["i_name"]["statement"]+'s',
+            name: i18n["i_name"]["statement"],
             type: 'storyline'
           });
         }

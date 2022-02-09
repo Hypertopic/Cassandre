@@ -13,7 +13,7 @@ function(head, req) {
     diary: diary,
     _id: diary,
     locale: req.headers["Accept-Language"].substring(0,2),
-    name: i18n["i_name"]["statement"]+'s',
+    name: i18n["i_name"]["statement"],
     authorized: true,
     contributors: [],
     readers: [],

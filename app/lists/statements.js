@@ -38,14 +38,15 @@ function(head, req) {
         });
       break;
       case 'S':
+        var href = '../diagram/'+ diary +'/'+ row.value._id;
         data.groundings.push({
           id: row.value._id,
-          href: '../diagram/'+ diary +'/'+ row.value._id,
+          href: href,
           type: 'diagram',
           preview: row.doc.negative,
           name: row.doc.name
         });
-        data.body.text += '* '+row.doc.statement+"\n";
+        data.body.text += '* ['+row.doc.statement+']('+href+")\n";
         if (row.doc.contributors && row.doc.contributors.length > 0)
           for (var n in row.doc.contributors)
             if (data.contributors.indexOf(row.doc.contributors[n]) == -1)

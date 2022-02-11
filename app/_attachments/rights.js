@@ -71,12 +71,7 @@ function modify_rights(action, value) {
     data: JSON.stringify({
      'action': action,
      'value': value
-    }),
-    error: function(request) {
-      alert(
-        (JSON.parse(request.responseText).reason || request.responseText)
-        + '\\nCode ' + request.status
-      );
-    }
+    })
   }).done(reload)
+  .fail(error_alert)
 }

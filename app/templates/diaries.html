@@ -74,11 +74,10 @@
     $.ajax({
       url: "../{{logged}}",
       type: "GET",
-      dataType: "json",
-      error: function() {
+      dataType: "json"
+    }).fail(function() {
         $('#storing_fullname_dialog').modal('show');
-      },
-      success: function(data) {
+    }).done(function(data) {
         if(data.fullname.length == 0) $('#storing_fullname_dialog').modal('show');
         if(data.fullname) $('#username').text(data.fullname);
         for (var o in data.order) {
@@ -95,7 +94,7 @@
           }
         }
       }
-    });
+    );
     $.ajax({
       url: "../diaries/{{logged}}",
       type: "GET",

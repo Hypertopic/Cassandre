@@ -326,17 +326,11 @@
       type: "PUT",
       url: "../../adapt_graph/{{_id}}",
       contentType: "application/json",
-      data: JSON.stringify(data),
-      error: function(request) {
-        alert(
-          (JSON.parse(request.responseText).reason || request.responseText)
-          + '\nCode ' + request.status
-        );
-      },
+      data: JSON.stringify(data)
     }).done(function () {
       refresh = true;
       location.replace("{{_id}}")
-    });
+    }).fail(error_alert)
   }
 
   {{>layoutscript}}

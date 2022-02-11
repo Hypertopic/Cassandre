@@ -182,13 +182,12 @@
       url: "../update_memo_content/{{_id}}",
       type: "PUT",
       contentType: "application/json",
-      data: data,
-      error: function(request) {
-        if (request.status == 401) alert("{{i18n.i_lost_connection}}".replace(/&#39;/g,"'").replace(/&quot;/g,'"')); 
-        self.location = '../memo/{{diary}}/{{_id}}';
-      },
-      success: toDoAfter
-    });
+      data: data
+    }).done(toDoAfter)
+    .fail(function(request) {
+      if (request.status == 401) alert("{{i18n.i_lost_connection}}".replace(/&#39;/g,"'").replace(/&quot;/g,'"')); 
+      self.location = '../memo/{{diary}}/{{_id}}';
+    })
   }
 
   $('#double').on('click', function() {

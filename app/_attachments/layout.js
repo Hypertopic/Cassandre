@@ -21,6 +21,12 @@ var reload = function() {
   if (typeof (anchor) !== 'undefined' && anchor > 0) self.location += '#'+anchor;
   if (refresh) location.reload();
 };
+var error_alert = function(qhr) {
+  alert(
+    (JSON.parse(qhr.responseText).reason || qhr.responseText)
+    + "\nCode " + qhr.status
+  );
+}
 String.prototype.trimLeft = String.prototype.trimLeft || function() {
   return this.replace(/^\s+/,'');
 };
@@ -85,15 +91,9 @@ $('#link_leaf').on('click', function() {
      'highlight': $('#kwic').val(),
      'anchor': anchor,
      'value': this_id
-    }),
-    error: function(request) {
-      alert(
-        (JSON.parse(request.responseText).reason || request.responseText)
-        + '\nCode ' + request.status
-      );
-    },
-    success: reload
-  });
+    })
+  }).done(reload)
+  .fail(error_alert)
 });
 function create(type, name, highlight, anchor) {
   $('.spinner').removeClass('d-none');
@@ -300,4 +300,3 @@ function momentRelative(what) {
     });
   }
 }
-

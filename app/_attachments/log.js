@@ -15,12 +15,12 @@ $('#signin').on('submit', function(e) {
     type: 'POST',
     data: $(this).serialize(),
     contentType: 'application/x-www-form-urlencoded',
-    success: reload,
-    error: function(request) {
+  }).done(reload)
+  .fail(function(request) {
       var mismatch = wrong_password;
       alert(mismatch);
     }
-  });
+  );
 });
 $('#signout').on('click', function() {
   $.ajax({
@@ -66,7 +66,7 @@ function createUserDoc(user, sponsor, success, error) {
       contentType: 'application/json',
       data: JSON.stringify(obj)
     }).done(success)
-    .fail(error);
+    .fail(error)
   });
 }
 

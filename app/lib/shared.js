@@ -266,14 +266,9 @@ var shared = {
           url: '../../edit_name/{{_id}}',\
           type: 'PUT',\
           contentType: 'application/json',\
-          data: $('#name').val().trim(),\
-          error: function(request) {\
-            alert(\
-              (JSON.parse(request.responseText).reason || request.responseText)\
-              + '\\nCode ' + request.status\
-            );\
-          }\
-        }).done(function(){\
+          data: $('#name').val().trim()\
+        }).fail(error_alert)\
+        .done(function(){\
           refresh = true;\
         }).done(reload);\
       });\

@@ -98,17 +98,10 @@
           url: "../../" + text_id,
           type: "PUT",
           contentType: "application/json",
-          data: JSON.stringify(text),
-          success: function() {
+          data: JSON.stringify(text)
+        }).done(function() {
             self.location = '../../kwic/{{diary}}'
-          },
-          error: function(request) {
-            alert(
-              (JSON.parse(request.responseText).reason || request.responseText)
-              + '\nCode ' + request.status
-            );
-          }
-        });
+        }).fail(error_alert)
       }
     });
   });

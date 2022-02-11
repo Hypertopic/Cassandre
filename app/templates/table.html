@@ -384,16 +384,11 @@
           type: "PUT",
           url: "../../{{_id}}",
           contentType: "application/json",
-          data: JSON.stringify(data),
-          error: function(request) {
-            alert(
-              (JSON.parse(request.responseText).reason || request.responseText)
-              + '\nCode ' + request.status
-            );
-          }
-        }).done(function (){
+          data: JSON.stringify(data)
+        }).fail(error_alert)
+        .done(function (){
           refresh = true;
-        }).done(reload);
+        }).done(reload)
       }
     });
   }

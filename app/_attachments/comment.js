@@ -66,9 +66,8 @@ function update_comment(id) {
     url: '../../update_comment_content/'+id,
     type: 'PUT',
     contentType: 'application/json',
-    data: $('#'+id+'>textarea').val().trim(),
-    success: reload
-  });
+    data: $('#'+id+'>textarea').val().trim()
+  }).done(reload)
 };
 function comment() {
   refresh = true;
@@ -83,13 +82,7 @@ function comment() {
     type: 'POST',
     url: '../../',
     contentType: 'application/json',
-    data: JSON.stringify(data),
-    error: function(request) {
-      alert(
-        (JSON.parse(request.responseText).reason || request.responseText)
-        + '\\nCode ' + request.status
-      );
-    },
-    success: reload
-  });
+    data: JSON.stringify(data)
+  }).done(reload)
+  .fail(error_alert)
 }

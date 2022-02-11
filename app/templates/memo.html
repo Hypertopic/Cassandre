@@ -244,12 +244,11 @@
     $.ajax({
       url: "{{>relpath}}{{diary}}",
       type: "GET",
-      dataType: "json",
-      success: function(data) {
-        if(data.diary_name) {
-          $('#diary').text(data.diary_name);
-          $('title').prepend(data.diary_name);
-        }
+      dataType: "json"
+    }).done(function(data){
+      if(data.diary_name) {
+        $('#diary').text(data.diary_name);
+        $('title').prepend(data.diary_name);
       }
     }).done(function(){
       stickToHeader();
@@ -559,14 +558,9 @@
       data: JSON.stringify({
        'action': action,
        'value': value
-      }),
-      error: function(request) {
-        alert(
-          (JSON.parse(request.responseText).reason || request.responseText)
-          + '\nCode ' + request.status
-        );
-      }
+      })
     }).done(reload)
+    .fail(error_alert)
   }
 
   function toColor(metrics) {

@@ -38,7 +38,7 @@ function(head, req) {
         data.readers.push(row.value._id);
         var fullname = row.value._id;
         if (row.doc && row.doc.fullname) fullname = row.doc.fullname;
-        data.readers_fullnames.push(fullname);
+        data.readers_fullnames.push({'fullname': fullname});
         break;
       case ('M'):
         var type = 'memo';
@@ -87,7 +87,7 @@ function(head, req) {
   var i = data.readers.indexOf(req.userCtx.name);
   if (i > -1) {
     data.authorized = true;
-    data.logged_fullname = data.readers_fullnames[i];
+    data.logged_fullname = data.readers_fullnames[i].fullname;
   }
   provides("html", function() {
     var end = data.activity[0].date;

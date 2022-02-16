@@ -10,12 +10,24 @@
         <div><h1><a href="memo/">{{i18n.i_diary}}</a></h1></div>
       </div>
       <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item"><a class="nav-link" href="https://github.com/Hypertopic/Cassandre/wiki">
-            <img src="style/info.svg" width="30" height="30" alt="Cassandre" loading="lazy">
-          </a></li>
-        </ul>
+        <div id="last-maintenance" class="nav-item"></div>
+        <div class="nav-item"><a class="nav-link" href="https://github.com/Hypertopic/Cassandre/wiki">
+          <img src="style/info.svg" width="30" height="30" alt="Cassandre" loading="lazy">
+        </a></div>
       </nav>
     </div>
+    <script>
+      function reqListener() {
+        var config = JSON.parse(this.responseText),
+            element = document.getElementById('last-maintenance');
+        if (new Date().toISOString().substr(0,10) == config.maintenance.date.substr(0,10))
+          element.innerHTML = "{{i18n.i_maintenance-scheduled}}".replace('@duration', config.maintenance.duration)
+            + new Date(config.maintenance.date).toLocaleString();
+      };
+      var read = new XMLHttpRequest();
+      read.onload = reqListener;
+      read.open("get", "/config", true);
+      read.send();
+    </script>
   </body>
 </html>

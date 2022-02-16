@@ -144,7 +144,8 @@ function(head, req) {
           var content = {
             words: []
           };
-          for each (var w in body.match(ALPHA)) {
+          for (var i in body.match(ALPHA)) {
+            var w = body.match(ALPHA)[i];
             if (w.match(SPACES) && content.words.length>0) {
               w = content.words.pop() + w;
             }
@@ -157,13 +158,15 @@ function(head, req) {
         }
         data.body.push(content);
       } else {
-        for each (var s in row.doc.speeches) {
-          var content = {
+        for (var i in row.doc.speeches) {
+          var s = row.doc.speeches[i],
+              content = {
             actor: s.actor,
             timestamp: s.timestamp,
             words: []
           };
-          for each (var w in s.text.match(ALPHA)) {
+          for (var i in s.text.match(ALPHA)) {
+            var w = s.text.match(ALPHA)[i];
             if (w.match(SPACES) && content.words.length>0) {
               w = content.words.pop() + w;
             }

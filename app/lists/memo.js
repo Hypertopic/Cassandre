@@ -132,8 +132,8 @@ function(head, req) {
       }
       if (data.peer == '127.0.0.1' && req.headers['X-Forwarded-For'] ) {
         var ips = req.headers['X-Forwarded-For'].split(',');
-        for (var n in ips) {
-          if (ips[n].trim() != '127.0.0.1') data.peer = ips[n].trim();
+        for (var ip of ips) {
+          if (ip.trim() != '127.0.0.1') data.peer = ip.trim();
         }
       }
       data.locale = data.locale.split(',');
@@ -144,8 +144,7 @@ function(head, req) {
           var content = {
             words: []
           };
-          for (var i in body.match(ALPHA)) {
-            var w = body.match(ALPHA)[i];
+          for (var w of body.match(ALPHA)) {
             if (w.match(SPACES) && content.words.length>0) {
               w = content.words.pop() + w;
             }
@@ -158,15 +157,13 @@ function(head, req) {
         }
         data.body.push(content);
       } else {
-        for (var i in row.doc.speeches) {
-          var s = row.doc.speeches[i],
-              content = {
+        for (var s of row.doc.speeches) {
+          var content = {
             actor: s.actor,
             timestamp: s.timestamp,
             words: []
           };
-          for (var i in s.text.match(ALPHA)) {
-            var w = s.text.match(ALPHA)[i];
+          for (var w of s.text.match(ALPHA)) {
             if (w.match(SPACES) && content.words.length>0) {
               w = content.words.pop() + w;
             }

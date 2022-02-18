@@ -8,7 +8,7 @@
     <header>
       <div id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item"><a class="nav-link" id="corpus">&nbsp;</a></li>
+          <li class="nav-item"><a href="../memo/{{diary}}/" class="nav-link btn" id="diary">&nbsp;</a></li>
         </ul>
         <div class="form-inline justify-content-between">
           <div class="input-group input-group-sm">
@@ -27,31 +27,26 @@
         <ul>
           {{#patterns}}
           <li id="{{highlight}}" data-text="{{document}}" class="kwic"><span></span>
-            <a href='../kwic/{{corpus}}/{{kwic}}' >{{kwic}}</a>
+            <a href='../kwic/{{diary}}/{{kwic}}'>{{kwic}}</a>
           </li>
           {{/patterns}}
         </ul>
       </div>
       <nav id="footer" class="{{>navbarstyle}} fixed-bottom"></nav>
     </div>
-  <script src="../script/jquery.js"></script>
+  {{>script}}
   <script>
   $(document).ready(function() {
     $.ajax({
-      url: "../../{{corpus}}",
+      url: "../../{{diary}}",
       type: "GET",
       dataType: "json",
       success: function(d) {
-        $("#corpus").html(d.diary_name);
+        $("#diary").html(d.diary_name);
       }
     });
     stickToHeader();
     resetUI();
-  });
-
-
-  $('#corpus').on('click', function(){
-    self.location = '../memo/{{corpus}}/?by=date';
   });
 
   $('#footer')
@@ -108,22 +103,23 @@
     });
 
   $('#kwic').on('keypress', function(key) {
-    var corpusUrl = encodeURIComponent("{{{corpus}}}");
+    var diaryUrl = encodeURIComponent("{{{diary}}}");
     if (key.which == 13) {
-      self.location = '../kwic/' +corpusUrl+ '/' + $('#kwic').val().toLowerCase();
+      self.location = '../kwic/' +diaryUrl+ '/' + $('#kwic').val().toLowerCase();
     }
   });
 
   $('.search').on('click', function() {
     if ($('#kwic').val().length > 0) {
-      self.location = '../kwic/{{corpus}}/' + $('#kwic').val().toLowerCase();
+      self.location = '../kwic/{{diary}}/' + $('#kwic').val().toLowerCase();
     }
   });
 
   function resetUI() {
     $('#footer').html(
       '<button type="button" id="show_delete" class="btn btn-outline-{{>contrastcolor}} navbar-btn btn-sm">{{i18n.i_delete}}...</button>'
-      + '<a class="navbar-text" href="https://github.com/Hypertopic/Cassandre/wiki">Cassandre</a>'
+      + '<a class="navbar-brand" href="https://github.com/Hypertopic/Cassandre/wiki">'
+      +   '<img src="../../style/info.svg" width="30" height="30" alt="Cassandre" loading="lazy"></a>'
     );
     $('input[type="checkbox"]').remove();
   }

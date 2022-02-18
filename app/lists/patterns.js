@@ -6,7 +6,7 @@ function(head, req) {
   start({"headers":{"Content-Type":"text/html;charset=utf-8"}});
   var data = {
     i18n: localized(),
-    corpus: req.query.key,
+    diary: req.query.key,
     patterns: []
   };
   while (row = getRow()) {

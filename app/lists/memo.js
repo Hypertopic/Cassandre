@@ -138,7 +138,7 @@ function(head, req) {
       }
       data.locale = data.locale.split(',');
       data.locale = data.locale[0].substring(0,2);
-      if (row.doc.body) {
+      if (typeof row.doc.body !== 'undefined') {
         var body = row.doc.body.replace(/\n\t/g, "\n ").replace(/\n {4,}/g, "\n").replace(/\n\n/g, "\n \n");
         if (row.doc.type == 'interview') {
           var content = {

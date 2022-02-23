@@ -144,7 +144,7 @@ function(head, req) {
           var content = {
             words: []
           };
-          for (var w of body.match(ALPHA)) {
+          if (body.length > 0) for (var w of body.match(ALPHA)) {
             if (w.match(SPACES) && content.words.length>0) {
               w = content.words.pop() + w;
             }
@@ -157,7 +157,7 @@ function(head, req) {
         }
         data.body.push(content);
       } else {
-        for (var s of row.doc.speeches) {
+        if (row.doc.speeches) for (var s of row.doc.speeches) {
           var content = {
             actor: s.actor,
             timestamp: s.timestamp,

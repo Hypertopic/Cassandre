@@ -9,7 +9,6 @@ function(head, req) {
     i18n: localized(),
     logged: req.userCtx.name,
     diary: req.query.startkey[0],
-    _id: req.query.startkey[0],
     list: true,
     locale: req.headers["Accept-Language"].substring(0,2),
     peer: req.peer,
@@ -19,14 +18,12 @@ function(head, req) {
   while (row = getRow()) {
     switch (row.key[2]) {
       case '0':
-        if (req.userCtx.name == row.key[1]) {
-          data.by = row.value.by;
-          if (row.value.activity) data.activity = row.value.activity;
-          if (row.value.fullname && row.value.fullname.length > 0) data.logged_fullname = row.value.fullname;
-        }
+        data.by = row.value.by;
+        if (row.value.activity) data.activity = row.value.activity;
+        if (row.value.fullname && row.value.fullname.length > 0) data.logged_fullname = row.value.fullname;
       break;
       case 'M':
-        if ([null, req.userCtx.name].indexOf(row.key[1]) > -1 && memos.map(function(a){return a.id}).indexOf(row.key[3]) < 0) {
+        if (memos.map(function(a){return a.id}).indexOf(row.key[3]) < 0) {
           memos.push({
             'id': row.key[3],
             'date': row.key[4]

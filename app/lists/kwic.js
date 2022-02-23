@@ -23,6 +23,7 @@ function(head, req) {
       switch (v.type) {
         case 'graph':
         case 'diagram':
+        case 'table':
           path = v.type;
         break;
       }

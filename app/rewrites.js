@@ -63,8 +63,8 @@ function(req2) {
         var diary = path[1];
         reply.path = "_list/diary/diary";
         reply.query = {
-          "startkey": '["'+diary+'"]',
-          "endkey":   '["'+diary+'", {}]'
+          "startkey": '["'+diary+'", '+logged+']',
+          "endkey":   '["'+diary+'", '+logged+', {}]'
         };
       } else {
         reply.path = "_list/diaries/diaries";
@@ -93,7 +93,7 @@ function(req2) {
               "startkey": '["'+diary+'", "'+order+'", '+logged+', "M", "'+start+'"]',
               "endkey":   '["'+diary+'", "'+order+'", '+logged+', "M"]',
               "descending": 'true',
-              "limit": '30',
+              "limit": '40',
               "include_docs": 'true'
             };
           break;

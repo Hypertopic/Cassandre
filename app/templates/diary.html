@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <title>{{diary_name}}</title>
+    <title></title>
     {{>links}}
     {{^list}}
       {{>viscss}}
@@ -57,10 +57,8 @@
     </nav>
     <div id="container" class='container-fluid pb-5'>
       <div id="content" class='col'>
-        <h1>{{diary_name}}
-          <span id="size" class="badge badge-pill badge-{{^unreads}}secondary{{/unreads}}{{#unreads}}success{{/unreads}}" title="{{i18n.i_memos}}">{{#unreads}}{{unreads}} / {{/unreads}}{{size}}</span>
-        </h1>
-        <input id="name" type="search" class="form-control hidden mb-3" value="{{diary_name}}"/>
+        <h1> <span id="size" class="badge badge-pill badge-secondary" title="{{i18n.i_memos}}">{{size}}</span></h1>
+        <input id="name" type="search" class="form-control hidden mb-3" value=""/>
         <div id="top-right">
           <img id="show-activity" src="../../style/history.svg" alt="{{i18n.i_activity}}" title="{{i18n.i_activity}}"/>
         </div>
@@ -93,10 +91,11 @@
   {{#list}}<script src="../../script/showdown.min.js"></script>{{/list}}
   {{^list}}<script src="../../script/vis.min.js"></script>{{/list}}
   <script>
-  const diary_id = '{{_id}}',
+  const activity = {{{activity}}},
+        diary_id = '{{_id}}',
+        memos = {{{memos}}},
         this_id = '{{_id}}';
-  var activity = {{{activity}}},
-      converter = new showdown.Converter({
+  var converter = new showdown.Converter({
         tables: 'true',
         tasklists: 'true',
         strikethrough: 'true'
@@ -106,6 +105,7 @@
       list = [],
       number = 0,
       origin = '0',
+      read = 0,
       result,
       results = [];
       text = {
@@ -118,7 +118,30 @@
       };
   if (["date","update"].indexOf("{{by}}") > -1) horizon = '1970';
   $(document).ready(function() {
+    $.ajax({
+      url: "../../{{diary}}",
+      type: "GET",
+      dataType: "json"
+    }).done(function(d){
+      if (d.diary_name) {
+        $('h1').prepend(d.diary_name);
+        $('h1 .spinner-border').addClass("d-none");
+        $('#name').val(d.diary_name);
+        $('title').prepend(d.diary_name);
+      }
+    });
     {{#logged}}
+    for (var m of memos) {
+      var j = activity.map(function(a){return a.doc}).indexOf(m.id);
+      if (activity.length > -1 && j > -1) {
+        if (m.date < activity[j].date) read++;
+      }
+    }
+    if (memos.length - read > 0) {
+      $('#size').prepend(memos.length - read + ' / ');
+      $('#size').addClass('badge-success');
+      $('#size').removeClass('badge-secondary');
+    }
     if ("{{by}}".length <= 0) track('update');
     {{/logged}}
     if (["date","update"].indexOf("{{by}}") > -1) {

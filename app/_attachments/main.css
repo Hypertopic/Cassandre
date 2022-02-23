@@ -68,17 +68,22 @@ div.post {
   border-right: 1px solid #eeeeee;
 }
 
-#content {
-  border-top: 1px solid #eeeeee;
+#memo {
+  padding-top: 60px;
 }
 
-#memo {
-  padding-top: 56px;
+#content {
+  border-top: 1px solid #eeeeee;
+  padding-top: 60px;
 }
 
 #memo>#content {
   display: flex;
   flex-direction: column;
+}
+
+#memo main {
+  padding-top: 0px !important;
 }
 
 #leaves {

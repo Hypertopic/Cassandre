@@ -1,8 +1,7 @@
 function stickToHeader() {
   var h = document.getElementById('header').offsetHeight;
   $('#container>#memo').css({'padding-top': h});
-  $('#container>#content>h1').css({'padding-top': h+5});
-  $('#container>#content #name').css({'margin-top': h+5});
+  $('#content').css({'padding-top': h+5});
   $('#top-right').css({'top': h+5});
   if (h > 36) $('#show-leaves').css({'top': h-36});
   $('.mytooltip .preview').css({'top': h});

@@ -71,9 +71,9 @@
         {{/list}}
         <div id="network" class="hidden"></div>
         <div id="memos"></div>
-        <p class="text-center">
-          <img id="more" src="../../script/cloud-download.svg" alt="{{i18n.i_show-more}}" title="{{i18n.i_show-more}}"/>
-        </p>
+        <p><div class="d-flex justify-content-center">
+          <div id="more" class="spinner-border spinner-border-sm" title="{{i18n.i_show-more}}" role="status" aria-hidden="true"></div>
+        </div></p>
       </div>
     </div>
     <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
@@ -167,10 +167,9 @@
     $.ajax({
       url: "../../kwic/{{diary}}",
       type: "GET",
-      dataType: "json",
-      success: function(kwic) {
-        if (kwic.pending > 0) $('#patterns').removeClass("hidden");
-      }
+      dataType: "json"
+    }).done(function(kwic){
+      if (kwic.pending > 0) $('#patterns').removeClass("hidden");
     });
     poller('diary', '{{update_seq}}');
   });

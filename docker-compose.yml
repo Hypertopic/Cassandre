@@ -33,6 +33,7 @@ services:
     volumes:
       - ./conf/aaaforrest.yml:/AAAforREST/conf/config.yml:ro
     working_dir: /AAAforREST
+    restart: on-failure
     depends_on:
       - proxy
 

@@ -72,7 +72,7 @@
 
     .on('click', '#delete', function() {
       var checked = $(".kwic :checked");
-      var countdown = checked.size();
+      var countdown = checked.length;
       if (!countdown) {
         resetUI();
       }

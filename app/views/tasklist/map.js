@@ -7,8 +7,7 @@ function(o) {
   var contributors = [].concat(o.readers, o.contributors).sort();
   var users = contributors.filter(function(item, pos, ary) {return !pos || item != ary[pos - 1];} );
   if (o.readers == undefined || o.readers.length == 0) users.push(null);
-  for (i in users) {
-    var user = users[i];
+  for (user of users) {
     if (o.name == '' || o.name == '...')
       emit([diary, user, 'N', o.history[o.history.length -1].date], {'id': o._id, 'name': '...'});
     if (o.editing)

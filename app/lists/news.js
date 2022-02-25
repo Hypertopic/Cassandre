@@ -38,13 +38,13 @@ function(head, req) {
     }
   }
   news.shift();
-  for (i in number) {
-    var diary = number[i].diary;
+  for (var n of number) {
+    var diary = n.diary;
     data.push({
       id: diary,
       lastvisit: lastvisit[diary],
       news: news[diary],
-      size: number[i].memos.length
+      size: n.memos.length
      });
   }
   return send(toJSON(data));

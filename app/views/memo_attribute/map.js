@@ -12,10 +12,10 @@ function(o) {
   if (o.history) {
     date = o.history[0].date;
     update = o.history[o.history.length-1].date;
-    for (var id in o.history) {
+    for (var [id, h] of Object.entries(o.history)) {
       var value = {
-        user: o.history[id].user,
-        _id: o.history[id].user
+        user: h.user,
+        _id: h.user
       }
       if (id < 1) {
         value.created = 1;
@@ -33,7 +33,7 @@ function(o) {
         value.comment = 1;
       }
       value.users = users;
-      emit([diary, 'Z', o.history[id].date], value);
+      emit([diary, 'Z', h.date], value);
     }
   }
   if (o.commented && o.text != "") {
@@ -68,8 +68,7 @@ function(o) {
         preview = preview.join('\n \n');
       }
     }
-    for (var i in users) {
-      var user = users[i];
+    for (var user of users) {
       var obj = {
         id: o._id,
         rev: o._rev,

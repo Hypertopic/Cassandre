@@ -26,8 +26,8 @@ function(head, req){
         if (row.doc)  {
           if (row.value.preview) {
             preview = [];
-            for (var p in row.value.preview) {
-              preview.push(row.value.preview[p].text);
+            for (var p of row.value.preview) {
+              preview.push(p.text);
             }
             preview = preview.join('\n \n---\n');
           } else if (row.doc.body) {

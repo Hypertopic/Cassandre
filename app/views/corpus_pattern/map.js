@@ -1,7 +1,6 @@
 function(o) {
-  var corpus = o.corpus || o._id; // compatibility with old data model
-  for (var h in o.highlights) {
-    var highlight = o.highlights[h];
+  var corpus = o.corpus || o._id;
+  for (var [h, highlight] of Object.entries(o.highlights)) {
     emit(corpus, {
       highlight: h,
       text: highlight.text,

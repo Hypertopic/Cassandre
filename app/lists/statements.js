@@ -48,13 +48,13 @@ function(head, req) {
         });
         data.body.text += '* ['+row.doc.statement+']('+href+")\n";
         if (row.doc.contributors && row.doc.contributors.length > 0)
-          for (var n in row.doc.contributors)
-            if (data.contributors.indexOf(row.doc.contributors[n]) == -1)
-              data.contributors.push(row.doc.contributors[n]);
+          for (var c of row.doc.contributors)
+            if (data.contributors.indexOf(c) == -1)
+              data.contributors.push(c);
         if (row.doc.readers && row.doc.readers.length > 0)
-          for (var n in row.doc.readers)
-            if (data.readers.indexOf(row.doc.readers[n]) == -1)
-              data.readers.push(row.doc.readers[n]);
+          for (var r of row.doc.readers)
+            if (data.readers.indexOf(r) == -1)
+              data.readers.push(r);
       break;
     }
   }

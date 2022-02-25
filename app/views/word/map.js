@@ -4,16 +4,15 @@ function(o) {
   if (o.type == 'interview' && !o.editing) {
     var counts = {};
     var words = o.body.match(ALPHA);
-    if (words) for (var i in words) {
-      var word = words[i].toLowerCase();
+    if (words) for (var w of words) {
+      var word = w.toLowerCase();
       if (!counts.hasOwnProperty(word)) {
         counts[word] = 1;
       } else {
         counts[word]++;
       }
     }
-    for (var word in counts) {
-      var count = counts[word];
+    for (var [word, count] of Object.entries(counts)) {
       emit([o.diary, word], count);
       emit([o._id, word], count);
     }

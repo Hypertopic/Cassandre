@@ -19,8 +19,8 @@ function(head, req) {
   data.locale = data.locale[0].substring(0,2);
   if (data.peer == '127.0.0.1' && req.headers['X-Forwarded-For'] ) {
     var ips = req.headers['X-Forwarded-For'].split(',');
-    for (var n in ips) {
-      if (ips[n].trim() != '127.0.0.1') data.peer = ips[n].trim();
+    for (var ip of ips) {
+      if (ip.trim() != '127.0.0.1') data.peer = ip.trim();
     }
   }
   while (row = getRow()) {
@@ -45,8 +45,7 @@ function(head, req) {
             });
             preview = preview.join('\n \n');
           }
-          for (i in row.value.groundings) {
-            var id = row.value.groundings[i];
+          for (var id of row.value.groundings) {
             if (typeof id._id === 'string') id = id._id;
             groundings.push({
               'id': id,

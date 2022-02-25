@@ -48,8 +48,7 @@ function(head, req) {
             'name': row.value.name.replace(/[\n\r]+/g,' ')
           });
           if (row.value.type != 'statement')
-          for (i in row.value.groundings) {
-            var from = row.value.groundings[i];
+          for (var from of row.value.groundings) {
             if (typeof from._id === 'string') from = from._id;
             data.edges.push({
               'from': from,

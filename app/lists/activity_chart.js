@@ -48,28 +48,28 @@ function(head, req) {
     }
   }
   if (data.activity.length > 0) data.end = data.activity[data.activity.length-1].date;
-  for(var user in nCommented) {
+  for(var [user, n] of Object.entries(nCommented)) {
     data.ncommented.push({
       user: user,
-      n: nCommented[user]
+      n: n
     });
   }
-  for(var user in nCreated) {
+  for(var [user, n] of Object.entries(nCreated)) {
     data.ncreated.push({
       user: user,
-      n: nCreated[user]
+      n: n
     });
   }
-  for(var user in nModified) {
+  for(var [user, n] of Object.entries(nModified)) {
     data.nmodified.push({
       user: user,
-      n: nModified[user]
+      n: n
     });
   }
-  for(var user in fullnames) {
+  for(var [user, fullname] of Object.entries(fullnames)) {
     data.fullnames.push({
       user: user,
-      fullname: fullnames[user]
+      fullname: fullname
     });
   }
   send(toJSON(data));

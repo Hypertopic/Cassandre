@@ -58,8 +58,8 @@ function(head, req) {
               preview = null;
           if (row.value.preview) {
             preview = [];
-            for (var p in row.value.preview) {
-              preview.push('['+row.value.preview[p].text+']('+row.value._id+'#'+row.value.preview[p].anchor+')');
+            for (var p of row.value.preview) {
+              preview.push('['+p.text+']('+row.value._id+'#'+p.anchor+')');
             }
             preview = preview.join('\n \n---\n');
           } else {

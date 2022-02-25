@@ -34,7 +34,8 @@ By default, users are managed both by CouchDB and LDAP.
 
 1. In CouchDB, [create an administrator account](http://localhost:5984/_utils/#createAdmin).
 2. In CouchDB, [create a database](http://localhost:5984/_utils/#/_all_dbs) named `_users`.
-3. Choose a password and set in as the `secret` in `conf/couchdb.ini` and `conf/aaaforrest.yml`.
-4. Set LDAP settings to fit your own LDAP server.
+3. Create an empty `{"_id": "_security"}` object into `_users` database.
+4. Choose a password and set in as the `secret` in `conf/couchdb.ini` and `conf/aaaforrest.yml`.
+5. Set LDAP settings to fit your own LDAP server.
 
 You can [create a user account](http://localhost/register/) from Cassandre.

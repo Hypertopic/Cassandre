@@ -8,7 +8,7 @@
     <div id="container" class='container-fluid h-100'>
       <div id="content" class="h-100 d-flex justify-content-center align-items-center" style="height:100px;">
         <div><h1>{{i18n.i_does-not-exist}}</h1>
-          <p><a id="diary"><img src="../../style/arrow-left.svg" /></a></p>
+          <p><a id="back"><img src="../../style/arrow-left.svg" /></a></p>
         </div>
       </div>
       <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
@@ -21,7 +21,7 @@
     </div>
     {{>script}}
     <script>
-    $('#diary').on('click', function() {
+    $('#back').on('click', function() {
       var diary = window.location.pathname.split('/')[2];
       self.location = '../../memo/'+diary+'/';
     });

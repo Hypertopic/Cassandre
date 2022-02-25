@@ -92,9 +92,9 @@
   {{^list}}<script src="../../script/vis.min.js"></script>{{/list}}
   <script>
   const activity = {{{activity}}},
-        diary_id = '{{_id}}',
+        diary_id = '{{diary}}',
         memos = {{{memos}}},
-        this_id = '{{_id}}';
+        this_id = '{{diary}}';
   var converter = new showdown.Converter({
         tables: 'true',
         tasklists: 'true',

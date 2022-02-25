@@ -16,18 +16,18 @@
         </a></div>
       </nav>
     </div>
+    {{>script}}
     <script>
-      function reqListener() {
-        var config = JSON.parse(this.responseText),
-            element = document.getElementById('last-maintenance');
-        if (new Date().toISOString().substr(0,10) == config.maintenance.date.substr(0,10))
-          element.innerHTML = "{{i18n.i_maintenance-scheduled}}".replace('@duration', config.maintenance.duration)
-            + new Date(config.maintenance.date).toLocaleString();
-      };
-      var read = new XMLHttpRequest();
-      read.onload = reqListener;
-      read.open("get", "/config", true);
-      read.send();
+      $.ajax({
+        url: "{{>relpath}}config",
+        type: "GET",
+        dataType: "json"
+      }).done(function(c){
+        if (new Date().toISOString().substr(0,10) == c.maintenance.date.substr(0,10)) {
+          $('#last-maintenance').prepend("{{i18n.i_maintenance-scheduled}}".replace('@duration', c.maintenance.duration));
+          $('#last-maintenance').append(moment(c.maintenance.date).format("HH:mm"));
+        }
+      });
     </script>
   </body>
 </html>

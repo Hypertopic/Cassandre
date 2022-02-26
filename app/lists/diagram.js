@@ -51,7 +51,7 @@ function(head, req) {
       case ('G'):
         if (row.doc)  {
           if (row.doc.body) {
-            var preview = row.doc.body.substr(0, 200);
+            if (row.doc.body.replace(/\s/g, '').length > 0) var preview = row.doc.body.substr(0, 200);
           } else {
             if (row.doc.speeches) {
               var preview = row.doc.speeches[0].text.substr(0, 200) || null;

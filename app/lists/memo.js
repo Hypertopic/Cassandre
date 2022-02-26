@@ -63,7 +63,7 @@ function(head, req) {
             }
             preview = preview.join('\n \n---\n');
           } else {
-            if (row.doc.body) preview = row.doc.body;
+            if (row.doc.body && row.doc.body.replace(/\s/g, '').length > 0) preview = row.doc.body;
             if (row.doc.speeches) preview = row.doc.speeches[0].text;
             if (row.doc.negative) preview = row.doc.negative;
             if (preview != null) preview = preview.substr(0, 200);

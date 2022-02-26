@@ -22,8 +22,8 @@
         <h1>{{fullname}} <span id="contribution"></span></h1>
         <fieldset class="form-group">
           <legend class="col-form-label">
-          {{i18n.i_filter}}
           {{#stats}}
+          {{i18n.i_filter}}
           <a id="all-activity">{{i18n.i_all}} ({{all}})</a>
           <a class="d-none" id="only-created">{{i18n.i_creations}} ({{created}})</a>
           <a class="d-none" id="only-modified">{{i18n.i_modifications}} ({{modified}})</a>
@@ -57,6 +57,7 @@
   {{/authorized}}
   {{#authorized}}
   moment.locale('{{locale}}');
+  {{#stats}}
   let cal = new CalHeatMap(),
       converter = new showdown.Converter({strikethrough: 'true'}),
       all = {},
@@ -65,6 +66,7 @@
       modified = {},
       end = new Date('{{end}}'),
       start = new Date('{{start}}');
+  {{/stats}}
   $(document).ready(function() {
     stickToHeader();
     {{#activity}}
@@ -83,8 +85,8 @@
       }
     }
     {{/activity}}
-    drawChart(all);
     {{#stats}}
+    drawChart(all);
     if ({{commented}} > 0) $('#only-commented').removeClass('d-none');
     if ({{created}} > 0) $('#only-created').removeClass('d-none');
     if ({{modified}} > 0) $('#only-modified').removeClass('d-none');
@@ -103,14 +105,13 @@
     $.ajax({
       url: "../user/{{id}}/"+start,
       type: "GET",
-      dataType: "json",
-      success: function(data) {
-        for (var i in data) {
-          $("#events").append('<li class="'+data[i].action+'">'
-            +'<span id="'+data[i].date+'" class="'+data[i].date+' moment"></span>&nbsp;– '
-            +'<a href="../'+data[i].type+'/'+data[i].diary+'/'+data[i].id+'">'+data[i].name+'</a>'
-            +'</li>');
-        }
+      dataType: "json"
+    }).done(function(data){
+      for (var e of data) {
+        $("#events").append('<li class="'+e.action+'">'
+          +'<span id="'+e.date+'" class="'+e.date+' moment"></span>&nbsp;– '
+          +'<a href="../'+e.type+'/'+e.diary+'/'+e.id+'">'+e.name+'</a>'
+          +'</li>');
       }
     }).done(function(){
       momentRelative('#events');
@@ -119,6 +120,8 @@
         if (md.substring(0,3) == '<p>') md = md.replace(/<\/?p>/g, '');
         return md;
       });
+    }).then(function(){
+      if ($('#events li').length == 0) $('#events').text('{{i18n.i_nothing-to-show}}');
     });
   }
 

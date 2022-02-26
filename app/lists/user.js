@@ -18,8 +18,7 @@ function(head, req) {
     logged: req.userCtx.name,
     logged_fullname: req.userCtx.name,
     readers: [],
-    readers_fullnames: [],
-    stats: []
+    readers_fullnames: []
   };
   while (row = getRow()) {
     var type = 'memo';
@@ -90,17 +89,20 @@ function(head, req) {
     data.logged_fullname = data.readers_fullnames[i].fullname;
   }
   provides("html", function() {
-    var end = data.activity[0].date;
-    data.end = end;
-    end = new Date(end);
-    var start = new Date(end.setFullYear(end.getFullYear() - 1));
-    data.start = start.toJSON();
-    data.stats.push({
-      all: created+commented+modified,
-      commented: commented,
-      created: created,
-      modified: modified
-    });
+    if (data.activity.length > 0) {
+      var end = data.activity[0].date;
+      data.end = end;
+      end = new Date(end);
+      var start = new Date(end.setFullYear(end.getFullYear() - 1));
+      data.start = start.toJSON();
+      data.stats = [];
+      data.stats.push({
+        all: created+commented+modified,
+        commented: commented,
+        created: created,
+        modified: modified
+      });
+    }
     return Mustache.to_html(templates.user, data, shared);
   });
   provides("json", function() {

@@ -2,7 +2,7 @@ function(o) {
   var diary = o.diary || o.corpus;
   if (o.diary_name)
     emit([o._id, null, 'B'], {diary_name: o.diary_name});
-  if (o.commented && !o.checked)
+  if (o.commented && o.text && !o.checked)
     emit([o.diary, null, 'C', o.date], {'id': o.commented, '_id': o.commented, 'name': o.text});
   var contributors = [].concat(o.readers, o.contributors).sort();
   var users = contributors.filter(function(item, pos, ary) {return !pos || item != ary[pos - 1];} );

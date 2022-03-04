@@ -80,10 +80,10 @@
     }).done(function(data) {
         if(data.fullname.length == 0) $('#storing_fullname_dialog').modal('show');
         if(data.fullname) $('#username').text(data.fullname);
-        for (var o in data.order) {
-          if (typeof data.order[o].collection !== 'undefined') {
-            let collection = data.order[o].collection,
-                diary = data.order[o].diary;
+        for (var o of data.order) {
+          if (typeof o.collection !== 'undefined') {
+            let collection = o.collection,
+                diary = o.diary;
             if (document.getElementById(collection) == null) $("#content").append("<h3 class='collection d-none'>"+collection+"</h3><div id='"+collection+"' class='card-columns'></div>");
             if (document.getElementById(diary) !== null) {
               $('#'+collection).append($('#'+diary).parent().parent());
@@ -100,12 +100,12 @@
       type: "GET",
       dataType: "json",
       success: function(data) {
-        for (var i in data) {
-          let id = data[i].id;
+        for (var d of data) {
+          let id = d.id;
           if (!$('#'+id).length) {
             var card = '<div class="card text-center bg-light mb-3">'
               +'<div title="{{i18n.i_integrate}} {{i18n.i_in}} {{i18n.i_collection}}" class="in-collection d-none"><img src="../style/chevron-down.svg" alt="v" /></div>'
-              +'<h5><a href="../memo/'+id+'/">'+data[i].name+'</a></h5>'
+              +'<h5><a href="../memo/'+id+'/">'+d.name+'</a></h5>'
               +'<div title="{{i18n.i_restricted-access}}" class="card-icons"><img src="../style/lock.svg" alt="" /></div>'
               +'<p><span id="'+id+'" title="{{i18n.i_memos}}" class="badge badge-pill badge-secondary progress-bar-striped progress-bar-animated d-none">{{i18n.i_loading}}</span></p>'
               +'</div>';
@@ -114,7 +114,7 @@
             } else {
               $('#loading').after(card);
             }
-            added.push(data[i].id);
+            added.push(d.id);
           }
         }
       }
@@ -147,18 +147,18 @@
       type: "GET",
       dataType: "json",
       success: function(data) {
-        for (var i in data) {
-          $('#'+data[i].id).text(data[i].size);
-          if (data[i].news) {
-            $('#'+data[i].id).prepend(data[i].news+' / ');
-            $('#'+data[i].id).parent().parent().removeClass('bg-light');
-            $('#'+data[i].id).parent().parent().addClass('alert-success');
-            $('#'+data[i].id).parent().parent().attr("title", "{{i18n.i_updated-diary}}");
-            $('#'+data[i].id).removeClass('badge-secondary');
-            $('#'+data[i].id).addClass('badge-success');
-            $('#'+data[i].id).attr("title", "{{i18n.i_memos-number}}");
-            if (typeof data[i].lastvisit !== 'undefined')
-              $("<br/><span class='moment'>{{i18n.i_last-visit}} "+moment(data[i].lastvisit).fromNow()+'</span>').insertAfter('#'+data[i].id);
+        for (var n of data) {
+          $('#'+n.id).text(n.size);
+          if (n.news) {
+            $('#'+n.id).prepend(n.news+' / ');
+            $('#'+n.id).parent().parent().removeClass('bg-light');
+            $('#'+n.id).parent().parent().addClass('alert-success');
+            $('#'+n.id).parent().parent().attr("title", "{{i18n.i_updated-diary}}");
+            $('#'+n.id).removeClass('badge-secondary');
+            $('#'+n.id).addClass('badge-success');
+            $('#'+n.id).attr("title", "{{i18n.i_memos-number}}");
+            if (typeof n.lastvisit !== 'undefined')
+              $("<br/><span class='moment'>{{i18n.i_last-visit}} "+moment(n.lastvisit).fromNow()+'</span>').insertAfter('#'+n.id);
           }
         }
       }

@@ -250,11 +250,11 @@
         {'color':'red', 'value': false, 'text': "{{i18n.i_false}}" },
         {'color':'', 'value': '...', 'text': "{{i18n.i_undef}}" }
       ];
-      for (i in colors) {
+      for (c of colors) {
         var selected = false;
-        if (selected_color == colors[i].color) selected = true ;
+        if (selected_color == c.color) selected = true ;
         $(this).find('select').append(
-          $('<option>', { value: selected_cell+colors[i].value, text: colors[i].text, class:colors[i].color, selected: selected })
+          $('<option>', { value: selected_cell+c.value, text: c.text, class:c.color, selected: selected })
         );
       }
   });

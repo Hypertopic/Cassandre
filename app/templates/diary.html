@@ -296,22 +296,22 @@
   };
 
   function showList(data) {
-    for (var i in data) {
-      if(document.getElementById(data[i].id) == null) {
+    for (var m of data) {
+      if(document.getElementById(m.id) == null) {
         var unread = 'unread';
-        var date = data[i].date;
-        if('{{by}}' == 'update') date = data[i].update;
-        var sort_key = data[i].sortkey;
-        var j = activity.findIndex(e => e.doc === data[i].id);
-        if (j > -1 && activity[j].date > data[i].update) unread = '';
-        var checkbox = '<input type="checkbox" id="'+data[i].id+'" name="'+data[i].rev+'" class="hidden deletable" />';
-        if (data[i].rev == 'statement') checkbox = '<input type="checkbox" class="hidden" disabled />';
-        var li = '<li class="'+data[i].type+'" name="'+sort_key+'">' + checkbox
-          +' <span id="'+data[i].id+'" name="'+data[i].update+'" class="'+date+' moment '+unread+'"></span>&nbsp;– '
+        var date = m.date;
+        if('{{by}}' == 'update') date = m.update;
+        var sort_key = m.sortkey;
+        var j = activity.findIndex(e => e.doc === m.id);
+        if (j > -1 && activity[j].date > m.update) unread = '';
+        var checkbox = '<input type="checkbox" id="'+m.id+'" name="'+m.rev+'" class="hidden deletable" />';
+        if (m.rev == 'statement') checkbox = '<input type="checkbox" class="hidden" disabled />';
+        var li = '<li class="'+m.type+'" name="'+sort_key+'">' + checkbox
+          +' <span id="'+m.id+'" name="'+m.update+'" class="'+date+' moment '+unread+'"></span>&nbsp;– '
           +'<span class="mytooltip">'
-          +'<a href="../../'+data[i].path+'/'+data[i].diary+'/'+data[i].id+'" class="'+unread+'">'+data[i].name+'</a>';
-        if (typeof data[i].preview !== 'undefined' && data[i].preview.trim().length > 0)
-          li += '<span class="preview text-{{>contrastcolor}} bg-{{>menucolor}}">'+data[i].preview+'</span>';
+          +'<a href="../../'+m.path+'/'+m.diary+'/'+m.id+'" class="'+unread+'">'+m.name+'</a>';
+        if (typeof m.preview !== 'undefined' && m.preview.trim().length > 0)
+          li += '<span class="preview text-{{>contrastcolor}} bg-{{>menucolor}}">'+m.preview+'</span>';
         li += '</span></li>';
         $("#memos").append(li);
       }

@@ -387,8 +387,7 @@
         dataType: "json",
         success: function(lexcorpus) {
           var corpus = {};
-          for (var i in lexcorpus.rows) {
-            var c = lexcorpus.rows[i];
+          for (var c of lexcorpus.rows) {
             corpus[c.key[1]] = c.value;
           }
           $.ajax({
@@ -397,10 +396,9 @@
             dataType: "json",
             success: function(lexdoc) {
               var max_specific = 0;
-              for (var j in lexdoc.rows) {
-                var d = lexdoc.rows[j];
-                var word = d.key[1];
-                var inCorpus = corpus[word];
+              for (var d of lexdoc.rows) {
+                var word = d.key[1],
+                    inCorpus = corpus[word];
                 metrics[word] = {
                   rare: 1/inCorpus.sum,
                   specific: Math.sqrt(d.value)/inCorpus.count,
@@ -422,8 +420,7 @@
         type: "GET",
         dataType: "json",
         success: function(phrases) {
-          for (var l in phrases.rows) {
-            var r = phrases.rows[l];
+          for (var r of phrases.rows) {
             trigrams[[r.key[1], r.key[2], r.key[3]]] = r.value;
           }
           $('#repeated').removeClass('disabled');

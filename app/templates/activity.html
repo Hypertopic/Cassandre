@@ -84,28 +84,27 @@
       type: "GET",
       dataType: "json"
     }).done(function(data) {
-      for (u in data.fullnames) {
-        if (fullnames[data.fullnames[u].user] == null) fullnames[data.fullnames[u].user] = data.fullnames[u].fullname;
+      for (u of data.fullnames) {
+        if (fullnames[u.user] == null) fullnames[u.user] = u.fullname;
       }
       end = new Date(data.end);
       start = new Date(end.setFullYear(end.getFullYear() - 1));
       for (activity in {created,commented,modified}) {
         if (data['n'+activity].length > 0)
-          for (i in data['n'+activity]) {
-            var e = data['n'+activity][i],
-                fullname = e.user;
+          for (e of data['n'+activity]) {
+            var fullname = e.user;
             if (fullnames[e.user] == null) getFullname(e.user);
             if (fullnames[e.user] != null) fullname = fullnames[e.user];
             $('#contributors .'+activity).append(fullname+'&nbsp;('+e.n+') ');
           }
       }
-      for (var i in data.activity) {
-        var date = data.activity[i].date;
+      for (var a of data.activity) {
+        var date = a.date;
         if(date > start.toJSON()) {
           all[moment(date).format('X')] = 1;
-          if (data.activity[i].commented) commented[moment(date).format('X')] = 1;
-          if (data.activity[i].created)     created[moment(date).format('X')] = 1;
-          if (data.activity[i].modified)   modified[moment(date).format('X')] = 1;
+          if (a.commented) commented[moment(date).format('X')] = 1;
+          if (a.created)     created[moment(date).format('X')] = 1;
+          if (a.modified)   modified[moment(date).format('X')] = 1;
         }
       }
     }).done(function() {
@@ -187,9 +186,9 @@
       type: "GET",
       dataType: "json",
       success: function(data) {
-        for (var i in data) {
-          var [date, user, user_fullname, type] = [data[i].date, data[i].user, data[i].user_fullname, data[i].modified_type];
-          if (typeof data[i].commented !== 'undefined') {
+        for (var a of data) {
+          var [date, user, user_fullname, type] = [a.date, a.user, a.user_fullname, a.modified_type];
+          if (typeof a.commented !== 'undefined') {
             action = '{{i18n.i_commented}}&nbsp;: ';
           }
           path = type2path(type);
@@ -198,14 +197,14 @@
           if (typeof user_fullname === 'undefined' && fullnames[user] !== null) user_fullname = fullnames[user];
           if (typeof user_fullname === 'undefined' && fullnames[user] == null) user_fullname = user;
 
-          if (typeof data[i].diary_label !== 'undefined') {
-            if (typeof data[i].created   !== 'undefined') action = '{{i18n.i_created}} {{i18n.i_the-diary}}';
-            if (typeof data[i].modified  !== 'undefined') action = '{{i18n.i_modified}} {{i18n.i_the-diary}}';
+          if (typeof a.diary_label !== 'undefined') {
+            if (typeof a.created   !== 'undefined') action = '{{i18n.i_created}} {{i18n.i_the-diary}}';
+            if (typeof a.modified  !== 'undefined') action = '{{i18n.i_modified}} {{i18n.i_the-diary}}';
           } else {
-            if (typeof data[i].commented !== 'undefined') action = '{{i18n.i_commented}}&nbsp;: ';
-            if (typeof data[i].created   !== 'undefined') action = '{{i18n.i_created}} ';
-            if (typeof data[i].modified  !== 'undefined') action = '{{i18n.i_modified}} ';
-            action += '<a href="../../'+path+'/'+diary_id+'/'+data[i].modified_id+'">'+data[i].modified_name+'</a>';
+            if (typeof a.commented !== 'undefined') action = '{{i18n.i_commented}}&nbsp;: ';
+            if (typeof a.created   !== 'undefined') action = '{{i18n.i_created}} ';
+            if (typeof a.modified  !== 'undefined') action = '{{i18n.i_modified}} ';
+            action += '<a href="../../'+path+'/'+diary_id+'/'+a.modified_id+'">'+a.modified_name+'</a>';
           }
           var li = '<li>'
             +'<span id="'+date+'" class="'+date+' moment"></span>, '

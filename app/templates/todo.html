@@ -103,10 +103,10 @@
         $('title').prepend(d.diary_name);
         nComments = d.comments.length;
         var data = d.comments;
-        for (var i in data) {
+        for (var c of data) {
           payload += "<li class='unchecked-comment'>"
-            +'<span class="'+data[i].date+' moment"></span>&nbsp;– '
-            +"<a href='../../"+data[i].type+"/"+data[i].diary+"/"+data[i].id+"'>"+data[i].name+"</a>"
+            +'<span class="'+c.date+' moment"></span>&nbsp;– '
+            +"<a href='../../"+c.type+"/"+c.diary+"/"+c.id+"'>"+c.name+"</a>"
             +'</li>';
         }
       }

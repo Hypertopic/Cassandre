@@ -172,9 +172,8 @@
       type: "GET",
       dataType: "json",
         success: function(grounds) {
-        for (var i in grounds.rows) {
-          var r = grounds.rows[i],
-              id = r.value['id'],
+        for (var r of grounds.rows) {
+          var id = r.value['id'],
               ground_href = r.value['id'];
               ground_label = r.value['name'];
           if ($('#groundings>li').length < 2 && document.getElementById(id) == null && ground_href != "{{_id}}") {

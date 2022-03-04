@@ -281,15 +281,15 @@
     destroyGraphViz();
     var viz = new Viz(),
         graphviz = 'graph "{{name}}" {overlap=false; graph [fontname = "helvetica"]; node [fontname = "helvetica" style="filled" fillcolor="white"]; edge [fontname = "helvetica"];';
-    for (var i in nodes) {
-      graphviz += 'node'+nodes[i].id + '[label="' + nodes[i].label.replace(/['"]/g, '\'').replace(/\n/g, '\\n') + '", shape='+nodes[i].shape+']; ';
+    for (var n of nodes) {
+      graphviz += 'node'+n.id + '[label="' + n.label.replace(/['"]/g, '\'').replace(/\n/g, '\\n') + '", shape='+n.shape+']; ';
     }
-    for (var i in edges) {
-      if (nodes.findIndex(x => x.id === edges[i].to) > -1 && nodes.findIndex(x => x.id === edges[i].from) > -1) {
-        if (edges[i].dashes == null) {
-          graphviz += 'node'+edges[i].from + ' -- ' + 'node'+edges[i].to + '[color=' +edges[i].color+ ']; ';
+    for (var e of edges) {
+      if (nodes.findIndex(x => x.id === e.to) > -1 && nodes.findIndex(x => x.id === e.from) > -1) {
+        if (e.dashes == null) {
+          graphviz += 'node'+e.from + ' -- ' + 'node'+e.to + '[color=' +e.color+ ']; ';
         } else {
-          graphviz += 'node'+edges[i].from + ' -- ' + 'node'+edges[i].to + '[style=dashed,color='+edges[i].color+',label="' +edges[i].label.replace(/['"]/g, '\'').replace(/\n/g, '\\n')+ '"]; ';
+          graphviz += 'node'+e.from + ' -- ' + 'node'+e.to + '[style=dashed,color='+e.color+',label="' +e.label.replace(/['"]/g, '\'').replace(/\n/g, '\\n')+ '"]; ';
         }
       }
     }

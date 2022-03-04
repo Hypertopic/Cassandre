@@ -166,8 +166,7 @@
     graphviz += theoretical + '}}' + operational + '}'+ field + '}' + coding + '}}' + diagram + '}'+ storyline + '}';
     graphviz += '1->2->3->4->5->6 [style = invis]';
 
-    for (var i in edges) {
-      var e = edges[i];
+    for (var [i, e] of Object.entries(edges)) {
       var f = e;
       var j = surrenders.map(x => x.original).indexOf(e.from);
       if (j > -1) {
@@ -180,8 +179,7 @@
         edges.splice(i, 1, f);
       }
     }
-    for (var i in edges) {
-      var e = edges[i];
+    for (var [i, e] of Object.entries(edges)) {
       if (edges.map(x => x.from+x.to).indexOf(e.from+e.to) == i && e.from != e.to) {
         graphviz += 'node'+e.from+' -> node'+e.to+' [color='+e.color+', constraint=false];';
       }

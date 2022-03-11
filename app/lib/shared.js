@@ -185,6 +185,7 @@ var shared = {
     <script src='{{>relpath}}style/bootstrap.min.js'></script>\
     <script src='{{>relpath}}script/moment.min.js'></script>\
     <script src='{{>relpath}}script/showdown.min.js'></script>\
+    <script src='{{>relpath}}script/editname.js'></script>\
     <script src='{{>relpath}}script/layout.js'></script>\
     <script src='{{>relpath}}script/log.js'></script>\
     {{^list}}\
@@ -209,74 +210,10 @@ var shared = {
       showMore($('li').last().find('span').attr('id'));\
     }\
   });{{/list}}",
-  editname: "\
-  $('h1').on('click', function() {\
-    refresh = false;\
-    $(this).hide();\
-    {{#list}}\
-    $('#sort').addClass('disabled');\
-    $('#show-activity').remove();\
-    $('#tasklist-alert').off();\
-    $('#diaries').prop('disabled', true);\
-    $('#drawTimeline').prop('disabled', true);\
-    $('#toggle').prop('disabled', true);\
-    {{/list}}\
-    $('#leave-name').addClass('hidden');\
-    $('#footer > div > button').prop('disabled', true);\
-    $('#add-leaves').addClass('hidden');\
-    $('#kwic').parent().children().addClass('hidden');\
-    $('a').removeAttr('href');\
-    $('#diary').addClass('disabled');\
-    $('#to-register').prop('disabled', true);\
-    $('#signin').prop('disabled', true);\
-    $('#signout').prop('disabled', true);\
-    $('.toast').toast('hide');\
-    $('#modify_rights').remove();\
-    $('#renamed').removeClass('hidden');\
-    $('#renamed').prop('disabled', false);\
-    $('#name').removeClass('hidden');\
-  });\
-  $('#renamed').on('click', function() {\
-    rename();\
-  });\
-  $('#name').on('keypress', function(key) {\
-    if (key.which == 13) rename();\
-  });\
-  function rename() {\
-    if ($('#name').val().trim() == '') {\
-      {{^link}}\
-        {{^list}}alert('{{i18n.i_enter_memo_name}}');{{/list}}\
-        {{#list}}alert('{{i18n.i_enter_diary_name}}');{{/list}}\
-      {{/link}}\
-      {{#link}}\
-        alert('{{i18n.i_enter_graph_name}}');\
-      {{/link}}\
-    } else {\
-      var todos = [];\
-      {{#type}}\
-      if ('{{type}}' == 'coding') {\
-        {{#leaves}}\
-        if ('{{type}}' == 'diagram') {\
-          todos.push(renameDiagram('{{href}}'.split('/').pop(),$('#name').val().trim()));\
-        }\
-        {{/leaves}}\
-      }{{/type}}\
-      $.when(...todos).then(function(){\
-        $.ajax({\
-          url: '../../edit_name/{{_id}}',\
-          type: 'PUT',\
-          contentType: 'application/json',\
-          data: $('#name').val().trim()\
-        }).fail(error_alert)\
-        .done(function(){\
-          refresh = true;\
-        }).done(reload);\
-      });\
-    }\
-  };",
   logscript: "\
   const everyone = '{{i18n.i_everyone}}',\
         enter_comment ='{{i18n.i_enter_comment}}',\
+        enter_diary_name ='{{i18n.i_i18n.i_enter_diary_name}}',\
         enter_graph_name = '{{i18n.i_enter_graph_name}}',\
         enter_location_date = '{{i18n.i_enter_location_date}}',\
         enter_memo_name = '{{i18n.i_enter_memo_name}}',\

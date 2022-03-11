@@ -32,7 +32,7 @@
           <h1>{{i18n.i_sign-in_required}}</h1>
           {{/authorized}}
           {{#authorized}}
-          <h1> <img title="{{i18n.i_memo.table}}" src="../../style/{{type}}.svg"/> {{name}} </h1>
+          <h1 {{#editable}}class="editable"{{/editable}}> <img title="{{i18n.i_memo.table}}" src="../../style/{{type}}.svg"/> {{name}} </h1>
           <input id="name" type="search" class="form-control hidden" value="{{name}}"/>
           {{>rights}}
           <div class="table-responsive">
@@ -395,9 +395,6 @@
 
   {{>layoutscript}}
   {{>logscript}}
-  {{#editable}}
-    {{>editname}}
-  {{/editable}}
   </script>
   </body>
 </html>

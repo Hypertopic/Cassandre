@@ -13,7 +13,7 @@
           <div>{{^logged}}{{i18n.i_sign-in-for-more}}{{/logged}}</div>
         {{/authorized}}
         {{#authorized}}
-          <h1><img src="{{>relpath}}style/{{type}}.svg"/> {{name}}</h1>
+          <h1 {{#editable}}class="editable"{{/editable}}><img src="{{>relpath}}style/{{type}}.svg"/> {{name}}</h1>
           <input id="name" type="search" class="form-control hidden" value="{{name}}"/>
           <div class="speeches">
           {{#body}}
@@ -531,18 +531,6 @@
     create(type, $('#leave-name').val().trim(), $('#kwic').val());
   });
 
-  function renameDiagram(id,name) {
-    $.ajax({
-      url: "../../rename_diagram/"+id,
-      type: "PUT",
-      contentType: "application/json",
-      data: JSON.stringify({
-       'id': '{{_id}}',
-       'name': name
-      })
-    });
-  }
-
   function filter(type) {
     $('#select_grounding option').each(function() {
       $(this).prop("hidden", false);
@@ -609,9 +597,6 @@
 
   {{>layoutscript}}
   {{>logscript}}
-  {{#editable}}
-    {{>editname}}
-  {{/editable}}
   </script>
   </body>
 </html>

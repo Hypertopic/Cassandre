@@ -1,5 +1,5 @@
 function (o) {
-  if (!o.editing) {
+  if (o.name && !o.editing) {
     const KEYWORD_LENGTH = 25;
     const OFFSET = 35;
     const FRAME = 80;

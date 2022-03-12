@@ -44,7 +44,10 @@ $('#kwic').on('keypress', function(key) {
     self.location = relpath+'kwic/'+diary_id+'/' + $('#kwic').val().toLowerCase();
   }
 });
-  
+$("#reload").on('click', function() {
+  refresh = true;
+  reload();
+});
 $('.groundings')
   .on('hidden.bs.collapse', function() {
     $('#toggle-groundings').removeClass('d-none');

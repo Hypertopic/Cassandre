@@ -177,6 +177,7 @@ var shared = {
       <span class='d-block d-sm-none'><img src='../../style/comment.svg' alt='{{i18n.i_comment}}'></span>\
       <span class='d-none d-sm-block'>{{i18n.i_comment}}</span>\
     </button>\
+    <button class='btn navbar-btn btn-outline-{{>contrastcolor}} btn-sm hidden' type='button' id='reload'>{{i18n.i_cancel}}</button>\
     <button class='btn navbar-btn btn-outline-{{>contrastcolor}} btn-sm hidden' type='button' id='commented'>{{i18n.i_save}}</button>\
     <button class='btn navbar-btn btn-outline-{{>contrastcolor}} btn-sm hidden' type='button' id='comment_updated'>{{i18n.i_save}}</button>\
     <button class='btn navbar-btn btn-outline-{{>contrastcolor}} btn-sm hidden' type='button' id='renamed'>{{i18n.i_save}}</button>",

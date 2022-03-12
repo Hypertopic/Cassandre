@@ -13,7 +13,7 @@ $('h1.editable').on('click', function() {
   $('#drawTimeline').prop('disabled', true);
   $('#toggle').prop('disabled', true);
   $('#leave-name').addClass('hidden');
-  $('#footer > div > button').prop('disabled', true);
+  $('#footer > div > button').addClass('hidden');
   $('#add-leaves').addClass('hidden');
   $('#kwic').parent().children().addClass('hidden');
   $('a').removeAttr('href');
@@ -24,7 +24,7 @@ $('h1.editable').on('click', function() {
   $('.toast').toast('hide');
   $('#modify_rights').remove();
   $('#renamed').removeClass('hidden');
-  $('#renamed').prop('disabled', false);
+  $('#reload').removeClass('hidden');
   $('#name').removeClass('hidden');
 });
 $('#renamed').on('click', function() {

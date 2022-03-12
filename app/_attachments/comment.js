@@ -1,7 +1,7 @@
 $('#comment_create').click(function () {
   refresh = false;
   $('#comment_create').remove();
-  $('#footer > div > button').prop('disabled', true);
+  $('#footer > div > button').addClass('hidden');
   $('#render').prop('disabled', true);
   $('#commented').prop('disabled', null);
   $('#leave-name').addClass('hidden');
@@ -14,6 +14,7 @@ $('#comment_create').click(function () {
   $('.toast').toast('hide');
   $('#comments').find('textarea').removeClass('hidden');
   $('#commented').removeClass('hidden');
+  $('#reload').removeClass('hidden');
   $('html, body').scrollTop($(document).height());
 });
 $('#commented').on('click', function() {
@@ -36,10 +37,10 @@ $('.comment').click(function(event) {
     $('#comments').find('textarea').attr('name', 'input'+comment_id);
     $('#input'+comment_id).removeClass('hidden');
     $('#commented').remove();
-    $('#footer > div > button').prop('disabled', true);
+    $('#footer > div > button').addClass('hidden');
     $('#add-leaves').addClass('hidden');
+    $('#reload').removeClass('hidden');
     $('#comment_updated').removeClass('hidden');
-    $('#comment_updated').prop('disabled', false);
     $('.comment').off('click');
     $('#kwic').parent().children().addClass('hidden');
     $('#signout').prop('disabled', true);

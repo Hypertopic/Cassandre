@@ -1,4 +1,4 @@
-version: '3'
+version: '2'
 
 services:
 
@@ -13,6 +13,7 @@ services:
       options:
         max-size: "1M"
         max-file: "3"
+    mem_limit: 29g
     restart: on-failure
 
   proxy:

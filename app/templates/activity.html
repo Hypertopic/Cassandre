@@ -38,12 +38,13 @@
         </div>
         <div id="alert" class="d-flex justify-content-center" title="{{i18n.i_loading}}">
           <div class="d-none d-sm-inline-flex">{{i18n.i_loading}}</div>
-          <div class="spinner-border spinner-border-sm ml-auto  mr-auto mr-sm-0" role="status" aria-hidden="true"></div>
+          <div class="spinner-border spinner-border-sm ml-auto  mr-auto mr-sm-0 more" role="status" aria-hidden="true"></div>
         </div>
         <ul id="activities">
         </ul></div>
       </main>
       <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
+        <button class="btn navbar-btn btn-outline-{{>contrastcolor}} btn-sm ml-1 more" type="button">{{i18n.i_show-more}}</button>
         <a class='navbar-text ml-auto' href="https://github.com/Hypertopic/Cassandre/wiki">
           <img src="../../style/info.svg" width="30" height="30" alt="Cassandre" loading="lazy">
         </a>
@@ -156,6 +157,10 @@
     $('#contributors .created').addClass('d-none');
     $('#contributors .commented').addClass('d-none');
     cal.update(modified);
+  });
+
+  $('.more').on('click', function() {
+    showMore($('li').last().find('span').attr('id'));
   });
 
   function type2path(type) {

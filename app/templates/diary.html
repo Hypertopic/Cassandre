@@ -70,7 +70,7 @@
         <div id="network" class="hidden"></div>
         <div id="memos"></div>
         <p><div class="d-flex justify-content-center">
-          <div id="more" class="spinner-border spinner-border-sm" title="{{i18n.i_show-more}}" role="status" aria-hidden="true"></div>
+          <div class="spinner-border spinner-border-sm more" title="{{i18n.i_show-more}}" role="status" aria-hidden="true"></div>
         </div></p>
       </div>
     </div>
@@ -82,6 +82,7 @@
         <button class="btn navbar-btn btn-outline-{{>contrastcolor}} btn-sm ml-1 hidden" id="delete" type="button">{{i18n.i_delete}}</button>
         <button class="btn navbar-btn btn-outline-{{>contrastcolor}} btn-sm ml-1 hidden" id="reload" type="button">{{i18n.i_cancel}}</button>
         <button class="btn navbar-btn btn-outline-{{>contrastcolor}} btn-sm ml-1 hidden" type="button" id="renamed">{{i18n.i_save}}</button>
+        <button class="btn navbar-btn btn-outline-{{>contrastcolor}} btn-sm ml-1 more" type="button">{{i18n.i_show-more}}</button>
       </div>
       <a class='navbar-text' href="https://github.com/Hypertopic/Cassandre/wiki">
         <img src="../../style/info.svg" width="30" height="30" alt="Cassandre" loading="lazy">
@@ -267,6 +268,7 @@
     $("#memos>li>input").addClass("hidden");
     $("#footer .form-check-inline").children().addClass("hidden");
     $("#show_delete").removeClass("hidden");
+    $("#footer .more").removeClass("hidden");
   }
 
   function taskreport(task, count) {
@@ -285,7 +287,7 @@
     number = number + count;
   }
 
-  $('#more').on('click', function() {
+  $('.more').on('click', function() {
     includePublic();
   });
 
@@ -324,7 +326,7 @@
     var nothing_to_show = '{{i18n.i_nothing-to-show}}';
     {{^logged}}nothing_to_show +='. {{i18n.i_sign-in-for-more}}';{{/logged}}
     if ({{size}} == 0) $('#memos').text(nothing_to_show);
-    if (document.getElementById("memos").childNodes.length >= {{size}}) $('#more').addClass("d-none");
+    if (document.getElementById("memos").childNodes.length >= {{size}}) $('.more').addClass("d-none");
   }
 
   async function getMore(coord) {

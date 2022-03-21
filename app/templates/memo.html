@@ -73,7 +73,6 @@
         <div class="modal-content">
           <div class="modal-header">{{i18n.i_add_groundings}}</div>
           <div class="modal-body">
-            <div id="loading" class="spinner-border spinner-border-sm ml-auto mr-auto mr-sm-0" role="status" aria-hidden="true"></div>
             <div id="type_filter" hidden>{{i18n.i_filter}} <select onChange="filter(this.value);">
               <option>{{i18n.i_type}}</option>
               <option value="theoretical" hidden>{{i18n.i_memo.theoretical}}</option>
@@ -539,6 +538,7 @@
   }
 
   function record(action, value) {
+    $('#'+action+' .modal-body').append($('#loading'));
     $.ajax({
       url: "../../adapt_memo/{{_id}}",
       type: "PUT",

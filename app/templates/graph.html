@@ -112,7 +112,6 @@
               <input class="form-check-input" type="radio" name="type-of-field-memo" id="all-articulations" value="all" required>
               <label class="form-check-label" for="all-articulations">{{i18n.i_all-articulations}}</label>
             </div><br/>
-            <div id="loading" class="spinner-border spinner-border-sm ml-auto mr-auto mr-sm-0" role="status" aria-hidden="true"></div>
             <select id="select_grounding" onChange="record('add_grounding', this.value);" hidden><option>{{i18n.i_select_grounding}}</option></select>
           </div>
           <div class="modal-footer">
@@ -316,6 +315,7 @@
   }
 
   function record(action, diagram) {
+    $('#'+action+' .modal-body').append($('#loading'));
     if (diagram !== '') diagram = JSON.parse(diagram);
     var data = {
       'action': action,

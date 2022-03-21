@@ -9,9 +9,9 @@
       <header>
         <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
           <ul class="navbar-nav mr-auto">
-            <li style="max-width: 200px;" class="nav-item text-{{>contrastcolor}} text-truncate">{{diary_name}}</li>
+            <li style="max-width: 200px;" class="nav-item navbar-text d-none d-md-block text-{{>contrastcolor}} text-truncate">{{diary_name}}</li>
             {{#authorized}}{{#editing}}
-            <li><button title="{{i18n.i_double}}" class="btn text-{{>contrastcolor}}" id="double">¶²</button></li>
+            <li><button title="{{i18n.i_double}}" class="btn text-{{>contrastcolor}} d-none d-sm-inline" id="double">¶²</button></li>
             {{/editing}}{{/authorized}}
           </ul>
           {{>log}}
@@ -130,13 +130,15 @@
     $('#groundings').find('.toggle').next().slideToggle('fast');
     {{#authorized}}
     $('#header > ul > li:first').after($('.editor-toolbar'));
+    $('.editor-toolbar > button:last').addClass('d-none d-sm-inline');
     if ("{{type}}" == 'interview') $('.editor-toolbar').remove ();
     if (easymde.value() == $('#remote').text()) {
       easymde.clearAutosavedValue();
     } else {
       cherrypick()
     }
-
+    $('#username').addClass('d-none d-lg-inline');
+    $('#signout').addClass('d-none d-sm-inline');
     {{/authorized}}
     {{/editing}}
     stickToHeader();

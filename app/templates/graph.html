@@ -258,7 +258,7 @@
 
   $('#all-articulations').on('click', function() {
     $('#integrate_all-articulations').removeClass('d-none');
-    $('#loading').addClass('d-none');
+    $('#loading').addClass('hidden');
     $('#select_grounding').addClass('d-none');
   });
 
@@ -315,7 +315,7 @@
   }
 
   function record(action, diagram) {
-    $('#'+action+' .modal-body').append($('#loading'));
+    $('#'+action+' .modal-body').append($('#loading').removeClass('hidden'));
     if (diagram !== '') diagram = JSON.parse(diagram);
     var data = {
       'action': action,

@@ -107,7 +107,7 @@ var shared = {
       </div>\
     </div>",
   modify_rights_dialog:"\
-    <div id='loading'  title='{{i18n.i_loading}}' class='spinner-border spinner-border-sm ml-auto mr-auto mr-sm-0' role='status' aria-hidden='true'></div>\
+    <div id='loading'  title='{{i18n.i_loading}}' class='spinner-border spinner-border-sm ml-auto mr-auto mr-sm-0 hidden' role='status' aria-hidden='true'></div>\
     <div id='modify_rights_dialog' class='modal fade' role='dialog'>\
       <div class='modal-dialog' role='document'>\
         <div class='modal-content'>\

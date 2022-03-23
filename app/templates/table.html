@@ -285,7 +285,7 @@
   });
 
   function record(type, value) {
-    $('#'+type+' .modal-body').append($('#loading'));
+    $('#'+type+' .modal-body').append($('#loading').removeClass('hidden'));
     $.ajax({
       url: "../../{{_id}}",
       type: "GET",

@@ -64,7 +64,7 @@ $('#unsubscribe').on('click', function() {
   }).done(reload)
 });
 function modify_rights(action, value) {
-  $('#modify_rights_dialog .modal-body').append($('#loading'));
+  $('#modify_rights_dialog .modal-body').append($('#loading').removeClass('hidden'));
   $.ajax({
     url: '../../modify_rights/'+this_id,
     type: 'PUT',

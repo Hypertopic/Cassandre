@@ -1,5 +1,5 @@
 $('#add_grounding').on('show.bs.modal', function (event) {
-  $("#add_grounding .modal-body").append($('#loading'));
+  $("#add_grounding .modal-body").append($('#loading').removeClass('hidden'));
   if (this_type == "graph") refresh = false;
   candidates = [];
   $('#select_grounding').children("option").each(function(){
@@ -37,7 +37,7 @@ $('#add_grounding').on('show.bs.modal', function (event) {
         }));
       }
     }
-    $("#container").after($('#loading'));
+    $('#loading').addClass('hidden');
     $('#type_filter').removeAttr("hidden");
     $('#select_grounding').removeAttr("hidden");
     switch (this_type) {
@@ -87,7 +87,7 @@ $('#remove_grounding').on('show.bs.modal', function (event) {
     });
   });
   if ($('#groundings li').length < 2) $("#remove_grounding").find('option').eq('1').attr("disabled", "disabled");
-  $("#container").after($('#loading'));
+  $('#loading').addClass('hidden');
 });
 
 function addOptions(id, name) {

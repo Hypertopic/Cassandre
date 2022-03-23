@@ -538,7 +538,7 @@
   }
 
   function record(action, value) {
-    $('#'+action+' .modal-body').append($('#loading'));
+    $('#'+action+' .modal-body').append($('#loading').removeClass('hidden'));
     $.ajax({
       url: "../../adapt_memo/{{_id}}",
       type: "PUT",

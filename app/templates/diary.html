@@ -110,6 +110,7 @@
       read = 0,
       result,
       results = [];
+      ready = true;
       text = {
         comments: "{{i18n.i_unchecked-comment}}",
         diagram: "{{i18n.i_to-be-articulated}}",
@@ -327,10 +328,12 @@
     {{^logged}}nothing_to_show +='. {{i18n.i_sign-in-for-more}}';{{/logged}}
     if ({{size}} == 0) $('#memos').text(nothing_to_show);
     if (document.getElementById("memos").childNodes.length >= {{size}}) $('.more').addClass("d-none");
+    ready = true;
   }
 
   async function getMore(coord) {
-    return new Promise((resolve, reject) => {
+    if (ready == true) return new Promise((resolve, reject) => {
+      ready = false; 
       $.ajax({
         url: "../../memos/{{diary}}/{{by}}/"+coord,
         type: "GET",

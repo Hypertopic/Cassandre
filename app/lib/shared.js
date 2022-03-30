@@ -208,7 +208,7 @@ var shared = {
   {{/list}}\
   {{#list}}\
   $(window).scroll(function(){\
-    if ($(window).scrollTop() == $(document).height() - $(window).height()){\
+    if ($(window).scrollTop() + $(window).height() >= $(document).height() - 100){\
       showMore($('li').last().find('span').attr('id'));\
     }\
   });{{/list}}",

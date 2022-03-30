@@ -77,6 +77,7 @@ function(head, req) {
           }
           ground_path += row.value._id;
           if (row.value.anchor) ground_path += '#'+row.value.anchor;
+          if (row.value._id !== diary)
           data.groundings.push({
             id: row.value._id,
             href: ground_path,

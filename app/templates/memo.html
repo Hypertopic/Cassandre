@@ -473,11 +473,17 @@
   });
 
   $('#content').on('mouseup', function() {
-    if (window.getSelection().anchorNode !== null)
-    var posts = document.getElementsByClassName('post'),
-        selected = window.getSelection().anchorNode.parentNode.parentNode,
-        p = [].indexOf.call(posts[0].childNodes, selected);
-    if (p > -1) anchor = p;
+    if (window.getSelection().anchorNode !== null) {
+      var posts = document.getElementsByClassName('post'),
+          selected = window.getSelection().anchorNode.parentNode,
+          p = [].indexOf.call(posts[0].childNodes, selected);
+      if (this_type == 'interview') {
+        p = [].indexOf.call(posts[0].childNodes, selected.parentNode);
+      } else {
+        p = (p/2) + 1;
+      }
+      if (p > -1) anchor = p;
+    }
   });
 
   $('#create').on('click', function() {

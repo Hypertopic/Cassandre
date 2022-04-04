@@ -306,6 +306,7 @@
         $("#add").attr("title", "{{i18n.i_create.coding}}");
         $("#leave-name").attr("placeHolder", "{{i18n.i_name.coding}}");
         $('#lexical').removeClass('hidden');
+        $('.post').children('font').wrapAll('<p></p>');
         break;
       case ('coding'):
         $("h1>img").attr("title", "{{i18n.i_memo.coding}}");
@@ -367,9 +368,6 @@
     converter.setFlavor('github');
     renderComments(converter);
     renderPreviews(converter);
-    if ("{{type}}" == 'interview') {
-      $('.post').children('font').wrapAll('<p></p>');;
-    }
     $('.post').html(function(i, text) {
       if ("{{type}}" == 'interview') {
         return text.replace(/\n \n/g, '</font></p><p><font>');
@@ -425,9 +423,9 @@
           $('#repeated').removeClass('disabled');
         }
       });
-      const par = window.location.hash.substring(1);
-      if (par !== '') highlight(par);
     }
+    const par = window.location.hash.substring(1);
+    if (par !== '') highlight(par);
     stickToHeader();
     {{^statements}}
     poller('memo', '{{update_seq}}');
@@ -438,9 +436,11 @@
   });
 
   function highlight(p) {
-    $('.post p').eq(p-1).addClass('highlight');
+    $('.post').children().eq(p-1).addClass('highlight');
     var prev = document.querySelector(".highlight").previousSibling;
-    if (p == "1") prev = document.getElementById('authorization');
+    if (p == "1") {
+      prev = document.getElementById('authorization')
+    } else if (this_type != 'interview') prev = prev.previousSibling;
     prev.scrollIntoView({ behavior: 'smooth', block: 'center'});
     $('.highlight').addClass('fadeout');
   }

@@ -206,6 +206,7 @@
     </nav>
   {{>script}}
   <script src="{{>relpath}}script/grounding.js"></script>
+  <script src="{{>relpath}}script/memo.js"></script>
   <script>
   var metrics = {},
       trigrams = {},
@@ -217,9 +218,21 @@
       diary_id = "{{diary}}",
       this_id = "{{_id}}",
       this_type = "{{type}}";
-  help["field"] = {init: "{{{i18n.i_content.field}}}", next: "{{{i18n.i_next.field}}}"};
+  help["field"] = {
+    init: "{{{i18n.i_content.field}}}", 
+    next: "{{{i18n.i_next.field}}}",
+    create: "{{i18n.i_create.field}}", 
+    location: "{{i18n.i_content.location.field}}".replace('&#39;',"'"), 
+    date: "{{i18n.i_content.date.field}}".replace('&#39;',"'")
+  };
+  help["transcript"] = {
+    init: "{{{i18n.i_content.transcript}}}",
+    next: "{{{i18n.i_next.transcript}}}",
+    create: "{{i18n.i_create.transcript}}",
+    location: "{{i18n.i_content.location.transcript}}".replace('&#39;',"'"),
+    date: "{{i18n.i_content.date.transcript}}".replace('&#39;',"'")
+  };
   help["interview"] = {init: "{{{i18n.i_content.transcript}}}", next: "{{{i18n.i_next.transcript}}}"};
-  help["transcript"] = {init: "{{{i18n.i_content.transcript}}}", next: "{{{i18n.i_next.transcript}}}"};
   help["coding"] = {init: "{{{i18n.i_content.coding}}}", next: "{{{i18n.i_next.coding}}}"};
   help["theoretical"] = {init: "{{{i18n.i_content.theoretical}}}", next: "{{{i18n.i_next.theoretical}}}"};
   help["operational"] = {init: "{{{i18n.i_content.operational}}}", next: "{{{i18n.i_next.operational}}}"};
@@ -232,7 +245,7 @@
     if ($('.post').text().trim().length == 0) $('.post').text(nothing_to_show);
     {{#logged}}
     $.ajax({
-      url: "{{>relpath}}{{logged}}",
+      url: relpath + '{{logged}}',
       type: "GET",
       dataType: "json",
       success: function(data) {
@@ -241,7 +254,7 @@
     });
     {{/logged}}
     $.ajax({
-      url: "{{>relpath}}{{diary}}",
+      url: relpath + diary_id,
       type: "GET",
       dataType: "json"
     }).done(function(data){
@@ -276,9 +289,9 @@
     if ($('#leaves li').length < 1) {
       var tip = '';
       if($('.post').text().trim().length == 0) {
-        tip = "{{i18n.i_fill-this-memo}}. " + help["{{type}}"]["init"];
+        tip = "{{i18n.i_fill-this-memo}}. " + help[this_type]["init"];
       } else {
-        tip = help["{{type}}"]["next"] + " {{i18n.i_hereunder_button}}";
+        tip = help[this_type]["next"] + " {{i18n.i_hereunder_button}}";
       }
       inform('info', tip);
     }
@@ -343,13 +356,13 @@
         $('#add').parent().append($('#create'));
         break;
       case ('diagram'):
-        self.location = "../../diagram/{{diary}}/{{_id}}";
+        self.location = '../../diagram/'+diary_id+'/'+this_id;
         break;
       case ('table'):
-        self.location = "../../table/{{diary}}/{{_id}}";
+        self.location = '../../table/'+diary_id+'/'+this_id;
         break;
       case ('graph'):
-        self.location = "../../graph/{{diary}}/{{_id}}";
+        self.location = '../../graph/'+diary_id+'/'+this_id;
         break;
       case ('storyline'):
         $("h1>img").attr("title", "{{i18n.i_memo.storyline}}");
@@ -369,7 +382,7 @@
     renderComments(converter);
     renderPreviews(converter);
     $('.post').html(function(i, text) {
-      if ("{{type}}" == 'interview') {
+      if (this_type == 'interview') {
         return text.replace(/\n \n/g, '</font></p><p><font>');
       } else {
         return converter.makeHtml(text.replace(/&gt;/g, '>').trim());
@@ -377,9 +390,9 @@
     });
     if ($('#groundings li').length == 1) $("#groundings").find('legend').text("{{i18n.i_grounding}}");
     if ($('#groundings li').length < 1) $("#groundings").addClass('hidden');
-    if ("{{type}}" === 'interview') {
+    if (this_type === 'interview') {
       $.ajax({
-        url: "../../corpus_words/{{diary}}",
+        url: '../../corpus_words/'+diary_id,
         type: "GET",
         dataType: "json",
         success: function(lexcorpus) {
@@ -388,7 +401,7 @@
             corpus[c.key[1]] = c.value;
           }
           $.ajax({
-            url: "../../text_words/{{_id}}",
+            url: "../../text_words/" + this_id,
             type: "GET",
             dataType: "json",
             success: function(lexdoc) {
@@ -413,7 +426,7 @@
         }
       });
       $.ajax({
-        url: "../../phrase/{{diary}}",
+        url: '../../phrase/'+diary_id,
         type: "GET",
         dataType: "json",
         success: function(phrases) {
@@ -434,172 +447,6 @@
     poller('statements', '{{update_seq}}');
     {{/statements}}
   });
-
-  function highlight(p) {
-    $('.post').children().eq(p-1).addClass('highlight');
-    var prev = document.querySelector(".highlight").previousSibling;
-    if (p == "1") {
-      prev = document.getElementById('authorization')
-    } else if (this_type != 'interview') prev = prev.previousSibling;
-    prev.scrollIntoView({ behavior: 'smooth', block: 'center'});
-    $('.highlight').addClass('fadeout');
-  }
-
-  $('#edit').on('click', function() {
-    refresh = false;
-    if ('{{type}}' == 'transcript') {
-      self.location = '../../editable_text/{{_id}}';
-    } else {
-      $.ajax({
-        url: "../../start_editing_memo/{{_id}}",
-        type: "PUT",
-        contentType: "application/json"
-      }).done(function(){
-        self.location = '../../editable_memo/{{_id}}';
-      });
-    }
-  });
-
-  $('#add').on('click', function() {
-    var classlist = $(this)[0].classList,
-        ground = '{{_id}}',
-        type = classlist[classlist.length - 1];
-    if (['field', 'interview'].indexOf(type) > -1) {
-      $("#field-leaf").prop("checked", true).trigger("click");
-      $('#field_title_dialog').modal('show');
-    } else {
-      create(type, $('#leave-name').val().trim(), $('#kwic').val(), anchor);
-    }
-  });
-
-  $('#content').on('mouseup', function() {
-    if (window.getSelection().anchorNode !== null) {
-      var posts = document.getElementsByClassName('post'),
-          selected = window.getSelection().anchorNode.parentNode,
-          p = [].indexOf.call(posts[0].childNodes, selected);
-      if (this_type == 'interview') {
-        p = [].indexOf.call(posts[0].childNodes, selected.parentNode);
-      } else {
-        p = (p/2) + 1;
-      }
-      if (p > -1) anchor = p;
-    }
-  });
-
-  $('#create').on('click', function() {
-    var name = $('#leave-name').val().trim(),
-        classlist = $(this)[0].classList,
-        highlight = $('#kwic').val(),
-        type = classlist[classlist.length - 1];
-    if (type == 'diagram') name = $('#name').val().trim(); 
-    if (type == 'interview') {
-      $("#transcript-leaf").prop("checked", true).trigger("click");
-      $('#field_title_dialog').modal('show');
-    } else {
-      create(type, name, highlight, anchor);
-    }
-  });
-
-  $('#create_field-memo').on('click', function() {
-    $('#create_field-memo').append($('<span>', {
-      class: 'spinner-border spinner-border-sm ml-1',
-      role: 'status'
-    }));
-    var name = $('#location').val().trim() + ', ' + $('#date').val().trim(),
-        highlight = $('#kwic').val(),
-        type = $('input[name="type-of-field-memo"]:checked').val();
-    if (type != 'field') name = $('#pseudonym').val().trim() + ', ' + name;
-    if ([$('#location').val().trim(), $('#date').val().trim()].indexOf('') > -1) {
-      alert('{{i18n.i_enter_location_date}}');
-    } else {
-      create(type, name, highlight);
-    }
-  });
-
-  $('#field-leaf').on('click', function() {
-    $('.pseudonym').addClass('d-none');
-    $('#create_field-memo').html("{{i18n.i_create.field}}");
-    $('#location').attr("placeHolder", "{{i18n.i_content.location.field}}".replace('&#39;',"'"));
-    $('#date').attr("placeHolder", "{{i18n.i_content.date.field}}".replace('&#39;',"'"));
-  });
-
-  $('#transcript-leaf').on('click', function() {
-    $('.pseudonym').removeClass('d-none');
-    $('#create_field-memo').html("{{i18n.i_create.transcript}}");
-    $('#location').attr("placeHolder", "{{i18n.i_content.location.transcript}}");
-    $('#date').attr("placeHolder", "{{i18n.i_content.date.transcript}}");
-  });
-
-  $('#create-table').on('click', function() {
-    var classlist = $(this)[0].classList;
-        type = classlist[classlist.length - 1];
-    create(type, $('#leave-name').val().trim(), $('#kwic').val());
-  });
-
-  function filter(type) {
-    $('#select_grounding option').each(function() {
-      $(this).prop("hidden", false);
-      if (!$(this).hasClass(type)) $(this).prop("hidden", true);
-    });
-  }
-
-  function record(action, value) {
-    $('#'+action+' .modal-body').append($('#loading').removeClass('hidden'));
-    $.ajax({
-      url: "../../adapt_memo/{{_id}}",
-      type: "PUT",
-      contentType: "application/json",
-      data: JSON.stringify({
-       'action': action,
-       'value': value
-      })
-    }).done(reload)
-    .fail(error_alert)
-  }
-
-  function toColor(metrics) {
-    var grayLevel = Math.floor(255*(1-metrics)).toString(16);
-    return '#' + grayLevel + grayLevel + grayLevel;
-  }
-
-  $('#clear_highlights').on('click', function() {
-    $('font').each(function() {
-      $(this).removeAttr('color');
-    });
-  });
-
-  $('.highlight_words').on('click', function() {
-    var type = this.id;
-    $('font').each(function() {
-      $(this).attr('color', toColor(wordMetrics(metrics, $.trim($(this).text()), type)));
-    });
-  });
-
-  $('#repeated').on('click', function() {
-    var words = [];
-    $('font').each(function(i) {
-      words[i] = {text: $.trim($(this).text()).toLowerCase()};
-    });
-    words[0].count = 0;
-    words[1].count = 0;
-    var max = 0;
-    for (w=0; w<words.length-2; w++) {
-      var nb = trigrams[[words[w].text, words[w+1].text, words[w+2].text]];
-      if (!nb) nb = 1;
-      words[w].count = Math.max(words[w].count, nb);
-      words[w+1].count = Math.max(words[w+1].count, nb);
-      words[w+2].count = nb;
-      max = Math.max(max, words[w].count);
-    }
-    $('font').each(function(i) {
-      $(this).attr('color', toColor(words[i].count/max));
-    });
-  });
-
-  function wordMetrics(metrics, word, type) {
-    var w = metrics[word.toLowerCase()];
-    return (w)?w[type]:.05;
-  }
 
   {{>layoutscript}}
   {{>logscript}}

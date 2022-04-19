@@ -12,11 +12,9 @@ function(head, req) {
     diary: req.query.startkey[0],
     memos: [],
     docs: [],
-    locale: req.headers["Accept-Language"],
+    locale: req.headers["Accept-Language"].split(',')[0].substring(0,2),
     peer: req.peer
   };
-  data.locale = data.locale.split(',');
-  data.locale = data.locale[0].substring(0,2);
   if (data.peer == '127.0.0.1' && req.headers['X-Forwarded-For'] ) {
     var ips = req.headers['X-Forwarded-For'].split(',');
     for (var ip of ips) {

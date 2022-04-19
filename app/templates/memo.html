@@ -215,9 +215,9 @@
       candidates = [],
       userids = [],
       help = [],
-      diary_id = "{{diary}}",
-      this_id = "{{_id}}",
-      this_type = "{{type}}";
+      diary_id = '{{diary}}',
+      this_id = '{{_id}}',
+      this_type = '{{type}}';
   help["field"] = {
     init: "{{{i18n.i_content.field}}}", 
     next: "{{{i18n.i_next.field}}}",
@@ -238,7 +238,6 @@
   help["operational"] = {init: "{{{i18n.i_content.operational}}}", next: "{{{i18n.i_next.operational}}}"};
   help["storyline"] = {init: "{{{i18n.i_content.storyline}}}", next: "{{{i18n.i_next.storyline}}}"};
   $(document).ready(function() {
-    moment.locale('{{locale}}');
     {{>render}}
     {{#statements}}
     {{^logged}}nothing_to_show +='. {{i18n.i_sign-in-for-more}}';{{/logged}}

@@ -14,7 +14,7 @@ function(head, req) {
     i18n: localized(),
     id: req.query.startkey[0],
     list: true,
-    locale: req.headers["Accept-Language"],
+    locale: req.headers["Accept-Language"].split(',')[0].substring(0,2),
     logged: req.userCtx.name,
     logged_fullname: req.userCtx.name,
     readers: [],

@@ -130,7 +130,7 @@ function(head, req) {
         groundings: [],
         nodes: [],
         peer: req.peer,
-        locale: req.headers["Accept-Language"],
+        locale: req.headers["Accept-Language"].split(',')[0].substring(0,2),
         leaves: [],
         logged: username,
         logged_fullname: username,
@@ -141,8 +141,6 @@ function(head, req) {
         type: type,
         update_seq: req.info.update_seq
       }
-      data.locale = data.locale.split(',');
-      data.locale = data.locale[0].substring(0,2);
       if (data.peer == '127.0.0.1' && req.headers['X-Forwarded-For'] ) {
         var ips = req.headers['X-Forwarded-For'].split(',');
         for (var ip of ips) {

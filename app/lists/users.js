@@ -8,7 +8,7 @@ function(head, req) {
   var data = {
     i18n: localized(),
     list: true,
-    locale: req.headers["Accept-Language"],
+    locale: req.headers["Accept-Language"].split(',')[0].substring(0,2),
     logged: req.userCtx.name,
     users: []
   };

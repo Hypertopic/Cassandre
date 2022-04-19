@@ -277,20 +277,36 @@ function renderPreviews(converter){
     return md;
   });
 };
+function unix_date(d) {
+  return Math.floor(new Date(d).getTime() / 1000);
+}
+function hr_date(d) {
+  return new Date(d).toLocaleDateString(locale, {year: 'numeric', month: 'long', day: 'numeric'});
+}
+function hr_time(t) {
+  return new Intl.DateTimeFormat(locale, {year: 'numeric', month: 'long', day: 'numeric', hour: "numeric", minute: "numeric"}).format(new Date(t));
+}
 function momentRelative(what) {
-  let now = moment(),
-      moments = $(what+' .moment');
+  const rtf = new Intl.RelativeTimeFormat(locale, { numeric: 'auto' });
+  let moments = $(what+' .moment');
   moments.each(function() {
     var jstime = $(this).attr('id');
     var jstime = $(this).attr('class').split(' ');
     jstime = jstime[0];
-    var mmtime = moment(jstime);
-    if(now.diff(mmtime, 'days') <= 2) {
-      $(this).text(mmtime.fromNow());
-    } else if(now.diff(mmtime, 'years') < 1) {
-      $(this).text(on_a_date+' '+mmtime.format('Do MMMM'));
+    var mmtime = new Date(jstime);
+    var delta = mmtime.getTime() - new Date(Date.now()).getTime();
+    var daydiff = delta / (1000 * 60 * 60 * 24);  
+    if(daydiff >= 0 && (delta / (1000 * 60 * 60)) > 1.2) { 
+      $(this).text(on_a_date+' '+hr_time(mmtime));
+    } else if(daydiff >= 0 && (delta / (1000 * 60 * 60)) <= 1.2) { 
+      $(this).text(rtf.format(Math.round(delta / (1000 * 60)), 'minute'));
+      $(this).wrap("<strong></strong>");
+    } else if(daydiff >= -1) { 
+      $(this).text(rtf.format(Math.round(delta / (1000 * 60 * 60)), 'hour'));
+    } else if(daydiff >= -3) { 
+      $(this).text(rtf.format(Math.round(daydiff), 'day'));
     } else {
-      $(this).text(on_a_date+' '+mmtime.format('Do MMMM YYYY'));
+      $(this).text(on_a_date+' '+hr_date(mmtime));
     }
   });
   if (what != '') {

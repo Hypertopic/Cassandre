@@ -67,7 +67,6 @@
   types["operational"] = "{{i18n.i_memo.operational}}";
   types["storyline"] = "{{i18n.i_memo.storyline}}";
   $(document).ready(function() {
-    moment.locale('{{locale}}');
     {{#list}}
     momentRelative('#memos');
     var converter = new showdown.Converter({

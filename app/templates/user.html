@@ -56,7 +56,6 @@
   stickToHeader();
   {{/authorized}}
   {{#authorized}}
-  moment.locale('{{locale}}');
   {{#stats}}
   let cal = new CalHeatMap(),
       converter = new showdown.Converter({strikethrough: 'true'}),
@@ -71,16 +70,16 @@
     stickToHeader();
     {{#activity}}
     if('{{date}}' > start.toJSON()) {
-      all[moment('{{date}}').format('X')] = 1;
+      all[unix_date('{{date}}')] = 1;
       switch('{{action}}') {
         case('commented'):
-          commented[moment('{{date}}').format('X')] = 1;
+          commented[unix_date('{{date}}')] = 1;
         break;
         case('created'):
-          created[moment('{{date}}').format('X')] = 1;
+          created[unix_date('{{date}}')] = 1;
         break;
         case('modified'):
-          modified[moment('{{date}}').format('X')] = 1;
+          modified[unix_date('{{date}}')] = 1;
         break;
       }
     }
@@ -101,7 +100,6 @@
   });
 
   function showMore(start) {
-    let now = moment();
     $.ajax({
       url: "../user/{{id}}/"+start,
       type: "GET",
@@ -130,7 +128,7 @@
       domain: "week",
       subDomain: "day",
       subDomainDateFormat: function(date) {
-        return moment(date).format("LL");
+        return hr_date(date);
       },
       subDomainTitleFormat: {
         filled: "{count} {name}, {date}"

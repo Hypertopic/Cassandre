@@ -7,14 +7,18 @@ function(o, req) {
     return {
       body: JSON.stringify({
         service: 'Cassandre',
-        revision: '3.21.11.25',
+        revision: '3.22.04.19',
         update_seq: req.info.update_seq
       })
     }
   });
   provides('html', function() {
+    var data = {
+      i18n: localized(),
+      locale: req.headers["Accept-Language"].split(',')[0].substring(0,2)
+    };
     return {
-      body: Mustache.to_html(templates.index, {i18n: localized()}, shared)
+      body: Mustache.to_html(templates.index, data, shared)
     }
   });
 }

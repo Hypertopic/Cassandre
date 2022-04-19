@@ -7,7 +7,7 @@ function(head, req) {
   var diaries = [[[]]];
   var data = {
     i18n: localized(),
-    locale: req.headers["Accept-Language"],
+    locale: req.headers["Accept-Language"].split(',')[0].substring(0,2),
     logged: req.userCtx.name,
     diaries: [],
     flat: true,

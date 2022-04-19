@@ -117,7 +117,7 @@ function(head, req) {
         editable: !row.doc.contributors || row.doc.contributors && row.doc.contributors.indexOf(username)>-1 || req.userCtx.roles.indexOf("_admin")>-1,
         groundings: [],
         peer: req.peer,
-        locale: req.headers["Accept-Language"],
+        locale: req.headers["Accept-Language"].split(',')[0].substring(0,2),
         leaves: [],
         logged: username,
         logged_fullname: username,
@@ -129,8 +129,6 @@ function(head, req) {
         update_seq: req.info.update_seq
       }
       data.cells = JSON.stringify(data.cells);
-      data.locale = data.locale.split(',');
-      data.locale = data.locale[0].substring(0,2);
       if (data.peer == '127.0.0.1' && req.headers['X-Forwarded-For'] ) {
         var ips = req.headers['X-Forwarded-For'].split(',');
         for (var ip of ips) {

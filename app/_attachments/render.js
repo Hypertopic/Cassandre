@@ -13,12 +13,13 @@ function announceMaintenance(before, during){
     dataType: 'json'
   }).done(function(data){
     var maintenance_start = new Date(data.maintenance.date),
-        maintenance_end = moment(maintenance_start).add(data.maintenance.duration, 'm').toDate();
+        maintenance_end = new Date(maintenance_start.getTime() + (60000* data.maintenance.duration));
     if (maintenance_start > new Date(Date.now())) {
-      inform('danger', before.replace('@duration', data.maintenance.duration)+' '+moment(data.maintenance.date).calendar().toLowerCase());
+      inform('danger', before.replace('@duration', data.maintenance.duration).replace('@moment', '<span class="'+data.maintenance.date+' moment"></span>'));
     } else if (maintenance_end > new Date(Date.now())) {
-      inform('danger', during+' '+moment(data.maintenance.date).add(data.maintenance.duration, 'm').fromNow());
+      inform('danger', during+' <span class="'+new Date(maintenance_end).toJSON()+' moment"></span>');
     }
+    momentRelative('')
   });
 }
 function renderRights(){

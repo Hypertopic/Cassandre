@@ -141,7 +141,6 @@
 
   $('#show').on('click', function() {
     $(".badge").removeClass('d-none');
-    moment.locale('{{locale}}');
     $.ajax({
       url: "../news/",
       type: "GET",
@@ -158,7 +157,7 @@
             $('#'+n.id).addClass('badge-success');
             $('#'+n.id).attr("title", "{{i18n.i_memos-number}}");
             if (typeof n.lastvisit !== 'undefined')
-              $("<br/><span class='moment'>{{i18n.i_last-visit}} "+moment(n.lastvisit).fromNow()+'</span>').insertAfter('#'+n.id);
+              $("<br/><span class='moment'>{{i18n.i_last-visit}} "+hr_date(n.lastvisit)+'</span>').insertAfter('#'+n.id);
           }
         }
       }

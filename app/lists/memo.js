@@ -120,7 +120,7 @@ function(head, req) {
         editing: editing,
         groundings: [],
         peer: req.peer,
-        locale: req.headers["Accept-Language"],
+        locale: req.headers["Accept-Language"].split(',')[0].substring(0,2),
         leaves: [],
         logged: username,
         logged_fullname: username,
@@ -137,8 +137,6 @@ function(head, req) {
           if (ip.trim() != '127.0.0.1') data.peer = ip.trim();
         }
       }
-      data.locale = data.locale.split(',');
-      data.locale = data.locale[0].substring(0,2);
       if (typeof row.doc.body !== 'undefined') {
         var body = row.doc.body.replace(/\n\t/g, "\n ").replace(/\n {4,}/g, "\n").replace(/\n\n/g, "\n \n");
         if (row.doc.type == 'interview') {

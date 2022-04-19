@@ -57,7 +57,7 @@ function(head, req){
           authorized: !row.doc.readers || row.doc.readers.length==0 || row.doc.readers.indexOf(username)>-1 || row.doc.contributors && row.doc.contributors.indexOf(username)>-1 || req.userCtx.roles.indexOf("_admin")>-1,
           editing: row.doc.editing || false,
           name: row.doc.name,
-          locale: req.headers["Accept-Language"],
+          locale: req.headers["Accept-Language"].split(',')[0].substring(0,2),
           logged: username,
           logged_fullname: username,
           peer: req.peer,
@@ -72,7 +72,5 @@ function(head, req){
       }
     if (fullnames[username]) data.logged_fullname = fullnames[username];
   }
-  data.locale = data.locale.split(',');
-  data.locale = data.locale[0].substring(0,2);
   return Mustache.to_html(templates.editable_memo, data, shared);
 }

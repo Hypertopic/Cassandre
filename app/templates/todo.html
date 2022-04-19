@@ -78,7 +78,6 @@
   <script>
   const diary_id = '{{diary}}';
   $(document).ready(function() {
-    moment.locale('{{locale}}');
     var payload = '',
         nComments = 0,
         converter = new showdown.Converter({strikethrough: 'true'}),

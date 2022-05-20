@@ -156,13 +156,15 @@
             $('#'+n.id).removeClass('badge-secondary');
             $('#'+n.id).addClass('badge-success');
             $('#'+n.id).attr("title", "{{i18n.i_memos-number}}");
-            if (typeof n.lastvisit !== 'undefined')
-              $("<br/><span class='moment'>{{i18n.i_last-visit}} "+hr_date(n.lastvisit)+'</span>').insertAfter('#'+n.id);
+            if (typeof n.lastvisit !== 'undefined') {
+              $("<br/><span class='lastvisit'>{{i18n.i_last-visit}} <span class='"+n.lastvisit+" moment'></span></span>").insertAfter('#'+n.id);
+            }
           }
         }
       }
     }).done(function(){
       $("#show").addClass('d-none');
+      momentRelative('.card-columns');
       $(".progress-bar-striped").removeClass('progress-bar progress-bar-striped progress-bar-animated');
     });
   });

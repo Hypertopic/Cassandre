@@ -178,7 +178,7 @@ div.post {
   max-height: 60em;
 }
 
-.card>p>.moment,
+.card>p>.lastvisit,
 .comment>.meta,
 #negative-case>.meta,
 #statement>.meta,

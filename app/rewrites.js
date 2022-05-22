@@ -206,6 +206,14 @@ function(req2) {
         "include_docs": "true"
       };
     break;
+    case 'revert':
+      reply.path = "_list/revert/memo";
+      reply.query = {
+        "startkey": '["'+path[1]+'"]',
+        "endkey":   '["'+path[1]+'", {}]',
+        "include_docs": "true"
+      };
+    break;
     case 'graph':
       reply.path = "_list/graph/memo";
       reply.query = {
@@ -393,6 +401,16 @@ function(req2) {
     break;
     case '_users':
       reply.path = '../../../_users/' + path[1];
+    break;
+    case 'rev':
+      switch(path[2]) {
+        case 'all':
+          reply.path = '../../../cassandre/'+path[1]+'?revs_info=true';
+        break;
+        default:
+          reply.path = '../../../cassandre/'+path[1]+'?rev='+path[2];
+        break;
+      }
     break;
     case 'script':
     case 'style':

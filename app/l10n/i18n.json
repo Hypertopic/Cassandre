@@ -145,6 +145,13 @@
     "i_enter_comment": "Enter your comment",
     "i_fill-this-memo": "Fill this memo",
     "i_hereunder_button": "(through the button, hereunder)",
+    "i_versions": {
+       "legend": "Versions",
+       "list": "List previous versions of this memo",
+       "single": "No other version is available",
+       "revert": "Revert to this version",
+       "keep-current": "Keep the current version"
+    },
     "i_register_prompt": {
        "academic_staff": "I am a staff member of ULiege",
        "academic_staff_prompt": "You do not need to register : simply user the usual ULiege username and password on the page listing ",
@@ -379,6 +386,13 @@
     "i_enter_comment": "Saisissez un commentaire",
     "i_fill-this-memo": "Complétez ce compte-rendu",
     "i_hereunder_button": "(via le bouton ci-dessous)",
+    "i_versions": {
+       "legend": "Versions",
+       "list": "Accéder aux précédentes versions de ce compte-rendu",
+       "single": "Aucune autre version n'est disponible",
+       "revert": "Revenir à cette version",
+       "keep-current": "Conserver la version actuelle"
+    },
     "i_register_prompt": {
        "academic_staff": "Je fais partie de l'université de Liège",
        "academic_staff_prompt": "Pas besoin de créer de compte : connectez-vous simplement avec votre identifiant et votre mot de passe habituels via la page des ",

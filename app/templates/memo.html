@@ -440,6 +440,7 @@
     if (par !== '') highlight(par);
     stickToHeader();
     {{^statements}}
+    $('#kwic').parent().parent().prepend('<a class="nav-link btn-sm" title="{{i18n.i_versions.list}}" href="../../revert/{{_id}}"><img src="../../style/history.svg" style="height: 2em;" alt="{{i18n.i_versions.legend}}" /></a>');
     poller('memo', '{{update_seq}}');
     {{/statements}}
     {{#statements}}

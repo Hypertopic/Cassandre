@@ -1,0 +1,163 @@
+<!doctype html>
+<html>
+  <head>
+    <title>{{diary_name}} - {{name}}</title>
+    {{>links}}
+  </head>
+  <body>
+      <header>
+        <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
+          <ul class="navbar-nav mr-auto">
+            <a style="max-width: 200px;" class="d-inline-block btn navbar-btn text-{{>contrastcolor}} text-truncate" href="../memo/{{diary}}/" >{{diary_name}}</a>
+          </ul>
+          {{>log}}
+        </nav>
+      </header>
+      <div id="container" class='container-fluid h-100'>
+        <div id="memo" class='row h-100'>
+          {{#authorized}}
+          <div class="d-none d-sm-block col-sm-4 col-md-3 col-xl-2 pb-5" id="groundings">
+            <legend>{{i18n.i_versions.legend}}</legend>
+          </div>
+          {{/authorized}}
+          <main class="col pb-0 pb-sm-5" id="content">
+            {{^authorized}}
+            <h1>{{i18n.i_sign-in_required}}</h1>
+            {{/authorized}}
+            {{#authorized}}
+            <div id="bodies">
+              <div class="version" id="v{{current}}">
+                <h2>{{name}}</h2><div class="content">{{body}}</div>
+              </div>
+            </div>
+            {{/authorized}}
+          </main>
+        </div>
+      </div>
+      <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
+        {{#authorized}}
+        <div role="group">
+          <button type="button" class="btn btn-outline-{{>contrastcolor}} btn-sm" id="cancel">{{i18n.i_versions.keep-current}}</button>
+          {{#editable}}<button type="button" class="btn btn-outline-{{>contrastcolor}} btn-sm d-none" id="revert">{{i18n.i_versions.revert}}</button>{{/editable}}
+        </div>
+        {{/authorized}}
+        <a class="navbar-text" href="https://github.com/Hypertopic/Cassandre/wiki">
+          <img src="../style/info.svg" width="30" height="30" alt="Cassandre" loading="lazy">
+        </a>
+      </nav>
+
+  <script src="../script/jquery.js"></script>
+  <script src="../script/showdown.min.js"></script>
+  <script src="../script/layout.js"></script>
+  <script src="../script/render.js"></script>
+  <script src="../script/log.js"></script>
+  <script>
+  var revisions = [], current = {{current}}, bodies = [], selected = current,
+      converter = new showdown.Converter({
+    parseImgDimensions: 'true',
+    tables: 'true',
+    tasklists: 'true',
+    strikethrough: 'true'
+  });
+  converter.setFlavor('github');
+
+  $(document).ready(function() {
+    $.ajax({
+      url: "../rev/{{_id}}/all/",
+      type: "GET",
+      dataType: "json"
+    }).done(function(all){
+      revisions = all._revs_info
+      for (var s of revisions) {
+        var t = s.rev.split('-')[0];
+        if(s.status == 'available' && t != current)
+          $('#bodies').append($('<div>', { class: 'version d-none', id: 'v'+t })); 
+          $('#groundings').append($('<li>', { id: 'tab_'+t}));
+      }
+      $('#tab_'+current).append($('<button>', { class: "btn btn-outline-secondary active", text: hr_time('{{date}}')}))
+        .on('click', function(){showOnly($(this).prop('id').split('_')[1]); });
+      for (var r of revisions) {
+        if(r.status == 'available') {
+          if (r.rev != "{{_rev}}") getPrevious(r.rev);
+        } else {
+          $('#tab_'+r.rev.split('-')[0]).remove();
+        }
+      }
+      if ($('#groundings li').length == 1) $('#groundings').append($('<div>', { text: "{{i18n.i_versions.single}}".replace('&#39;', "'")  }));
+    })
+    vlayout();
+    stickToHeader();
+  });
+
+  function getPrevious(rev){
+    $.ajax({
+      url: '../rev/{{_id}}/'+rev+'/',
+      type: "GET",
+      dataType: "json"
+    }).done(function(old){
+      var n = rev.split('-')[0];
+      if (old.editing) {
+        $('#tab_'+n).remove()
+      } else {
+        bodies.push({
+          version: n, name: old.name, body: old.body
+        })
+        $('#tab_'+n).append($('<button>', { class: "btn btn-outline-secondary", text: hr_time(old.history[old.history.length-1].date)}))
+        .on('click', function(){showOnly($(this).prop('id').split('_')[1]); });
+        $('#v'+n).append($('<h2>', { text: old.name }))
+          .append($('<div>', { class: 'content', text: old.body}))
+      }
+    });
+  }
+
+  function vlayout(){
+    $('#bodies .content').html(function(i, text) {
+      if ('{{type}}' == 'interview') {
+        return text.replace(/\n \n/g, '</font></p><p><font>');
+      } else {
+        return converter.makeHtml(text.replace(/&gt;/g, '>').trim());
+      }
+    });
+  }
+  
+  function showOnly(n){  
+    selected = n
+    $('#groundings li button').removeClass('active')
+    $('.version').addClass('d-none')
+    $('#v'+n).removeClass('d-none')
+    $('#tab_'+n+' button').addClass('active')
+    if (current == selected) {
+      $('#cancel').removeClass('d-none')
+      $('#revert').addClass('d-none')
+    } else {
+      $('#revert').removeClass('d-none')
+      $('#cancel').addClass('d-none')
+    }
+    vlayout();
+  }
+  
+  $('#cancel').on('click', function() {
+    self.location = '../memo/{{diary}}/{{_id}}';
+  });
+
+  $('#revert').on('click', function() {
+    reverting();
+  });
+  
+  function reverting() {
+    var data = bodies.find(x => x.version === selected)
+    delete data.version
+    $.ajax({
+      url: "../update_memo_content/{{_id}}",
+      type: "PUT",
+      contentType: "application/json",
+      data: JSON.stringify(data)
+    }).done(function() {
+      self.location = '../memo/{{diary}}/{{_id}}';
+    })
+  }
+  {{>layoutscript}}
+  {{>logscript}}
+  </script>
+  </body>
+</html>

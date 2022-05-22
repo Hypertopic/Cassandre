@@ -178,13 +178,16 @@
 
   function save(modify, toDoAfter) {
     warning = false;
-    var data = 'false';
-    if (modify) data = easymde.value().replace(/ *\n/g, " \n");
+    var data = {
+      name: 'false',
+      body: 'false'
+    }
+    if (modify) data.body = easymde.value().replace(/ *\n/g, " \n")
     $.ajax({
       url: "../update_memo_content/{{_id}}",
       type: "PUT",
       contentType: "application/json",
-      data: data
+      data: JSON.stringify(data)
     }).done(toDoAfter)
     .fail(function(request) {
       if (request.status == 401) alert("{{i18n.i_lost_connection}}".replace(/&#39;/g,"'").replace(/&quot;/g,'"')); 

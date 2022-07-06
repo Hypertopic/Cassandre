@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+  <symbol class="bi" viewBox="0 0 16 16" id="add">
+    <g stroke="currentColor" fill="none">
+      <circle cx="10" cy="2" r="1" />
+      <line x1="10" y1="3" x2="10" y2="15" />
+      <line x1="7" y1="6" x2="13" y2="6" />
+      <path d="M4,10 c0,6 12,6 12,0" />
+      <line x1="0" y1="3" x2="6" y2="3"/>
+      <line x1="3" y1="0" x2="3" y2="6"/>
+    </g>
+  </symbol>
+  <symbol class="bi" viewBox="0 0 16 16" id="remove">  
+    <g stroke="currentColor" stroke-width="1" fill="none">
+      <circle cx="10" cy="2" r="1" />
+      <line x1="10" y1="3" x2="10" y2="15" />
+      <line x1="7" y1="6" x2="13" y2="6"/>
+      <path d="M4,10 c0,6 12,6 12,0" />
+      <line x1="0" y1="3" x2="6" y2="3" />
+    </g>
+  </symbol>
+</svg>

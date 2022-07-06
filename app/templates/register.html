@@ -44,7 +44,9 @@
       <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
         <div><button class="btn navbar-btn btn-outline-{{>contrastcolor}} btn-sm d-none" id="register">{{i18n.i_register}}</button></div>
         <a class='navbar-text' href="https://github.com/Hypertopic/Cassandre/wiki">
-          <img src="../../style/info.svg" width="30" height="30" alt="Cassandre" loading="lazy">
+          <svg class="bi" width="24" height="24" fill="currentColor">
+            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#info-circle"/>
+          </svg>
         </a>
       </nav>
     </div>

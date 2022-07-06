@@ -5,6 +5,12 @@ function stickToHeader() {
   $('#top-right').css({'top': h+5});
   if (h > 36) $('#show-leaves').css({'top': h-36});
   $('.mytooltip .preview').css({'top': h});
+
+  $(function () {
+    $('span').tooltip({ offset: "0, 15" })
+    $('a').tooltip({ offset: "0, 11" })
+    $('button').tooltip({ offset: "0, 8" })
+  })
 }
 $(window).resize(function() {
   stickToHeader();
@@ -45,6 +51,10 @@ $('#kwic').on('keypress', function(key) {
   }
 });
 $("#reload").on('click', function() {
+  refresh = true;
+  reload();
+});
+$("#cancel").on('click', function() {
   refresh = true;
   reload();
 });

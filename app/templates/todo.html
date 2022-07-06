@@ -7,7 +7,11 @@
   <body>
     <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item"><a class="d-inline-block text-truncate text-{{>contrastcolor}} btn navbar-btn" href="../../memo/{{diary}}/" id="diary">{{diary_name}}</a></li>
+        <li class="nav-item"><a class="d-inline-block btn navbar-btn" href="../../memo/{{diary}}/" id="diary" title="{{diary_name}}">
+          <svg class="bi" width="24" height="24" fill="currentColor">
+            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#book"/>
+          </svg>
+        </a></li>
       </ul>
       {{>log}}
     </nav>
@@ -69,8 +73,10 @@
         </div>
       </main>
       <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
-        <a class='navbar-text ml-auto' href="https://github.com/Hypertopic/Cassandre/wiki">
-          <img src="../../style/info.svg" width="30" height="30" alt="Cassandre" loading="lazy">
+        <a class="navbar-text ml-auto" href="https://github.com/Hypertopic/Cassandre/wiki">
+          <svg class="bi" width="24" height="24" fill="currentColor">
+            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#info-circle"/>
+          </svg>
         </a>
       </nav>
     </div>
@@ -89,7 +95,10 @@
       type: "GET",
       dataType: "json",
       success: function(data) {
-        if(data.fullname) $('#username').text(data.fullname);
+        if(data.fullname) $('#signout')
+          .tooltip('dispose')
+          .attr('title', "{{i18n.i_sign-out}} "+data.fullname)
+          .tooltip({ offset: "0, 8" });
       }
     });
     {{/logged}}
@@ -98,7 +107,7 @@
       type: "GET",
       dataType: "json",
       success: function(d) {
-        $('#diary').text(d.diary_name);
+        $('#diary').attr('title',d.diary_name);
         $('title').prepend(d.diary_name);
         nComments = d.comments.length;
         var data = d.comments;

@@ -9,12 +9,33 @@
   <body>
     <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top justify-content-between">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item"><a class="d-inline-block text-truncate btn navbar-btn text-{{>contrastcolor}}" id="diary">{{diary_name}}</a></li>
+        <a class="d-inline-block btn navbar-btn " id="diary" data-toggle="tooltip" data-placement="bottom" title="{{diary_name}}">
+          <svg class="bi" width="24" height="24" fill="currentColor">
+            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#book"/>
+          </svg>
+        </a>
         {{#authorized}}
-        <a id="toggle-groundings" class="text-{{>contrastcolor}} nav-link btn" data-toggle="collapse" aria-expanded="true" title="{{i18n.i_show_groundings}}" href=".groundings">{{i18n.i_show_groundings}}</a>
+        <a id="toggle-groundings" class="btn" data-toggle="collapse" aria-expanded="true" title="{{i18n.i_show_groundings}}" href=".groundings">
+          <span class="d-block d-sm-none">
+            <svg class="bi" width="24" height="24" fill="currentColor">
+              <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#window"/>
+            </svg>
+          </span>
+          <span class="d-none d-sm-block">
+            <svg class="bi" width="24" height="24" fill="currentColor">
+              <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#layout-sidebar"/>
+            </svg>
+          </span>
+        </a>
         {{/authorized}}
         <div class="dropdown">
-          <a class="nav-link btn dropdown-toggle text-{{>contrastcolor}}" href="#" id="render" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{i18n.i_layout}}</a>
+          <a class="nav-link btn dropdown-toggle href="#" id="render" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span title="{{i18n.i_layout}}">
+              <svg class="bi" width="24" height="24" fill="currentColor">
+                <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#diagram-3"/>
+              </svg>
+            </span>
+          </a>          
           <div class="dropdown-menu" aria-labelledby="render">
             <div id="graphviz" class="dropdown-item">Statique</div>
             <div id="vis" class="dropdown-item">Dynamique</div>
@@ -27,7 +48,7 @@
       <div id="memo" class='row h-100'>
         {{#authorized}}
         <div id='groundings' class="groundings pb-0 pb-sm-5 col-xs-12 col-sm-3 collapse">
-          <button type="button" class="close" title="{{i18n.i_hide_groundings}}" data-toggle="collapse" href=".groundings">×</button>
+          <button type="button" class="close" title="{{i18n.i_hide_groundings}}" data-toggle="collapse" data-placement="bottom" href=".groundings">×</button>
           <legend>{{i18n.i_groundings}}</legend>
           {{#groundings}}
           <li class="d-inline d-sm-block {{type}}" id="{{id}}">
@@ -64,13 +85,19 @@
       <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
         <div role="group">
           {{#editable}}
-          <button class='groundings btn btn-outline-{{>contrastcolor}} btn-sm collapse' data-toggle="modal" data-target="#add_grounding" title="{{i18n.i_add_groundings}}">
-            <span class="d-block d-sm-none"><img src="{{>relpath}}style/grounding-add.svg" alt="{{i18n.i_add_groundings}}"></span>
-            <span class="d-none d-sm-block">{{i18n.i_add_groundings}}</span>
+          <button class='groundings btn btn-sm collapse' data-toggle="modal" data-target="#add_grounding">
+            <span data-toggle="tooltip" data-placement="top" title="{{i18n.i_add_groundings}}">
+              <svg class="bi" width="24" height="24" fill="currentColor">
+                <use xlink:href="{{>relpath}}style/grounding.svg#add"/>
+              </svg>
+            </span>
           </button>
-          <button class='groundings btn btn-outline-{{>contrastcolor}} btn-sm collapse d-none' data-toggle="modal" data-target="#remove_grounding" id="remove_grounding_btn" title="{{i18n.i_remove_grounding}}">
-            <span class="d-block d-sm-none"><img src="{{>relpath}}style/grounding-remove.svg" alt="{{i18n.i_remove_grounding}}"></span>
-            <span class="d-none d-sm-block">{{i18n.i_remove_grounding}}</span>
+          <button class='groundings btn btn-sm collapse d-none' data-toggle="modal" data-target="#remove_grounding" id="remove_grounding_btn">
+            <span data-toggle="tooltip" data-placement="top" title="{{i18n.i_remove_grounding}}">
+              <svg class="bi" width="24" height="24" fill="currentColor">
+                <use xlink:href="{{>relpath}}style/grounding.svg#remove"/>
+              </svg>
+            </span>
           </button>
           {{/editable}}
           {{#authorized}}
@@ -255,6 +282,10 @@
     $('#graph').addClass('d-none');
   });
 
+  $('.dropdown').on('show.bs.dropdown', function () {
+    $('#render').tooltip('hide');
+  })
+
   $('#all-articulations').on('click', function() {
     $('#integrate_all-articulations').removeClass('d-none');
     $('#loading').addClass('hidden');
@@ -271,7 +302,8 @@
   });
 
   function destroyGraphViz() {
-    var svg = document.getElementsByTagName("svg");
+    var context = document.getElementById("graph"),
+        svg = context.getElementsByTagName("svg");
     if (svg.length > 0) main.removeChild(svg[0]);
   }
 
@@ -299,8 +331,8 @@
     viz.renderSVGElement(graphviz, options)
     .then(function(element) {
       main.insertBefore(element, container);
-      if($('svg').attr('width').slice(0, -2) > 300)
-        $('svg').removeAttr('width').removeAttr('height');
+      if($('#graph svg').attr('width').slice(0, -2) > 300)
+        $('#graph svg').removeAttr('width').removeAttr('height');
     })
     .catch(error => {
       viz = new Viz();

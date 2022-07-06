@@ -26,9 +26,14 @@ var shared = {
   diagramcss: "<link rel='stylesheet' type='text/css' href='{{>relpath}}style/diagram.css' />",
   viscss: "<link rel='stylesheet' type='text/css' href='{{>relpath}}style/vis.min.css' />",
   log: "\
-    <ul class='navbar-nav'><li class='form-inline justify-content-between'>\
+    <ul class='mr-0 ml-auto navbar-nav nav-fill'><li class='form-inline justify-content-between'>\
       {{#diary}}\
-      <div class='input-group input-group-sm pl-1'>\
+      <button id='search-icon' class='btn' title='{{i18n.i_search}}'>\
+        <svg class='bi' width='24' height='24' fill='currentColor'>\
+          <use xlink:href='{{>relpath}}style/bootstrap-icons.svg#search'/>\
+        </svg>\
+      </button>\
+      <div id='search-input' class='input-group flex-grow-1 mr-1 hidden'>\
         <input id='kwic' type='search' class='form-control' placeholder='{{i18n.i_search}}' />\
         <div class='input-group-append'>\
           <span class='input-group-text kwic search'>?</span>\
@@ -37,35 +42,49 @@ var shared = {
       {{/diary}}\
     <div id='logged' class='order-3 justify-content-end pl-1'>\
       {{^logged}}\
-      <button class='btn navbar-btn text-{{>contrastcolor}}' title='{{i18n.i_sign-in}}' id='sign-in'>{{i18n.i_sign-in}}</button>\
-      <button class='btn navbar-btn btn-outline-{{>contrastcolor}}' title='{{i18n.i_register}}' id='to-register'>{{i18n.i_register}}</button>\
+      <button class='btn navbar-btn' title='{{i18n.i_sign-in}}' id='sign-in'>\
+        <svg class='bi' width='24' height='24' fill='currentColor'>\
+          <use xlink:href='{{>relpath}}style/bootstrap-icons.svg#box-arrow-in-left'/>\
+        </svg>\
+      </button>\
+      <button class='btn navbar-btn' title='{{i18n.i_register}}' id='to-register'>\
+        <svg class='bi' width='24' height='24' fill='currentColor'>\
+          <use xlink:href='{{>relpath}}style/bootstrap-icons.svg#person-plus'/>\
+        </svg>\
+      </button>\
       <form id='signin' class='form-inline hidden'>\
-        <div class='input-group input-group-sm'>\
+        <div class='input-group input-group'>\
           <div class='input-group-prepend'>\
-            <span class='input-group-text'><img src='{{>relpath}}style/person.svg' alt='' /></span>\
+            <span class='input-group-text'>\
+              <svg class='bi' width='24' height='24' fill='currentColor'>\
+                <use xlink:href='{{>relpath}}style/bootstrap-icons.svg#person'/>\
+              </svg>\
+            </span>\
           </div>\
           <input class='form-control' type='text' autocapitalize='none' name='name' placeholder='{{i18n.i_username}}'/>\
         </div>\
-        <div class='input-group input-group-sm'>\
+        <div class='input-group input-group'>\
           <div class='input-group-prepend'>\
-            <span class='input-group-text'><img src='{{>relpath}}style/lock.svg' alt='' /></span>\
+            <span class='input-group-text'>\
+              <svg class='bi' width='24' height='24' fill='currentColor'>\
+                <use xlink:href='{{>relpath}}style/bootstrap-icons.svg#lock'/>\
+              </svg>\
+            </span>\
           </div>\
           <input class='form-control' type='password' name='password' placeholder='{{i18n.i_password}}'/>\
         </div>\
-        <button class='btn navbar-btn' title='{{i18n.i_sign-in}}' type='submit'>\
-          <img class='d-block d-sm-none' src='{{>relpath}}style/sign-in.svg' alt='{{i18n.i_sign-in}}'>\
-          <span class='d-none d-sm-block text-{{>contrastcolor}}'>{{i18n.i_sign-in}}</span>\
+        <button class='btn navbar-btn ml-1' title='{{i18n.i_sign-in}}' type='submit'>\
+          <svg class='bi' width='24' height='24' fill='currentColor'>\
+            <use xlink:href='{{>relpath}}style/bootstrap-icons.svg#check-lg'/>\
+          </svg>\
         </button>\
       </form>\
       {{/logged}}\
       {{#logged}}\
-      <span id='username' class='navbar-text ml-2'>\
-        {{#logged_fullname}}{{logged_fullname}}{{/logged_fullname}}\
-        {{^logged_fullname}}{{logged}}{{/logged_fullname}}\
-      </span>\
-      <button class='btn navbar-btn' title='{{i18n.i_sign-out}}' id='signout'>\
-        <span class='d-none d-sm-block text-{{>contrastcolor}}'>{{i18n.i_sign-out}}</span>\
-        <img class='d-block d-sm-none' src='{{>relpath}}style/sign-out.svg' alt='{{i18n.i_sign-out}}'>\
+      <button class='btn navbar-btn' title='{{i18n.i_sign-out}} {{#logged_fullname}}{{logged_fullname}}{{/logged_fullname}}' id='signout'>\
+        <svg class='bi' width='24' height='24' fill='currentColor'>\
+          <use xlink:href='{{>relpath}}style/bootstrap-icons.svg#person-circle'/>\
+        </svg>\
       </button>\
       {{/logged}}\
     </div></li></ul>",
@@ -87,7 +106,9 @@ var shared = {
       {{#readers_fullnames}}{{fullname}} {{/readers_fullnames}}</span></span>\
       {{#logged}}\
       <span id='modify_rights' data-toggle='modal' data-target='#modify_rights_dialog' title='{{i18n.i_modify_rights}}'>\
-        <img src='../../style/gear.svg' alt='{{i18n.i_modify_rights}}'>\
+        <svg class='bi' width='24' height='24' fill='currentColor'>\
+          <use xlink:href='{{>relpath}}style/bootstrap-icons.svg#gear'/>\
+        </svg>\
       </span>\
       {{/logged}}\
     </div>",
@@ -174,16 +195,34 @@ var shared = {
       <textarea rows='5' type='text' class='form-control hidden' autocomplete='off' placeHolder='{{i18n.i_enter_comment}}'></textarea>\
     </div>",
   commentsbtn:"\
-    <button class='btn navbar-btn btn-outline-{{>contrastcolor}} btn-sm' id='comment_create' title='{{i18n.i_comment}}'>\
-      <span class='d-block d-sm-none'><img src='../../style/comment.svg' alt='{{i18n.i_comment}}'></span>\
-      <span class='d-none d-sm-block'>{{i18n.i_comment}}</span>\
+    <button class='btn navbar-btn btn-sm' id='comment_create' data-toggle='tooltip' data-placement='top' title='{{i18n.i_comment}}'>\
+      <svg class='bi' width='24' height='24' fill='currentColor'>\
+        <use xlink:href='{{>relpath}}style/bootstrap-icons.svg#chat-right-text'/>\
+      </svg>\
     </button>\
-    <button class='btn navbar-btn btn-outline-{{>contrastcolor}} btn-sm hidden' type='button' id='reload'>{{i18n.i_cancel}}</button>\
-    <button class='btn navbar-btn btn-outline-{{>contrastcolor}} btn-sm hidden' type='button' id='commented'>{{i18n.i_save}}</button>\
-    <button class='btn navbar-btn btn-outline-{{>contrastcolor}} btn-sm hidden' type='button' id='comment_updated'>{{i18n.i_save}}</button>\
-    <button class='btn navbar-btn btn-outline-{{>contrastcolor}} btn-sm hidden' type='button' id='renamed'>{{i18n.i_save}}</button>",
+    <button class='btn navbar-btn btn-sm hidden' type='button' id='commented' data-toggle='tooltip' data-placement='top' title='{{i18n.i_save}}'>\
+      <svg class='bi' width='24' height='24' fill='currentColor'>\
+        <use xlink:href='{{>relpath}}style/bootstrap-icons.svg#check-lg'/>\
+      </svg>\
+    </button>\
+    <button class='btn navbar-btn btn-sm hidden' type='button' id='comment_updated' data-toggle='tooltip' data-placement='top' title='{{i18n.i_save}}'>\
+      <svg class='bi' width='24' height='24' fill='currentColor'>\
+        <use xlink:href='{{>relpath}}style/bootstrap-icons.svg#check-lg'/>\
+      </svg>\
+    </button>\
+    <button class='btn navbar-btn btn-sm hidden' type='button' id='renamed' data-toggle='tooltip' data-placement='top' title='{{i18n.i_save}}'>\
+      <svg class='bi' width='24' height='24' fill='currentColor'>\
+        <use xlink:href='{{>relpath}}style/bootstrap-icons.svg#check-lg'/>\
+      </svg>\
+    </button>\
+    <button class='btn navbar-btn btn-sm hidden' type='button' id='reload' data-toggle='tooltip' data-placement='top' title='{{i18n.i_cancel}}'>\
+      <svg class='bi' width='24' height='24' fill='currentColor'>\
+        <use xlink:href='{{>relpath}}style/bootstrap-icons.svg#x-lg'/>\
+      </svg>\
+    </button>",
   script: "<script src='{{>relpath}}script/jquery.js'></script>\
     <script src='{{>relpath}}script/jquery-ui.min.js'></script>\
+    <script src='{{>relpath}}script/popper.min.js'></script>\
     <script src='{{>relpath}}style/bootstrap.min.js'></script>\
     <script src='{{>relpath}}script/showdown.min.js'></script>\
     <script src='{{>relpath}}script/editname.js'></script>\

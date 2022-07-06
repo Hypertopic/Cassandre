@@ -12,7 +12,11 @@
   <body>
     <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item"><a class="nav-link btn navbar-btn text-truncate" id="diary">{{diary_name}}</a></li>
+        <li class="nav-item"><a class="nav-link btn navbar-btn text-truncate" id="diary" title="{{diary_name}}">
+          <svg class="bi" width="24" height="24" fill="currentColor">
+            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#book"/>
+          </svg>
+        </a></li>
         <li class="nav-item"><a class="nav-link btn-sm" id="json" href="../../export/{{diary}}/json/">json</a></li>
         <li class="nav-item"><a class="nav-link btn-sm" id="xml" href="../../export/{{diary}}/xml/">xml</a></li>
         <li class="nav-item"><a class="nav-link btn-sm disabled" id='pdf'>pdf</a></li>
@@ -79,7 +83,10 @@
       return converter.makeHtml(text.trim());
     });
     getFullname('{{logged}}');
-    $('#username').text(fullnames['{{logged}}']);
+    $('#signout')
+      .tooltip('dispose')
+      .attr('title', "{{i18n.i_sign-out}} "+fullnames['{{logged}}'])
+      .tooltip({ offset: "0, 8" });
     if ('{{diary}}') $.ajax({
       url: "../../{{diary}}",
       type: "GET",
@@ -87,7 +94,10 @@
       success: function(data) {
         if(data.diary_name) {
           $('title').text(data.diary_name);
-          $('#diary').text(data.diary_name);
+          $('#diary')
+            .tooltip('dispose')
+            .attr('title', data.diary_name)
+            .tooltip({ offset: "0, 8" });
           $('#json').prop('href', $('#json').prop('href')+data.diary_name);
           $('#xml').prop('href', $('#xml').prop('href')+data.diary_name);
         }
@@ -123,7 +133,7 @@
 
   $('#header')
     .on('click', '#diary', function() {
-      self.location = '../../memo/{{diary}}/?by=date';
+      self.location = '../../memo/{{diary}}/';
     })
     .on('click', '#pdf', function() {
       printPDF();

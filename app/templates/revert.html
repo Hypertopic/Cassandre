@@ -42,12 +42,16 @@
         </div>
         {{/authorized}}
         <a class="navbar-text" href="https://github.com/Hypertopic/Cassandre/wiki">
-          <img src="../style/info.svg" width="30" height="30" alt="Cassandre" loading="lazy">
+          <svg class="bi" width="24" height="24" fill="currentColor">
+            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#info-circle"/>
+          </svg>
         </a>
       </nav>
 
   <script src="../script/jquery.js"></script>
   <script src="../script/showdown.min.js"></script>
+  <script src="../script/popper.min.js"></script>
+  <script src="../script/bootstrap.min.js"></script>
   <script src="../script/layout.js"></script>
   <script src="../script/render.js"></script>
   <script src="../script/log.js"></script>

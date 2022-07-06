@@ -8,10 +8,15 @@
   <body>
     <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item"><a class="d-inline-block text-truncate text-{{>contrastcolor}} btn navbar-btn" id="diary">{{diary_name}}</a></li>
+        <li class="nav-item"><a class="nav-link btn" id="diary" title="{{diary_name}}">
+          <svg class="bi" width="24" height="24" fill="currentColor">
+            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#book"/>
+          </svg>
+        </a></li>
         <li class="nav-item"><a class="nav-link btn disabled" id="drawChart" title="{{i18n.i_draw-chart}}">
-          <span class="d-block d-sm-none"><img src="{{>relpath}}style/calendar.svg" alt="{{i18n.i_draw-chart}}"></span>
-          <span class="d-none d-sm-block">{{i18n.i_draw-chart}}</span>
+          <svg class="bi" width="24" height="24" fill="currentColor">
+            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#calendar-week"/>
+          </svg>
         </a></li>
       </ul>
       {{>log}}
@@ -44,9 +49,20 @@
         </ul></div>
       </main>
       <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
-        <button class="btn navbar-btn btn-outline-{{>contrastcolor}} btn-sm ml-1 more" type="button">{{i18n.i_show-more}}</button>
+        <button class="btn navbar-btn btn-sm ml-1 more" type="button" title="{{i18n.i_show-more}}">
+          <svg class="bi" width="24" height="24" fill="currentColor">
+            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#arrow-down-circle"/>
+          </svg>
+        </button>
+        <button class="btn navbar-btn btn-sm ml-1 hidden" id="reload" type="button" data-toggle="tooltip" data-placement="bottom" title="{{i18n.i_cancel}}">
+          <svg class="bi" width="24" height="24" fill="currentColor">
+            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#x-lg"/>
+          </svg>
+        </button>
         <a class='navbar-text ml-auto' href="https://github.com/Hypertopic/Cassandre/wiki">
-          <img src="../../style/info.svg" width="30" height="30" alt="Cassandre" loading="lazy">
+          <svg class="bi" width="24" height="24" fill="currentColor">
+            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#info-circle"/>
+          </svg>
         </a>
       </nav>
     </div>
@@ -68,7 +84,10 @@
   $(document).ready(function() {
     {{#logged}}
     getFullname('{{logged}}');
-    $('#username').text(fullnames['{{logged}}']);
+    $('#signout')
+      .tooltip('dispose')
+      .attr('title', "{{i18n.i_sign-out}} "+fullnames['{{logged}}'])
+      .tooltip({ offset: "0, 8" });
     {{/logged}}
     showMore("Z");
     stickToHeader();

@@ -46,7 +46,7 @@
         </main>
         {{#authorized}}
         <div id='groundings' class="groundings order-1 pb-0 pb-sm-5 col-xs-12 col-sm-3 collapse show">
-          <button type="button" class="close" title="{{i18n.i_hide_groundings}}" data-toggle="collapse" href=".groundings">×</button>
+          <button type="button" class="close" title="{{i18n.i_hide_groundings}}" data-toggle="collapse" data-placement="bottom" href=".groundings">×</button>
           <legend>{{i18n.i_groundings}}</legend>
           {{#groundings}}
           <li class="d-inline d-sm-block {{type}}" id="{{id}}">
@@ -131,6 +131,11 @@
         </div>
       </div>
     </div>
+    <button id="revert" class="btn hidden" data-toggle="tooltip" data-placement="bottom" title="{{i18n.i_versions.list}}">
+      <svg class="bi" width="24" height="24" fill="currentColor">
+        <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#arrow-counterclockwise"/>
+      </svg>
+    </button>
     {{/editable}}
     {{>modify_rights_dialog}}
     <div id="editing" class="hidden">
@@ -145,46 +150,59 @@
       </div>
     </div>
     <nav id="header" class="{{>navbarstyle}} navbar-expand-lg bd-navbar fixed-top">
-      <a class="d-inline-block btn navbar-btn text-truncate" id="diary">{{diary_name}}</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span><img src="{{>relpath}}style/three-bars.svg" /></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <div class="navbar-nav btn-group justify-content-between">
-          <a id="toggle-groundings" class="nav-link btn text-{{>contrastcolor}} d-none" data-toggle="collapse" title="{{i18n.i_show_groundings}}" aria-expanded="true" href=".groundings">
-            <span class="d-block d-sm-none"><img src="{{>relpath}}style/screen-normal.svg" alt="{{i18n.i_show_grounding}}"></span>
-            <span class="d-none d-sm-block">{{i18n.i_show_groundings}}</span>
-          </a>
+      <a class="d-inline-block btn navbar-btn" id="diary" data-toggle="tooltip" data-placement="bottom" title="{{diary_name}}">
+        <svg class="bi" width="24" height="24" fill="currentColor">
+          <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#book"/>
+        </svg>
+      </a>
+      <a id="toggle-groundings" class="btn d-none" data-toggle="collapse" title="{{i18n.i_show_groundings}}" aria-expanded="true" href=".groundings">
+        <span class="d-block d-sm-none">
+          <svg class="bi" width="24" height="24" fill="currentColor">
+            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#window"/>
+          </svg>
+        </span>
+        <span class="d-none d-sm-block">
+          <svg class="bi" width="24" height="24" fill="currentColor">
+            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#layout-sidebar"/>
+          </svg>
+        </span>
+      </a>      
+      <ul class="mr-auto navbar-nav">
+        {{#authorized}}
+        <div id='lexical' class="btn-group justify-content-between hidden" role="group">
+          <li class="nav-item"><a class="nav-link btn-sm" id='clear_highlights'>{{i18n.i_raw}}</a></li>
+          <li class="nav-item"><a class="nav-link btn-sm highlight_words disabled" id='specific'>{{i18n.i_specific}}</a></li>
+          <li class="nav-item"><a class="nav-link btn-sm highlight_words disabled" id='rare'>{{i18n.i_rare}}</a></li>
+          <li class="nav-item"><a class="nav-link btn-sm disabled" id='repeated'>{{i18n.i_phrases}}</a></li>
         </div>
-        <ul class="navbar-nav mr-auto">
-          {{#authorized}}
-          <div id='lexical' class="btn-group justify-content-between hidden" role="group">
-            <li class="nav-item"><a class="nav-link btn-sm" id='clear_highlights'>{{i18n.i_raw}}</a></li>
-            <li class="nav-item"><a class="nav-link btn-sm highlight_words disabled" id='specific'>{{i18n.i_specific}}</a></li>
-            <li class="nav-item"><a class="nav-link btn-sm highlight_words disabled" id='rare'>{{i18n.i_rare}}</a></li>
-            <li class="nav-item"><a class="nav-link btn-sm disabled" id='repeated'>{{i18n.i_phrases}}</a></li>
-          </div>
-          {{/authorized}}
-        </ul>
-        {{>log}}
-      </div>
+        {{/authorized}}
+      </ul>
+      {{>log}}
     </nav>
     <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
       {{#authorized}}
       <div role="group">
         {{#editable}}
-        <button class="groundings btn navbar-btn btn-outline-{{>contrastcolor}} btn-sm collapse show" data-toggle="modal" data-target="#add_grounding" title="{{i18n.i_add_groundings}}">
-          <span class="d-block d-sm-none"><img src="{{>relpath}}style/grounding-add.svg" alt="{{i18n.i_add_groundings}}"></span>
-          <span class="d-none d-sm-block">{{i18n.i_add_groundings}}</span>
+        <button class="groundings btn navbar-btn btn-sm collapse show" data-toggle="modal" data-target="#add_grounding">
+          <span data-toggle="tooltip" data-placement="top" title="{{i18n.i_add_groundings}}">
+            <svg class="bi" width="24" height="24" fill="currentColor">
+              <use xlink:href="{{>relpath}}style/grounding.svg#add"/>
+            </svg>
+          </span>
         </button>
-        <button class="groundings btn navbar-btn btn-outline-{{>contrastcolor}} btn-sm collapse show d-none" data-toggle="modal" data-target="#remove_grounding" title="{{i18n.i_remove_grounding}}" id="remove_grounding_btn">
-          <span class="d-block d-sm-none"><img src="{{>relpath}}style/grounding-remove.svg" alt="{{i18n.i_remove_grounding}}"></span>
-          <span class="d-none d-sm-block">{{i18n.i_remove_grounding}}</span>
+        <button class="groundings btn navbar-btn btn-sm collapse show d-none" data-toggle="modal" data-target="#remove_grounding" id="remove_grounding_btn">
+          <span data-toggle="tooltip" data-placement="top" title="{{i18n.i_remove_grounding}}">
+            <svg class="bi" width="24" height="24" fill="currentColor">
+              <use xlink:href="{{>relpath}}style/grounding.svg#remove"/>
+            </svg>
+          </span>
         </button>
-        <button class="btn navbar-btn btn-outline-{{>contrastcolor}} btn-sm d-none {{#editing}}disabled{{/editing}}" id="edit"
-          title="{{^editing}}{{i18n.i_edit}}{{/editing}}" {{#editing}}disabled{{/editing}}>
-          <span class="d-block d-sm-none"><img src="{{>relpath}}style/pencil.svg" alt="{{i18n.i_edit}}"></span>
-          <span class="d-none d-sm-block">{{i18n.i_edit}}</span>
+        <button class="btn navbar-btn btn-sm d-none {{#editing}}disabled{{/editing}}" id="edit" {{#editing}}disabled{{/editing}}>
+          <span data-toggle="tooltip" data-placement="top" title="{{^editing}}{{i18n.i_edit}}{{/editing}}">
+            <svg class="bi" width="24" height="24" fill="currentColor">
+              <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#pencil"/>
+            </svg>
+          </span>
         </button>
         {{/editable}}
         {{^statements}}
@@ -248,7 +266,10 @@
       type: "GET",
       dataType: "json",
       success: function(data) {
-        if(data.fullname) $('#username').text(data.fullname);
+        if(data.fullname) $('#signout')
+          .tooltip('dispose')
+          .attr('title', "{{i18n.i_sign-out}} "+data.fullname)
+          .tooltip({ offset: "0, 8" });
       }
     });
     {{/logged}}
@@ -258,7 +279,10 @@
       dataType: "json"
     }).done(function(data){
       if(data.diary_name) {
-        $('#diary').text(data.diary_name);
+        $('#diary')
+          .tooltip('dispose')
+          .attr('title', data.diary_name)
+          .tooltip({ offset: "0, 8" });
         $('title').prepend(data.diary_name);
       }
     }).done(function(){
@@ -440,7 +464,8 @@
     if (par !== '') highlight(par);
     stickToHeader();
     {{^statements}}
-    $('#kwic').parent().parent().prepend('<a class="nav-link btn-sm" title="{{i18n.i_versions.list}}" href="../../revert/{{_id}}"><img src="../../style/history.svg" style="height: 2em;" alt="{{i18n.i_versions.legend}}" /></a>');
+    $('#revert').removeClass('hidden');
+    $('#kwic').parent().parent().prepend($('#revert'));
     poller('memo', '{{update_seq}}');
     {{/statements}}
     {{#statements}}

@@ -7,7 +7,11 @@
   <body>
     <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item"><a class="nav-link btn text-{{>contrastcolor}} text-truncate" id="diary">&nbsp;</a></li>
+        <li class="nav-item"><a class="nav-link btn text-truncate" id="diary">
+          <svg class="bi" width="24" height="24" fill="currentColor">
+            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#book"/>
+          </svg>
+        </a></li>
         <li class="dropdown d-none">
           <a class="nav-link dropdown-toggle" href="#" id="filter" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           {{i18n.i_filter}}
@@ -19,7 +23,7 @@
         </li>
       </ul>
       <div class="form-inline justify-content-between">
-        <div class="input-group input-group-sm">
+        <div class="input-group input-group">
           <input id="kwic" type="search" class="form-control" placeholder="{{i18n.i_search}}" />
           <div class="input-group-append">
             <span class="input-group-text kwic search">?</span>
@@ -31,6 +35,9 @@
       <div id="content" class="col mb-3 pb-5">
         <h1>{{i18n.i_kwic}}</h1>
         <h2>{{i18n.i_occurrences}}: {{pattern}}</h2>
+        <div id="loading" class="d-flex justify-content-center hidden" title="{{i18n.i_loading}}">
+          <div class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></div>
+        </div>
         {{#occurrences}}
         <div class="occurrence" data-text="{{id}}">
           {{#context}}
@@ -46,9 +53,15 @@
         {{/occurrences}}
       </div>
       <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
-        <input type="button" id="new_pattern" class='btn btn-outline-{{>contrastcolor}} btn-sm' value="{{i18n.i_new_pattern}}" />
-        <a class='navbar-brand' href="https://github.com/Hypertopic/Cassandre/wiki">
-          <img src="../../style/info.svg" width="30" height="30" alt="Cassandre" loading="lazy">
+        <button type="button" id="new_pattern" class='btn btn-sm' title="{{i18n.i_new_pattern}}">
+          <svg class="bi" width="24" height="24" fill="currentColor">
+            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#bookmark-plus"/>
+          </svg>
+        </button>
+        <a class='navbar-text' href="https://github.com/Hypertopic/Cassandre/wiki">
+          <svg class="bi" width="24" height="24" fill="currentColor">
+            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#info-circle"/>
+          </svg>
         </a>
       </nav>
     </div>
@@ -62,7 +75,10 @@
       type: "GET",
       dataType: "json",
       success: function(d) {
-        $("#diary").html(d.diary_name);
+        $('#diary')
+          .tooltip('dispose')
+          .attr('title',d.diary_name)
+          .tooltip({ offset: "0, 8" });
       }
     });
     stickToHeader();
@@ -71,7 +87,7 @@
   });
 
   $('#diary').on('click', function(){
-    self.location = '../../memo/{{diary}}/?by=date';
+    self.location = '../../memo/{{diary}}/';
   });
 
   function getUUID() {
@@ -83,6 +99,7 @@
 
   $('#new_pattern').on('click',function(){
     var text_id = $('.occurrence').data('text');
+    $("#loading").removeClass("hidden");
     $.ajax({
       url: "../../" + text_id,
       type: "GET",

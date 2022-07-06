@@ -35,6 +35,10 @@ $('#add').on('click', function() {
   }
 });
 
+$('#revert').on('click', function() {
+  self.location = '../../revert/' + this_id;
+});
+
 $('#content').on('mouseup', function() {
   if (window.getSelection().anchorNode !== null) {
     var posts = document.getElementsByClassName('post'),

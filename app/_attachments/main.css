@@ -243,7 +243,7 @@ button.comment {
 .unchecked-comment a p, .unchecked-comment a blockquote,
 .comment_text > ul, .comment_text > ol,
 .comment_text > blockquote {
-  margin-bottom: 0px;
+  margin-bottom: 2px;
 }
 
 .checked {
@@ -303,11 +303,15 @@ a.dropdown-item, .create-leave, a.dropdown-toggle,
   color: white;
 }
 
-#header a:hover,
+#footer .btn, #header .btn {
+  color: white;
+}
+
+#header .btn:not([disabled]):hover, #footer .btn:enabled:hover,
 #double:hover, #sign-in:hover,
 .editor-toolbar > button.active, 
 .editor-toolbar > button:hover {
-  background: white;
+  background-color: white;
   color: black !important;
 }
 
@@ -367,6 +371,8 @@ a.dropdown-item, .create-leave, a.dropdown-toggle,
 .table {
   background-image: url('table.svg');
   margin-bottom: 0px;
+  border: 0 !important;
+  width: auto;
 }
 
 .diagram {
@@ -386,6 +392,8 @@ a.dropdown-item, .create-leave, a.dropdown-toggle,
 #modify_rights {
   height: 30px;
   cursor: pointer;
+  display: inline-block;
+  vertical-align: top;
 }
 
 .search {
@@ -419,16 +427,19 @@ a.dropdown-item, .create-leave, a.dropdown-toggle,
 }
 
 .in-collection{
-  position: absolute;
-  top: -1rem;
-  left: .55rem;
   font-size: 2.5em;
   cursor: pointer;
 }
 
+div.in-collection{
+  position: absolute;
+  top: .5rem;
+  left: .55rem;
+}
+
 .card-icons{
   position: absolute;
-  bottom: -.35rem;
+  bottom: .35rem;
   right: .55rem;
   font-size: 2.5em;
 }

@@ -22,7 +22,11 @@
             {{/logged}}
             {{#diaries}}
             <div class="card text-center bg-light mb-3">
-              <div title="{{i18n.i_integrate}} {{i18n.i_in}} {{i18n.i_collection}}" class="in-collection d-none"><img src="../style/chevron-down.svg" alt="v" /></div>
+              <div title="{{i18n.i_integrate}} {{i18n.i_in}} {{i18n.i_collection}}" class="in-collection d-none">
+                <svg class="bi" width="16" height="16" fill="currentColor">
+                  <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#chevron-down"/>
+                </svg>
+              </div>
               <h5><a href='../memo/{{id}}/'>{{name}}</a></h5>
               <p><span id="{{id}}" title="{{i18n.i_memos}}" class="badge badge-pill badge-secondary progress-bar-striped progress-bar-animated d-none">{{i18n.i_loading}}</span></p>
             </div>
@@ -41,10 +45,21 @@
       <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
         <div role="group">
           <button class="btn navbar-btn btn-outline-{{>contrastcolor}} btn-sm d-none" id="show">{{i18n.i_last-visit}}</button>
-          <button class="btn navbar-btn btn-outline-{{>contrastcolor}} btn-sm d-none" type='button' id='create_diary'>{{i18n.i_create.diary}}</button>
+          <button class="btn navbar-btn btn-sm d-none" type='button' id='create_diary' title="{{i18n.i_create.diary}}">
+            <svg class="bi" width="24" height="24" fill="currentColor">
+              <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#journal-plus"/>
+            </svg>
+          </button>
+          <button class="btn navbar-btn btn-sm ml-1 hidden" id="reload" type="button" data-toggle="tooltip" data-placement="top" title="{{i18n.i_cancel}}">
+            <svg class="bi" width="24" height="24" fill="currentColor">
+              <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#x-lg"/>
+            </svg>
+          </button>
         </div>
-        <a class='navbar-text ml-auto' href="https://github.com/Hypertopic/Cassandre/wiki">
-          <img src="../style/info.svg" width="30" height="30" alt="Cassandre" loading="lazy">
+        <a class='navbar-text text-{{>contrastcolor}} ml-auto' href="https://github.com/Hypertopic/Cassandre/wiki">
+          <svg class="bi" width="24" height="24" fill="currentColor">
+            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#info-circle"/>
+          </svg>
         </a>
       </nav>
       {{>storing_fullname_dialog}}
@@ -79,7 +94,10 @@
         $('#storing_fullname_dialog').modal('show');
     }).done(function(data) {
         if(data.fullname.length == 0) $('#storing_fullname_dialog').modal('show');
-        if(data.fullname) $('#username').text(data.fullname);
+        if(data.fullname) $('#signout')
+          .tooltip('dispose')
+          .attr('title', "{{i18n.i_sign-out}} "+data.fullname)
+          .tooltip({ offset: "0, 8" });
         for (var o of data.order) {
           if (typeof o.collection !== 'undefined') {
             let collection = o.collection,
@@ -104,9 +122,12 @@
           let id = d.id;
           if (!$('#'+id).length) {
             var card = '<div class="card text-center bg-light mb-3">'
-              +'<div title="{{i18n.i_integrate}} {{i18n.i_in}} {{i18n.i_collection}}" class="in-collection d-none"><img src="../style/chevron-down.svg" alt="v" /></div>'
+              +'<div title="{{i18n.i_integrate}} {{i18n.i_in}} {{i18n.i_collection}}" class="in-collection d-none">'
+              +'<svg class="bi" width="16" height="16" fill="currentColor"><use xlink:href="{{>relpath}}style/bootstrap-icons.svg#chevron-down"/></svg></div>'
               +'<h5><a href="../memo/'+id+'/">'+d.name+'</a></h5>'
-              +'<div title="{{i18n.i_restricted-access}}" class="card-icons"><img src="../style/lock.svg" alt="" /></div>'
+              +'<div title="{{i18n.i_restricted-access}}" class="card-icons text-secondary">'
+              +'<svg class="bi" width="16" height="16" fill="currentColor"><use xlink:href="{{>relpath}}style/bootstrap-icons.svg#lock"/></svg>'
+              +'</div>'
               +'<p><span id="'+id+'" title="{{i18n.i_memos}}" class="badge badge-pill badge-secondary progress-bar-striped progress-bar-animated d-none">{{i18n.i_loading}}</span></p>'
               +'</div>';
             if (register[id]) {
@@ -175,6 +196,8 @@
       $('.in-collection').remove();
       $('#signout').prop('disabled', true);
       $('#show').prop('disabled', true);
+      $('#show').remove();
+      $('#reload').removeClass("hidden");
       $('#create_diary').removeClass("d-none");
     }
     if (key.which == 13) {

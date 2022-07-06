@@ -10,7 +10,9 @@ $('h1.editable').on('click', function() {
   $('#show-activity').remove();
   $('#tasklist-alert').off();
   $('#diaries').prop('disabled', true);
-  $('#drawTimeline').prop('disabled', true);
+  $('#drawTimeline').parent().children()
+    .prop('disabled', true)
+    .addClass('disabled');
   $('#toggle').prop('disabled', true);
   $('#leave-name').addClass('hidden');
   $('#footer > div > button').addClass('hidden');
@@ -18,10 +20,12 @@ $('h1.editable').on('click', function() {
   $('#kwic').parent().children().addClass('hidden');
   $('a').removeAttr('href');
   $('#diary').addClass('disabled');
-  $('#to-register').prop('disabled', true);
-  $('#signin').prop('disabled', true);
-  $('#signout').prop('disabled', true);
+  $('#logged').children().prop('disabled', true).tooltip('dispose');
+  $('#search-icon').prop('disabled', true).tooltip('dispose');
+  $('#revert').prop('disabled', true).tooltip('dispose');
   $('.toast').toast('hide');
+  $('.close').remove();
+  $('button.create').prop('disabled', true);
   $('#modify_rights').remove();
   $('#renamed').removeClass('hidden');
   $('#reload').removeClass('hidden');

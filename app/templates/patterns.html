@@ -8,10 +8,14 @@
     <header>
       <div id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item"><a href="../memo/{{diary}}/" class="nav-link btn" id="diary">&nbsp;</a></li>
+          <li class="nav-item"><a href="../memo/{{diary}}/" class="nav-link btn" id="diary">
+            <svg class="bi" width="24" height="24" fill="currentColor">
+              <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#book"/>
+            </svg>
+          </a></li>
         </ul>
         <div class="form-inline justify-content-between">
-          <div class="input-group input-group-sm">
+          <div class="input-group input-group">
             <input id="kwic" type="search" class="form-control" placeholder="{{i18n.i_search}}" />
             <div class="input-group-append">
               <span class="input-group-text kwic search">?</span>
@@ -23,6 +27,9 @@
     <div id="container"  class='container-fluid'>
       <div id="content" class="col pb-5">
         <h1>{{i18n.i_patterns}}</h1>
+        <div id="loading" class="d-flex justify-content-center hidden" title="{{i18n.i_loading}}">
+          <div class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></div>
+        </div>
         <div></div>
         <ul>
           {{#patterns}}
@@ -32,17 +39,45 @@
           {{/patterns}}
         </ul>
       </div>
-      <nav id="footer" class="{{>navbarstyle}} fixed-bottom"></nav>
+      <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
+       <div role="group" class="form-check-inline">
+        <button class="btn navbar-btn btn-sm" id="show_delete" type="button" data-toggle="tooltip" data-placement="top" title="{{i18n.i_delete}}...">
+          <svg class="bi" width="24" height="24" fill="currentColor">
+            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#trash"/>
+          </svg>
+        </button>
+        <div class="custom-control custom-switch hidden"><input id="toggle" type="checkbox" class="custom-control-input"></input><label class="navbar-text custom-control-label" for="toggle">{{i18n.i_select}}</label></div>
+        <button class="btn navbar-btn btn-sm ml-1 hidden" id="delete" type="button" data-toggle="tooltip" data-placement="top" title="{{i18n.i_delete}}">
+          <svg class="bi" width="24" height="24" fill="currentColor">
+            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#trash"/>
+          </svg>
+        </button>
+        <button class="btn navbar-btn btn-sm mr-1 hidden" id="cancel" type="button" data-toggle="tooltip" data-placement="top" title="{{i18n.i_cancel}}">
+          <svg class="bi" width="24" height="24" fill="currentColor">
+            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#x-lg"/>
+          </svg>
+        </button>
+       </div>
+       <a class='navbar-text' href="https://github.com/Hypertopic/Cassandre/wiki">
+         <svg class="bi" width="24" height="24" fill="currentColor">
+           <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#info-circle"/>
+         </svg>
+       </a>
+      </nav>
     </div>
   {{>script}}
   <script>
+  const diary_id = '{{diary}}';
   $(document).ready(function() {
     $.ajax({
       url: "../../{{diary}}",
       type: "GET",
       dataType: "json",
       success: function(d) {
-        $("#diary").html(d.diary_name);
+        $('#diary')
+          .tooltip('dispose')
+          .attr('title',d.diary_name)
+          .tooltip({ offset: "0, 8" });
       }
     });
     stickToHeader();
@@ -51,11 +86,11 @@
 
   $('#footer')
     .on('click', '#show_delete', function() {
-      $("#footer").html(
-        '<div role="group"><button id="cancel" type="button" class="btn btn-outline-{{>contrastcolor}} navbar-btn btn-sm">{{i18n.i_cancel}}</button>'
-        + '<input id="toggle" type="checkbox"><span class="navbar-text">{{i18n.i_select}}</span></button>'
-        + '<button id="delete" type="button" class="btn btn-outline-{{>contrastcolor}} navbar-btn btn-sm">{{i18n.i_delete}}</button></div>'
-      );
+      $("#cancel").removeClass("hidden");
+      $("#delete").removeClass("hidden");
+      $(".custom-switch").removeClass("hidden");
+      $("#show_delete").tooltip("hide");
+      $("#show_delete").addClass("hidden");
       $(".kwic>span").prepend("<input type='checkbox' />");
     })
 
@@ -71,8 +106,9 @@
     })
 
     .on('click', '#delete', function() {
-      var checked = $(".kwic :checked");
-      var countdown = checked.length;
+      var checked = $(".kwic :checked"),
+          countdown = checked.length;
+      $("#loading").removeClass("hidden");
       if (!countdown) {
         resetUI();
       }
@@ -116,15 +152,13 @@
   });
 
   function resetUI() {
-    $('#footer').html(
-      '<button type="button" id="show_delete" class="btn btn-outline-{{>contrastcolor}} navbar-btn btn-sm">{{i18n.i_delete}}...</button>'
-      + '<a class="navbar-brand" href="https://github.com/Hypertopic/Cassandre/wiki">'
-      +   '<img src="../../style/info.svg" width="30" height="30" alt="Cassandre" loading="lazy"></a>'
-    );
-    $('input[type="checkbox"]').remove();
+    $('input[type="checkbox"]').addClass("hidden");
+    $("#footer .form-check-inline").children().addClass("hidden");
+    $("#show_delete").removeClass("hidden");    
   }
 
   {{>layoutscript}}
+  {{>logscript}}
   </script>
   </body>
 </html>

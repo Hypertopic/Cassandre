@@ -7,8 +7,10 @@
   <body>
     <div id="container">
       <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
-        <a class="text-{{>contrastcolor}}" id="diaries">
-          <img src="../style/brand.svg" width="30" height="30" alt="{{i18n.i_diaries}}" loading="lazy">
+        <a class="btn" id="diaries" data-toggle="tooltip" data-placement="bottom" title="{{i18n.i_diaries}}">
+          <svg class="bi" width="24" height="24" fill="currentColor">
+            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#journals"/>
+          </svg>
         </a>
         <ul class="navbar-nav mr-auto"></ul>
         {{>log}}
@@ -21,14 +23,21 @@
         <h1> {{i18n.i_username}}</h1>
 	<div class="card-columns mb-3 pb-3">
         <ul>
-        {{#users}}<li><a href="../user/{{id}}">{{fullname}}</a></li>{{/users}}
+        {{#users}}
+          <li>
+          <a href="../user/{{id}}">{{fullname}}</a>
+          <span title="{{i18n.i_integrate}} {{i18n.i_in}} {{i18n.i_collection}}" class="in-collection d-none"><img src="../style/chevron-down.svg" alt="v" /></span>
+          </li>
+        {{/users}}
         </ul>
 	</div>
         {{/logged}}
       </main>
       <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
         <a class='navbar-text' href="https://github.com/Hypertopic/Cassandre/wiki">
-          <img src="../style/info.svg" width="30" height="30" alt="Cassandre" loading="lazy">
+          <svg class="bi" width="24" height="24" fill="currentColor">
+            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#info-circle"/>
+          </svg>
         </a>
       </nav>
     </div>
@@ -37,9 +46,6 @@
   $(document).ready(function() {
     stickToHeader();
     {{#logged}}
-    {{#users}}
-    if ('{{id}}' === $('#username').text().trim()) $('#username').text('{{fullname}}');
-    {{/users}}
     var n = $('#content ul>li').length;
     $('h1').prepend(n);
     if (n > 1) $('h1').append('s');

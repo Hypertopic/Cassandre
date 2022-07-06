@@ -7,22 +7,17 @@
     {{>viscss}}
   </head>
   <body id="container">
-    <nav id="header" class="{{>navbarstyle}} navbar-expand-md fixed-top">
-      <a class="d-inline-block text-truncate btn navbar-btn text-{{>contrastcolor}}" id="diary">{{i18n.i_diary}}</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="text-{{>contrastcolor}} bg-{{>menucolor}}"><img src="../../style/three-bars.svg" alt="=" /></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-          <li class="form-inline justify-content-between">
-          </li>
-        </ul>
-        <ul class="navbar-nav justify-content-between">
-          <li class="form-inline justify-content-between">
-            {{>log}}
-          </li>
-        </ul>
-      </div>
+    <nav id="header" class="{{>navbarstyle}} justify-content-between fixed-top">
+      <a class="d-inline-block btn navbar-btn" id="diary">
+        <svg class="bi" width="24" height="24" fill="currentColor">
+          <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#book"/>
+        </svg>
+      </a>
+      <ul class="navbar-nav">
+        <li class="form-inline justify-content-between">
+          {{>log}}
+        </li>
+      </ul>
     </nav>
     <main class="col pb-5" id="content">
       <h1>{{i18n.i_timeline}}</h1>
@@ -30,8 +25,15 @@
       <div id="graph" class="d-none"></div>
     </main>
     <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
-      <a class='navbar-text ml-auto' href="https://github.com/Hypertopic/Cassandre/wiki">
-        <img src="../../style/info.svg" width="30" height="30" alt="Cassandre" loading="lazy">
+      <button class="btn navbar-btn btn-sm ml-1 hidden" id="reload" type="button" data-toggle="tooltip" data-placement="top" title="{{i18n.i_cancel}}">
+        <svg class="bi" width="24" height="24" fill="currentColor">
+          <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#x-lg"/>
+        </svg>
+      </button>
+      <a class='navbar-text' href="https://github.com/Hypertopic/Cassandre/wiki">
+        <svg class="bi" width="24" height="24" fill="currentColor">
+          <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#info-circle"/>
+        </svg>
       </a>
     </nav>
   {{>script}}
@@ -49,7 +51,6 @@
       result,
       results = [];
   $(document).ready(function() {
-    stickToHeader();
     drawGraphViz();
     {{#logged}}
     $.ajax({
@@ -57,7 +58,12 @@
       type: "GET",
       dataType: "json",
       success: function(data) {
-        if(data.fullname) $('#username').text(data.fullname);
+        if(data.fullname) {
+          $('#signout')
+            .tooltip('dispose')
+            .attr('title', "{{i18n.i_sign-out}} "+data.fullname)
+            .tooltip({ offset: "0, 8" });
+        }
       }
     });
     $.ajax({
@@ -66,16 +72,20 @@
       dataType: "json",
       success: function(data) {
         if(data.diary_name) {
-          $('#diary').text(data.diary_name);
+          $('#diary')
+          .tooltip('dispose')
+          .attr('title',data.diary_name)
+          .tooltip({ offset: "0, 8" });
           $('title').prepend(data.diary_name+' - ');
         }
       }
-    });
+    }).done(stickToHeader());
     {{/logged}}
   });
 
   function destroyGraphViz() {
-    var svg = document.getElementsByTagName("svg");
+    var context = document.getElementById("content"),
+        svg = context.getElementsByTagName("svg");
     if (svg.length > 0) main.removeChild(svg[0]);
   }
 

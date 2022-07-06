@@ -90,6 +90,14 @@ $('#remove_grounding').on('show.bs.modal', function (event) {
   $('#loading').addClass('hidden');
 });
 
+$(".groundings").on('show.bs.collapse', function () {
+  $("#toggle-groundings").tooltip('hide');
+});
+
+$(".groundings").on('hide.bs.collapse', function () {
+  $("#groundings .close").tooltip('hide');
+});
+
 function addOptions(id, name) {
   var shortname = name;
   if (name.length > 45) shortname = name.substr(0,45)+'...';

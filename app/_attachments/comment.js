@@ -1,5 +1,6 @@
 $('#comment_create').click(function () {
   refresh = false;
+  $("#comment_create").tooltip('hide')
   $('#comment_create').remove();
   $('#footer > div > button').addClass('hidden');
   $('#render').prop('disabled', true);

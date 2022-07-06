@@ -1,8 +1,53 @@
 $('#sign-in').on('click', function() {
   $('#signin').removeClass('hidden');
-  $('#sign-in').addClass('hidden');
+  $('#signin').children().removeClass('hidden');
+  $('#sign-in')
+    .tooltip('hide')
+    .addClass('hidden');
   $('#to-register').addClass('hidden');
+  $('#diaries').parent().children().addClass('hidden');
+  $('#render').parent().addClass('hidden');
+  $('#diary').addClass('hidden');
+  $('#lexical').addClass('hidden');
+  $('#toggle-groundings').addClass('hidden');
+  $('#comment_create').addClass('hidden');
+  $('#search-icon').addClass('hidden');
+  $('#show_delete').addClass('hidden');
+  $('#signin').append($('#reload'));
+  $('#reload').removeClass('hidden');
 });
+$('#search-icon').on('click', function() {
+  $('#header .btn').addClass('disabled');
+  $('#search-input').parent().append($('#reload'));
+  $('#search-input').removeClass('hidden');
+  $('#reload').removeClass('hidden');
+  $('#reload').addClass('ml-0');
+  $('#header .dropdown').remove();
+  $('#footer').remove();
+  $('#diary').remove();
+  $('#toggle-groundings').remove();
+  $('#drawTimeline').parent().remove();
+  $('#drawChart').parent().remove();
+  $('#diaries').remove();
+  $('#revert').remove();
+  $('#lexical').parent().remove();
+  $('#logged').remove();
+  $('a').removeAttr('href');
+  $('.toast').toast('hide');
+  $('.close').remove();
+  $('#modify_rights').remove();
+  $('#tasklist-alert').off();
+  $('h1').off();
+  $('#show-activity').off();
+  $('#search-icon').parent().parent().parent().parent().addClass('w-100');
+  $('#search-icon').parent().parent().parent().addClass('w-100');
+  $('#search-icon').parent().parent().addClass('w-100');
+  $('#search-icon').parent().addClass('nav-fill w-100');
+  $('#search-icon').tooltip('hide');
+  $('#search-icon').addClass('hidden');
+  stickToHeader();
+});
+
 $('#to-register').on('click', function() {
   self.location = relpath+'register/';
 });

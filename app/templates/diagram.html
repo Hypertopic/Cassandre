@@ -8,8 +8,23 @@
   <body>
     <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item"><a class="d-inline-block text-truncate btn navbar-btn text-{{>contrastcolor}}" id="diary">{{diary_name}}</a></li>
-        <a id="toggle-groundings" class="nav-link btn text-{{>contrastcolor}} d-none" data-toggle="collapse" aria-expanded="true" href="#groundings">{{i18n.i_show_groundings}}</a>
+        <li class="nav-item"><a class="d-inline-block btn navbar-btn" id="diary" data-toggle="tooltip" data-placement="bottom" title="{{diary_name}}">
+          <svg class="bi" width="24" height="24" fill="currentColor">
+            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#book"/>
+          </svg>
+        </a></li>
+        <a id="toggle-groundings" class="btn d-none" data-toggle="collapse" aria-expanded="true" href="#groundings" title="{{i18n.i_show_groundings}}">
+          <span class="d-block d-sm-none">
+            <svg class="bi" width="24" height="24" fill="currentColor">
+              <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#window"/>
+            </svg>
+          </span>
+          <span class="d-none d-sm-block">
+            <svg class="bi" width="24" height="24" fill="currentColor">
+              <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#layout-sidebar"/>
+            </svg>
+          </span>
+        </a>
       </ul>
       <ul class="navbar-nav justify-content-between">
         <li class="form-inline justify-content-between">{{>log}}</li>
@@ -19,7 +34,7 @@
       <div id="memo" class='row h-100'>
         {{#authorized}}
         <div id='groundings' class="groundings col-xs-12 col-sm-3 collapse show">
-          <button type="button" class="close" title="{{i18n.i_hide_groundings}}" data-toggle="collapse" href="#groundings">×</button>
+          <button type="button" class="close" title="{{i18n.i_hide_groundings}}" data-toggle="collapse" data-placement="bottom" href="#groundings">×</button>
           <legend>{{i18n.i_groundings}}</legend>
           {{#groundings}}
           <li class="d-inline d-sm-block {{type}}" id="{{id}}">
@@ -69,18 +84,38 @@
       <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
         <div role='group'>
           {{#editable}}
-          <button class='groundings btn btn-outline-{{>contrastcolor}} btn-sm collapse show' data-toggle="modal" data-target="#add_grounding" id="add_grounding_btn"><span>{{i18n.i_add_groundings}}</span></button>
-          <button class="btn btn-outline-{{>contrastcolor}} btn-sm hidden" id="write_statement" title="{{i18n.i_write_statement}}">
-            <span class="d-block d-sm-none" title="{{i18n.i_write_statement}}">3V</span>
-            <span class="d-none d-sm-block">{{i18n.i_write_statement}}</span>
+          <button class='groundings btn btn-sm collapse show' data-toggle="modal" data-target="#add_grounding" id="add_grounding_btn">
+            <span data-toggle="tooltip" data-placement="top" title="{{i18n.i_add_groundings}}">
+              <svg class="bi" width="24" height="24" fill="currentColor">
+                <use xlink:href="{{>relpath}}style/grounding.svg#add"/>
+              </svg>
+            </span>
           </button>
-          <button class="btn btn-outline-{{>contrastcolor}} btn-sm hidden" id="add_negative-case" title="{{i18n.i_add_negative-case}}">
-            <span class="d-block d-sm-none"><img src="{{>relpath}}style/location.svg" alt="{{i18n.i_add_negative-case}}"></span>
-            <span class="d-none d-sm-block">{{i18n.i_add_negative-case}}</span>
+          <button class="btn btn-sm hidden" id="write_statement" data-toggle="tooltip" data-placement="top"  title="{{i18n.i_write_statement}}">
+            <svg class="bi" width="24" height="24" fill="currentColor">
+              <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#text-paragraph"/>
+            </svg>
           </button>
-          <button class="btn btn-outline-{{>contrastcolor}} btn-sm mr-1 hidden" id="reload" type="button">{{i18n.i_cancel}}</button>
-          <button class="btn btn-outline-{{>contrastcolor}} btn-sm hidden" id="negative-case_done">{{i18n.i_save}}</button>
-          <button class="btn btn-outline-{{>contrastcolor}} btn-sm hidden" id="statement_done">{{i18n.i_save}}</button>
+          <button class="btn btn-sm hidden" id="add_negative-case" data-toggle="tooltip" data-placement="top" title="{{i18n.i_add_negative-case}}">
+            <svg class="bi" width="24" height="24" fill="currentColor">
+              <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#geo-alt"/>
+            </svg>
+          </button>
+          <button class="btn btn-sm hidden" id="negative-case_done" data-toggle="tooltip" data-placement="top" title="{{i18n.i_save}}">
+            <svg class="bi" width="24" height="24" fill="currentColor">
+              <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#check-lg"/>
+            </svg>
+          </button>
+          <button class="btn btn-sm hidden" id="statement_done" data-toggle="tooltip" data-placement="top" title="{{i18n.i_save}}">
+            <svg class="bi" width="24" height="24" fill="currentColor">
+              <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#check-lg"/>
+            </svg>
+          </button>
+          <button class="btn btn-sm mr-1 hidden" id="reload" type="button" data-toggle="tooltip" data-placement="top" title="{{i18n.i_cancel}}">
+            <svg class="bi" width="24" height="24" fill="currentColor">
+              <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#x-lg"/>
+            </svg>
+          </button>
           {{/editable}}
           {{#authorized}}
           {{>commentsbtn}}
@@ -272,7 +307,7 @@
     if ($('#groundings>li').length == 1) {
       $('#create').remove();
       $('.articulate').addClass('hidden');
-      $('#add_grounding_btn').html("{{i18n.i_add_groundings}}");
+      $('#add_grounding_btn').attr('title', "{{i18n.i_add_groundings}}");
       $("#add_grounding").find('.modal-title').append(" <em>"+$('#groundings>li').first().find('a').html()+"</em> {{i18n.i_in}}");
       $("#add_grounding").find('select').append($('<option>', {
         text: "{{i18n.i_select_grounding}}"
@@ -286,7 +321,8 @@
       if ('{{negative}}' != '') $('#negative-case .meta').text('{{i18n.i_name.negative-case}}: ');
       $('#add_negative-case').removeClass('hidden');
       $('#write_statement').removeClass('hidden');
-      $('#add_grounding_btn').html("{{i18n.i_link}}");
+      $('#add_grounding_btn span').attr('title', "{{i18n.i_link}}");
+      $('#add_grounding_btn span svg use').attr('xlink:href', "{{>relpath}}style/bootstrap-icons.svg#link");
       $("#add_grounding").find('select').remove();
       $('#'+'{{link}}').prop('title', '{{i18n.i_current-link}}').prop('disabled', true);
       $('.articulate').removeClass('hidden');
@@ -356,23 +392,27 @@
 
   $("#write_statement").click(function () {
     refresh = false;
+    $("#write_statement").tooltip('hide');
     $(".statement_text").remove();
     $('#statement .meta').text('{{i18n.i_name.statement}}: ');
     $("#add-leaves").addClass('hidden');
     $("#footer .btn").addClass('hidden');
     $("#statement").find('input').removeClass('hidden');
     $('#statement_done').removeClass('hidden');
+    $('#reload').removeClass('hidden');
     $('html, body').scrollTop($(document).height());
   });
 
   $("#add_negative-case").click(function () {
     refresh = false;
+    $("#add_negative-case").tooltip('hide');
     $(".negative_text").remove();
     $('#negative-case .meta').text('{{i18n.i_name.negative-case}}: ');
     $("#add-leaves").addClass('hidden');
     $("#footer .btn").addClass('hidden');
     $("#negative-case").find('input').removeClass('hidden');
     $('#negative-case_done').removeClass('hidden');
+    $('#reload').removeClass('hidden');
     $('html, body').scrollTop($(document).height());
   });
 

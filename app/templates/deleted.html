@@ -8,13 +8,19 @@
     <div id="container" class='container-fluid h-100'>
       <div id="content" class="h-100 d-flex justify-content-center align-items-center" style="height:100px;">
         <div><h1>{{i18n.i_does-not-exist}}</h1>
-          <p><a id="back"><img src="../../style/arrow-left.svg" /></a></p>
+          <p><a id="back" style="display: inline-block; vertical-align: top; cursor: pointer;">
+            <svg class="bi" width="24" height="24" fill="currentColor">
+              <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#arrow-left"/>
+            </svg>
+          </a></p>
         </div>
       </div>
       <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item"><a class="nav-link" href="https://github.com/Hypertopic/Cassandre/wiki">
-            <img src="../../style/info.svg" width="30" height="30" alt="Cassandre" loading="lazy">
+            <svg class="bi" width="24" height="24" fill="currentColor">
+              <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#info-circle"/>
+            </svg>
           </a></li>
         </ul>
       </nav>

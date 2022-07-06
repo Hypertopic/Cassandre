@@ -227,7 +227,12 @@
        "operational": "This memo enumerates what should be investigated on the field. Once you will come back from the field, do not put back (field) memo creation",
        "resume": "To proceed, use the button named",
        "statement": "This relation deserves to be put into words. To do so, use the button named",
-       "storyline": "If not, do not hesitate to refine this memo... Or to formulate new question in a theoretical memo"
+       "storyline": "If not, do not hesitate to refine this memo... Or to formulate new question in a theoretical memo",
+       "table": {
+         "row": "To insert a row, precise a situation (through ...)",
+         "column": "To insert a column, add a grouding"
+       }
+
     },
     "i_export": {
        "text-only": "Only textual memos are included here. Diagrams (connecting dimensions) and graphs are excluded from the export to HTML, to PDF or to XML; they are only included in the JSON export.",
@@ -467,7 +472,11 @@
        "operational": "Ce compte-rendu prépare le terrain. Créez un compte-rendu de terrain dès que vous reviendrez du terrain",
        "resume": "Pour l'enregistrer, utilisez le bouton",
        "storyline": "N'hésitez pas à améliorer ce compte-rendu",
-       "statement": "Cette articulation mériterait d'être mise en mots. Pour ce faire, utilsez le bouton"
+       "statement": "Cette articulation mériterait d'être mise en mots. Pour ce faire, utilsez le bouton",
+       "table": {
+         "row": "Pour insérer une ligne, précisez une situation (via ...)",
+         "column": "Pour insérer une colonne, ajouter une dimension en ancrage"
+       }
     },
     "i_export": {
        "text-only": "Seuls les comptes-rendus (textes) sont intégrés ci-dessous. Les diagrammes (articulations et schématisations intégratives) sont exclus des exportations en HTML, en PDF ou XML; ils ne figurent que dans l'exportation en JSON.",

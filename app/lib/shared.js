@@ -28,6 +28,7 @@ var shared = {
   log: "\
     <ul class='mr-0 ml-auto navbar-nav nav-fill'><li class='form-inline justify-content-between'>\
       {{#diary}}\
+      {{>rights_btn}}\
       <button id='search-icon' class='btn' title='{{i18n.i_search}}'>\
         <svg class='bi' width='24' height='24' fill='currentColor'>\
           <use xlink:href='{{>relpath}}style/bootstrap-icons.svg#search'/>\
@@ -81,7 +82,7 @@ var shared = {
       </form>\
       {{/logged}}\
       {{#logged}}\
-      <button class='btn navbar-btn' title='{{i18n.i_sign-out}} {{#logged_fullname}}{{logged_fullname}}{{/logged_fullname}}' id='signout'>\
+      <button class='btn navbar-btn' data-html='true' title='{{i18n.i_sign-out}}<br/>{{#logged_fullname}}{{logged_fullname}}{{/logged_fullname}}' id='signout'>\
         <svg class='bi' width='24' height='24' fill='currentColor'>\
           <use xlink:href='{{>relpath}}style/bootstrap-icons.svg#person-circle'/>\
         </svg>\
@@ -91,27 +92,24 @@ var shared = {
   menucolor:"dark",
   contrastcolor:"light",
   navbarstyle:"navbar navbar-{{>menucolor}} text-{{>contrastcolor}}",
-  readrights:"\
-    <p id='authorization'>\
-      {{i18n.i_readable-by}} <span class='readers'>\
-      {{#readers_fullnames}}{{fullname}} {{/readers_fullnames}}</span>\
-    </p>",
-  rights:"\
-    <div id='authorization'>\
-      {{i18n.i_created-by}} {{creator}} <span class='{{date}} moment'></span><br/>\
-      {{i18n.i_editable-by}} <span class='contributors'>\
-      {{#contributors_fullnames}}{{fullname}} {{/contributors_fullnames}}</span>\
-      </span><br/>\
-      {{i18n.i_readable-by}} <span class='readers'>\
-      {{#readers_fullnames}}{{fullname}} {{/readers_fullnames}}</span></span>\
-      {{#logged}}\
-      <span id='modify_rights' data-toggle='modal' data-target='#modify_rights_dialog' title='{{i18n.i_modify_rights}}'>\
-        <svg class='bi' width='24' height='24' fill='currentColor'>\
-          <use xlink:href='{{>relpath}}style/bootstrap-icons.svg#gear'/>\
-        </svg>\
-      </span>\
-      {{/logged}}\
+  creator:"\
+    <div class='hidden' id='creator'>\
+      {{i18n.i_created-by}} {{creator}} <span class='{{date}} moment'></span>\
     </div>",
+  rights_btn:"\
+      {{#type}}{{#authorized}}{{^statements}}\
+      <button class='btn hidden {{#public}}{{#logged}}text-dark bg-warning{{/logged}}{{/public}}' id='modify_rights' data-html='true' title='\
+        {{#rights}}<h5>{{i18n.i_modify_rights}}</h5>{{/rights}}\
+        <p><strong>{{i18n.i_editable-by}}</strong><br/>{{#contributors_fullnames}}{{fullname}}<br/>{{/contributors_fullnames}}{{^contributors_fullnames}}{{i18n.i_everyone}}{{/contributors_fullnames}}</p>\
+        <p><strong>{{i18n.i_readable-by}}</strong><br/>{{#readers_fullnames}}{{fullname}}<br/>{{/readers_fullnames}}{{^readers_fullnames}}{{i18n.i_everyone}}{{/readers_fullnames}}\
+        {{#public}}{{#logged}}<h5 class=\"text-warning\">Ce compte-rendu est public</h5>{{/logged}}{{/public}}'>\
+        <span {{#rights}}data-toggle='modal' data-target='#modify_rights_dialog'{{/rights}}>\
+          <svg class='bi' width='24' height='24' fill='currentColor'>\
+            <use xlink:href='{{>relpath}}style/bootstrap-icons.svg#{{^public}}key{{/public}}{{#public}}unlock{{/public}}'/>\
+          </svg>\
+        </span>\
+      </button>\
+      {{/statements}}{{/authorized}}{{/type}}",
   existing_memo_dialog:"\
     <div id='existing_memo' class='modal fade' role='dialog'>\
       <div class='modal-dialog' role='document'>\
@@ -132,7 +130,12 @@ var shared = {
     <div id='modify_rights_dialog' class='modal fade' role='dialog'>\
       <div class='modal-dialog' role='document'>\
         <div class='modal-content'>\
-          <div class='modal-header'>{{#editable}}{{i18n.i_modify_rights}}{{/editable}}{{^editable}}{{i18n.i_reader_unsubscribe}}{{/editable}}</div>\
+          <div class='modal-header'>\
+            <h5 class='modal-title'>{{#editable}}{{i18n.i_modify_rights}}{{/editable}}{{^editable}}{{i18n.i_reader_unsubscribe}}{{/editable}}</h5>\
+            <button type='button' class='close' data-dismiss='modal' aria-label='Close'>\
+              <span aria-hidden='true'>×</span>\
+            </button>\
+          </div>\
           <div class='modal-body'>\
             {{#editable}}\
             <table><tr><th>{{i18n.i_contributors}}</th><th>{{i18n.i_readers}}</th></tr><tr><td>\
@@ -142,6 +145,7 @@ var shared = {
               {{#contributors_fullnames}}\
                 <p>{{fullname}}<button class='remove_contributor' value='{{id}}'>x</button></p>\
               {{/contributors_fullnames}}\
+              {{^contributors_fullnames}}{{i18n.i_everyone}}{{/contributors_fullnames}}\
               </div>\
             </td><td>\
               <input id='add_reader' type='search' placeholder='{{i18n.i_add_reader}}'/><br/>\
@@ -150,6 +154,7 @@ var shared = {
               {{#readers_fullnames}}\
                 <p>{{fullname}}<button class='remove_reader' value='{{id}}'>x</button></p>\
               {{/readers_fullnames}}\
+              {{^readers_fullnames}}{{i18n.i_everyone}}{{/readers_fullnames}}\
               </div>\
             </td></tr></table>\
             {{/editable}}\

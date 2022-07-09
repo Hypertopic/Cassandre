@@ -50,7 +50,7 @@
           {{/authorized}}
           {{#authorized}}
           <h1> <img title="{{i18n.i_memo.diagram}}" src="../../style/{{type}}.svg"/> <span id="name"> {{name}} </span> </h1>
-          {{>rights}}
+          {{>creator}}
           <svg id="diagram" viewBox="0 0 508 300" class="{{link}}"></svg>
           <p class="spacer">&nbsp;</p>
           <div id="negative-case" class="hidden">
@@ -342,6 +342,7 @@
         inform('info', "{{i18n.i_next.negative-case}} {{i18n.i_hereunder_button}}");
       }
     }
+    $('#modify_rights').removeClass('hidden');
     poller('memo', '{{update_seq}}');
   });
 

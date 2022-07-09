@@ -126,6 +126,10 @@ function(head, req) {
         date: row.doc.date,
         diary: diary,
         editable: !row.doc.contributors || row.doc.contributors && row.doc.contributors.indexOf(username)>-1 || req.userCtx.roles.indexOf("_admin")>-1,
+        rights: !row.doc.contributors || row.doc.contributors && row.doc.contributors.indexOf(username)>-1
+               || (row.doc.history[0].user == username && row.doc.contributors.length == 0 && (row.doc.readers && row.doc.readers.length == 0))
+               || (row.doc.readers && row.doc.readers.indexOf(username)>-1)
+               || req.userCtx.roles.indexOf("_admin")>-1,
         edges: [],
         groundings: [],
         nodes: [],
@@ -135,6 +139,7 @@ function(head, req) {
         logged: username,
         logged_fullname: username,
         name: name.replace(/\s/g, ' '),
+        public: (!row.doc.readers || row.doc.readers.length==0 || !row.doc.contributors || row.doc.contributors.length==0),
         readers: [],
         readers_fullnames: [],
         roles: req.userCtx.roles,

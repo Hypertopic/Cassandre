@@ -9,6 +9,8 @@ $('#sign-in').on('click', function() {
   $('#render').parent().addClass('hidden');
   $('#diary').addClass('hidden');
   $('#lexical').addClass('hidden');
+  $('#modify_rights').addClass('hidden');
+  $('#show-activity').addClass('hidden');
   $('#toggle-groundings').addClass('hidden');
   $('#comment_create').addClass('hidden');
   $('#search-icon').addClass('hidden');
@@ -25,6 +27,7 @@ $('#search-icon').on('click', function() {
   $('#header .dropdown').remove();
   $('#footer').remove();
   $('#diary').remove();
+  $('#show-activity').addClass('hidden');
   $('#toggle-groundings').remove();
   $('#drawTimeline').parent().remove();
   $('#drawChart').parent().remove();

@@ -37,7 +37,7 @@
           </div>
           {{^statements}}
           {{>comments}}
-          {{>rights}}
+          {{>creator}}
           {{/statements}}
           <div aria-live="polite" aria-atomic="true" class="position-0">
             <div id="toasts"></div>
@@ -131,7 +131,7 @@
         </div>
       </div>
     </div>
-    <button id="revert" class="btn hidden" data-toggle="tooltip" data-placement="bottom" title="{{i18n.i_versions.list}}">
+    <button id="revert" class="btn hidden" data-toggle="tooltip" data-placement="bottom">
       <svg class="bi" width="24" height="24" fill="currentColor">
         <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#arrow-counterclockwise"/>
       </svg>
@@ -466,6 +466,11 @@
     if (par !== '') highlight(par);
     stickToHeader();
     {{^statements}}
+    $('#modify_rights').removeClass('hidden');
+    $('#revert')
+      .tooltip('dispose')
+      .attr('title', "{{i18n.i_versions.list}} "+$('#creator').text())
+      .tooltip({ offset: "0, 8" });
     $('#revert').removeClass('hidden');
     $('#kwic').parent().parent().prepend($('#revert'));
     poller('memo', '{{update_seq}}');

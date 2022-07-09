@@ -46,6 +46,11 @@
         </li>
       <ul class="navbar-nav justify-content-between">
         <li class="form-inline justify-content-between">
+          <button id="show-activity" class="btn" title="{{i18n.i_activity}}">
+            <svg class="bi" width="24" height="24" fill="currentColor">
+              <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#clock-history"/>
+            </svg>
+          </button>
           {{>log}}
         </li>
       </ul>
@@ -55,9 +60,6 @@
         <h1 class="editable"> <span id="size" class="badge badge-pill" title="{{i18n.i_memos}}"></span></h1>
         <input id="name" type="search" class="form-control hidden mb-3" value=""/>
         <div id="top-right">
-          <svg id="show-activity" class="bi" width="32" height="32" fill="currentColor" title="{{i18n.i_activity}}">
-            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#clock-history"/>
-          </svg>
         </div>
         {{#list}}
         <div id="tasklist-alert" role="group" class="list-group list-group-horizontal-md pb-4 hidden">

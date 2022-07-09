@@ -64,7 +64,7 @@
           {{#authorized}}
           <h1 {{#editable}}class="editable"{{/editable}}> <img title="{{i18n.i_memo.graph}}" src="../../style/{{type}}.svg"/> {{name}} </h1>
           <input id="name" type="search" class="form-control hidden" value="{{name}}"/>
-          {{>rights}}
+          {{>creator}}
           <div id="graph" class="d-none"></div>
           {{>comments}}
           <div aria-live="polite" aria-atomic="true" class="position-0">
@@ -225,6 +225,7 @@
     var converter = new showdown.Converter({strikethrough: 'true'});
     renderComments(converter);
     renderPreviews(converter);
+    $('#modify_rights').removeClass('hidden');
     poller('memo', '{{update_seq}}');
   });
 
@@ -304,7 +305,7 @@
   });
 
   function destroyGraphViz() {
-    var context = document.getElementById("graph"),
+    var context = document.getElementById("content"),
         svg = context.getElementsByTagName("svg");
     if (svg.length > 0) main.removeChild(svg[0]);
   }
@@ -333,8 +334,8 @@
     viz.renderSVGElement(graphviz, options)
     .then(function(element) {
       main.insertBefore(element, container);
-      if($('#graph svg').attr('width').slice(0, -2) > 300)
-        $('#graph svg').removeAttr('width').removeAttr('height');
+      if($('#content svg').attr('width').slice(0, -2) > 300)
+        $('#content svg').removeAttr('width').removeAttr('height');
     })
     .catch(error => {
       viz = new Viz();

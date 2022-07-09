@@ -181,9 +181,7 @@ div.post {
 .card>p>.lastvisit,
 .comment>.meta,
 #negative-case>.meta,
-#statement>.meta,
-#modify_rights,
-#authorization {
+#statement>.meta {
   color: gray;
   font-size:70%;
 }
@@ -195,7 +193,7 @@ div.post {
   z-index: +1;
 }
 
-#authorization {
+#creator {
   order: 1;
 }
 
@@ -387,13 +385,6 @@ a.dropdown-item, .create-leave, a.dropdown-toggle,
 
 .storyline {
   background-image: url('storyline.svg');
-}
-
-#modify_rights {
-  height: 30px;
-  cursor: pointer;
-  display: inline-block;
-  vertical-align: top;
 }
 
 .search {

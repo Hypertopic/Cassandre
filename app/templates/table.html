@@ -49,7 +49,7 @@
           {{#authorized}}
           <h1 {{#editable}}class="editable"{{/editable}}> <img title="{{i18n.i_memo.table}}" src="../../style/{{type}}.svg"/> {{name}} </h1>
           <input id="name" type="search" class="form-control hidden" value="{{name}}"/>
-          {{>rights}}
+          {{>creator}}
           <div class="table-responsive">
             <table id="table" class="table-striped">
               <thead><tr><td></td></tr></thead>
@@ -225,6 +225,7 @@
     converter.setFlavor('github');
     renderComments(converter);
     renderPreviews(converter);
+    $('#modify_rights').removeClass('hidden');
     if (document.getElementById('table').rows[0].cells.length < 4) tip += " {{i18n.i_next.table.column}} {{i18n.i_hereunder_button}}.";
     if (document.getElementById('table').rows.length < 3) tip += " {{i18n.i_next.table.row}}";
     if (tip.length > 0) inform('info', tip);

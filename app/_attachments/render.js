@@ -1,6 +1,5 @@
 function render(){
   announceMaintenance(maintenance, maintenance_in_progress);
-  renderRights()
   renderLeaves()
   momentRelative('')
   stickToHeader()
@@ -21,14 +20,6 @@ function announceMaintenance(before, during){
     }
     momentRelative('')
   });
-}
-function renderRights(){
-  if ($('.contributors').text().trim().length < 1) {
-    $('.contributors').before(everyone);
-  }
-  if ($('.readers').text().trim().length < 1) {
-    $('.readers').before(everyone);
-  }
 }
 function renderLeaves(){
   if ($('#name').val().length > 0) {

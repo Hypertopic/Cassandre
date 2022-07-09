@@ -8,7 +8,11 @@
       <header>
         <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
           <ul class="navbar-nav mr-auto">
-            <a style="max-width: 200px;" class="d-inline-block btn navbar-btn text-{{>contrastcolor}} text-truncate" href="../memo/{{diary}}/" >{{diary_name}}</a>
+            <a class="d-inline-block btn navbar-btn" href="../memo/{{diary}}/" title="{{diary_name}}">
+              <svg class="bi" width="24" height="24" fill="currentColor">
+                <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#book"/>
+              </svg>
+            </a>
           </ul>
           {{>log}}
         </nav>
@@ -47,14 +51,7 @@
           </svg>
         </a>
       </nav>
-
-  <script src="../script/jquery.js"></script>
-  <script src="../script/showdown.min.js"></script>
-  <script src="../script/popper.min.js"></script>
-  <script src="../script/bootstrap.min.js"></script>
-  <script src="../script/layout.js"></script>
-  <script src="../script/render.js"></script>
-  <script src="../script/log.js"></script>
+  {{>script}}
   <script>
   var revisions = [], current = {{current}}, bodies = [], selected = current,
       converter = new showdown.Converter({
@@ -64,7 +61,7 @@
     strikethrough: 'true'
   });
   converter.setFlavor('github');
-
+  let diary_id = "{{diary}}"
   $(document).ready(function() {
     $.ajax({
       url: "../rev/{{_id}}/all/",

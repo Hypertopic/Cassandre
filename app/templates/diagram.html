@@ -107,7 +107,9 @@
               <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#geo-alt"/>
             </svg>
           </button>
-          <button class="btn btn-sm hidden" id="add_negative-case" data-toggle="tooltip" data-placement="top" title="{{i18n.i_add_negative-case}}">
+          <button class="btn btn-sm hidden" id="add_negative-case" data-toggle="tooltip" data-placement="top"
+            title="{{^negative}}{{i18n.i_add_negative-case}}{{/negative}}
+                   {{#negative}}{{i18n.i_amend_negative-case}}{{/negative}}">
             <svg class="bi" width="24" height="24" fill="currentColor">
               <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#geo-alt-fill"/>
             </svg>

@@ -10,6 +10,7 @@ $('#sign-in').on('click', function() {
   $('#diary').addClass('hidden');
   $('#lexical').addClass('hidden');
   $('#modify_rights').addClass('hidden');
+  $('#revert').addClass('hidden');
   $('#show-activity').addClass('hidden');
   $('#toggle-groundings').addClass('hidden');
   $('#comment_create').addClass('hidden');
@@ -17,6 +18,7 @@ $('#sign-in').on('click', function() {
   $('#show_delete').addClass('hidden');
   $('#signin').append($('#reload'));
   $('#reload').removeClass('hidden');
+  if ($('#signin').find('input').first().val().length > 0) $('#signin button').removeAttr('disabled');
 });
 $('#search-icon').on('click', function() {
   $('#header .btn').addClass('disabled');
@@ -69,6 +71,9 @@ $('#signin').on('submit', function(e) {
       alert(mismatch);
     }
   );
+});
+$('#signin').find('input').first().on('input', function() {
+  if ($(this).val().length > 0) $('#signin button').removeAttr('disabled');
 });
 $('#signout').on('click', function() {
   $.ajax({

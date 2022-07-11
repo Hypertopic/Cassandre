@@ -74,7 +74,7 @@ var shared = {
           </div>\
           <input class='form-control' type='password' name='password' placeholder='{{i18n.i_password}}'/>\
         </div>\
-        <button class='btn navbar-btn ml-1' title='{{i18n.i_sign-in}}' type='submit'>\
+        <button class='btn navbar-btn ml-1' title='{{i18n.i_sign-in}}' type='submit' disabled>\
           <svg class='bi' width='24' height='24' fill='currentColor'>\
             <use xlink:href='{{>relpath}}style/bootstrap-icons.svg#check-lg'/>\
           </svg>\

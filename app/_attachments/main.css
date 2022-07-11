@@ -181,6 +181,7 @@ div.post {
 .card>p>.lastvisit,
 .comment>.meta,
 #negative-case>.meta,
+#situation>.meta,
 #statement>.meta {
   color: gray;
   font-size:70%;
@@ -201,7 +202,7 @@ div.post {
   order: 3;
 }
 
-#statement {
+#situation {
   order: 4;
   position: static;
 }
@@ -211,8 +212,13 @@ div.post {
   position: static;
 }
 
-#comments {
+#statement {
   order: 6;
+  position: static;
+}
+
+#comments {
+  order: 7;
   position: static;
   top: 0px;
   left: 0px;

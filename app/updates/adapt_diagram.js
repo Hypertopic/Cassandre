@@ -14,6 +14,9 @@ function (doc, req) {
     case('statement'):
       doc.statement = o.statement;
     break;
+    case('situation'):
+      doc.situation = o.situation;
+    break;
     case('negative'):
       doc.negative = o.negative;
     break;

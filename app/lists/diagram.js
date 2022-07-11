@@ -143,9 +143,8 @@ function(head, req) {
       }
       if (row.doc.link) {
         data.link = row.doc.link;
-        if (row.doc.negative) {
-          data.negative = row.doc.negative;
-        }
+        if (row.doc.negative) data.negative = row.doc.negative;
+        if (row.doc.situation) data.situation = row.doc.situation;
         if (row.doc.statement) {
           data.statement = row.doc.statement;
           data.leaves.push({

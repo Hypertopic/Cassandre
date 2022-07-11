@@ -53,6 +53,12 @@
           {{>creator}}
           <svg id="diagram" viewBox="0 0 508 300" class="{{link}}"></svg>
           <p class="spacer">&nbsp;</p>
+          <div id="situation" class="hidden">
+            <span class="meta"></span><span class="situation_text">{{situation}}</span>
+            {{#editable}}
+            <input type="text" size="35" class="form-control hidden" placeHolder="{{i18n.i_content.situation}}" value="{{situation}}"/>
+            {{/editable}}
+          </div>
           <div id="negative-case" class="hidden">
             <span class="meta"></span><span id="temp" class="negative_text">{{negative}}</span>
             {{#editable}}
@@ -96,9 +102,19 @@
               <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#text-paragraph"/>
             </svg>
           </button>
-          <button class="btn btn-sm hidden" id="add_negative-case" data-toggle="tooltip" data-placement="top" title="{{i18n.i_add_negative-case}}">
+          <button class="btn btn-sm hidden" id="add_situation" data-toggle="tooltip" data-placement="top" title="{{i18n.i_add_situation}}">
             <svg class="bi" width="24" height="24" fill="currentColor">
               <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#geo-alt"/>
+            </svg>
+          </button>
+          <button class="btn btn-sm hidden" id="add_negative-case" data-toggle="tooltip" data-placement="top" title="{{i18n.i_add_negative-case}}">
+            <svg class="bi" width="24" height="24" fill="currentColor">
+              <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#geo-alt-fill"/>
+            </svg>
+          </button>
+          <button class="btn btn-sm hidden" id="situation_done" data-toggle="tooltip" data-placement="top" title="{{i18n.i_save}}">
+            <svg class="bi" width="24" height="24" fill="currentColor">
+              <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#check-lg"/>
             </svg>
           </button>
           <button class="btn btn-sm hidden" id="negative-case_done" data-toggle="tooltip" data-placement="top" title="{{i18n.i_save}}">
@@ -293,18 +309,18 @@
     if ("{{link}}" == 'pp') {
       articulated = '<path d="M170 30 H 330" stroke="green" stroke-width="2"/>'
         +'<path d="M170 270 H 330" stroke="green" stroke-width="2"/>';
-      negative = '<path stroke-dasharray="10,10" d="M170 30 330 270" stroke="red"  stroke-width="2"/>'
-      +'<path id="situation" stroke-dasharray="10,10" d="M170 270 330 30" stroke="red"  stroke-width="2"/>';
+      negative = '<path stroke-dasharray="10,10" d="M170 30 330 270" stroke="red" stroke-width="2"/>'
+      +'<path id="negative-case_situation" stroke-dasharray="10,10" d="M170 270 330 30" stroke="red" stroke-width="2"/>';
     }
     if ("{{link}}" == 'ipp') {
       articulated = '<path d="M170 30 330 270" stroke="red" stroke-width="2"/>'
         +'<path d="M170 270 330 30" stroke="red" stroke-width="2"/>';
-      negative = '<path id="situation" stroke-dasharray="10,10"  d="M170 30 H 330" stroke="green" stroke-width="2"/>'
+      negative = '<path id="negative-case_situation" stroke-dasharray="10,10"  d="M170 30 H 330" stroke="green" stroke-width="2"/>'
         +'<path stroke-dasharray="10,10" d="M170 270 H 330" stroke="green" stroke-width="2"/>';
     }
     if ("{{negative}}") {
       articulated += negative
-      +'<text fill=""><textPath href="#situation" startOffset="50%" text-anchor="middle">{{negative}}</textPath></text>';
+      +'<text fill=""><textPath href="#negative-case_situation" startOffset="50%" text-anchor="middle">{{negative}}</textPath></text>';
     }
     if ($('#groundings>li').length == 1) {
       $('#create').remove();
@@ -319,8 +335,11 @@
       $('#create').removeClass('hidden');
       $('#negative-case').removeClass('hidden');
       $('#statement').removeClass('hidden');
+      $('#situation').removeClass('hidden');
+      if ('{{situation}}' != '') $('#situation .meta').text('{{i18n.i_name.situation}}: ');
       if ('{{statement}}' != '') $('#statement .meta').text('{{i18n.i_name.statement}}: ');
       if ('{{negative}}' != '') $('#negative-case .meta').text('{{i18n.i_name.negative-case}}: ');
+      $('#add_situation').removeClass('hidden');
       $('#add_negative-case').removeClass('hidden');
       $('#write_statement').removeClass('hidden');
       $('#add_grounding_btn span').attr('title', "{{i18n.i_link}}");
@@ -336,10 +355,13 @@
     renderPreviews(converter);
     if ($('#groundings>li').length == 1) {
       $('#add_grounding').modal('show')
-    } else if ($('.statement_text').text().length < 1) {
-      inform('warning', "{{{i18n.i_next.statement}}} <strong>{{i18n.i_write_statement}}</strong>");
-      if ($('.negative_text').text().length < 1 && $('#leaves li').length < 1) {
-        inform('info', "{{i18n.i_next.negative-case}} {{i18n.i_hereunder_button}}");
+    } else {
+      if ($('.situation_text').text().length < 1)
+        inform('info', "{{{i18n.i_next.situation}}} <strong>{{i18n.i_add_situation}}</strong>");
+      if ($('.statement_text').text().length < 1)
+        inform('basic', "{{{i18n.i_next.statement}}} <strong>{{i18n.i_write_statement}}</strong>");
+      if ($('.negative_text').text().length < 1 && $('#leaves li.theoretical').length < 1) {
+        inform('warning', "{{i18n.i_next.negative-case}} {{i18n.i_hereunder_button}}");
       }
     }
     $('#modify_rights').removeClass('hidden');
@@ -406,6 +428,19 @@
     $('html, body').scrollTop($(document).height());
   });
 
+  $("#add_situation").click(function () {
+    refresh = false;
+    $("#add_situation").tooltip('hide');
+    $(".situation_text").remove();
+    $('#situation .meta').text('{{i18n.i_name.situation}}: ');
+    $("#add-leaves").addClass('hidden');
+    $("#footer .btn").addClass('hidden');
+    $("#situation").find('input').removeClass('hidden');
+    $('#situation_done').removeClass('hidden');
+    $('#reload').removeClass('hidden');
+    $('html, body').scrollTop($(document).height());
+  });
+
   $("#add_negative-case").click(function () {
     refresh = false;
     $("#add_negative-case").tooltip('hide');
@@ -417,6 +452,10 @@
     $('#negative-case_done').removeClass('hidden');
     $('#reload').removeClass('hidden');
     $('html, body').scrollTop($(document).height());
+  });
+
+  $("#situation_done").click(function () {
+    adapt({situation: $('#situation').find('input').val().trim()});
   });
 
   $("#statement_done").click(function () {
@@ -439,6 +478,14 @@
     }
   });
   {{/editable}}
+
+  $(".groundings").on('show.bs.collapse', function () {
+    $("#toggle-groundings").tooltip('hide');
+  });
+
+  $(".groundings").on('hide.bs.collapse', function () {
+    $("#groundings .close").tooltip('hide');
+  });
 
   {{>layoutscript}}
   {{>logscript}}

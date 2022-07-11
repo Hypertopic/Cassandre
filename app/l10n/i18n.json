@@ -111,7 +111,7 @@
     "i_search": "Search in the diary",
     "i_diaries": "Diaries",
     "i_enter_diary_name": "Give a name to your diary",
-    "i_enter_location_date": "Precise date and location",
+    "i_enter_location_date": "Specify date and location",
     "i_enter_memo_name": "Give a name to this memo",
     "i_enter_graph_name": "Give a name to this graph",
     "i_memo_already_exists": "This memo name already exists",
@@ -128,7 +128,8 @@
     "i_memos-number": "Memos (update/total)",
     "i_updated-diary": "This diary was updated since your last visit",
     "i_leaves": "Next level",
-    "i_add_negative-case": "Precise a negative case",
+    "i_add_situation": "Specify a situation",
+    "i_add_negative-case": "Specify a negative case",
     "i_write_statement": "Write a statement",
     "i_add_groundings": "Add grounds",
     "i_integrate": "Integrate",
@@ -198,6 +199,7 @@
        "operational": "Planning next contact with the field",
        "storyline": "Conclusions for this study",
        "negative-case": "Negative case",
+       "situation": "Situation",
        "statement": "Statement"
     },
     "i_content": {
@@ -215,7 +217,8 @@
       "operational": "Things not to forget to observe on the field",
       "theoretical": "Research question or theoretical question(s) raised when coding the material",
       "storyline": "Summarize what have learned, draw the storyline of the research project, write the draft of your next paper",
-      "negative-case": "Context making the inverted relation possible",
+      "situation": "Context making the relation possible",
+      "negative-case": "Context inverting the relation",
       "statement": "Put the articulation into words"
     },
     "i_next": {
@@ -223,13 +226,14 @@
        "transcript": "How can you interpret what was told ? What dimension of the phenomenon is expressed ? Create a coding memo to formulate it",
        "coding": "If the empirical material indicates that this dimension varies according to another dimension, represent this relation with a diagram. If this dimension suggests a new question, it deserves a new theoretical memo",
        "theoretical": "How can you investigate these questions on the field. Prepare your next contact to the field through an operational memo !",
-       "negative-case": "What determines this articulation ? In what context would it differ ? If this occurs in the material, fill the \"negative case\" field. If not, this hypothesis or research lead deserves a theoretical memo",
+       "negative-case": "In what context would this relation differ ? If this occurs in the material, fill the \"negative case\" field. If not, this hypothesis or research lead deserves a theoretical memo",
        "operational": "This memo enumerates what should be investigated on the field. Once you will come back from the field, do not put back (field) memo creation",
        "resume": "To proceed, use the button named",
+       "situation": "What determines this relation ? Specify its context, circumstances or conditions with the button named",
        "statement": "This relation deserves to be put into words. To do so, use the button named",
        "storyline": "If not, do not hesitate to refine this memo... Or to formulate new question in a theoretical memo",
        "table": {
-         "row": "To insert a row, precise a situation (through ...)",
+         "row": "To insert a row, specify a situation (through ...)",
          "column": "To insert a column, add a grouding"
        }
 
@@ -357,7 +361,7 @@
     "i_search": "Chercher dans le journal",
     "i_diaries": "Journaux de bord",
     "i_enter_diary_name": "Donnez un nom à votre journal",
-    "i_enter_location_date": "Precisez le lieu et la date",
+    "i_enter_location_date": "Précisez le lieu et la date",
     "i_enter_memo_name": "Donnez un nom à ce compte-rendu",
     "i_enter_graph_name": "Donnez un nom à cette schématisation",
     "i_memo_already_exists": "Un compte-rendu portant ce nom existe déjà",
@@ -374,7 +378,8 @@
     "i_memos-number": "Comptes-rendus (mis à jour / totaux)",
     "i_updated-diary": "Ce journal a été mis à jour depuis votre dernière consultation",
     "i_leaves": "Étage suivant",
-    "i_add_negative-case": "Préciser un cas négatif",
+    "i_add_situation": "Préciser une situation",
+    "i_add_negative-case": "Ajouter un cas négatif",
     "i_write_statement": "Mettre en mots",
     "i_add_groundings": "Ajouter un ancrage",
     "i_integrate": "Intégrer",
@@ -443,6 +448,7 @@
        "operational": "Aide-mémoire pour la suite",
        "storyline": "Résultats intermédiaires",
        "negative-case": "Cas négatif",
+       "situation": "Situation",
        "statement": "Premiers résultats"
     },
     "i_content": {
@@ -459,6 +465,7 @@
       "coding": "Comment se définit tel processus, tel vécu ou telle expérience ?",
       "operational": "Que ne faut-il pas oublier de faire sur le terrain ?",
       "theoretical": "Formulez (ou reformulez) la question de recherche ou les questions théoriques que suscite l'analyse du matériau. Identifiez la dimension à approfondir ou la situation à explorer",
+      "situation": "Dans quelles circonstances ces dimensions s'articulent-elles ?",
       "storyline": "Faites le point sur le déroulement de la recherche, prépapez une restitution à l'intention des acteurs de terrain ou rédigez vos premières conclusions",
        "negative-case": "Quelles circonstances inversent cette articulation ?",
        "statement": "Mettre en mots (phrase à trois verbes)"
@@ -471,6 +478,7 @@
        "negative-case": "À quelles conditions cette articulation s'inverserait-elle ? Si celles-ci sont documentées dans le matériau, complétez le cas négatif. Sinon, consignez cette hypothèse dans un compte-rendu théorique",
        "operational": "Ce compte-rendu prépare le terrain. Créez un compte-rendu de terrain dès que vous reviendrez du terrain",
        "resume": "Pour l'enregistrer, utilisez le bouton",
+       "situation": "Précisez le contexte, les circonstances ou les conditions de cette articulation via le bouton",
        "storyline": "N'hésitez pas à améliorer ce compte-rendu",
        "statement": "Cette articulation mériterait d'être mise en mots. Pour ce faire, utilsez le bouton",
        "table": {

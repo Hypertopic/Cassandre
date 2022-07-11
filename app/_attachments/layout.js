@@ -5,7 +5,6 @@ function stickToHeader() {
   $('#top-right').css({'top': h+5});
   if (h > 36) $('#show-leaves').css({'top': h-36});
   $('.mytooltip .preview').css({'top': h});
-
   $(function () {
     $('#header span').tooltip({ trigger: 'hover', offset: "0, 17" })
     $('.create-leave').tooltip({ trigger: 'hover', offset: "0, 10" })

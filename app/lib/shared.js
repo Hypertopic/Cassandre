@@ -103,7 +103,7 @@ var shared = {
         <p><strong>{{i18n.i_editable-by}}</strong><br/>{{#contributors_fullnames}}{{fullname}}<br/>{{/contributors_fullnames}}{{^contributors_fullnames}}{{i18n.i_everyone}}{{/contributors_fullnames}}</p>\
         <p><strong>{{i18n.i_readable-by}}</strong><br/>{{#readers_fullnames}}{{fullname}}<br/>{{/readers_fullnames}}{{^readers_fullnames}}{{i18n.i_everyone}}{{/readers_fullnames}}\
         {{#public}}{{#logged}}<h5 class=\"text-warning\">Ce compte-rendu est public</h5>{{/logged}}{{/public}}'>\
-        <span {{#rights}}data-toggle='modal' data-target='#modify_rights_dialog'{{/rights}}>\
+        <span {{#rights}}{{^editing}}data-toggle='modal' data-target='#modify_rights_dialog'{{/editing}}{{/rights}}>\
           <svg class='bi' width='24' height='24' fill='currentColor'>\
             <use xlink:href='{{>relpath}}style/bootstrap-icons.svg#{{^public}}key{{/public}}{{#public}}unlock{{/public}}'/>\
           </svg>\

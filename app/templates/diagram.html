@@ -355,6 +355,7 @@
     converter.setFlavor('github');
     renderComments(converter);
     renderPreviews(converter);
+    {{#editable}}
     if ($('#groundings>li').length == 1) {
       $('#add_grounding').modal('show')
     } else {
@@ -366,6 +367,7 @@
         inform('warning', "{{i18n.i_next.negative-case}} {{i18n.i_hereunder_button}}");
       }
     }
+    {{/editable}}
     $('#modify_rights').removeClass('hidden');
     poller('memo', '{{update_seq}}');
   });

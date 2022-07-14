@@ -226,7 +226,9 @@
     renderComments(converter);
     renderPreviews(converter);
     $('#modify_rights').removeClass('hidden');
+    {{#editable}}
     if ($('#groundings').length < 2) inform('info', "{{i18n.i_content.graph}}".replace('@show', "<strong>{{i18n.i_show_groundings}}</strong>").replace('@add', "<strong>{{i18n.i_add_groundings}}</strong>"));
+    {{/editable}}
     poller('memo', '{{update_seq}}');
   });
 

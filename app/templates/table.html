@@ -226,8 +226,8 @@
     renderComments(converter);
     renderPreviews(converter);
     $('#modify_rights').removeClass('hidden');
-    if (document.getElementById('table').rows[0].cells.length < 4) tip += " {{i18n.i_next.table.column}} {{i18n.i_hereunder_button}}.";
-    if (document.getElementById('table').rows.length < 3) tip += " {{i18n.i_next.table.row}}";
+    if (document.getElementById('table').rows[0].cells.length < 4) tip += " {{i18n.i_content.table.column}} {{i18n.i_hereunder_button}}.";
+    if (document.getElementById('table').rows.length < 3) tip += " {{i18n.i_content.table.row}}";
     if (tip.length > 0) inform('info', tip);
     poller('memo', '{{update_seq}}');
   });

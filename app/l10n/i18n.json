@@ -148,60 +148,60 @@
     "i_fill-this-memo": "Fill this memo",
     "i_hereunder_button": "(through the button, hereunder)",
     "i_versions": {
-       "legend": "Versions",
-       "list": "List previous versions of this memo",
-       "single": "No other version is available",
-       "revert": "Revert to this version",
-       "keep-current": "Keep the current version"
+      "legend": "Versions",
+      "list": "List previous versions of this memo",
+      "single": "No other version is available",
+      "revert": "Revert to this version",
+      "keep-current": "Keep the current version"
     },
     "i_register_prompt": {
-       "academic_staff": "I am a staff member of ULiege",
-       "academic_staff_prompt": "You do not need to register : simply user the usual ULiege username and password on the page listing ",
-       "not_academic_staff": "I do not belong to ULiege",
-       "submit_button_in_footer": "Submit this form with the button in the footer",
-       "fullname": "Your activity will be listed under this name",
-       "email_as_username": "This email will be your username",
-       "safe_password": "Choose a safe password",
-       "record_password": "Memorise your password"
+      "academic_staff": "I am a staff member of ULiege",
+      "academic_staff_prompt": "You do not need to register : simply user the usual ULiege username and password on the page listing ",
+      "not_academic_staff": "I do not belong to ULiege",
+      "submit_button_in_footer": "Submit this form with the button in the footer",
+      "fullname": "Your activity will be listed under this name",
+      "email_as_username": "This email will be your username",
+      "safe_password": "Choose a safe password",
+      "record_password": "Memorise your password"
     },
     "i_memo": {
-       "field": "Field memo",
-       "transcript": "Interview transcript",
-       "coding": "Coding memo",
-       "theoretical": "Theoretical memo",
-       "operational": "Operational memo",
-       "storyline": "Storyline memo",
-       "table": "Properties table",
-       "diagram": "Connected dimensions",
-       "graph": "Graph"
+      "field": "Field memo",
+      "transcript": "Interview transcript",
+      "coding": "Coding memo",
+      "theoretical": "Theoretical memo",
+      "operational": "Operational memo",
+      "storyline": "Storyline memo",
+      "table": "Properties table",
+      "diagram": "Connected dimensions",
+      "graph": "Graph"
     },
     "i_create": {
-       "diary": "Create...",
-       "field": "Create a field memo",
-       "transcript": "Create a transcript",
-       "interview": "Create a transcript",
-       "coding": "Create a coding memo",
-       "theoretical": "Create a theoretical memo",
-       "operational": "Create an operational memo",
-       "storyline": "Create a storyline memo",
-       "table": "Create a properties table",
-       "row": "Add a row",
-       "diagram": "Connect two dimensions",
-       "graph": "Create a graph"
+      "diary": "Create...",
+      "field": "Create a field memo",
+      "transcript": "Create a transcript",
+      "interview": "Create a transcript",
+      "coding": "Create a coding memo",
+      "theoretical": "Create a theoretical memo",
+      "operational": "Create an operational memo",
+      "storyline": "Create a storyline memo",
+      "table": "Create a properties table",
+      "row": "Add a row",
+      "diagram": "Connect two dimensions",
+      "graph": "Create a graph"
     },
     "i_name": {
-       "pseudonym": "Pseudonym",
-       "date": "Date",
-       "location": "Location",
-       "field": "Observed field",
-       "transcript": "Informant pseudonym",
-       "coding": "Property or dimension",
-       "theoretical": "Category or relation to be sampled",
-       "operational": "Planning next contact with the field",
-       "storyline": "Conclusions for this study",
-       "negative-case": "Negative case",
-       "situation": "Situation",
-       "statement": "Statement"
+      "pseudonym": "Pseudonym",
+      "date": "Date",
+      "location": "Location",
+      "field": "Observed field",
+      "transcript": "Informant pseudonym",
+      "coding": "Property or dimension",
+      "theoretical": "Category or relation to be sampled",
+      "operational": "Planning next contact with the field",
+      "storyline": "Conclusions for this study",
+      "negative-case": "Negative case",
+      "situation": "Situation",
+      "statement": "Statement"
     },
     "i_content": {
       "date": {
@@ -215,34 +215,34 @@
       "field": "What am I observing ?",
       "transcript": "Caracole: What's up, doc?\\n \\nSov: Elementary, my dear!",
       "coding": "How is defined such an activity ? What process is at stake ?",
+      "graph": "To integrate more connected dimensions, show groundings with button @show then add additional groundings with button @add",
       "operational": "Things not to forget to observe on the field",
       "theoretical": "Research question or theoretical question(s) raised when coding the material",
       "storyline": "Summarize what have learned, draw the storyline of the research project, write the draft of your next paper",
       "situation": "Context making the relation possible",
       "negative-case": "Context inverting the relation",
-      "statement": "Put the articulation into words"
+      "statement": "Put the articulation into words",
+      "table": {
+        "row": "To insert a row, specify a situation (through ...)",
+        "column": "To insert a column, add a grouding"
+      }
     },
     "i_next": {
-       "field": "How can you interpret your observations ? What dimension of the phenomenon is attested ? Create a coding memo to formulate it",
-       "transcript": "How can you interpret what was told ? What dimension of the phenomenon is expressed ? Create a coding memo to formulate it",
-       "coding": "If the empirical material indicates that this dimension varies according to another dimension, represent this relation with a diagram. If this dimension suggests a new question, it deserves a new theoretical memo",
-       "theoretical": "How can you investigate these questions on the field. Prepare your next contact to the field through an operational memo !",
-       "negative-case": "In what context would this relation differ ? If this occurs in the material, fill the \"negative case\" field. If not, this hypothesis or research lead deserves a theoretical memo",
-       "operational": "This memo enumerates what should be investigated on the field. Once you will come back from the field, do not put back (field) memo creation",
-       "resume": "To proceed, use the button named",
-       "situation": "What determines this relation ? Specify its context, circumstances or conditions with the button named",
-       "statement": "This relation deserves to be put into words. To do so, use the button named",
-       "storyline": "If not, do not hesitate to refine this memo... Or to formulate new question in a theoretical memo",
-       "table": {
-         "row": "To insert a row, specify a situation (through ...)",
-         "column": "To insert a column, add a grouding"
-       }
-
+      "field": "How can you interpret your observations ? What dimension of the phenomenon is attested ? Create a coding memo to formulate it",
+      "transcript": "How can you interpret what was told ? What dimension of the phenomenon is expressed ? Create a coding memo to formulate it",
+      "coding": "If the empirical material indicates that this dimension varies according to another dimension, represent this relation with a diagram. If this dimension suggests a new question, it deserves a new theoretical memo",
+      "theoretical": "How can you investigate these questions on the field. Prepare your next contact to the field through an operational memo !",
+      "negative-case": "In what context would this relation differ ? If this occurs in the material, fill the \"negative case\" field. If not, this hypothesis or research lead deserves a theoretical memo",
+      "operational": "This memo enumerates what should be investigated on the field. Once you will come back from the field, do not put back (field) memo creation",
+      "resume": "To proceed, use the button named",
+      "situation": "What determines this relation ? Specify its context, circumstances or conditions with the button named",
+      "statement": "This relation deserves to be put into words. To do so, use the button named",
+      "storyline": "If not, do not hesitate to refine this memo... Or to formulate new question in a theoretical memo"
     },
     "i_export": {
-       "text-only": "Only textual memos are included here. Diagrams (connecting dimensions) and graphs are excluded from the export to HTML, to PDF or to XML; they are only included in the JSON export.",
-       "in-progress": "Conversion to PDF in progress...",
-       "done": "Your PDF is ready"
+      "text-only": "Only textual memos are included here. Diagrams (connecting dimensions) and graphs are excluded from the export to HTML, to PDF or to XML; they are only included in the JSON export.",
+      "in-progress": "Conversion to PDF in progress...",
+      "done": "Your PDF is ready"
     },
     "i_link": "Linking",
     "i_link_properties": "two bars varying in the same direction",
@@ -427,31 +427,31 @@
        "graph": "Schématisation"
     },
     "i_create": {
-       "diary": "Créer...",
-       "field": "Créer un compte-rendu d'observation",
-       "transcript": "Créer une transcription d'entretien",
-       "coding": "Créer un compte-rendu de codage",
-       "theoretical": "Créer un compte-rendu théorique",
-       "operational": "Créer un compte-rendu opérationnel",
-       "storyline": "Créer un compte-rendu de scénario",
-       "table": "Créer une table des propriétés",
-       "row": "Ajouter une ligne",
-       "diagram": "Articuler deux dimensions",
-       "graph": "Créer une schématisation"
+      "diary": "Créer...",
+      "field": "Créer un compte-rendu d'observation",
+      "transcript": "Créer une transcription d'entretien",
+      "coding": "Créer un compte-rendu de codage",
+      "theoretical": "Créer un compte-rendu théorique",
+      "operational": "Créer un compte-rendu opérationnel",
+      "storyline": "Créer un compte-rendu de scénario",
+      "table": "Créer une table des propriétés",
+      "row": "Ajouter une ligne",
+      "diagram": "Articuler deux dimensions",
+      "graph": "Créer une schématisation"
     },
     "i_name": {
-       "pseudonym": "Pseudonyme",
-       "date": "Date",
-       "location": "Lieu",
-       "field": "Terrain observé",
-       "transcript": "Pseudonyme de l'informatrice",
-       "coding": "Propriété ou dimension",
-       "theoretical": "Question de recherche ou phénomène à échantillonner",
-       "operational": "Aide-mémoire pour la suite",
-       "storyline": "Résultats intermédiaires",
-       "negative-case": "Cas négatif",
-       "situation": "Situation",
-       "statement": "Premiers résultats"
+      "pseudonym": "Pseudonyme",
+      "date": "Date",
+      "location": "Lieu",
+      "field": "Terrain observé",
+      "transcript": "Pseudonyme de l'informatrice",
+      "coding": "Propriété ou dimension",
+      "theoretical": "Question de recherche ou phénomène à échantillonner",
+      "operational": "Aide-mémoire pour la suite",
+      "storyline": "Résultats intermédiaires",
+      "negative-case": "Cas négatif",
+      "situation": "Situation",
+      "statement": "Premiers résultats"
     },
     "i_content": {
       "date": {
@@ -465,33 +465,35 @@
       "field": "Qu'avez-vous observé ?",
       "transcript": "Caracole: Quoi de neuf, docteur ?\\n \\nSov: Élementaire, mon cher !",
       "coding": "Comment se définit tel processus, tel vécu ou telle expérience ?",
+      "graph": "Pour intégrer d'autres articulations, affichez les ancrages (au moyen du bouton @show) puis ajoutez-en de nouveaux (grâce au bouton @add)",
       "operational": "Que ne faut-il pas oublier de faire sur le terrain ?",
       "theoretical": "Formulez (ou reformulez) la question de recherche ou les questions théoriques que suscite l'analyse du matériau. Identifiez la dimension à approfondir ou la situation à explorer",
       "situation": "Dans quelles circonstances ces dimensions s'articulent-elles ?",
       "storyline": "Faites le point sur le déroulement de la recherche, prépapez une restitution à l'intention des acteurs de terrain ou rédigez vos premières conclusions",
-       "negative-case": "Quelles circonstances inversent cette articulation ?",
-       "statement": "Mettre en mots (phrase à trois verbes)"
+      "negative-case": "Quelles circonstances inversent cette articulation ?",
+      "statement": "Mettre en mots (phrase à trois verbes)",
+      "table": {
+        "row": "Pour insérer une ligne, précisez une situation (via ...)",
+        "column": "Pour insérer une colonne, ajouter une dimension en ancrage"
+      }
+
     },
     "i_next": {
-       "field": "Quelle analyse suggèrent ces observations ? Quelle dimension y est attestée ? Formulez-la dans un compte-rendu de codage",
-       "transcript": "Quelle interprétation soutiennent ces propos ? Quelle dimension est exprimée ? Créez un compte-rendu de codage pour la formuler",
-       "coding": "Si cette dimension suggère une nouvelle question, celle-ci mérite d'être consignée dans un nouveau compte-rendu théorique",
-       "theoretical": "Comment ces questions peuvent-elles être explorées sur le terrain ? Préparez votre prochain contact avec le terrain dans un compte-rendu opérationnel",
-       "negative-case": "À quelles conditions cette articulation s'inverserait-elle ? Si celles-ci sont documentées dans le matériau, complétez le cas négatif. Sinon, consignez cette hypothèse dans un compte-rendu théorique",
-       "operational": "Ce compte-rendu prépare le terrain. Créez un compte-rendu de terrain dès que vous reviendrez du terrain",
-       "resume": "Pour l'enregistrer, utilisez le bouton",
-       "situation": "Précisez le contexte, les circonstances ou les conditions de cette articulation via le bouton",
-       "storyline": "N'hésitez pas à améliorer ce compte-rendu",
-       "statement": "Cette articulation mériterait d'être mise en mots. Pour ce faire, utilsez le bouton",
-       "table": {
-         "row": "Pour insérer une ligne, précisez une situation (via ...)",
-         "column": "Pour insérer une colonne, ajouter une dimension en ancrage"
-       }
+      "field": "Quelle analyse suggèrent ces observations ? Quelle dimension y est attestée ? Formulez-la dans un compte-rendu de codage",
+      "transcript": "Quelle interprétation soutiennent ces propos ? Quelle dimension est exprimée ? Créez un compte-rendu de codage pour la formuler",
+      "coding": "Si cette dimension suggère une nouvelle question, celle-ci mérite d'être consignée dans un nouveau compte-rendu théorique",
+      "theoretical": "Comment ces questions peuvent-elles être explorées sur le terrain ? Préparez votre prochain contact avec le terrain dans un compte-rendu opérationnel",
+      "negative-case": "À quelles conditions cette articulation s'inverserait-elle ? Si celles-ci sont documentées dans le matériau, complétez le cas négatif. Sinon, consignez cette hypothèse dans un compte-rendu théorique",
+      "operational": "Ce compte-rendu prépare le terrain. Créez un compte-rendu de terrain dès que vous reviendrez du terrain",
+      "resume": "Pour l'enregistrer, utilisez le bouton",
+      "situation": "Précisez le contexte, les circonstances ou les conditions de cette articulation via le bouton",
+      "storyline": "N'hésitez pas à améliorer ce compte-rendu",
+      "statement": "Cette articulation mériterait d'être mise en mots. Pour ce faire, utilsez le bouton"
     },
     "i_export": {
-       "text-only": "Seuls les comptes-rendus (textes) sont intégrés ci-dessous. Les diagrammes (articulations et schématisations intégratives) sont exclus des exportations en HTML, en PDF ou XML; ils ne figurent que dans l'exportation en JSON.",
-       "in-progress": "Votre PDF est en préparation...",
-       "done": "Votre PDF est prêt"
+      "text-only": "Seuls les comptes-rendus (textes) sont intégrés ci-dessous. Les diagrammes (articulations et schématisations intégratives) sont exclus des exportations en HTML, en PDF ou XML; ils ne figurent que dans l'exportation en JSON.",
+      "in-progress": "Votre PDF est en préparation...",
+      "done": "Votre PDF est prêt"
     },
     "i_link": "Articuler",
     "i_link_properties": "deux bâtonnets variant dans le même sens",

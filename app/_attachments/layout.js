@@ -244,9 +244,20 @@ function create(type, name, highlight, anchor) {
   }
 }
 function inform(type, msg){
-  $('#toasts').append('<div class="toast" role="alert">'
-    + '<div class="toast-body alert-'+type+'">'
-    + '<button type="button" class="close" data-dismiss="toast">×</button>'+ msg +'</div></div>');
+  var t = '<div class="toast" role="alert">',
+      body = '<div class="toast-body alert-'+type+'">',
+      close = '<button type="button" class="ml-auto mr-1 mb-1 close" data-dismiss="toast">&times;</button>', 
+      header = '<div class="toast-header bg-'+type+'"><span class="text-light">'
+    + '<svg class="bi mr-1 ml-auto" width="20" height="20" fill="currentColor"><use xlink:href="'+relpath+'style/bootstrap-icons.svg#cone-striped"/></svg></span>'
+    + '<strong class="mr-auto text-light">Maintenance</strong>'+close+'</div>';
+  if (type == 'danger') {
+    t += header + body;
+  } else {
+    t += body + close;
+  }
+  t += msg +'</div></div>';
+  $('#toasts').append(t);
+  $('#top-right').append(t);
   $('.toast').toast({autohide: false});
   $('.toast').toast('show');
 }
@@ -288,6 +299,22 @@ function renderPreviews(converter){
     return md;
   });
 };
+function announceMaintenance(before, during){
+  $.ajax({
+    type: 'GET',
+    url: relpath+'config',
+    dataType: 'json'
+  }).done(function(data){
+    var maintenance_start = new Date(data.maintenance.date),
+        maintenance_end = new Date(maintenance_start.getTime() + (60000* data.maintenance.duration));
+    if (maintenance_start > new Date(Date.now())) {
+      inform('danger', before.replace('@duration', data.maintenance.duration).replace('@moment', '<span class="'+data.maintenance.date+' moment"></span>'));
+    } else if (maintenance_end > new Date(Date.now())) {
+      inform('danger', during+' <span class="'+new Date(maintenance_end).toJSON()+' moment"></span>');
+    }
+    momentRelative('')
+  });
+}
 function unix_date(d) {
   return Math.floor(new Date(d).getTime() / 1000);
 }

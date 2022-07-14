@@ -158,6 +158,7 @@
         $('title').prepend(d.diary_name);
       }
     });
+    announceMaintenance(maintenance, maintenance_in_progress);
     {{#logged}}
     for (var m of memos) {
       var j = activity.map(function(a){return a.doc}).indexOf(m.id);
@@ -354,7 +355,7 @@
     var nothing_to_show = '{{i18n.i_nothing-to-show}}';
     {{^logged}}nothing_to_show +='. {{i18n.i_sign-in-for-more}}';{{/logged}}
     if ({{size}} == 0) $('#memos').text(nothing_to_show);
-    if (document.getElementById("memos").childNodes.length >= {{size}}) $('.more').addClass("d-none");
+    if (document.getElementById("memos").childNodes.length >= {{size}}) $('.more').tooltip('hide').addClass("d-none");
     ready = true;
   }
 

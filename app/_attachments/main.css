@@ -93,8 +93,9 @@ div.post {
 
 #top-right {
   position: fixed;
-  right: 36px;
-  top: 36px;
+  right: 29px;
+  top: 64px;
+  z-index: +2;
 }
 
 #show-leaves {

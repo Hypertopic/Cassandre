@@ -96,7 +96,7 @@
         if(data.fullname.length == 0) $('#storing_fullname_dialog').modal('show');
         if(data.fullname) $('#signout')
           .tooltip('dispose')
-          .attr('title', "{{i18n.i_sign-out}} "+data.fullname)
+          .attr('title', "{{i18n.i_sign-out}}<br/>"+data.fullname)
           .tooltip({ offset: "0, 8" });
         for (var o of data.order) {
           if (typeof o.collection !== 'undefined') {

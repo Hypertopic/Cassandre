@@ -86,7 +86,7 @@
     getFullname('{{logged}}');
     $('#signout')
       .tooltip('dispose')
-      .attr('title', "{{i18n.i_sign-out}} "+fullnames['{{logged}}'])
+      .attr('title', "{{i18n.i_sign-out}}<br/>"+fullnames['{{logged}}'])
       .tooltip({ offset: "0, 8" });
     {{/logged}}
     showMore("Z");

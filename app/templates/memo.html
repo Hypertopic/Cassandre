@@ -172,10 +172,10 @@
       <ul class="mr-auto navbar-nav">
         {{#authorized}}
         <div id='lexical' class="btn-group justify-content-between hidden" role="group">
-          <li class="nav-item"><a class="nav-link btn-sm" id='clear_highlights'>{{i18n.i_raw}}</a></li>
-          <li class="nav-item"><a class="nav-link btn-sm highlight_words disabled" id='specific'>{{i18n.i_specific}}</a></li>
-          <li class="nav-item"><a class="nav-link btn-sm highlight_words disabled" id='rare'>{{i18n.i_rare}}</a></li>
-          <li class="nav-item"><a class="nav-link btn-sm disabled" id='repeated'>{{i18n.i_phrases}}</a></li>
+          <li class="nav-item d-none d-sm-inline mr-1"><a class="nav-link btn-sm" id='clear_highlights'>{{i18n.i_raw}}</a></li>
+          <li class="nav-item d-none d-sm-inline mr-1"><a class="nav-link btn-sm highlight_words disabled" id='specific'>{{i18n.i_specific}}</a></li>
+          <li class="nav-item d-none d-sm-inline mr-1"><a class="nav-link btn-sm highlight_words disabled" id='rare'>{{i18n.i_rare}}</a></li>
+          <li class="nav-item d-none d-sm-inline"><a class="nav-link btn-sm disabled" id='repeated'>{{i18n.i_phrases}}</a></li>
         </div>
         {{/authorized}}
       </ul>
@@ -295,10 +295,13 @@
     {{#editing}}
     {{#editable}}
     if ('{{logged}}' == '{{editing.user}}') {
-      $('#edit').removeAttr("disabled");
-      $('#edit').removeClass("disabled");
-      $('#edit').text("{{i18n.i_resume}}");
-      $('#edit').attr("title", $('#editing').text().replace(/\s+/g, " "));
+      $('#edit')
+        .removeAttr("disabled")
+        .removeClass("disabled")
+        .addClass("bg-warning");
+      $('#edit')
+        .attr("data-html", 'true')
+        .attr("title", $('#editing').text().replace(/\s+/g, " ")+"<h5>{{i18n.i_resume}}</h5>");
       resume = ". {{i18n.i_next.resume}} <strong>{{i18n.i_resume}}</strong>"
     } else {
       $('#edit').attr("title", $('#editing').text().replace(/\s+/g, " "));

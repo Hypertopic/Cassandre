@@ -99,10 +99,10 @@ var shared = {
   rights_btn:"\
       {{#type}}{{#authorized}}{{^statements}}\
       <button class='btn hidden {{#public}}{{#logged}}text-dark bg-warning{{/logged}}{{/public}}' id='modify_rights' data-html='true' title='\
-        {{#rights}}<h5>{{i18n.i_modify_rights}}</h5>{{/rights}}\
+        {{#rights}}{{^editing}}<h5>{{i18n.i_modify_rights}}</h5>{{/editing}}{{/rights}}\
         <p><strong>{{i18n.i_editable-by}}</strong><br/>{{#contributors_fullnames}}{{fullname}}<br/>{{/contributors_fullnames}}{{^contributors_fullnames}}{{i18n.i_everyone}}{{/contributors_fullnames}}</p>\
         <p><strong>{{i18n.i_readable-by}}</strong><br/>{{#readers_fullnames}}{{fullname}}<br/>{{/readers_fullnames}}{{^readers_fullnames}}{{i18n.i_everyone}}{{/readers_fullnames}}\
-        {{#public}}{{#logged}}<h5 class=\"text-warning\">Ce compte-rendu est public</h5>{{/logged}}{{/public}}'>\
+        {{#public}}{{#logged}}<h5 class=\"text-warning\">{{i18n.i_public_memo}}</h5>{{/logged}}{{/public}}'>\
         <span {{#rights}}{{^editing}}data-toggle='modal' data-target='#modify_rights_dialog'{{/editing}}{{/rights}}>\
           <svg class='bi' width='24' height='24' fill='currentColor'>\
             <use xlink:href='{{>relpath}}style/bootstrap-icons.svg#{{^public}}key{{/public}}{{#public}}unlock{{/public}}'/>\

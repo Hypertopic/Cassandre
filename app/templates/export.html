@@ -12,14 +12,26 @@
   <body>
     <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item"><a class="nav-link btn navbar-btn text-truncate" id="diary" title="{{diary_name}}">
+        <li class="nav-item"><a class="nav-link btn navbar-btn" id="diary" title="{{diary_name}}">
           <svg class="bi" width="24" height="24" fill="currentColor">
             <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#book"/>
           </svg>
         </a></li>
-        <li class="nav-item"><a class="nav-link btn-sm" id="json" href="../../export/{{diary}}/json/">json</a></li>
-        <li class="nav-item"><a class="nav-link btn-sm" id="xml" href="../../export/{{diary}}/xml/">xml</a></li>
-        <li class="nav-item"><a class="nav-link btn-sm disabled" id='pdf'>pdf</a></li>
+        <li class="nav-item"><a class="nav-link btn-sm" id="json" href="../../export/{{diary}}/json/">
+          <svg class="bi" width="24" height="24" fill="currentColor">
+            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#filetype-json"/>
+          </svg>
+        </a></li>
+        <li class="nav-item"><a class="nav-link btn-sm" id="xml" href="../../export/{{diary}}/xml/">
+          <svg class="bi" width="24" height="24" fill="currentColor">
+            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#filetype-xml"/>
+          </svg>
+        </a></li>
+        <li class="nav-item"><a class="nav-link btn-sm disabled" id='pdf'>
+          <svg class="bi" width="24" height="24" fill="currentColor">
+            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#filetype-pdf"/>
+          </svg>
+        </a></li>
       </ul>
       {{>log}}
     </nav>

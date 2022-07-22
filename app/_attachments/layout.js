@@ -9,7 +9,9 @@ function stickToHeader() {
     $('#header span').tooltip({ trigger: 'hover', offset: "0, 17" })
     $('.create-leave').tooltip({ trigger: 'hover', offset: "0, 10" })
     $('#footer span').tooltip({ trigger: 'hover', offset: "0, 14" })
+    $('#header a').tooltip({ trigger: 'hover', offset: "0, 8" })
     $('a').tooltip({ trigger: 'hover', offset: "0, 11" })
+    $('#footer button').tooltip({ trigger: 'hover', offset: "0, 10" })
     $('button').tooltip({ trigger: 'hover', offset: "0, 8" })
   })
 }

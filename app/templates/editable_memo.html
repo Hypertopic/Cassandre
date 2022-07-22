@@ -65,8 +65,20 @@
       <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
         {{#authorized}}{{#editing}}
         <div role="group">
-          <button type="button" class="btn btn-outline-{{>contrastcolor}} btn-sm" id="done">{{i18n.i_save}}</button>
-          <button type="button" class="btn btn-outline-{{>contrastcolor}} btn-sm" id="cancel">{{i18n.i_cancel}}</button>
+          <button type="button" class="btn btn-sm" title="{{i18n.i_save}}" id="done">
+            <span data-toggle="tooltip" data-placement="top">
+              <svg class="bi" width="24" height="24" fill="currentColor">
+                <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#check-lg"/>
+              </svg>
+            </span>
+          </button>
+          <button type="button" class="btn btn-sm" title="{{i18n.i_cancel}}" id="cancel">
+            <span data-toggle="tooltip" data-placement="top">
+              <svg class="bi" width="24" height="24" fill="currentColor">
+                <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#x-lg"/>
+              </svg>
+            </span>
+          </button>
         </div>
         {{/editing}}{{/authorized}}
         <a class="navbar-text" href="https://github.com/Hypertopic/Cassandre/wiki">

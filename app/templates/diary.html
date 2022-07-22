@@ -28,17 +28,17 @@
               <a class="dropdown-item" href="#" value='type'>{{i18n.i_type}}</a>
             </div>
           </div>
-          <a class="btn" href="../../export/{{diary}}/" data-toggle="tooltip" data-placement="bottom" title="{{i18n.i_to-export}}">
+          <a class="d-none d-sm-block btn" href="../../export/{{diary}}/" data-toggle="tooltip" data-placement="bottom" title="{{i18n.i_to-export}}">
             <svg class="bi" width="24" height="24" fill="currentColor">
               <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#download"/>
             </svg>
           </a>
-          <a class="btn" id="drawTimeline" data-toggle="tooltip" data-placement="bottom" title="{{i18n.i_timeline}}">
+          <a class="d-none d-sm-block btn" id="drawTimeline" data-toggle="tooltip" data-placement="bottom" title="{{i18n.i_timeline}}">
             <svg class="bi" width="24" height="24" fill="currentColor">
               <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#bar-chart-steps"/>
             </svg>
           </a>
-          <a class="btn hidden" id="patterns" data-toggle="tooltip" data-placement="bottom" title="{{i18n.i_patterns}}">
+          <a class="{{^logged}}d-none d-sm-block{{/logged}} btn hidden" id="patterns" data-toggle="tooltip" data-placement="bottom" title="{{i18n.i_patterns}}">
             <svg class="bi" width="24" height="24" fill="currentColor">
               <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#bookmarks-fill"/>
             </svg>

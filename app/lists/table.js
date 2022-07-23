@@ -127,6 +127,7 @@ function(head, req) {
         logged_fullname: username,
         name: row.doc.name.replace(/\s/g, ' '),
         public: (!row.doc.readers || row.doc.readers.length==0 || !row.doc.contributors || row.doc.contributors.length==0),
+        eager: true,
         readers: [],
         readers_fullnames: [],
         roles: req.userCtx.roles,

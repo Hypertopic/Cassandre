@@ -48,10 +48,14 @@
         <div id='groundings' class="groundings order-1 pb-0 pb-sm-5 col-xs-12 col-sm-3 collapse show">
           <button type="button" class="close" title="{{i18n.i_hide_groundings}}" data-toggle="collapse" data-placement="bottom" href=".groundings">×</button>
           <legend>{{i18n.i_groundings}}</legend>
+          {{^statements}}
+          <div class="" title="{{i18n.i_loading}}"><span class="spinner spinner-border spinner-border-sm" role="status"></span></div>
+          {{/statements}}
           {{#groundings}}
-          <li class="d-inline d-sm-block {{type}}" id="{{id}}">
-            <a href="{{href}}">{{name}}</a> {{#preview}}<span class="toggle dropdown-toggle"> </span>
-            <div class="preview">{{preview}}</div>{{/preview}}
+          <li class="d-inline d-sm-block {{#statements}}{{type}}{{/statements}}{{^statements}}hidden{{/statements}}">
+            <a href="{{#statements}}{{href}}{{/statements}}">{{#statements}}{{name}}{{/statements}}</a>
+            <span class="toggle dropdown-toggle hidden"> </span>
+            <div class="preview hidden">{{#statements}}{{preview}}{{/statements}}</div>
           </li>
           {{/groundings}}
         </div>
@@ -140,7 +144,7 @@
     {{>modify_rights_dialog}}
     <div id="editing" class="hidden">
       {{#editing}}
-      <span class="user">{{user_fullname}}</span> {{i18n.i_started_editing}}
+      <span class="user">{{user}}</span> {{i18n.i_started_editing}}
       <span class="{{date}} moment"></span>
       {{/editing}}
     </div>
@@ -172,9 +176,9 @@
       <ul class="mr-auto navbar-nav">
         {{#authorized}}
         <div id='lexical' class="btn-group justify-content-between hidden" role="group">
-          <li class="nav-item d-none d-sm-inline mr-1"><a class="nav-link btn-sm" id='clear_highlights'>{{i18n.i_raw}}</a></li>
-          <li class="nav-item d-none d-sm-inline mr-1"><a class="nav-link btn-sm highlight_words disabled" id='specific'>{{i18n.i_specific}}</a></li>
-          <li class="nav-item d-none d-sm-inline mr-1"><a class="nav-link btn-sm highlight_words disabled" id='rare'>{{i18n.i_rare}}</a></li>
+          <li class="nav-item d-none d-sm-inline mr-sm-1"><a class="nav-link btn-sm" id='clear_highlights'>{{i18n.i_raw}}</a></li>
+          <li class="nav-item d-none d-sm-inline mr-sm-1"><a class="nav-link btn-sm highlight_words disabled" id='specific'>{{i18n.i_specific}}</a></li>
+          <li class="nav-item d-none d-sm-inline mr-sm-1"><a class="nav-link btn-sm highlight_words disabled" id='rare'>{{i18n.i_rare}}</a></li>
           <li class="nav-item d-none d-sm-inline"><a class="nav-link btn-sm disabled" id='repeated'>{{i18n.i_phrases}}</a></li>
         </div>
         {{/authorized}}
@@ -228,16 +232,28 @@
   <script src="{{>relpath}}script/grounding.js"></script>
   <script src="{{>relpath}}script/memo.js"></script>
   <script>
-  var metrics = {},
+  {{^authorized}}
+  stickToHeader();
+  {{/authorized}}
+  var converter = new showdown.Converter({
+      parseImgDimensions: 'true',
+      tables: 'true',
+      tasklists: 'true',
+      strikethrough: 'true'
+    }),
+      metrics = {},
       trigrams = {},
       leaf_type = leaf_id = resume = '',
       anchor = 0,
       candidates = [],
+      fullnames = [],
       userids = [],
       help = [],
       diary_id = '{{diary}}',
       this_id = '{{_id}}',
       this_type = '{{type}}';
+  converter.setFlavor('github');
+  {{#authorized}}
   help["field"] = {
     init: "{{{i18n.i_content.field}}}", 
     next: "{{{i18n.i_next.field}}}",
@@ -258,72 +274,10 @@
   help["operational"] = {init: "{{{i18n.i_content.operational}}}", next: "{{{i18n.i_next.operational}}}"};
   help["storyline"] = {init: "{{{i18n.i_content.storyline}}}", next: "{{{i18n.i_next.storyline}}}"};
   $(document).ready(function() {
-    {{>render}}
     {{#statements}}
     {{^logged}}nothing_to_show +='. {{i18n.i_sign-in-for-more}}';{{/logged}}
     if ($('.post').text().trim().length == 0) $('.post').text(nothing_to_show);
-    {{#logged}}
-    $.ajax({
-      url: relpath + '{{logged}}',
-      type: "GET",
-      dataType: "json",
-      success: function(data) {
-        if(data.fullname) $('#signout')
-          .tooltip('dispose')
-          .attr('title', "{{i18n.i_sign-out}}<br/>"+data.fullname)
-          .tooltip({ offset: "0, 8" });
-      }
-    });
-    {{/logged}}
-    $.ajax({
-      url: relpath + diary_id,
-      type: "GET",
-      dataType: "json"
-    }).done(function(data){
-      if(data.diary_name) {
-        $('#diary')
-          .tooltip('dispose')
-          .attr('title', data.diary_name)
-          .tooltip({ offset: "0, 8" });
-        $('title').prepend(data.diary_name);
-      }
-    }).done(function(){
-      stickToHeader();
-    });
     {{/statements}}
-    {{#logged}}
-    {{#editing}}
-    {{#editable}}
-    if ('{{logged}}' == '{{editing.user}}') {
-      $('#edit')
-        .removeAttr("disabled")
-        .removeClass("disabled")
-        .addClass("bg-warning");
-      $('#edit')
-        .attr("data-html", 'true')
-        .attr("title", $('#editing').text().replace(/\s+/g, " ")+"<h5>{{i18n.i_resume}}</h5>");
-      resume = ". {{i18n.i_next.resume}} <strong>{{i18n.i_resume}}</strong>"
-    } else {
-      $('#edit').attr("title", $('#editing').text().replace(/\s+/g, " "));
-      document.getElementById('edit').disabled = true
-    }
-    {{/editable}}
-    if ("{{contributors}}".split(',').length > 1) $('#editing').append(". {{i18n.i_no-edit-by-others}}");
-    inform('warning', $('#editing').text().replace(/\s+/g, " ") + resume);
-    {{/editing}}
-    $('#edit').removeClass('d-none');
-    {{/logged}}
-    {{#editable}}
-    if ($('#leaves li').length < 1) {
-      var tip = '';
-      if($('.post').text().trim().length == 0) {
-        tip = "{{i18n.i_fill-this-memo}}. " + help[this_type]["init"];
-      } else {
-        tip = help[this_type]["next"] + " {{i18n.i_hereunder_button}}";
-      }
-      inform('info', tip);
-    }
-    {{/editable}}
     switch (this_type) {
       case ('field'):
         $("h1>img").attr("title", "{{i18n.i_memo.field}}".replace('&#39;',"'"));
@@ -400,15 +354,6 @@
         $("#leave-name").attr("placeHolder", "{{i18n.i_name.storyline}}");
         break;
     }
-    var converter = new showdown.Converter({
-      parseImgDimensions: 'true',
-      tables: 'true',
-      tasklists: 'true',
-      strikethrough: 'true'
-    });
-    converter.setFlavor('github');
-    renderComments(converter);
-    renderPreviews(converter);
     $('.post').html(function(i, text) {
       if (this_type == 'interview') {
         return text.replace(/\n \n/g, '</font></p><p><font>');
@@ -416,8 +361,6 @@
         return converter.makeHtml(text.replace(/&gt;/g, '>').trim());
       }
     });
-    if ($('#groundings li').length == 1) $("#groundings").find('legend').text("{{i18n.i_grounding}}");
-    if ($('#groundings li').length < 1) $("#groundings").addClass('hidden');
     if (this_type === 'interview') {
       $.ajax({
         url: '../../corpus_words/'+diary_id,
@@ -467,21 +410,73 @@
     }
     const par = window.location.hash.substring(1);
     if (par !== '') highlight(par);
-    stickToHeader();
+    getSatellites('{{logged}}', toDoAfter)
+  });
+
+  function toDoAfter(){
+    {{>render}}
+    if ($('#groundings li').length == 1) $("#groundings").find('legend').text("{{i18n.i_grounding}}");
+    if ($('#groundings li').length < 1) $("#groundings").addClass('hidden');
+    {{#editable}}
+    if ($('#leaves li').length < 1) {
+      var tip = '';
+      if($('.post').text().trim().length == 0) {
+        tip = "{{i18n.i_fill-this-memo}}. " + help[this_type]["init"];
+      } else {
+        tip = help[this_type]["next"] + " {{i18n.i_hereunder_button}}";
+      }
+      inform('info', tip);
+    }
+    {{/editable}}
+    {{#logged}}
+    {{#editing}}
+    {{#editable}}
+    if ('{{logged}}' == '{{editing.user}}') {
+      $('#edit')
+        .removeAttr("disabled")
+        .removeClass("disabled")
+        .addClass("bg-warning");
+      $('#editing .user').text(fullnames['{{editing.user}}']);
+      $('#edit')
+        .attr("data-html", 'true')
+        .attr("title", $('#editing').text().replace(/\s+/g, " ")+"<h5>{{i18n.i_resume}}</h5>");
+      resume = ". {{i18n.i_next.resume}} <strong>{{i18n.i_resume}}</strong>"
+    } else {
+      $('#edit').attr("title", $('#editing').text().replace(/\s+/g, " "));
+      document.getElementById('edit').disabled = true
+    }
+    {{/editable}}
+    if ("{{contributors}}".split(',').length > 1) $('#editing').append(". {{i18n.i_no-edit-by-others}}");
+    inform('warning', $('#editing').text().replace(/\s+/g, " ") + resume);
+    {{/editing}}
+    $('#edit').removeClass('d-none');
+    {{/logged}}
     {{^statements}}
-    $('#modify_rights').removeClass('hidden');
-    $('#revert')
-      .tooltip('dispose')
-      .attr('title', "{{i18n.i_versions.list}} "+$('#creator').text())
-      .tooltip({ offset: "0, 8" });
+    $('#revert').attr('title', "{{i18n.i_versions.list}} "+$('#creator').text())
     $('#revert').removeClass('hidden');
     $('#kwic').parent().parent().prepend($('#revert'));
-    poller('memo', '{{update_seq}}');
+    $('#modify_rights').removeClass('hidden');
+    poller('memo', 'now');
     {{/statements}}
     {{#statements}}
+    $.ajax({
+      url: '../' + diary_id,
+      type: "GET",
+      dataType: "json"
+    }).done(function(data){
+      if(data.diary_name) {
+        $('#diary')
+          .tooltip('dispose')
+          .attr('title', data.diary_name)
+          .tooltip({ trigger: 'hover', offset: "0, 8" });
+        $('title').prepend(data.diary_name);
+      }
+    });
     poller('statements', '{{update_seq}}');
     {{/statements}}
-  });
+    stickToHeader();
+  };
+  {{/authorized}}
 
   {{>layoutscript}}
   {{>logscript}}

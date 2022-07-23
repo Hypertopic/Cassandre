@@ -98,6 +98,19 @@ $(".groundings").on('hide.bs.collapse', function () {
   $("#groundings .close").tooltip('hide');
 });
 
+function show_grounding(i, id, type, name, href, preview) {
+  $('#groundings .spinner').addClass('d-none');
+  $('#groundings li').eq(i)
+    .removeClass('hidden')
+    .addClass(type)
+    .attr('id', id)
+    .find('a').text(name).attr('href', href);
+  if (preview) {
+    $('#groundings li').eq(i).find('.toggle').removeClass('hidden');
+    $('#groundings li').eq(i).find('.preview').text(preview).removeClass('hidden');
+  }
+}
+
 function addOptions(id, name) {
   var shortname = name;
   if (name.length > 45) shortname = name.substr(0,45)+'...';

@@ -28,7 +28,8 @@ var shared = {
   log: "\
     <ul class='mr-0 ml-auto navbar-nav nav-fill'><li class='form-inline justify-content-between'>\
       {{#diary}}\
-      {{>rights_btn}}\
+      {{^eager}}{{>rights}}{{/eager}}\
+      {{#eager}}{{>rights_eager}}{{/eager}}\
       <button id='search-icon' class='btn' title='{{i18n.i_search}}'>\
         <svg class='bi' width='24' height='24' fill='currentColor'>\
           <use xlink:href='{{>relpath}}style/bootstrap-icons.svg#search'/>\
@@ -94,9 +95,21 @@ var shared = {
   navbarstyle:"navbar navbar-{{>menucolor}} text-{{>contrastcolor}}",
   creator:"\
     <div class='hidden' id='creator'>\
-      {{i18n.i_created-by}} {{creator}} <span class='{{date}} moment'></span>\
+      {{i18n.i_created-by}} <span class='username {{creator}}'>{{creator}}</span> <span class='{{date}} moment'></span>\
     </div>",
-  rights_btn:"\
+  rights:"\
+      {{#type}}{{#authorized}}{{^statements}}\
+      <button class='btn hidden {{#public}}{{#logged}}text-dark bg-warning{{/logged}}{{/public}}' id='modify_rights' data-html='true' title='\
+        {{#rights}}{{^editing}}<h5>{{i18n.i_modify_rights}}</h5>{{/editing}}{{/rights}}\
+        {{#public}}{{#logged}}<h5 class=\"text-warning\">{{i18n.i_public_memo}}</h5>{{/logged}}{{/public}}'>\
+        <span {{#rights}}{{^editing}}data-toggle='modal' data-target='#modify_rights_dialog'{{/editing}}{{/rights}}>\
+          <svg class='bi' width='24' height='24' fill='currentColor'>\
+            <use xlink:href='../style/bootstrap-icons.svg#{{^public}}key{{/public}}{{#public}}unlock{{/public}}'/>\
+          </svg>\
+        </span>\
+      </button>\
+      {{/statements}}{{/authorized}}{{/type}}",
+  rights_eager:"\
       {{#type}}{{#authorized}}{{^statements}}\
       <button class='btn hidden {{#public}}{{#logged}}text-dark bg-warning{{/logged}}{{/public}}' id='modify_rights' data-html='true' title='\
         {{#rights}}{{^editing}}<h5>{{i18n.i_modify_rights}}</h5>{{/editing}}{{/rights}}\
@@ -143,7 +156,7 @@ var shared = {
               <p>{{i18n.i_editable-by}}</p>\
               <div class='contributors'>\
               {{#contributors_fullnames}}\
-                <p>{{fullname}}<button class='remove_contributor' value='{{id}}'>x</button></p>\
+                <p><span class='username {{id}}'>{{fullname}}</span><button class='remove_contributor' value='{{id}}'>x</button></p>\
               {{/contributors_fullnames}}\
               {{^contributors_fullnames}}{{i18n.i_everyone}}{{/contributors_fullnames}}\
               </div>\
@@ -152,7 +165,7 @@ var shared = {
               <p>{{i18n.i_readable-by}}</p>\
               <div class='readers'>\
               {{#readers_fullnames}}\
-                <p>{{fullname}}<button class='remove_reader' value='{{id}}'>x</button></p>\
+                <p><span class='username {{id}}'>{{fullname}}</span><button class='remove_reader' value='{{id}}'>x</button></p>\
               {{/readers_fullnames}}\
               {{^readers_fullnames}}{{i18n.i_everyone}}{{/readers_fullnames}}\
               </div>\
@@ -197,6 +210,12 @@ var shared = {
         <div class='comment_edit hidden'>{{text}}</div>\
       </div>\
       {{/comments}}\
+      <div class='template comment hidden'>\
+        <span class='meta'><span class='user'></span> (<span class='moment'></span>)</span>:\
+        {{#logged}}<span class='meta checker d-none d-sm-inline'></span><div class='checkbox'><input type='checkbox' class='form-check-input position-static comment_check'></div>{{/logged}}<br/>\
+        <span class='comment_text'></span>\
+        <div class='comment_edit hidden'></div>\
+      </div>\
       <textarea rows='5' type='text' class='form-control hidden' autocomplete='off' placeHolder='{{i18n.i_enter_comment}}'></textarea>\
     </div>",
   commentsbtn:"\
@@ -256,7 +275,9 @@ var shared = {
     }\
   });{{/list}}",
   logscript: "\
-  const everyone = '{{i18n.i_everyone}}',\
+  const checked_by = '{{i18n.i_checked_by}}',\
+        editable_by = '{{i18n.i_editable-by}}',\
+        everyone = '{{i18n.i_everyone}}',\
         enter_comment ='{{i18n.i_enter_comment}}',\
         enter_diary_name ='{{i18n.i_i18n.i_enter_diary_name}}',\
         enter_graph_name = '{{i18n.i_enter_graph_name}}',\
@@ -268,6 +289,8 @@ var shared = {
         memo_already_linked = '{{i18n.i_memo_already_linked}}',\
         on_a_date = '{{i18n.i_on-a-date}}',\
         relpath = '{{>relpath}}',\
+        readable_by = '{{i18n.i_readable-by}}',\
+        sign_out = '{{i18n.i_sign-out}}',\
         wrong_password = '{{i18n.i_wrong-password}}'.replace('&#39;','\\'');\
   let refresh = true,\
       fullname = null,\

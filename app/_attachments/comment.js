@@ -62,6 +62,19 @@ $('.comment_check').click(function() {
 $('#comment_updated').on('click', function() {
   update_comment(comment_id);
 });
+function show_comment(id, user, date, text, checked) {
+  $('#comments .template').clone(true).attr('id', id).appendTo("#comments");
+  if (checked) {
+    $('#'+id).addClass('checked');
+    $('#'+id+' .checker').text(checked_by+' '+checked);
+    $('#'+id).find('.comment_check').prop('checked', true);
+  }
+  $('#'+id+' .meta .user').text(user);
+  $('#'+id+' .meta .moment').removeClass('moment').addClass(date).addClass('moment');
+  $('#'+id+' .comment_text').text(text);
+  $('#'+id).removeClass('template hidden');
+  $('#'+id+' .comment_edit').text(text);
+}
 function update_comment(id) {
   refresh = true;
   $.ajax({

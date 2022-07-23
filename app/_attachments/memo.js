@@ -11,14 +11,14 @@ function highlight(p) {
 $('#edit').on('click', function() {
   refresh = false;
   if (this_type == 'transcript') {
-    self.location = '../../editable_text/' + this_id;
+    self.location = '../editable_text/' + this_id;
   } else {
     $.ajax({
-      url: "../../start_editing_memo/" + this_id,
+      url: "../start_editing_memo/" + this_id,
       type: "PUT",
       contentType: "application/json"
     }).done(function(){
-      self.location = '../../editable_memo/' + this_id;
+      self.location = '../editable_memo/' + this_id;
     });
   }
 });
@@ -36,7 +36,7 @@ $('#add').on('click', function() {
 });
 
 $('#revert').on('click', function() {
-  self.location = '../../revert/' + this_id;
+  self.location = '../revert/' + this_id;
 });
 
 $('#content').on('mouseup', function() {
@@ -109,7 +109,7 @@ function filter(type) {
 function record(action, value) {
   $('#'+action+' .modal-body').append($('#loading').removeClass('hidden'));
   $.ajax({
-    url: "../../adapt_memo/" + this_id,
+    url: "../adapt_memo/" + this_id,
     type: "PUT",
     contentType: "application/json",
     data: JSON.stringify({

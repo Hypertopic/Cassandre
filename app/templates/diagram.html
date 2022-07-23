@@ -10,18 +10,18 @@
       <ul class="navbar-nav mr-auto">
         <li class="nav-item"><a class="d-inline-block btn navbar-btn" id="diary" data-toggle="tooltip" data-placement="bottom" title="{{diary_name}}">
           <svg class="bi" width="24" height="24" fill="currentColor">
-            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#book"/>
+            <use xlink:href="../style/bootstrap-icons.svg#book"/>
           </svg>
         </a></li>
         <a id="toggle-groundings" class="btn d-none" data-toggle="collapse" aria-expanded="true" href="#groundings" title="{{i18n.i_show_groundings}}">
           <span class="d-block d-sm-none">
             <svg class="bi" width="24" height="24" fill="currentColor">
-              <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#window"/>
+              <use xlink:href="../style/bootstrap-icons.svg#window"/>
             </svg>
           </span>
           <span class="d-none d-sm-block">
             <svg class="bi" width="24" height="24" fill="currentColor">
-              <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#layout-sidebar"/>
+              <use xlink:href="../style/bootstrap-icons.svg#layout-sidebar"/>
             </svg>
           </span>
         </a>
@@ -47,7 +47,7 @@
           <h1>{{i18n.i_sign-in_required}}</h1>
           {{/authorized}}
           {{#authorized}}
-          <h1> <img title="{{i18n.i_memo.diagram}}" src="../../style/{{type}}.svg"/> <span id="name"> {{name}} </span> </h1>
+          <h1> <img title="{{i18n.i_memo.diagram}}" src="../style/{{type}}.svg"/> <span id="name"> {{name}} </span> </h1>
           {{>creator}}
           <svg id="diagram" viewBox="0 0 508 300" class="{{link}}"></svg>
           <p class="spacer">&nbsp;</p>
@@ -91,45 +91,45 @@
           <button class='groundings btn btn-sm collapse show' data-toggle="modal" data-target="#add_grounding" id="add_grounding_btn">
             <span data-toggle="tooltip" data-placement="top" title="{{i18n.i_add_groundings}}">
               <svg class="bi" width="24" height="24" fill="currentColor">
-                <use xlink:href="{{>relpath}}style/grounding.svg#add"/>
+                <use xlink:href="../style/grounding.svg#add"/>
               </svg>
             </span>
           </button>
           <button class="btn btn-sm hidden" id="write_statement" data-toggle="tooltip" data-placement="top"  title="{{i18n.i_write_statement}}">
             <svg class="bi" width="24" height="24" fill="currentColor">
-              <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#text-paragraph"/>
+              <use xlink:href="../style/bootstrap-icons.svg#text-paragraph"/>
             </svg>
           </button>
           <button class="btn btn-sm hidden" id="add_situation" data-toggle="tooltip" data-placement="top" title="{{i18n.i_add_situation}}">
             <svg class="bi" width="24" height="24" fill="currentColor">
-              <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#geo-alt"/>
+              <use xlink:href="../style/bootstrap-icons.svg#geo-alt"/>
             </svg>
           </button>
           <button class="btn btn-sm hidden" id="add_negative-case" data-toggle="tooltip" data-placement="top"
             title="{{^negative}}{{i18n.i_add_negative-case}}{{/negative}}
                    {{#negative}}{{i18n.i_amend_negative-case}}{{/negative}}">
             <svg class="bi" width="24" height="24" fill="currentColor">
-              <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#geo-alt-fill"/>
+              <use xlink:href="../style/bootstrap-icons.svg#geo-alt-fill"/>
             </svg>
           </button>
           <button class="btn btn-sm hidden" id="situation_done" data-toggle="tooltip" data-placement="top" title="{{i18n.i_save}}">
             <svg class="bi" width="24" height="24" fill="currentColor">
-              <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#check-lg"/>
+              <use xlink:href="../style/bootstrap-icons.svg#check-lg"/>
             </svg>
           </button>
           <button class="btn btn-sm hidden" id="negative-case_done" data-toggle="tooltip" data-placement="top" title="{{i18n.i_save}}">
             <svg class="bi" width="24" height="24" fill="currentColor">
-              <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#check-lg"/>
+              <use xlink:href="../style/bootstrap-icons.svg#check-lg"/>
             </svg>
           </button>
           <button class="btn btn-sm hidden" id="statement_done" data-toggle="tooltip" data-placement="top" title="{{i18n.i_save}}">
             <svg class="bi" width="24" height="24" fill="currentColor">
-              <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#check-lg"/>
+              <use xlink:href="../style/bootstrap-icons.svg#check-lg"/>
             </svg>
           </button>
           <button class="btn btn-sm mr-1 hidden" id="reload" type="button" data-toggle="tooltip" data-placement="top" title="{{i18n.i_cancel}}">
             <svg class="bi" width="24" height="24" fill="currentColor">
-              <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#x-lg"/>
+              <use xlink:href="../style/bootstrap-icons.svg#x-lg"/>
             </svg>
           </button>
           {{/editable}}
@@ -159,7 +159,7 @@
     <div id="show-leaves" class="d-none d-sm-block d-lg-block d-xl-none invisible">
       <div title="{{i18n.i_leaves}}" class="reverse">{{i18n.i_leaves}}
         <svg class="bi" width="16" height="16" fill="currentColor">
-          <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#chevron-down"/>
+          <use xlink:href="../style/bootstrap-icons.svg#chevron-down"/>
         </svg>
       </div>
     </div>

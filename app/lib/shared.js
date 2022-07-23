@@ -16,15 +16,14 @@ const diacritics = [
   ];
 
 var shared = {
-  relpath: "{{^flat}}../{{/flat}}../",
   links: "<meta charset='utf-8'>\
     <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no'>\
-    <link rel='icon' type='image/svg' href='{{>relpath}}style/favicon.svg' />\
-    <link rel='apple-touch-icon' type='image/png' href='{{>relpath}}style/apple-touch-icon-precomposed.png' />\
-    <link rel='stylesheet' href='{{>relpath}}style/bootstrap.min.css' />\
-    <link rel='stylesheet' type='text/css' href='{{>relpath}}style/main.css' />",
-  diagramcss: "<link rel='stylesheet' type='text/css' href='{{>relpath}}style/diagram.css' />",
-  viscss: "<link rel='stylesheet' type='text/css' href='{{>relpath}}style/vis.min.css' />",
+    <link rel='icon' type='image/svg' href='../style/favicon.svg' />\
+    <link rel='apple-touch-icon' type='image/png' href='../style/apple-touch-icon-precomposed.png' />\
+    <link rel='stylesheet' href='../style/bootstrap.min.css' />\
+    <link rel='stylesheet' type='text/css' href='../style/main.css' />",
+  diagramcss: "<link rel='stylesheet' type='text/css' href='../style/diagram.css' />",
+  viscss: "<link rel='stylesheet' type='text/css' href='../style/vis.min.css' />",
   log: "\
     <ul class='mr-0 ml-auto navbar-nav nav-fill'><li class='form-inline justify-content-between'>\
       {{#diary}}\
@@ -32,7 +31,7 @@ var shared = {
       {{#eager}}{{>rights_eager}}{{/eager}}\
       <button id='search-icon' class='btn' title='{{i18n.i_search}}'>\
         <svg class='bi' width='24' height='24' fill='currentColor'>\
-          <use xlink:href='{{>relpath}}style/bootstrap-icons.svg#search'/>\
+          <use xlink:href='../style/bootstrap-icons.svg#search'/>\
         </svg>\
       </button>\
       <div id='search-input' class='input-group flex-grow-1 mr-1 hidden'>\
@@ -46,12 +45,12 @@ var shared = {
       {{^logged}}\
       <button class='btn navbar-btn' title='{{i18n.i_sign-in}}' id='sign-in'>\
         <svg class='bi' width='24' height='24' fill='currentColor'>\
-          <use xlink:href='{{>relpath}}style/bootstrap-icons.svg#box-arrow-in-left'/>\
+          <use xlink:href='../style/bootstrap-icons.svg#box-arrow-in-left'/>\
         </svg>\
       </button>\
       <button class='btn navbar-btn' title='{{i18n.i_register}}' id='to-register'>\
         <svg class='bi' width='24' height='24' fill='currentColor'>\
-          <use xlink:href='{{>relpath}}style/bootstrap-icons.svg#person-plus'/>\
+          <use xlink:href='../style/bootstrap-icons.svg#person-plus'/>\
         </svg>\
       </button>\
       <form id='signin' class='form-inline hidden'>\
@@ -59,7 +58,7 @@ var shared = {
           <div class='input-group-prepend'>\
             <span class='input-group-text'>\
               <svg class='bi' width='24' height='24' fill='currentColor'>\
-                <use xlink:href='{{>relpath}}style/bootstrap-icons.svg#person'/>\
+                <use xlink:href='../style/bootstrap-icons.svg#person'/>\
               </svg>\
             </span>\
           </div>\
@@ -69,7 +68,7 @@ var shared = {
           <div class='input-group-prepend'>\
             <span class='input-group-text'>\
               <svg class='bi' width='24' height='24' fill='currentColor'>\
-                <use xlink:href='{{>relpath}}style/bootstrap-icons.svg#lock'/>\
+                <use xlink:href='../style/bootstrap-icons.svg#lock'/>\
               </svg>\
             </span>\
           </div>\
@@ -77,7 +76,7 @@ var shared = {
         </div>\
         <button class='btn navbar-btn ml-1' title='{{i18n.i_sign-in}}' type='submit' disabled>\
           <svg class='bi' width='24' height='24' fill='currentColor'>\
-            <use xlink:href='{{>relpath}}style/bootstrap-icons.svg#check-lg'/>\
+            <use xlink:href='../style/bootstrap-icons.svg#check-lg'/>\
           </svg>\
         </button>\
       </form>\
@@ -85,7 +84,7 @@ var shared = {
       {{#logged}}\
       <button class='btn navbar-btn' data-html='true' title='{{i18n.i_sign-out}}<br/>{{#logged_fullname}}{{logged_fullname}}{{/logged_fullname}}' id='signout'>\
         <svg class='bi' width='24' height='24' fill='currentColor'>\
-          <use xlink:href='{{>relpath}}style/bootstrap-icons.svg#person-circle'/>\
+          <use xlink:href='../style/bootstrap-icons.svg#person-circle'/>\
         </svg>\
       </button>\
       {{/logged}}\
@@ -118,7 +117,7 @@ var shared = {
         {{#public}}{{#logged}}<h5 class=\"text-warning\">{{i18n.i_public_memo}}</h5>{{/logged}}{{/public}}'>\
         <span {{#rights}}{{^editing}}data-toggle='modal' data-target='#modify_rights_dialog'{{/editing}}{{/rights}}>\
           <svg class='bi' width='24' height='24' fill='currentColor'>\
-            <use xlink:href='{{>relpath}}style/bootstrap-icons.svg#{{^public}}key{{/public}}{{#public}}unlock{{/public}}'/>\
+            <use xlink:href='../style/bootstrap-icons.svg#{{^public}}key{{/public}}{{#public}}unlock{{/public}}'/>\
           </svg>\
         </span>\
       </button>\
@@ -221,43 +220,43 @@ var shared = {
   commentsbtn:"\
     <button class='btn navbar-btn btn-sm' id='comment_create' data-toggle='tooltip' data-placement='top' title='{{i18n.i_comment}}'>\
       <svg class='bi' width='24' height='24' fill='currentColor'>\
-        <use xlink:href='{{>relpath}}style/bootstrap-icons.svg#chat-right-text'/>\
+        <use xlink:href='../style/bootstrap-icons.svg#chat-right-text'/>\
       </svg>\
     </button>\
     <button class='btn navbar-btn btn-sm hidden' type='button' id='commented' data-toggle='tooltip' data-placement='top' title='{{i18n.i_save}}'>\
       <svg class='bi' width='24' height='24' fill='currentColor'>\
-        <use xlink:href='{{>relpath}}style/bootstrap-icons.svg#check-lg'/>\
+        <use xlink:href='../style/bootstrap-icons.svg#check-lg'/>\
       </svg>\
     </button>\
     <button class='btn navbar-btn btn-sm hidden' type='button' id='comment_updated' data-toggle='tooltip' data-placement='top' title='{{i18n.i_save}}'>\
       <svg class='bi' width='24' height='24' fill='currentColor'>\
-        <use xlink:href='{{>relpath}}style/bootstrap-icons.svg#check-lg'/>\
+        <use xlink:href='../style/bootstrap-icons.svg#check-lg'/>\
       </svg>\
     </button>\
     <button class='btn navbar-btn btn-sm hidden' type='button' id='renamed' data-toggle='tooltip' data-placement='top' title='{{i18n.i_save}}'>\
       <svg class='bi' width='24' height='24' fill='currentColor'>\
-        <use xlink:href='{{>relpath}}style/bootstrap-icons.svg#check-lg'/>\
+        <use xlink:href='../style/bootstrap-icons.svg#check-lg'/>\
       </svg>\
     </button>\
     <button class='btn navbar-btn btn-sm hidden' type='button' id='reload' data-toggle='tooltip' data-placement='top' title='{{i18n.i_cancel}}'>\
       <svg class='bi' width='24' height='24' fill='currentColor'>\
-        <use xlink:href='{{>relpath}}style/bootstrap-icons.svg#x-lg'/>\
+        <use xlink:href='../style/bootstrap-icons.svg#x-lg'/>\
       </svg>\
     </button>",
-  script: "<script src='{{>relpath}}script/jquery.js'></script>\
-    <script src='{{>relpath}}script/jquery-ui.min.js'></script>\
-    <script src='{{>relpath}}script/popper.min.js'></script>\
-    <script src='{{>relpath}}style/bootstrap.min.js'></script>\
-    <script src='{{>relpath}}script/showdown.min.js'></script>\
-    <script src='{{>relpath}}script/editname.js'></script>\
-    <script src='{{>relpath}}script/layout.js'></script>\
-    <script src='{{>relpath}}script/log.js'></script>\
+  script: "<script src='../script/jquery.js'></script>\
+    <script src='../script/jquery-ui.min.js'></script>\
+    <script src='../script/popper.min.js'></script>\
+    <script src='../style/bootstrap.min.js'></script>\
+    <script src='../script/showdown.min.js'></script>\
+    <script src='../script/editname.js'></script>\
+    <script src='../script/layout.js'></script>\
+    <script src='../script/log.js'></script>\
     {{^list}}\
-    <script src='{{>relpath}}script/render.js'></script>\
-    <script src='{{>relpath}}script/rights.js'></script>\
-    <script src='{{>relpath}}script/comment.js'></script>\
+    <script src='../script/render.js'></script>\
+    <script src='../script/rights.js'></script>\
+    <script src='../script/comment.js'></script>\
     {{/list}}\
-    <link rel='stylesheet' href='{{>relpath}}style/jquery-ui.min.css' />",
+    <link rel='stylesheet' href='../style/jquery-ui.min.css' />",
   layoutscript:"\
   {{^list}}\
   var ground = ['{{_id}}'];\
@@ -288,8 +287,8 @@ var shared = {
         maintenance_in_progress = '{{i18n.i_maintenance-in-progress}}',\
         memo_already_linked = '{{i18n.i_memo_already_linked}}',\
         on_a_date = '{{i18n.i_on-a-date}}',\
-        relpath = '{{>relpath}}',\
         readable_by = '{{i18n.i_readable-by}}',\
+        relpath = '../',\
         sign_out = '{{i18n.i_sign-out}}',\
         wrong_password = '{{i18n.i_wrong-password}}'.replace('&#39;','\\'');\
   let refresh = true,\
@@ -305,10 +304,10 @@ var shared = {
   function track(memo) {\
     $.ajax({\
       {{^list}}\
-      url: '../../track_memo/'+user,\
+      url: '../track_memo/'+user,\
       {{/list}}\
       {{#list}}\
-      url: '../../save_diary_order/'+user,\
+      url: '../save_diary_order/'+user,\
       {{/list}}\
       type: 'PUT',\
       contentType: 'application/json',\
@@ -333,6 +332,19 @@ var shared = {
     {{/statements}}\
   "
 };
+
+function type2path(type) {
+  switch (type) {
+    case 'table':
+    case 'graph':
+    case 'diagram':
+      return type;
+    break;
+    default:
+      return 'memo';
+    break;
+  }
+}
 
 function dSort(array, locale){
   array.sort(function(a,b){

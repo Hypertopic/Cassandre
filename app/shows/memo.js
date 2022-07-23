@@ -92,9 +92,6 @@ function(o, req){
   }
   data.groundable = data.editable;
   if (data._id) {
-//    if (data.editing && data.editing.user) data.editing.user_fullname = data.editing.user;
-//    if (fullnames[data.editing.user]) data.editing.user_fullname = fullnames[data.editing.user];
-//    data.groundings = dSort(data.groundings, data.locale);
     return Mustache.to_html(templates.memo, data, shared);
   } else {
     return Mustache.to_html(templates.deleted, {i18n: localized()}, shared);

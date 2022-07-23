@@ -114,7 +114,7 @@ function createUserDoc(user, sponsor, success, error) {
     };
     if (sponsor && sponsor.length > 0) obj.readers = sponsor;
     $.ajax({
-      url: '../../'+user,
+      url: '../'+user,
       type: 'PUT',
       contentType: 'application/json',
       data: JSON.stringify(obj)

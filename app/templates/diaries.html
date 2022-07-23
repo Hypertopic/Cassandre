@@ -24,10 +24,10 @@
             <div class="card text-center bg-light mb-3">
               <div title="{{i18n.i_integrate}} {{i18n.i_in}} {{i18n.i_collection}}" class="in-collection d-none">
                 <svg class="bi" width="16" height="16" fill="currentColor">
-                  <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#chevron-down"/>
+                  <use xlink:href="../style/bootstrap-icons.svg#chevron-down"/>
                 </svg>
               </div>
-              <h5><a href='../memo/{{id}}/'>{{name}}</a></h5>
+              <h5><a href='../diary/{{id}}'>{{name}}</a></h5>
               <p><span id="{{id}}" title="{{i18n.i_memos}}" class="badge badge-pill badge-secondary progress-bar-striped progress-bar-animated d-none">{{i18n.i_loading}}</span></p>
             </div>
             {{/diaries}}
@@ -47,18 +47,18 @@
           <button class="btn navbar-btn btn-outline-{{>contrastcolor}} btn-sm d-none" id="show">{{i18n.i_last-visit}}</button>
           <button class="btn navbar-btn btn-sm d-none" type='button' id='create_diary' title="{{i18n.i_create.diary}}">
             <svg class="bi" width="24" height="24" fill="currentColor">
-              <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#journal-plus"/>
+              <use xlink:href="../style/bootstrap-icons.svg#journal-plus"/>
             </svg>
           </button>
           <button class="btn navbar-btn btn-sm ml-1 hidden" id="reload" type="button" data-toggle="tooltip" data-placement="top" title="{{i18n.i_cancel}}">
             <svg class="bi" width="24" height="24" fill="currentColor">
-              <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#x-lg"/>
+              <use xlink:href="../style/bootstrap-icons.svg#x-lg"/>
             </svg>
           </button>
         </div>
         <a class='navbar-text text-{{>contrastcolor}} ml-auto' href="https://github.com/Hypertopic/Cassandre/wiki">
           <svg class="bi" width="24" height="24" fill="currentColor">
-            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#info-circle"/>
+            <use xlink:href="../style/bootstrap-icons.svg#info-circle"/>
           </svg>
         </a>
       </nav>
@@ -77,7 +77,7 @@
       </div>
     </div>
   {{>script}}
-  <script src="{{>relpath}}script/collection.js"></script>
+  <script src="../script/collection.js"></script>
   <script>
   let register = [],
       id = '';
@@ -123,10 +123,10 @@
           if (!$('#'+id).length) {
             var card = '<div class="card text-center bg-light mb-3">'
               +'<div title="{{i18n.i_integrate}} {{i18n.i_in}} {{i18n.i_collection}}" class="in-collection d-none">'
-              +'<svg class="bi" width="16" height="16" fill="currentColor"><use xlink:href="{{>relpath}}style/bootstrap-icons.svg#chevron-down"/></svg></div>'
-              +'<h5><a href="../memo/'+id+'/">'+d.name+'</a></h5>'
+              +'<svg class="bi" width="16" height="16" fill="currentColor"><use xlink:href="../style/bootstrap-icons.svg#chevron-down"/></svg></div>'
+              +'<h5><a href="../diary/'+id+'">'+d.name+'</a></h5>'
               +'<div title="{{i18n.i_restricted-access}}" class="card-icons text-secondary">'
-              +'<svg class="bi" width="16" height="16" fill="currentColor"><use xlink:href="{{>relpath}}style/bootstrap-icons.svg#lock"/></svg>'
+              +'<svg class="bi" width="16" height="16" fill="currentColor"><use xlink:href="../style/bootstrap-icons.svg#lock"/></svg>'
               +'</div>'
               +'<p><span id="'+id+'" title="{{i18n.i_memos}}" class="badge badge-pill badge-secondary progress-bar-striped progress-bar-animated d-none">{{i18n.i_loading}}</span></p>'
               +'</div>';

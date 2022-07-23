@@ -18,7 +18,6 @@ function(head, req) {
     contributors: [],
     readers: [],
     editable: false,
-    flat: false,
     groundings: [],
     leaves: [],
     type: 'storyline',
@@ -32,13 +31,13 @@ function(head, req) {
       case 'L':
         data.leaves.push({
           id: row.value.id,
-          href: '../graph/'+ diary +'/'+ row.value.id,
+          href: '../graph/'+ row.value.id,
           type: 'graph',
           name: row.value.name
         });
       break;
       case 'S':
-        var href = '../diagram/'+ diary +'/'+ row.value._id;
+        var href = '../diagram/'+ row.value._id;
         data.groundings.push({
           id: row.value._id,
           href: href,

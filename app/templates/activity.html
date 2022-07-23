@@ -3,19 +3,19 @@
   <head>
     <title>{{diary_name}} - {{i18n.i_activity}}</title>
     {{>links}}
-    <link rel="stylesheet" href="../../style/cal-heatmap.css" />
+    <link rel="stylesheet" href="../style/cal-heatmap.css" />
   </head>
   <body>
     <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item"><a class="nav-link btn" id="diary" title="{{diary_name}}">
           <svg class="bi" width="24" height="24" fill="currentColor">
-            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#book"/>
+            <use xlink:href="../style/bootstrap-icons.svg#book"/>
           </svg>
         </a></li>
         <li class="nav-item"><a class="nav-link btn disabled" id="drawChart" title="{{i18n.i_draw-chart}}">
           <svg class="bi" width="24" height="24" fill="currentColor">
-            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#calendar-week"/>
+            <use xlink:href="../style/bootstrap-icons.svg#calendar-week"/>
           </svg>
         </a></li>
       </ul>
@@ -51,24 +51,24 @@
       <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
         <button class="btn navbar-btn btn-sm ml-1 more" type="button" title="{{i18n.i_show-more}}">
           <svg class="bi" width="24" height="24" fill="currentColor">
-            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#arrow-down-circle"/>
+            <use xlink:href="../style/bootstrap-icons.svg#arrow-down-circle"/>
           </svg>
         </button>
         <button class="btn navbar-btn btn-sm ml-1 hidden" id="reload" type="button" data-toggle="tooltip" data-placement="bottom" title="{{i18n.i_cancel}}">
           <svg class="bi" width="24" height="24" fill="currentColor">
-            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#x-lg"/>
+            <use xlink:href="../style/bootstrap-icons.svg#x-lg"/>
           </svg>
         </button>
         <a class='navbar-text ml-auto' href="https://github.com/Hypertopic/Cassandre/wiki">
           <svg class="bi" width="24" height="24" fill="currentColor">
-            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#info-circle"/>
+            <use xlink:href="../style/bootstrap-icons.svg#info-circle"/>
           </svg>
         </a>
       </nav>
     </div>
   {{>script}}
-  <script type="text/javascript" src="../../script/d3.min.js"></script>
-  <script type="text/javascript" src="../../script/cal-heatmap.min.js"></script>
+  <script type="text/javascript" src="../script/d3.min.js"></script>
+  <script type="text/javascript" src="../script/cal-heatmap.min.js"></script>
   <script>
   let cal = new CalHeatMap(),
       all = {},
@@ -99,7 +99,7 @@
       <div class="d-none d-sm-inline-flex">{{i18n.i_loading}}</div>\
       <div class="spinner-border spinner-border-sm ml-auto  mr-auto mr-sm-0" role="status" aria-hidden="true"></div></div>');
     $.ajax({
-      url: '../../activity_chart/'+diary_id+'/',
+      url: '../activity_chart/'+diary_id+'/',
       type: "GET",
       dataType: "json"
     }).done(function(data) {
@@ -181,22 +181,9 @@
     showMore($('li').last().find('span').attr('id'));
   });
 
-  function type2path(type) {
-    switch (type) {
-      case 'table':
-      case 'graph':
-      case 'diagram':
-        return type;
-      break;
-      default:
-        return 'memo';
-      break;
-    }
-  }
-
   function getFullname(o) {
     $.ajax({
-      url: "../../userlist/"+o,
+      url: "../userlist/"+o,
       type: "GET",
       async: false,
       dataType: "json"
@@ -205,16 +192,15 @@
 
   function showMore(start) {
     $.ajax({
-      url: '../../activity/'+diary_id+'/'+start,
+      url: '../activity/'+diary_id+'/'+start,
       type: "GET",
       dataType: "json",
       success: function(data) {
         for (var a of data) {
-          var [date, user, user_fullname, type] = [a.date, a.user, a.user_fullname, a.modified_type];
+          var [date, user, user_fullname, type, path] = [a.date, a.user, a.user_fullname, a.modified_type, a.path];
           if (typeof a.commented !== 'undefined') {
             action = '{{i18n.i_commented}}&nbsp;: ';
           }
-          path = type2path(type);
           if (typeof user_fullname !== 'undefined') fullnames[user] = user_fullname;
           if (typeof user_fullname === 'undefined' && fullnames[user] == null) getFullname(user);
           if (typeof user_fullname === 'undefined' && fullnames[user] !== null) user_fullname = fullnames[user];
@@ -227,7 +213,7 @@
             if (typeof a.commented !== 'undefined') action = '{{i18n.i_commented}}&nbsp;: ';
             if (typeof a.created   !== 'undefined') action = '{{i18n.i_created}} ';
             if (typeof a.modified  !== 'undefined') action = '{{i18n.i_modified}} ';
-            action += '<a href="../../'+path+'/'+diary_id+'/'+a.modified_id+'">'+a.modified_name+'</a>';
+            action += '<a href="../'+path+'/'+a.modified_id+'">'+a.modified_name+'</a>';
           }
           var li = '<li>'
             +'<span id="'+date+'" class="'+date+' moment"></span>, '

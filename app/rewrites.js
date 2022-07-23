@@ -238,8 +238,8 @@ function(req2) {
     case 'table':
       reply.path = "_list/table/memo";
       reply.query = {
-        "startkey": '["'+path[2]+'"]',
-        "endkey":   '["'+path[2]+'", {}]',
+        "startkey": '["'+path[1]+'"]',
+        "endkey":   '["'+path[1]+'", {}]',
         "include_docs": "true"
       };
     break;

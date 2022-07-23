@@ -7,7 +7,7 @@ $('#add_contributor').autocomplete({
   minLength: 3,
   appendTo: '#modify_rights_dialog',
   source: function(request, response) {
-    $.getJSON('../../userlist/' + request.term, function (data) {
+    $.getJSON('../userlist/' + request.term, function (data) {
       response($.map(data.rows, function (value, key) {
         if (contributors.split(',').concat(userids).indexOf(value.id) == -1) {
           userids.push(value.id);
@@ -33,7 +33,7 @@ $('#add_reader').autocomplete({
   minLength: 3,
   appendTo: '#modify_rights_dialog',
   source: function(request, response) {
-    $.getJSON('../../userlist/' + request.term, function (data) {
+    $.getJSON('../userlist/' + request.term, function (data) {
       response($.map(data.rows, function (value, key) {
         if (readers.split(',').concat(userids).indexOf(value.id) == -1) {
           userids.push(value.id);
@@ -58,7 +58,7 @@ $('.remove_contributor').on('click', function() {
 });
 $('#unsubscribe').on('click', function() {
   $.ajax({
-    url: '../../reader_unsubscribe/'+this_id,
+    url: '../reader_unsubscribe/'+this_id,
     type: 'PUT',
     contentType: 'application/json'
   }).done(reload)
@@ -70,7 +70,7 @@ $('#modify_rights_dialog').on('show.bs.modal', function () {
 function modify_rights(action, value) {
   $('#modify_rights_dialog .modal-body').append($('#loading').removeClass('hidden'));
   $.ajax({
-    url: '../../modify_rights/'+this_id,
+    url: '../modify_rights/'+this_id,
     type: 'PUT',
     contentType: 'application/json',
     data: JSON.stringify({

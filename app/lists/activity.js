@@ -28,6 +28,7 @@ function(head, req) {
     } else {
       if (row.doc && row.doc.type) object.modified_type = row.doc.type;
     }
+    object.path = type2path(object.modified_type);
     if (row.value.created) {
       object.created = 'created';
     }

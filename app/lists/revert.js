@@ -40,7 +40,6 @@ function(head, req){
           peer: req.peer,
           type: row.doc.type,
           date: row.doc.history[row.doc.history.length-1].date,
-          flat: true,
           diary: row.doc.diary,
           body: row.doc.body,
           groundings:[]

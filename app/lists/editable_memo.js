@@ -63,7 +63,6 @@ function(head, req){
           peer: req.peer,
           type: row.doc.type,
           date: row.doc.date,
-          flat: true,
           diary: row.doc.diary,
           body: row.doc.body,
           groundings:[]

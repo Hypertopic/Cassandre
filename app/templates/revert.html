@@ -8,9 +8,9 @@
       <header>
         <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
           <ul class="navbar-nav mr-auto">
-            <a class="d-inline-block btn navbar-btn" href="../memo/{{diary}}/" title="{{diary_name}}">
+            <a class="d-inline-block btn navbar-btn" id="diary" title="{{diary_name}}">
               <svg class="bi" width="24" height="24" fill="currentColor">
-                <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#book"/>
+                <use xlink:href="../style/bootstrap-icons.svg#book"/>
               </svg>
             </a>
           </ul>
@@ -47,7 +47,7 @@
         {{/authorized}}
         <a class="navbar-text" href="https://github.com/Hypertopic/Cassandre/wiki">
           <svg class="bi" width="24" height="24" fill="currentColor">
-            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#info-circle"/>
+            <use xlink:href="../style/bootstrap-icons.svg#info-circle"/>
           </svg>
         </a>
       </nav>
@@ -138,7 +138,7 @@
   }
   
   $('#cancel').on('click', function() {
-    self.location = '../memo/{{diary}}/{{_id}}';
+    self.location = '../memo/{{_id}}';
   });
 
   $('#revert').on('click', function() {
@@ -154,7 +154,7 @@
       contentType: "application/json",
       data: JSON.stringify(data)
     }).done(function() {
-      self.location = '../memo/{{diary}}/{{_id}}';
+      self.location = '../memo/{{_id}}';
     })
   }
   {{>layoutscript}}

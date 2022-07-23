@@ -47,12 +47,12 @@ $('#content').on('mouseup', function() {
 });
 $('.search').on('click', function() {
   if ($('#kwic').val().length > 0) {
-    self.location = relpath+'kwic/'+diary_id+'/' + $('#kwic').val().toLowerCase();
+    self.location = '../kwic/'+diary_id+'/' + $('#kwic').val().toLowerCase();
   }
 });
 $('#kwic').on('keypress', function(key) {
   if (key.which == 13) {
-    self.location = relpath+'kwic/'+diary_id+'/' + $('#kwic').val().toLowerCase();
+    self.location = '../kwic/'+diary_id+'/' + $('#kwic').val().toLowerCase();
   }
 });
 $("#reload").on('click', function() {
@@ -89,7 +89,7 @@ $('#groundings').find('.toggle').click(function(){
   $('.preview').not($(this).next()).slideUp('fast');
 });
 $('#diary').on('click', function() {
-  self.location = relpath+'memo/'+diary_id+'/';
+  self.location = '../diary/'+diary_id;
 });
 
 $('#leave-name').on('keypress', function(key) {
@@ -100,7 +100,7 @@ $('#leave-name').on('keypress', function(key) {
 });
 $('#link_leaf').on('click', function() {
   $.ajax({
-    url: "../../adapt_memo/"+leaf_id,
+    url: "../adapt_memo/"+leaf_id,
     type: "PUT",
     contentType: "application/json",
     data: JSON.stringify({
@@ -132,7 +132,7 @@ function create(type, name, highlight, anchor) {
   } else {
     let i = 0;
     $.ajax({
-      url: relpath+'memo_attribute/'+diary_id+'',
+      url: '../memo_attribute/'+diary_id+'',
       type: 'GET',
       dataType: 'json',
     }).done(function(existing_memos) {
@@ -170,7 +170,7 @@ function create(type, name, highlight, anchor) {
         if (readers.length > 0) {
           data.readers = readers.split(',');
         }
-        var destination = relpath;
+        var destination = '../';
         switch (type) {
           case 'transcript':
             destination += 'editable_text/';
@@ -233,7 +233,7 @@ function create(type, name, highlight, anchor) {
         }
         if (type) {
           $.ajax({
-            url: relpath,
+            url: '../',
             type: 'POST',
             dataType: 'json',
             contentType: 'application/json',
@@ -252,7 +252,7 @@ function inform(type, msg){
       body = '<div class="toast-body alert-'+type+'">',
       close = '<button type="button" class="ml-auto mr-1 mb-1 close" data-dismiss="toast">&times;</button>', 
       header = '<div class="toast-header bg-'+type+'"><span class="text-light">'
-    + '<svg class="bi mr-1 ml-auto" width="20" height="20" fill="currentColor"><use xlink:href="'+relpath+'style/bootstrap-icons.svg#cone-striped"/></svg></span>'
+    + '<svg class="bi mr-1 ml-auto" width="20" height="20" fill="currentColor"><use xlink:href="../style/bootstrap-icons.svg#cone-striped"/></svg></span>'
     + '<strong class="mr-auto text-light">Maintenance</strong>'+close+'</div>';
   if (type == 'danger') {
     t += header + body;
@@ -268,13 +268,13 @@ function inform(type, msg){
 
 function poller(what, since) {
   $.ajax({
-    url: relpath+'changes/'+what+'/'+this_id+'/'+since
+    url: '../changes/'+what+'/'+this_id+'/'+since
   }).done(function(data){
     if (data.results.length && refresh == true) {
       reload();
     } else {
       $.ajax({
-        url: relpath+'memo_update_seq/'+this_id
+        url: '../memo_update_seq/'+this_id
       }).done(function(o){
         var memo_seq = JSON.parse(o);
         poller(what, memo_seq.update_seq);
@@ -361,7 +361,7 @@ function renderPreviews(converter){
 function announceMaintenance(before, during){
   $.ajax({
     type: 'GET',
-    url: relpath+'config',
+    url: '../config',
     dataType: 'json'
   }).done(function(data){
     var maintenance_start = new Date(data.maintenance.date),

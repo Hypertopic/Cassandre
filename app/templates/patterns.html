@@ -8,9 +8,9 @@
     <header>
       <div id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item"><a href="../memo/{{diary}}/" class="nav-link btn" id="diary">
+          <li class="nav-item"><a class="nav-link btn" id="diary">
             <svg class="bi" width="24" height="24" fill="currentColor">
-              <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#book"/>
+              <use xlink:href="../style/bootstrap-icons.svg#book"/>
             </svg>
           </a></li>
         </ul>
@@ -43,24 +43,24 @@
        <div role="group" class="form-check-inline">
         <button class="btn navbar-btn btn-sm" id="show_delete" type="button" data-toggle="tooltip" data-placement="top" title="{{i18n.i_delete}}...">
           <svg class="bi" width="24" height="24" fill="currentColor">
-            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#trash"/>
+            <use xlink:href="../style/bootstrap-icons.svg#trash"/>
           </svg>
         </button>
         <div class="custom-control custom-switch hidden"><input id="toggle" type="checkbox" class="custom-control-input"></input><label class="navbar-text custom-control-label" for="toggle">{{i18n.i_select}}</label></div>
         <button class="btn navbar-btn btn-sm ml-1 hidden" id="delete" type="button" data-toggle="tooltip" data-placement="top" title="{{i18n.i_delete}}">
           <svg class="bi" width="24" height="24" fill="currentColor">
-            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#trash"/>
+            <use xlink:href="../style/bootstrap-icons.svg#trash"/>
           </svg>
         </button>
         <button class="btn navbar-btn btn-sm mr-1 hidden" id="cancel" type="button" data-toggle="tooltip" data-placement="top" title="{{i18n.i_cancel}}">
           <svg class="bi" width="24" height="24" fill="currentColor">
-            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#x-lg"/>
+            <use xlink:href="../style/bootstrap-icons.svg#x-lg"/>
           </svg>
         </button>
        </div>
        <a class='navbar-text' href="https://github.com/Hypertopic/Cassandre/wiki">
          <svg class="bi" width="24" height="24" fill="currentColor">
-           <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#info-circle"/>
+           <use xlink:href="../style/bootstrap-icons.svg#info-circle"/>
          </svg>
        </a>
       </nav>
@@ -70,14 +70,14 @@
   const diary_id = '{{diary}}';
   $(document).ready(function() {
     $.ajax({
-      url: "../../{{diary}}",
+      url: "../{{diary}}",
       type: "GET",
       dataType: "json",
       success: function(d) {
         $('#diary')
           .tooltip('dispose')
           .attr('title',d.diary_name)
-          .tooltip({ offset: "0, 8" });
+          .tooltip({ trigger: 'hover', offset: "0, 8" });
       }
     });
     stickToHeader();

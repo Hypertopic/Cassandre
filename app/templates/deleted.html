@@ -10,7 +10,7 @@
         <div><h1>{{i18n.i_does-not-exist}}</h1>
           <p><a id="back" style="display: inline-block; vertical-align: top; cursor: pointer;">
             <svg class="bi" width="24" height="24" fill="currentColor">
-              <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#arrow-left"/>
+              <use xlink:href="../style/bootstrap-icons.svg#arrow-left"/>
             </svg>
           </a></p>
         </div>
@@ -19,7 +19,7 @@
         <ul class="navbar-nav mr-auto">
           <li class="nav-item"><a class="nav-link" href="https://github.com/Hypertopic/Cassandre/wiki">
             <svg class="bi" width="24" height="24" fill="currentColor">
-              <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#info-circle"/>
+              <use xlink:href="../style/bootstrap-icons.svg#info-circle"/>
             </svg>
           </a></li>
         </ul>
@@ -29,7 +29,7 @@
     <script>
     $('#back').on('click', function() {
       var diary = window.location.pathname.split('/')[2];
-      self.location = '../../memo/'+diary+'/';
+      self.location = '../diary/'+diary+'/';
     });
     </script>
   </body>

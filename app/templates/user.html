@@ -10,7 +10,7 @@
       <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
         <a class="navbar-brand btn" id="diaries" data-toggle="tooltip" data-placement="bottom" title="{{i18n.i_diaries}}">
           <svg class="bi" width="24" height="24" fill="currentColor">
-            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#journals"/>
+            <use xlink:href="../style/bootstrap-icons.svg#journals"/>
           </svg>
         </a>
         <ul class="navbar-nav mr-auto"></ul>
@@ -44,14 +44,14 @@
         <div class='pagination'>
           <button class="btn navbar-btn btn-sm" id="next" title="{{i18n.i_show-more}}">
             <svg class="bi" width="24" height="24" fill="currentColor">
-              <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#arrow-down-circle"/>
+              <use xlink:href="../style/bootstrap-icons.svg#arrow-down-circle"/>
             </svg>
           </button>
         </div>
         {{/authorized}}
         <a class='navbar-text' href="https://github.com/Hypertopic/Cassandre/wiki">
           <svg class="bi" width="24" height="24" fill="currentColor">
-            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#info-circle"/>
+            <use xlink:href="../style/bootstrap-icons.svg#info-circle"/>
           </svg>
         </a>
       </nav>
@@ -151,7 +151,7 @@
   }
 
   $('#diaries').on('click', function() {
-    self.location = '../memo/';
+    self.location = '../diary/';
   });
 
   $('#next').on('click', function() {

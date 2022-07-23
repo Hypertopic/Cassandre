@@ -14,22 +14,22 @@
       <ul class="navbar-nav mr-auto">
         <li class="nav-item"><a class="nav-link btn navbar-btn" id="diary" title="{{diary_name}}">
           <svg class="bi" width="24" height="24" fill="currentColor">
-            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#book"/>
+            <use xlink:href="../style/bootstrap-icons.svg#book"/>
           </svg>
         </a></li>
-        <li class="nav-item"><a class="nav-link btn-sm" id="json" href="../../export/{{diary}}/json/">
+        <li class="nav-item"><a class="nav-link btn-sm" id="json" href="../export/{{diary}}/json/">
           <svg class="bi" width="24" height="24" fill="currentColor">
-            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#filetype-json"/>
+            <use xlink:href="../style/bootstrap-icons.svg#filetype-json"/>
           </svg>
         </a></li>
-        <li class="nav-item"><a class="nav-link btn-sm" id="xml" href="../../export/{{diary}}/xml/">
+        <li class="nav-item"><a class="nav-link btn-sm" id="xml" href="../export/{{diary}}/xml/">
           <svg class="bi" width="24" height="24" fill="currentColor">
-            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#filetype-xml"/>
+            <use xlink:href="../style/bootstrap-icons.svg#filetype-xml"/>
           </svg>
         </a></li>
         <li class="nav-item"><a class="nav-link btn-sm disabled" id='pdf'>
           <svg class="bi" width="24" height="24" fill="currentColor">
-            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#filetype-pdf"/>
+            <use xlink:href="../style/bootstrap-icons.svg#filetype-pdf"/>
           </svg>
         </a></li>
       </ul>
@@ -54,9 +54,9 @@
       </main>
     </div>
   {{>script}}
-  {{#list}}<script src="../../script/showdown.min.js"></script>{{/list}}
-  <script src="../../script/jspdf.umd.min.js"></script>
-  <script src="../../script/html2canvas.min.js"></script>
+  {{#list}}<script src="../script/showdown.min.js"></script>{{/list}}
+  <script src="../script/jspdf.umd.min.js"></script>
+  <script src="../script/html2canvas.min.js"></script>
   <script>
   const ansi = [
     {char: '->', base: /\u2192/g},
@@ -100,7 +100,7 @@
       .attr('title', "{{i18n.i_sign-out}}<br/>"+fullnames['{{logged}}'])
       .tooltip({ offset: "0, 8" });
     if ('{{diary}}') $.ajax({
-      url: "../../{{diary}}",
+      url: "../{{diary}}",
       type: "GET",
       dataType: "json",
       success: function(data) {
@@ -137,7 +137,7 @@
           $(this).find('a').html("{{i18n.i_nothing-to-show}}");
         }
       }
-      if (document.getElementById(id) == null) $(this).find('a').prop('href', "../../memo/{{diary}}/"+id);
+      if (document.getElementById(id) == null) $(this).find('a').prop('href', "../memo/"+id);
     });
     {{/list}}
     stickToHeader();
@@ -145,7 +145,7 @@
 
   $('#header')
     .on('click', '#diary', function() {
-      self.location = '../../memo/{{diary}}/';
+      self.location = '../diary/{{diary}}';
     })
     .on('click', '#pdf', function() {
       printPDF();
@@ -153,7 +153,7 @@
 
   function getFullname(o) {
     $.ajax({
-      url: "../../userlist/"+o,
+      url: "../userlist/"+o,
       type: "GET",
       async: false,
       dataType: "json"

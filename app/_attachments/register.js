@@ -8,7 +8,7 @@ function register() {
       fullname = $("#fullname").val()
       $.ajax({
         type: "PUT",
-        url: "../../create_user/" + user,
+        url: "../create_user/" + user,
         contentType: "application/json",
         data: JSON.stringify({
           name: user,
@@ -45,7 +45,7 @@ function onRegistred() {
   $("#message").removeClass("alert-danger");
   $("#message").addClass("alert-success");
   $.ajax({
-    url: '../../'+user,
+    url: '../'+user,
     type: 'PUT',
     contentType: 'application/json',
     data: JSON.stringify({

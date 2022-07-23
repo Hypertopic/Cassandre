@@ -59,7 +59,7 @@ function(head, req) {
         if (row.doc)  {
           data.groundings.push({
             id: row.value._id,
-            href: '../../diagram/'+diary+'/'+ row.value._id,
+            href: '../diagram/'+ row.value._id,
             type: 'diagram',
             name: row.doc.name
           });
@@ -88,19 +88,10 @@ function(head, req) {
         }
       break;
       case ('L'):
-        var type = row.doc.type || 'transcript';
-        var id = row.doc._id;
-        var href = row.doc._id;
-        var name = row.doc.name || '...';
-        switch (type) {
-          case ('diagram'):
-            break;
-          case ('graph'):
-            var href = '../../graph/'+diary+'/'+href;
-            break;
-          default:
-            var href = '../../memo/'+diary+'/'+href;
-        }
+        var type = row.doc.type || 'transcript',
+            href = '../'+type2path(type)+'/'+row.doc._id,
+            id = row.doc._id,
+            name = row.doc.name || '...';
         data.leaves.push({
           href: href,
           id: id,

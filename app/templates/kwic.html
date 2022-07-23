@@ -2,14 +2,19 @@
 <html>
   <head>
     <title>{{i18n.i_kwic}} - {{pattern}}</title>
-    {{>links}}
+    <meta charset='utf-8'>
+    <meta name='viewport' content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel='icon' type='image/svg' href='../../style/favicon.svg' />
+    <link rel='apple-touch-icon' type='image/png' href='../../style/apple-touch-icon-precomposed.png' />
+    <link rel='stylesheet' href='../../style/bootstrap.min.css' />
+    <link rel='stylesheet' type='text/css' href='../../style/main.css' />
   </head>
   <body>
     <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item"><a class="nav-link btn text-truncate" id="diary">
           <svg class="bi" width="24" height="24" fill="currentColor">
-            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#book"/>
+            <use xlink:href="../../style/bootstrap-icons.svg#book"/>
           </svg>
         </a></li>
         <li class="dropdown d-none">
@@ -22,14 +27,6 @@
           </div>
         </li>
       </ul>
-      <div class="form-inline justify-content-between">
-        <div class="input-group input-group">
-          <input id="kwic" type="search" class="form-control" placeholder="{{i18n.i_search}}" />
-          <div class="input-group-append">
-            <span class="input-group-text kwic search">?</span>
-          </div>
-        </div>
-      </div>
     </nav>
     <div id="container" class='container-fluid'>
       <div id="content" class="col mb-3 pb-5">
@@ -45,7 +42,7 @@
           <div class="context">{{pole}}</div>
           <div class="context d-none d-md-inline">{{post}}</div>
           {{/context}}
-          <a class="{{type}}" href="../../{{path}}/{{corpus}}/{{id}}#{{par}}" title="{{title}}">
+          <a class="{{type}}" href="../../{{path}}/{{id}}#{{par}}" title="{{title}}">
             <div class="ml-4 d-inline"></div>
             <span class="ml-1 d-none d-xl-inline">{{title}}</span>
           </a>
@@ -55,20 +52,26 @@
       <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
         <button type="button" id="new_pattern" class='btn btn-sm' title="{{i18n.i_new_pattern}}">
           <svg class="bi" width="24" height="24" fill="currentColor">
-            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#bookmark-plus"/>
+            <use xlink:href="../../style/bootstrap-icons.svg#bookmark-plus"/>
           </svg>
         </button>
         <a class='navbar-text' href="https://github.com/Hypertopic/Cassandre/wiki">
           <svg class="bi" width="24" height="24" fill="currentColor">
-            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#info-circle"/>
+            <use xlink:href="../../style/bootstrap-icons.svg#info-circle"/>
           </svg>
         </a>
       </nav>
     </div>
-  {{>script}}
+
+  <script src='../../script/jquery.js'></script>
+  <script src='../../script/jquery-ui.min.js'></script>
+  <script src='../../script/popper.min.js'></script>
+  <script src='../../style/bootstrap.min.js'></script>
+  <script src='../../script/layout.js'></script>
+  <script src='../../script/log.js'></script>
   <script>
   const diary_id = '{{diary}}',
-        relpath = '{{>relpath}}';
+        relpath = '../../';
   $(document).ready(function() {
     $.ajax({
       url: "../../{{diary}}",
@@ -78,7 +81,7 @@
         $('#diary')
           .tooltip('dispose')
           .attr('title',d.diary_name)
-          .tooltip({ offset: "0, 8" });
+          .tooltip({ trigger: 'hover', offset: "0, 8" });
       }
     });
     stickToHeader();
@@ -87,7 +90,7 @@
   });
 
   $('#diary').on('click', function(){
-    self.location = '../../memo/{{diary}}/';
+    self.location = '../../diary/{{diary}}';
   });
 
   function getUUID() {
@@ -117,7 +120,7 @@
           contentType: "application/json",
           data: JSON.stringify(text)
         }).done(function() {
-            self.location = '../../kwic/{{diary}}'
+          self.location = '../../kwic/{{diary}}'
         }).fail(error_alert)
       }
     });

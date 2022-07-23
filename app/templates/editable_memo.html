@@ -68,14 +68,14 @@
           <button type="button" class="btn btn-sm" title="{{i18n.i_save}}" id="done">
             <span data-toggle="tooltip" data-placement="top">
               <svg class="bi" width="24" height="24" fill="currentColor">
-                <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#check-lg"/>
+                <use xlink:href="../style/bootstrap-icons.svg#check-lg"/>
               </svg>
             </span>
           </button>
           <button type="button" class="btn btn-sm" title="{{i18n.i_cancel}}" id="cancel">
             <span data-toggle="tooltip" data-placement="top">
               <svg class="bi" width="24" height="24" fill="currentColor">
-                <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#x-lg"/>
+                <use xlink:href="../style/bootstrap-icons.svg#x-lg"/>
               </svg>
             </span>
           </button>
@@ -83,7 +83,7 @@
         {{/editing}}{{/authorized}}
         <a class="navbar-text" href="https://github.com/Hypertopic/Cassandre/wiki">
           <svg class="bi" width="24" height="24" fill="currentColor">
-            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#info-circle"/>
+            <use xlink:href="../style/bootstrap-icons.svg#info-circle"/>
           </svg>
         </a>
       </nav>
@@ -122,7 +122,7 @@
   var warning = 'Save your content';
   $(document).ready(function() {
     {{^editing}}
-    self.location = '../../memo/{{diary}}/{{_id}}';
+    self.location = '../memo/{{_id}}';
     {{/editing}}
     {{#editing}}
     window.addEventListener("beforeunload", function (e) {
@@ -205,7 +205,7 @@
     }).done(toDoAfter)
     .fail(function(request) {
       if (request.status == 401) alert("{{i18n.i_lost_connection}}".replace(/&#39;/g,"'").replace(/&quot;/g,'"')); 
-      self.location = '../memo/{{diary}}/{{_id}}';
+      self.location = '../memo/{{_id}}';
     })
   }
 
@@ -215,7 +215,7 @@
 
   var toDoAfter = function() {
     easymde.clearAutosavedValue();
-    self.location = '../memo/{{diary}}/{{_id}}';
+    self.location = '../memo/{{_id}}';
   };
 
   $('#cancel').on('click', function() {

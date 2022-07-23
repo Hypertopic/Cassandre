@@ -69,7 +69,7 @@ async function renameDiagrams(ids,name) {
 }
 function renameDiagram(id,name) {
   $.ajax({
-    url: "../../rename_diagram/"+id,
+    url: "../rename_diagram/"+id,
     type: "PUT",
     contentType: "application/json",
     data: JSON.stringify({
@@ -80,7 +80,7 @@ function renameDiagram(id,name) {
 }
 function edit_name() {
   $.ajax({
-    url: '../../edit_name/'+this_id,
+    url: '../edit_name/'+this_id,
     type: 'PUT',
     contentType: 'application/json',
     data: $('#name').val().trim()

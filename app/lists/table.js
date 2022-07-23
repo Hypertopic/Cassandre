@@ -58,19 +58,9 @@ function(head, req) {
             }
           }
           var ground_type = row.doc.type || 'transcript';
-          switch (ground_type) {
-            case ('diagram'):
-            var ground_path = '';
-            break;
-            case ('graph'):
-            var ground_path = '../../graph/'+diary+'/';
-            break;
-            default:
-            var ground_path = '../../memo/'+diary+'/';
-          }
           data.groundings.push({
             id: row.value._id,
-            href: ground_path + row.value._id,
+            href: '../'+type2path(ground_type)+'/'+row.value._id,
             type: ground_type,
             preview: preview,
             name: row.doc.name
@@ -78,21 +68,11 @@ function(head, req) {
         }
       break;
       case ('L'):
-        var type = row.doc.type || 'transcript';
-        var id = row.doc._id;
-        var href = row.doc._id;
-        var name = row.doc.name || '...';
-        switch (type) {
-          case ('diagram'):
-            break;
-          case ('graph'):
-            var href = '../../graph/'+diary+'/'+href;
-            break;
-          default:
-            var href = '../../memo/'+diary+'/'+href;
-        }
+        var type = row.doc.type || 'transcript',
+            id = row.doc._id,
+            name = row.doc.name || '...';
         data.leaves.push({
-          href: href,
+          href: '../'+type2path(type)+'/'+row.doc._id,
           id: id,
           name: name,
           type: type

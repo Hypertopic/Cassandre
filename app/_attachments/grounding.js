@@ -7,9 +7,9 @@ $('#add_grounding').on('show.bs.modal', function (event) {
     if (this_type == "graph" && c != $("#select_grounding").children('option').first().text()) c = JSON.parse(c).id;
     if($(this).val() != $("#select_grounding").children('option').first().text()) candidates.push(c);
   })
-  var url = "../../memo_attribute/"+diary_id;
-  if (this_type == "graph") url = "../../memo_type/"+diary_id+"/diagram";
-  if (this_type == "table") url = "../../memo_type/"+diary_id+"/coding";
+  var url = "../memo_attribute/"+diary_id;
+  if (this_type == "graph") url = "../memo_type/"+diary_id+"/diagram";
+  if (this_type == "table") url = "../memo_type/"+diary_id+"/coding";
   $.ajax({
     url: url,
     type: "GET",

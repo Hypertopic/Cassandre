@@ -10,7 +10,7 @@
     <nav id="header" class="{{>navbarstyle}} justify-content-between fixed-top">
       <a class="d-inline-block btn navbar-btn" id="diary">
         <svg class="bi" width="24" height="24" fill="currentColor">
-          <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#book"/>
+          <use xlink:href="../style/bootstrap-icons.svg#book"/>
         </svg>
       </a>
       <ul class="navbar-nav">
@@ -27,19 +27,19 @@
     <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
       <button class="btn navbar-btn btn-sm ml-1 hidden" id="reload" type="button" data-toggle="tooltip" data-placement="top" title="{{i18n.i_cancel}}">
         <svg class="bi" width="24" height="24" fill="currentColor">
-          <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#x-lg"/>
+          <use xlink:href="../style/bootstrap-icons.svg#x-lg"/>
         </svg>
       </button>
       <a class='navbar-text' href="https://github.com/Hypertopic/Cassandre/wiki">
         <svg class="bi" width="24" height="24" fill="currentColor">
-          <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#info-circle"/>
+          <use xlink:href="../style/bootstrap-icons.svg#info-circle"/>
         </svg>
       </a>
     </nav>
   {{>script}}
-  <script src="../../script/vis.min.js"></script>
-  <script src="../../script/viz.js"></script>
-  <script src="../../script/full.render.js"></script>
+  <script src="../script/vis.min.js"></script>
+  <script src="../script/viz.js"></script>
+  <script src="../script/full.render.js"></script>
   <script>
   const diary_id = '{{diary}}';
   let from = '0',
@@ -143,7 +143,7 @@
     {{/edges}}
 
     nodes.forEach(function(e, i) {
-      var style = 'href="../../'+e.path+'/'+diary_id+'/'+e.id+'", label="'+hr_date(e.date)+': '+e.name+'"';
+      var style = 'href="../'+e.path+'/'+e.id+'", label="'+hr_date(e.date)+': '+e.name+'"';
       if (e.ids.length > 1) style = 'fillcolor="white", width=.2, penwidth=3, '+style;
       node = 'node'+e.id+' ['+style+'];';
       switch(e.type) {

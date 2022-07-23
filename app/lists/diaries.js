@@ -10,7 +10,6 @@ function(head, req) {
     locale: req.headers["Accept-Language"].split(',')[0].substring(0,2),
     logged: req.userCtx.name,
     diaries: [],
-    flat: true,
     peer: req.peer
   };
   while (row = getRow()) {

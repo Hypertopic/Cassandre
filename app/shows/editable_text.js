@@ -9,7 +9,6 @@ function(o, req){
     i18n: localized(),
     highlights: "{}",
     attributes:[],
-    flat: true,
     logged: username,
     logged_fullname: username,
     logs:[],

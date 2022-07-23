@@ -7,9 +7,9 @@
   <body>
     <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item"><a class="d-inline-block btn navbar-btn" href="../../memo/{{diary}}/" id="diary" title="{{diary_name}}">
+        <li class="nav-item"><a class="d-inline-block btn navbar-btn" id="diary" title="{{diary_name}}">
           <svg class="bi" width="24" height="24" fill="currentColor">
-            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#book"/>
+            <use xlink:href="../style/bootstrap-icons.svg#book"/>
           </svg>
         </a></li>
       </ul>
@@ -24,7 +24,7 @@
           {{#todo}}
             <li class='unchecked-todo'>
               <span class="{{date}} moment"></span>&nbsp;–
-              <a href='../../{{type}}/{{diary}}/{{id}}'>{{name}}</a>
+              <a href='../{{type}}/{{id}}'>{{name}}</a>
             </li>
           {{/todo}}
           </ul>
@@ -33,7 +33,7 @@
           {{#editing}}
             <li class='editing'>
               <span class="{{date}} moment"></span>&nbsp;–
-              <a href='../../{{type}}/{{diary}}/{{id}}'>{{name}}</a>
+              <a href='../{{type}}/{{id}}'>{{name}}</a>
             </li>
           {{/editing}}
           </ul>
@@ -42,7 +42,7 @@
           {{#diagram}}
             <li class='unarticulated'>
               <span class="{{date}} moment"></span>&nbsp;–
-              <a href='../../{{type}}/{{diary}}/{{id}}'>{{name}}</a>
+              <a href='../{{type}}/{{id}}'>{{name}}</a>
             </li>
           {{/diagram}}
           </ul>
@@ -51,7 +51,7 @@
           {{#unnamed}}
             <li class='unnamed'>
               <span class="{{date}} moment"></span>&nbsp;–
-              <a href='../../{{type}}/{{diary}}/{{id}}'>{{name}}</a>
+              <a href='../{{type}}/{{id}}'>{{name}}</a>
             </li>
           {{/unnamed}}
           </ul>
@@ -60,13 +60,13 @@
           {{#ungrounded}}
             <li class='ungrounded'>
               <span class="{{date}} moment"></span>&nbsp;–
-              <a href='../../{{type}}/{{diary}}/{{id}}'>{{name}}</a>
+              <a href='../{{type}}/{{id}}'>{{name}}</a>
             </li>
           {{/ungrounded}}
           {{#deadend}}
             <li class='deadend'>
               <span class="{{date}} moment"></span>&nbsp;–
-              <a href='../../{{type}}/{{diary}}/{{id}}'>{{name}}</a>
+              <a href='../{{type}}/{{id}}'>{{name}}</a>
             </li>
           {{/deadend}}
           </ul>
@@ -75,7 +75,7 @@
       <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
         <a class="navbar-text ml-auto" href="https://github.com/Hypertopic/Cassandre/wiki">
           <svg class="bi" width="24" height="24" fill="currentColor">
-            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#info-circle"/>
+            <use xlink:href="../style/bootstrap-icons.svg#info-circle"/>
           </svg>
         </a>
       </nav>
@@ -91,7 +91,7 @@
     {{^logged}}nothing_to_show +='. {{i18n.i_sign-in-for-more}}';{{/logged}}
     {{#logged}}
     $.ajax({
-      url: "../../{{logged}}",
+      url: "../{{logged}}",
       type: "GET",
       dataType: "json",
       success: function(data) {
@@ -103,7 +103,7 @@
     });
     {{/logged}}
     $.ajax({
-      url: "../../comments/{{diary}}",
+      url: "../comments/{{diary}}",
       type: "GET",
       dataType: "json",
       success: function(d) {
@@ -114,7 +114,7 @@
         for (var c of data) {
           payload += "<li class='unchecked-comment'>"
             +'<span class="'+c.date+' moment"></span>&nbsp;– '
-            +"<a href='../../"+c.type+"/"+c.diary+"/"+c.id+"'>"+c.name+"</a>"
+            +"<a href='../"+c.type+"/"+c.id+"'>"+c.name+"</a>"
             +'</li>';
         }
       }

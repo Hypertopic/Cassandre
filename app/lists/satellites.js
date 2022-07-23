@@ -63,7 +63,7 @@ function(head, req) {
       case ('G'):
         if (row.doc)  {
           var ground_type = row.doc.type || 'transcript',
-              ground_path = '../',
+              ground_path = '../'+type2path(ground_type)+'/'+row.value._id,
               preview = null;
           if (row.value.preview) {
             preview = [];
@@ -77,7 +77,6 @@ function(head, req) {
             if (row.doc.negative) preview = row.doc.negative;
             if (preview != null) preview = preview.substr(0, 200);
           }
-          ground_path += type2path(ground_type)+'/'+row.value._id;
           if (row.value.anchor) ground_path += '#'+row.value.anchor;
           if (row.value._id !== diary)
           data.groundings.push({

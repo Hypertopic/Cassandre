@@ -11,19 +11,19 @@
       <ul class="navbar-nav mr-auto">
         <a class="d-inline-block btn navbar-btn " id="diary" data-toggle="tooltip" data-placement="bottom" title="{{diary_name}}">
           <svg class="bi" width="24" height="24" fill="currentColor">
-            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#book"/>
+            <use xlink:href="../style/bootstrap-icons.svg#book"/>
           </svg>
         </a>
         {{#authorized}}
         <a id="toggle-groundings" class="btn" data-toggle="collapse" aria-expanded="true" title="{{i18n.i_show_groundings}}" href=".groundings">
           <span class="d-block d-sm-none">
             <svg class="bi" width="24" height="24" fill="currentColor">
-              <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#window"/>
+              <use xlink:href="../style/bootstrap-icons.svg#window"/>
             </svg>
           </span>
           <span class="d-none d-sm-block">
             <svg class="bi" width="24" height="24" fill="currentColor">
-              <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#layout-sidebar"/>
+              <use xlink:href="../style/bootstrap-icons.svg#layout-sidebar"/>
             </svg>
           </span>
         </a>
@@ -32,7 +32,7 @@
           <a class="nav-link btn dropdown-toggle href="#" id="render" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <span title="{{i18n.i_layout}}">
               <svg class="bi" width="24" height="24" fill="currentColor">
-                <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#diagram-3"/>
+                <use xlink:href="../style/bootstrap-icons.svg#diagram-3"/>
               </svg>
             </span>
           </a>          
@@ -62,7 +62,7 @@
           <h1>{{i18n.i_sign-in_required}}</h1>
           {{/authorized}}
           {{#authorized}}
-          <h1 {{#editable}}class="editable"{{/editable}}> <img title="{{i18n.i_memo.graph}}" src="../../style/{{type}}.svg"/> {{name}} </h1>
+          <h1 {{#editable}}class="editable"{{/editable}}> <img title="{{i18n.i_memo.graph}}" src="../style/{{type}}.svg"/> {{name}} </h1>
           <input id="name" type="search" class="form-control hidden" value="{{name}}"/>
           {{>creator}}
           <div id="graph" class="d-none"></div>
@@ -88,14 +88,14 @@
           <button class='groundings btn btn-sm collapse' data-toggle="modal" data-target="#add_grounding">
             <span data-toggle="tooltip" data-placement="top" title="{{i18n.i_add_groundings}}">
               <svg class="bi" width="24" height="24" fill="currentColor">
-                <use xlink:href="{{>relpath}}style/grounding.svg#add"/>
+                <use xlink:href="../style/grounding.svg#add"/>
               </svg>
             </span>
           </button>
           <button class='groundings btn btn-sm collapse d-none' data-toggle="modal" data-target="#remove_grounding" id="remove_grounding_btn">
             <span data-toggle="tooltip" data-placement="top" title="{{i18n.i_remove_grounding}}">
               <svg class="bi" width="24" height="24" fill="currentColor">
-                <use xlink:href="{{>relpath}}style/grounding.svg#remove"/>
+                <use xlink:href="../style/grounding.svg#remove"/>
               </svg>
             </span>
           </button>
@@ -124,7 +124,7 @@
     <div id="show-leaves" class="d-none d-sm-block d-lg-block invisible">
       <div title="{{i18n.i_leaves}}" class="reverse">{{i18n.i_leaves}}
         <svg class="bi" width="16" height="16" fill="currentColor">
-          <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#chevron-down"/>
+          <use xlink:href="../style/bootstrap-icons.svg#chevron-down"/>
         </svg>
       </div>
     </div>
@@ -160,10 +160,10 @@
       </div>
     </div>
   {{>script}}
-  <script src="../../script/vis.min.js"></script>
-  <script src="../../script/viz.js"></script>
-  <script src="../../script/full.render.js"></script>
-  <script src="{{>relpath}}script/grounding.js"></script>
+  <script src="../script/vis.min.js"></script>
+  <script src="../script/viz.js"></script>
+  <script src="../script/full.render.js"></script>
+  <script src="../script/grounding.js"></script>
   <script>
   let connected_nodes = "{{connected_nodes}}".split(','),
       articulations = [],
@@ -276,9 +276,9 @@
     var network = new vis.Network(container, data, options);
     network.on('click', function (selected) {
       if (typeof selected.nodes[0] === "undefined" && selected.edges[0].length == 32) {
-        self.location = "../../diagram/{{diary}}/"+selected.edges[0];
+        self.location = "../diagram/"+selected.edges[0];
       } else if (selected.nodes[0].length == 32) {
-        self.location = "../../memo/{{diary}}/"+selected.nodes[0];
+        self.location = "../memo/"+selected.nodes[0];
       } else {}
     });
   });
@@ -361,7 +361,7 @@
     };
     $.ajax({
       type: "PUT",
-      url: "../../adapt_graph/{{_id}}",
+      url: "../adapt_graph/{{_id}}",
       contentType: "application/json",
       data: JSON.stringify(data)
     }).done(function () {

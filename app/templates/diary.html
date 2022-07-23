@@ -12,13 +12,13 @@
       <li class="form-inline justify-content-between">
         <a class="navbar-brand btn" id="diaries" data-toggle="tooltip" data-placement="bottom" title="{{i18n.i_diaries}}">
           <svg class="bi" width="24" height="24" fill="currentColor">
-            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#journals"/>
+            <use xlink:href="../style/bootstrap-icons.svg#journals"/>
           </svg>
         </a>
           <div class="dropdown">
             <a class="btn dropdown-toggle" title="{{i18n.i_sort}}" id="sort" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <svg class="bi" width="24" height="24" fill="currentColor">
-                <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#sort-down"/>
+                <use xlink:href="../style/bootstrap-icons.svg#sort-down"/>
               </svg>
             </a>
             <div class="dropdown-menu" aria-labelledby="sort">
@@ -28,19 +28,19 @@
               <a class="dropdown-item" href="#" value='type'>{{i18n.i_type}}</a>
             </div>
           </div>
-          <a class="d-none d-sm-block btn" href="../../export/{{diary}}/" data-toggle="tooltip" data-placement="bottom" title="{{i18n.i_to-export}}">
+          <a class="d-none d-sm-block btn" href="../export/{{diary}}" data-toggle="tooltip" data-placement="bottom" title="{{i18n.i_to-export}}">
             <svg class="bi" width="24" height="24" fill="currentColor">
-              <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#download"/>
+              <use xlink:href="../style/bootstrap-icons.svg#download"/>
             </svg>
           </a>
           <a class="d-none d-sm-block btn" id="drawTimeline" data-toggle="tooltip" data-placement="bottom" title="{{i18n.i_timeline}}">
             <svg class="bi" width="24" height="24" fill="currentColor">
-              <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#bar-chart-steps"/>
+              <use xlink:href="../style/bootstrap-icons.svg#bar-chart-steps"/>
             </svg>
           </a>
           <a class="{{^logged}}d-none d-sm-block{{/logged}} btn hidden" id="patterns" data-toggle="tooltip" data-placement="bottom" title="{{i18n.i_patterns}}">
             <svg class="bi" width="24" height="24" fill="currentColor">
-              <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#bookmarks-fill"/>
+              <use xlink:href="../style/bootstrap-icons.svg#bookmarks-fill"/>
             </svg>
           </a>
         </li>
@@ -48,7 +48,7 @@
         <li class="form-inline justify-content-between">
           <button id="show-activity" class="btn" title="{{i18n.i_activity}}">
             <svg class="bi" width="24" height="24" fill="currentColor">
-              <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#clock-history"/>
+              <use xlink:href="../style/bootstrap-icons.svg#clock-history"/>
             </svg>
           </button>
           {{>log}}
@@ -77,46 +77,46 @@
       <div role="group" class="form-check-inline">
         <button class="btn navbar-btn btn-sm" id="show_delete" type="button" data-toggle="tooltip" data-placement="top" title="{{i18n.i_delete}}...">
           <svg class="bi" width="24" height="24" fill="currentColor">
-            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#trash"/>
+            <use xlink:href="../style/bootstrap-icons.svg#trash"/>
           </svg>
         </button>
         <div class="custom-control custom-switch hidden"><input id="toggle" type="checkbox" class="custom-control-input"></input><label class="navbar-text custom-control-label" for="toggle">{{i18n.i_select}}</label></div>
         <button class="btn navbar-btn btn-sm ml-1 hidden" id="delete" type="button" data-toggle="tooltip" data-placement="top" title="{{i18n.i_delete}}">
           <svg class="bi" width="24" height="24" fill="currentColor">
-            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#trash"/>
+            <use xlink:href="../style/bootstrap-icons.svg#trash"/>
           </svg>
         </button>
         <button class="btn navbar-btn btn-sm mr-1 hidden" id="cancel" type="button" data-toggle="tooltip" data-placement="top" title="{{i18n.i_cancel}}">
           <svg class="bi" width="24" height="24" fill="currentColor">
-            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#x-lg"/>
+            <use xlink:href="../style/bootstrap-icons.svg#x-lg"/>
           </svg>
         </button>
         <button class="btn navbar-btn btn-sm ml-1 hidden" type="button" id="renamed" data-toggle="tooltip" data-placement="top" title="{{i18n.i_save}}">
           <svg class="bi" width="24" height="24" fill="currentColor">
-            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#check-lg"/>
+            <use xlink:href="../style/bootstrap-icons.svg#check-lg"/>
           </svg>
         </button>
         <button class="btn navbar-btn btn-sm ml-1 hidden" id="reload" type="button" data-toggle="tooltip" data-placement="top" title="{{i18n.i_cancel}}">
           <svg class="bi" width="24" height="24" fill="currentColor">
-            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#x-lg"/>
+            <use xlink:href="../style/bootstrap-icons.svg#x-lg"/>
           </svg>
         </button>
         <button class="btn navbar-btn btn-sm ml-1 more" type="button" data-toggle="tooltip" data-placement="top" title="{{i18n.i_show-more}}">
           <svg class="bi" width="24" height="24" fill="currentColor">
-            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#arrow-down-circle"/>
+            <use xlink:href="../style/bootstrap-icons.svg#arrow-down-circle"/>
           </svg>
         </button>
       </div>
       <a class='navbar-text' href="https://github.com/Hypertopic/Cassandre/wiki">
         <svg class="bi" width="24" height="24" fill="currentColor">
-          <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#info-circle"/>
+          <use xlink:href="../style/bootstrap-icons.svg#info-circle"/>
         </svg>
       </a>
     </nav>
     {{^logged_fullname}}{{>storing_fullname_dialog}}{{/logged_fullname}}
   {{>script}}
-  {{#list}}<script src="../../script/showdown.min.js"></script>{{/list}}
-  {{^list}}<script src="../../script/vis.min.js"></script>{{/list}}
+  {{#list}}<script src="../script/showdown.min.js"></script>{{/list}}
+  {{^list}}<script src="../script/vis.min.js"></script>{{/list}}
   <script>
   const activity = {{{activity}}},
         diary_id = '{{diary}}',
@@ -147,7 +147,7 @@
   if (["date","update"].indexOf("{{by}}") > -1) horizon = '1970';
   $(document).ready(function() {
     $.ajax({
-      url: "../../{{diary}}",
+      url: "../{{diary}}",
       type: "GET",
       dataType: "json"
     }).done(function(d){
@@ -192,12 +192,12 @@
         sort_by ='filter';
       break;
     }
-    $('#sort svg use').attr('xlink:href','{{>relpath}}style/bootstrap-icons.svg#'+sort_by);
+    $('#sort svg use').attr('xlink:href','../style/bootstrap-icons.svg#'+sort_by);
     resetUI();
     {{#list}}
     var pendingtasks = function() {
       return $.ajax({
-        url: "../../tasklist/{{diary}}",
+        url: "../tasklist/{{diary}}",
         type: "GET",
         async: false,
         dataType: "json"
@@ -205,7 +205,7 @@
     }
     var uncheckedcomments = function() {
       return $.ajax({
-        url: "../../comments/{{diary}}",
+        url: "../comments/{{diary}}",
         type: "GET",
         async: false,
         dataType: "json"
@@ -218,7 +218,7 @@
     if (number > 0) $('#tasklist-alert').removeClass("hidden");
     {{/list}}
     $.ajax({
-      url: "../../kwic/{{diary}}",
+      url: "../kwic/{{diary}}",
       type: "GET",
       dataType: "json"
     }).done(function(kwic){
@@ -229,13 +229,13 @@
 
   $('#header')
     .on('click', '#diaries', function() {
-      self.location = '..';
+      self.location = '.';
     })
     .on('click', '#drawTimeline', function() {
-      self.location = '../../network/{{diary}}';
+      self.location = '../network/{{diary}}';
     })
     .on('click', '#patterns', function() {
-      self.location = '../../kwic/{{diary}}';
+      self.location = '../kwic/{{diary}}';
     });
 
   $('#footer')
@@ -265,7 +265,7 @@
         var memo = $(this).closest(".memo");
         $.ajax({
           type: "DELETE",
-          url: "../../" + $(this).attr("id") + "?rev=" + $(this).attr("name"),
+          url: "../" + $(this).attr("id") + "?rev=" + $(this).attr("name"),
           success: function() {
             countdown--;
             if (countdown<1) {
@@ -286,11 +286,11 @@
   });
 
   $('#tasklist-alert').on('click', function() {
-    self.location = "../../tasklist/{{diary}}/";
+    self.location = "../tasklist/{{diary}}";
   });
 
   $('#show-activity').on('click', function() {
-    self.location = "../../activity/{{diary}}/";
+    self.location = "../activity/{{diary}}";
   });
 
   function resetUI() {
@@ -338,7 +338,7 @@
         var li = '<li class="'+m.type+'" name="'+sort_key+'">' + checkbox
           +' <span id="'+m.id+'" name="'+m.update+'" class="'+date+' moment '+unread+'"></span>&nbsp;– '
           +'<span class="mytooltip">'
-          +'<a href="../../'+m.path+'/'+m.diary+'/'+m.id+'" class="'+unread+'">'+m.name+'</a>';
+          +'<a href="../'+m.path+'/'+m.id+'" class="'+unread+'">'+m.name+'</a>';
         if (typeof m.preview !== 'undefined' && m.preview.trim().length > 0)
           li += '<span class="preview text-{{>contrastcolor}} bg-{{>menucolor}}">'+m.preview+'</span>';
         li += '</span></li>';
@@ -363,7 +363,7 @@
     if (ready == true) return new Promise((resolve, reject) => {
       ready = false; 
       $.ajax({
-        url: "../../memos/{{diary}}/{{by}}/"+coord,
+        url: "../memos/{{diary}}/{{by}}/"+coord,
         type: "GET",
         dataType: "json",
         success: function(data) {

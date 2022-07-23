@@ -53,7 +53,7 @@ $('.comment').click(function(event) {
 });
 $('.comment_check').click(function() {
   $.ajax({
-    url: '../../checking_comment/'+$(this).closest('.comment').attr('id'),
+    url: '../checking_comment/'+$(this).closest('.comment').attr('id'),
     type: 'PUT',
     contentType: 'application/json',
     data: logged_fullname
@@ -78,7 +78,7 @@ function show_comment(id, user, date, text, checked) {
 function update_comment(id) {
   refresh = true;
   $.ajax({
-    url: '../../update_comment_content/'+id,
+    url: '../update_comment_content/'+id,
     type: 'PUT',
     contentType: 'application/json',
     data: $('#'+id+'>textarea').val().trim()
@@ -95,7 +95,7 @@ function comment() {
   };
   $.ajax({
     type: 'POST',
-    url: '../../',
+    url: '../',
     contentType: 'application/json',
     data: JSON.stringify(data)
   }).done(reload)

@@ -10,7 +10,6 @@ function(head, req) {
       data = {
     activity: [],
     authorized: req.userCtx.name==req.query.startkey[0] || req.userCtx.roles.indexOf("_admin")>-1,
-    flat: true,
     i18n: localized(),
     id: req.query.startkey[0],
     list: true,

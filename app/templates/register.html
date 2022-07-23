@@ -6,7 +6,7 @@
   </head>
   <body>
     <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
-      <a class="navbar-brand btn text-{{>contrastcolor}}" title="{{i18n.i_diaries}}" href="/memo/">{{i18n.i_diaries}}</a>
+      <a class="navbar-brand btn text-{{>contrastcolor}}" title="{{i18n.i_diaries}}" href="/diary/">{{i18n.i_diaries}}</a>
     </nav>
     <div id="container" class='container-fluid h-100'>
       <main class="col pb-5" id="content">
@@ -15,7 +15,7 @@
         <p class="d-none">{{i18n.i_register_prompt.academic_staff_prompt}}</p>
         <div id="newaccount" class="alert shadow py-4" style="cursor: pointer">{{i18n.i_register_prompt.not_academic_staff}}</div>
         <div class="alert d-none" id="message" role="alert">{{i18n.i_register_prompt.submit_button_in_footer}}</div>
-        <a id="diaries" class="d-none" title="{{i18n.i_diaries}}" href="/memo/">{{i18n.i_diaries}}</a>
+        <a id="diaries" class="d-none" title="{{i18n.i_diaries}}" href="/diary/">{{i18n.i_diaries}}</a>
         <form class="d-none row g-3 align-items-center">
           <div class="col-md-6 mb-3">
             <label for="fullname">{{i18n.i_fullname}}</label>
@@ -45,7 +45,7 @@
         <div><button class="btn navbar-btn btn-outline-{{>contrastcolor}} btn-sm d-none" id="register">{{i18n.i_register}}</button></div>
         <a class='navbar-text' href="https://github.com/Hypertopic/Cassandre/wiki">
           <svg class="bi" width="24" height="24" fill="currentColor">
-            <use xlink:href="{{>relpath}}style/bootstrap-icons.svg#info-circle"/>
+            <use xlink:href="../style/bootstrap-icons.svg#info-circle"/>
           </svg>
         </a>
       </nav>
@@ -53,7 +53,6 @@
   {{>script}}
   <script>
   var email = fullname = sponsor = "";
-  const relpath = '{{>relpath}}';
   $(document).ready(function() {
     $.ajax({
       type: 'DELETE',
@@ -61,7 +60,7 @@
     }).done(function() {
       $.ajax({
         type: 'GET',
-        url: relpath+'config',
+        url: '../config',
         dataType: 'json'
       }).done(function(data){
         sponsor = data.sponsors.local;
@@ -138,7 +137,7 @@
 
   function login() {
     $.ajax({
-      url: '../../_session',
+      url: '../_session',
       type: 'POST',
       contentType: 'application/x-www-form-urlencoded',
       data: "name=" + email + "&password=" + $("#password").val()

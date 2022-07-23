@@ -270,7 +270,7 @@ function poller(what, since) {
   $.ajax({
     url: '../changes/'+what+'/'+this_id+'/'+since
   }).done(function(data){
-    if (data.results.length && refresh == true) {
+    if (data && data.results.length && refresh == true) {
       reload();
     } else {
       $.ajax({

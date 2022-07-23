@@ -78,9 +78,8 @@ $('#signin').find('input').first().on('input', function() {
 $('#signout').on('click', function() {
   $.ajax({
     type: 'DELETE',
-    url: '/_session',
-    success: reload
-  });
+    url: '/_session'
+  }).done(reload)
 });
 $('#storing_fullname').on('click', function() {
   toUserDoc();
@@ -99,6 +98,13 @@ function toUserDoc() {
     if (fullname.length > 0) 
       createUserDoc(user, data.sponsors.ldap, reload, updateUserDoc);
   });
+}
+
+function updateTooltip(id, content) {
+  $('#'+id)
+    .tooltip('dispose')
+    .attr('title', content)
+    .tooltip({ trigger: 'hover', offset: "0, 8" });
 }
 
 function createUserDoc(user, sponsor, success, error) {

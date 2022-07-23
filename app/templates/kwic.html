@@ -17,9 +17,11 @@
             <use xlink:href="../../style/bootstrap-icons.svg#book"/>
           </svg>
         </a></li>
-        <li class="dropdown d-none">
-          <a class="nav-link dropdown-toggle" href="#" id="filter" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          {{i18n.i_filter}}
+        <li class="dropdown hidden">
+          <a class="nav-link dropdown-toggle" href="#" id="filter" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{i18n.i_filter}}">
+            <svg class="bi" width="24" height="24" fill="currentColor">
+              <use xlink:href="../../style/bootstrap-icons.svg#funnel"/>
+            </svg>
           </a>
           <div class="dropdown-menu" aria-labelledby="filter">
             <a class="dropdown-item disabled" id="show-all">{{i18n.i_all-memos}}</a>
@@ -77,16 +79,12 @@
       url: "../../{{diary}}",
       type: "GET",
       dataType: "json",
-      success: function(d) {
-        $('#diary')
-          .tooltip('dispose')
-          .attr('title',d.diary_name)
-          .tooltip({ trigger: 'hover', offset: "0, 8" });
-      }
+    }).done(function(d) {
+      updateTooltip('diary', d.diary_name)
     });
     stickToHeader();
-    if ($(".transcript").length > 0 && $(".occurrence").length > $(".transcript").length)
-      $("#filter").parent().removeClass('d-none');
+    if ($(".interview").length > 0 && $(".occurrence").length > $(".interview").length)
+      $("#filter").parent('.dropdown').removeClass('hidden');
   });
 
   $('#diary').on('click', function(){

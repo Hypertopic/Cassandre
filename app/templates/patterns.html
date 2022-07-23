@@ -72,13 +72,9 @@
     $.ajax({
       url: "../{{diary}}",
       type: "GET",
-      dataType: "json",
-      success: function(d) {
-        $('#diary')
-          .tooltip('dispose')
-          .attr('title',d.diary_name)
-          .tooltip({ trigger: 'hover', offset: "0, 8" });
-      }
+      dataType: "json"
+    }).done(function(d) {
+      updateTooltip('diary', d.diary_name)
     });
     stickToHeader();
     resetUI();
@@ -139,15 +135,14 @@
     });
 
   $('#kwic').on('keypress', function(key) {
-    var diaryUrl = encodeURIComponent("{{{diary}}}");
     if (key.which == 13) {
-      self.location = '../kwic/' +diaryUrl+ '/' + $('#kwic').val().toLowerCase();
+      self.location = '../kwic/'+diary_id+'/' + $('#kwic').val().toLowerCase();
     }
   });
 
   $('.search').on('click', function() {
     if ($('#kwic').val().length > 0) {
-      self.location = '../kwic/{{diary}}/' + $('#kwic').val().toLowerCase();
+      self.location = '../kwic/'+diary_id+'/' + $('#kwic').val().toLowerCase();
     }
   });
 

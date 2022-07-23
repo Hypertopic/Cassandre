@@ -286,44 +286,43 @@ var getSatellites = function(logged, toDoAfter){
   $.ajax({
     url:  '../satellites/'+diary_id+'/'+ this_id, 
     type: "GET",
-    dataType: "json",
-    success: function(data) {
-      for (var c of data.comments) {
-        show_comment(c.id, c.user, c.date, c.text, c.checked);
-      }
-      if (logged.length > 0) {
-        if (data.logged_fullname) {
-          logged_fullname = data.logged_fullname;
-          if (!fullnames[logged]) fullnames[logged] = logged_fullname;
-        } else {
-          if (!fullnames[logged]) getFullname(logged)
-          logged_fullname = fullnames[logged];
-        }
-        $('#signout').attr('title', sign_out+'<br/>'+logged_fullname);
-      }
-      if (data.diary_name) {
-        $('#diary').attr('title', data.diary_name)
-        $('title').prepend(data.diary_name);
-      }
-      for (var [i, g] of data.groundings.entries()) {
-        show_grounding(i, g.id, g.type, g.name, g.href, g.preview);
-      }
-      for (var l of data.leaves) $('#leaves').append('<li class="d-inline d-sm-block '+l.type+'"><a href="'+l.href+'">'+l.name+'</a></li>')
-      var modify_rights_details = "<p><strong>"+editable_by+"</strong><br/>";
-      for (var c of data.contributors_fullnames) {
-        modify_rights_details += c.fullname+'<br/>';
-        if (!fullnames[c.id]) fullnames[c.id] = c.fullname;
-      }
-      if(data.contributors_fullnames.length == 0) modify_rights_details += everyone;
-      modify_rights_details += "</p><p><strong>"+readable_by+"</strong><br/>";
-      for (var r of data.readers_fullnames) {
-        modify_rights_details += r.fullname+'<br/>';
-        if (!fullnames[r.id]) fullnames[r.id] = r.fullname;
-      }
-      if(data.readers_fullnames.length == 0) modify_rights_details += everyone;
-      var t = $('#modify_rights').attr('title') + modify_rights_details+'</p>'
-      $('#modify_rights').attr('title', t)
+    dataType: "json"
+  }).done(function(data){
+    for (var c of data.comments) {
+      show_comment(c.id, c.user, c.date, c.text, c.checked);
     }
+    if (logged.length > 0) {
+      if (data.logged_fullname) {
+        logged_fullname = data.logged_fullname;
+        if (!fullnames[logged]) fullnames[logged] = logged_fullname;
+      } else {
+        if (!fullnames[logged]) getFullname(logged)
+        logged_fullname = fullnames[logged];
+      }
+      $('#signout').attr('title', sign_out+'<br/>'+logged_fullname);
+    }
+    if (data.diary_name) {
+      $('#diary').attr('title', data.diary_name)
+      $('title').prepend(data.diary_name);
+    }
+    for (var [i, g] of data.groundings.entries()) {
+      show_grounding(i, g.id, g.type, g.name, g.href, g.preview);
+    }
+    for (var l of data.leaves) $('#leaves').append('<li class="d-inline d-sm-block '+l.type+'"><a href="'+l.href+'">'+l.name+'</a></li>')
+    var modify_rights_details = "<p><strong>"+editable_by+"</strong><br/>";
+    for (var c of data.contributors_fullnames) {
+      modify_rights_details += c.fullname+'<br/>';
+      if (!fullnames[c.id]) fullnames[c.id] = c.fullname;
+    }
+    if(data.contributors_fullnames.length == 0) modify_rights_details += everyone;
+    modify_rights_details += "</p><p><strong>"+readable_by+"</strong><br/>";
+    for (var r of data.readers_fullnames) {
+      modify_rights_details += r.fullname+'<br/>';
+      if (!fullnames[r.id]) fullnames[r.id] = r.fullname;
+    }
+    if(data.readers_fullnames.length == 0) modify_rights_details += everyone;
+    var t = $('#modify_rights').attr('title') + modify_rights_details+'</p>'
+    $('#modify_rights').attr('title', t)
   }).done(function(){
     $('.username').each(function() {
       var f = $(this).attr('class').split(' ').pop()

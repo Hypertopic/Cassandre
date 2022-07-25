@@ -107,10 +107,8 @@ function adapt(o) {
   .fail(error_alert)
 }
 
-function draw_diagram(link, negative_case) {
+function draw_diagram(content1, content2, link, negative_case) {
   var shape1 = shape2 = articulated = negative = '';
-      content1 = $('#groundings>li').first().find('a').html(),
-      content2 = $('#groundings>li').last().find('a').html();
   switch (link) {
     case 'pp':
     case 'ipp':

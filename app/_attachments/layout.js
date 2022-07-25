@@ -26,8 +26,8 @@ $('#navbarSupportedContent').on('shown.bs.collapse', function () {
 });
 var reload = function() {
   if (refresh) {
-    if (typeof (this_id) !== 'undefined') self.location = this_id;
-    if (typeof (anchor) !== 'undefined' && anchor > 0) self.location += '#'+anchor;
+    if (typeof (this_id) !== 'undefined') self.location = this_id
+    if (typeof (anchor) !== 'undefined' && anchor > 0) self.location = this_id+'#'+anchor;
     location.reload()
   }
 };

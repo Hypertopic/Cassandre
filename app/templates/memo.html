@@ -282,23 +282,26 @@
       case ('field'):
         $("h1>img").attr("title", "{{i18n.i_memo.field}}".replace('&#39;',"'"));
         $("#name").attr("placeHolder", "{{i18n.i_name.field}}");
-        $('#add').addClass('coding');
-        $("#add").attr("title", "{{i18n.i_create.coding}}");
+        $('#add')
+          .addClass('coding')
+          .attr("title", "{{i18n.i_create.coding}}");
         $("#leave-name").attr("placeHolder", "{{i18n.i_name.coding}}");
         break;
       case ('transcript'):
         $("h1>img").attr("title", "{{i18n.i_memo.transcript}}".replace('&#39;',"'"));
         $("#name").attr("placeHolder", "{{{i18n.i_name.transcript}}}");
-        $('#add').addClass('coding');
-        $("#add").attr("title", "{{i18n.i_create.coding}}");
+        $('#add')
+          .addClass('coding')
+          .attr("title", "{{i18n.i_create.coding}}");
         $("#leave-name").attr("placeHolder", "{{i18n.i_name.coding}}");
         $('.writing').removeClass('writing').addClass('words');
         break;
       case ('interview'):
         $("h1>img").attr("title", "{{i18n.i_memo.transcript}}".replace('&#39;',"'"));
         $("#name").attr("placeHolder", "{{{i18n.i_name.transcript}}}");
-        $('#add').addClass('coding');
-        $("#add").attr("title", "{{i18n.i_create.coding}}");
+        $('#add')
+           .addClass('coding')
+          .attr("title", "{{i18n.i_create.coding}}");
         $("#leave-name").attr("placeHolder", "{{i18n.i_name.coding}}");
         $('#lexical').removeClass('hidden');
         $('.post').children('font').wrapAll('<p></p>');
@@ -306,13 +309,15 @@
       case ('coding'):
         $("h1>img").attr("title", "{{i18n.i_memo.coding}}");
         $("#name").attr("placeHolder", "{{i18n.i_name.coding}}");
-        $('#add').addClass('theoretical');
-        $("#add").attr("title", "{{i18n.i_create.theoretical}}");
+        $('#add')
+          .addClass('theoretical')
+          .attr("title", "{{i18n.i_create.theoretical}}");
         $("#leave-name").attr("placeHolder", "{{i18n.i_name.theoretical}}");
         if ($('#name').val().length > 0) {
-          $('#create').removeClass('hidden');
-          $('#create').addClass('diagram');
-          $("#create").attr("title", "{{i18n.i_create.diagram}}");
+          $('#create')
+            .removeClass('hidden')
+            .addClass('diagram')
+            .attr("title", "{{i18n.i_create.diagram}}");
           $('#create-table').removeClass('hidden');
         }
         $('#add').parent().append($('#create'));
@@ -321,21 +326,25 @@
       case ('theoretical'):
         $("h1>img").attr("title", "{{i18n.i_memo.theoretical}}");
         $("#name").attr("placeHolder", "{{i18n.i_name.theoretical}}");
-        $('#add').addClass('operational');
-        $("#add").attr("title", "{{i18n.i_create.operational}}");
+        $('#add')
+          .addClass('operational')
+          .attr("title", "{{i18n.i_create.operational}}");
         $("#leave-name").attr("placeHolder", "{{i18n.i_name.operational}}");
         break;
       case ('operational'):
         $("h1>img").attr("title", "{{i18n.i_memo.operational}}");
         $("#name").attr("placeHolder", "{{i18n.i_name.operational}}");
-        $('#add').addClass('field');
-        $("#add").attr("title", "{{i18n.i_create.field}}".replace('&#39;',"'"));
-        $('#create').addClass('interview');
-        $('#create').attr("title", "{{i18n.i_create.transcript}}".replace('&#39;',"'"));
-        $('#create').removeClass('hidden');
-        $("#leave-name").attr("placeHolder", "{{i18n.i_name.field}}");
-        $('#leave-name').prop("disabled", true);
-        $('#add').parent().append($('#create'));
+        $('#create')
+          .addClass('interview')
+          .attr("title", "{{i18n.i_create.transcript}}".replace('&#39;',"'"))
+          .removeClass('hidden');
+        $("#leave-name")
+          .attr("placeHolder", "{{i18n.i_name.field}}")
+          .prop("disabled", true);
+        $('#add')
+          .addClass('field')
+          .attr("title", "{{i18n.i_create.field}}".replace('&#39;',"'"))
+          .parent().append($('#create'));
         break;
       case ('diagram'):
         self.location = '../diagram/'+diary_id+'/'+this_id;
@@ -349,8 +358,7 @@
       case ('storyline'):
         $("h1>img").attr("title", "{{i18n.i_memo.storyline}}");
         $("#name").attr("placeHolder", "{{i18n.i_name.storyline}}");
-        $('#add').addClass('storyline');
-        $("#add").attr("title", "{{i18n.i_create.storyline}}");
+        $('#add').addClass('storyline').attr("title", "{{i18n.i_create.storyline}}");
         $("#leave-name").attr("placeHolder", "{{i18n.i_name.storyline}}");
         break;
     }

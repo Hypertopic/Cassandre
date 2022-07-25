@@ -99,19 +99,25 @@ $('#leave-name').on('keypress', function(key) {
   }
 });
 $('#link_leaf').on('click', function() {
+  add_leaf(this_id, leaf_id, $('#kwic').val(), anchor)
+});
+function add_leaf(grounding, leaf, highlight, anchor) {
   $.ajax({
-    url: "../adapt_memo/"+leaf_id,
+    url: "../adapt_memo/"+leaf,
     type: "PUT",
     contentType: "application/json",
     data: JSON.stringify({
      'action': 'add_grounding',
-     'highlight': $('#kwic').val(),
+     'highlight': highlight,
      'anchor': anchor,
-     'value': this_id
+     'value': grounding
     })
   }).done(reload)
   .fail(error_alert)
-});
+}
+$('#existing_memo').on('hidden.bs.modal', function () {
+  $('.spinner').addClass('d-none');
+})
 function create(type, name, highlight, anchor) {
   $('.spinner').removeClass('d-none');
   name = name.replace(/\t/g, ' ');
@@ -148,8 +154,12 @@ function create(type, name, highlight, anchor) {
         } else {
           leaf_type = existing_memos.rows[i].value.type,
           leaf_id = existing_memos.rows[i].value.id;
-          if (['diagram','graph','table'].indexOf(leaf_type) > -1) $('.linkLeaf').addClass('d-none');
-          $('#existing_memo').modal('show');
+          if (['diagram','graph','table'].indexOf(leaf_type) > -1) {
+            $('.linkLeaf').addClass('d-none');
+            $('#existing_memo').modal('show');
+          } else {
+            add_leaf(this_id, leaf_id, $('#kwic').val(), anchor)
+          }
         }
       } else {
         if (anchor > 0) ground = [{'_id': this_id, 'preview':[{'text': highlight, 'anchor': anchor}]}];

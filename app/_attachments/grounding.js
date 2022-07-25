@@ -98,6 +98,10 @@ $(".groundings").on('hide.bs.collapse', function () {
   $("#groundings .close").tooltip('hide');
 });
 
+$('#add').on('show.bs.tooltip', function () {
+  $('.ui-autocomplete').hide();
+})
+
 function show_grounding(i, id, type, name, href, preview) {
   $('#groundings .spinner').addClass('d-none');
   $('#groundings li').eq(i)

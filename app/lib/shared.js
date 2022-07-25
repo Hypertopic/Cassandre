@@ -290,6 +290,7 @@ var shared = {
         name_situation = '{{i18n.i_name.situation}}',\
         name_statement = '{{i18n.i_name.statement}}',\
         on_a_date = '{{i18n.i_on-a-date}}',\
+        reuse = '{{i18n.i_reuse}}',\
         readable_by = '{{i18n.i_readable-by}}',\
         relpath = '../',\
         sign_out = '{{i18n.i_sign-out}}',\

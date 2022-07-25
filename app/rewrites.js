@@ -50,6 +50,13 @@ function(req2) {
         "endkey":   '["'+diary+'", '+logged+', "'+type+'", {}]'
       };
     break;
+    case 'codes':
+      reply.path = "_view/memo_type";
+      reply.query = {
+        "startkey": '["'+path[1]+'", '+logged+', "coding", "'+path[2]+'"]',
+        "limit": '3'
+      };
+    break;
     case 'satellites':
       var diary = path[1],
           memo = path[2];

@@ -2,6 +2,9 @@ function (doc, req) {
   var obj = JSON.parse(req.body);
   switch(obj.action) {
     case ('add_grounding'):
+      var i = doc.groundings.map(function(g){
+        if (g._id) {return g._id} else return g;
+      }).indexOf(obj.value);
       if (!doc.groundings) doc.groundings = [];
       if (doc.type == 'coding' && obj.highlight) {
         var highlight = obj.highlight,
@@ -15,9 +18,6 @@ function (doc, req) {
             };
         if (obj.anchor > 0) highlight = '['+highlight+']('+obj.value+'#'+obj.anchor+')';
         doc.body = doc.body + '\n \n>'+highlight+' \n \n';
-        var i = doc.groundings.map(function(g){
-          if (g._id) {return g._id} else return g;
-        }).indexOf(obj.value);
         if (i > -1) {
           if (doc.groundings[i].preview) {
             doc.groundings[i].preview.push(preview);
@@ -28,7 +28,7 @@ function (doc, req) {
           doc.groundings.push(grounding);
         }
       } else {
-        if (doc.groundings.indexOf(obj.value) == -1) doc.groundings.push(obj.value);
+        if (i == -1) doc.groundings.push(obj.value);
       }
     break;
     case ('remove_grounding'):

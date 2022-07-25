@@ -284,6 +284,12 @@ a.dropdown-item, .create-leave, a.dropdown-toggle,
   color: transparent;
 }
 
+.ui-autocomplete .header {
+  color: white;
+  background-color: black;
+  text-align: center;
+}
+
 .spinner-border, .create-leave:hover {
   color: black !important;
 }

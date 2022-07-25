@@ -35,6 +35,34 @@ $('#add').on('click', function() {
   }
 });
 
+$('#leave-name').on('keypress', function(key) {
+  if (['interview', 'field', 'transcript'].indexOf(this_type) > -1) {
+    $('#leave-name').autocomplete({
+      minLength: 3,
+      appendTo: '#add-leaves',
+      open: function(event, ui) {
+        $('ul.ui-autocomplete').prepend('<li><div class="pl-1 header">'+reuse+'</div></li>');
+        var p = $(event.target).autocomplete("widget").height();
+        $(event.target).autocomplete("widget").css('top', '-'+p+'px');
+      },
+      source: function(request, response) {
+        $.getJSON('../codes/'+diary_id+'/'+request.term, function (data) {
+          response($.map(data.rows, function (value, key) {
+            return {
+              key: value.id,
+              title: value.value.name,
+              value: value.value.name
+            };
+          }));
+        });
+      },
+      select: function (event, ui) {
+        create($('#add').attr('class').split(' ').pop(), ui.item.value, $('#kwic').val(), anchor);
+      }
+    });
+  }
+});
+
 $('#revert').on('click', function() {
   self.location = '../revert/' + this_id;
 });

@@ -463,12 +463,9 @@
       url: '../' + diary_id,
       type: "GET",
       dataType: "json"
-    }).done(function(data){
+    }).done(function(data) {
       if(data.diary_name) {
-        $('#diary')
-          .tooltip('dispose')
-          .attr('title', data.diary_name)
-          .tooltip({ trigger: 'hover', offset: "0, 8" });
+        updateTooltip('diary', data.diary_name)
         $('title').prepend(data.diary_name);
       }
     });

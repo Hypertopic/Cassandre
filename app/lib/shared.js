@@ -329,7 +329,7 @@ var shared = {
   render: "\
     render();\
     {{^statements}}\
-    {{^link}}if (($('#groundings li').length > 1) || ('{{type}}' == 'coding' && $('#groundings li').first().find('.preview').text().indexOf('---') > -1))\
+    {{^link}}if (($('#groundings>li[id]').length > 1) || ('{{type}}' == 'coding' && $('#groundings li').first().find('.preview a').length > 1))\
         $('#remove_grounding_btn').removeClass('d-none');{{/link}}\
     {{#type}}{{#logged}}setTimeout(function() {track('{{_id}}')}, 9000);{{/logged}}{{/type}}\
     {{/statements}}\

@@ -116,10 +116,11 @@ function addOptions(id, name) {
   if (name.length > 45) shortname = name.substr(0,45)+'...';
   if (this_type == "graph") id = JSON.stringify({'id': id})
   if (candidates.indexOf(id) < 0) {
-    $("#remove_grounding").find('select').append($('<option>', {
+    if (id) $("#remove_grounding").find('select').append($('<option>', {
       value: id,
       title: name,
       text: shortname
     }));
+    candidates.push(id)
   }
 }

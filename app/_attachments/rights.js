@@ -63,7 +63,6 @@ $('#unsubscribe').on('click', function() {
     contentType: 'application/json'
   }).done(reload)
 });
-
 $('#modify_rights_dialog').on('show.bs.modal', function () {
   $('#modify_rights').tooltip('hide');
 })

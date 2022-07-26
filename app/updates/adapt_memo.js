@@ -33,13 +33,14 @@ function (doc, req) {
     break;
     case ('remove_grounding'):
       var arg = obj.value;
-      var [id, anchor] = obj.value.split('#');
+      var [id, anchor] = obj.value.split('#'),
+          [anchor, index] = anchor.split('_');
       var i = doc.groundings.map(function(g){
         if (g._id) {return g._id} else return g;
       }).indexOf(id);
       if (arg.indexOf('#') > -1){
-        var j = doc.groundings[i].preview.map(function(p){
-          return p.anchor.toString();
+        var j = doc.groundings[i].preview.map(function(p, i){
+          if (i == index) return p.anchor.toString();
         }).indexOf(anchor);
         if (i > -1 && j > -1) doc.groundings[i].preview.splice(j, 1)
       } else {

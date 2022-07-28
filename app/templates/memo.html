@@ -347,13 +347,13 @@
           .parent().append($('#create'));
         break;
       case ('diagram'):
-        self.location = '../diagram/'+diary_id+'/'+this_id;
+        self.location = '../diagram/'+this_id;
         break;
       case ('table'):
-        self.location = '../table/'+diary_id+'/'+this_id;
+        self.location = '../table/'+this_id;
         break;
       case ('graph'):
-        self.location = '../graph/'+diary_id+'/'+this_id;
+        self.location = '../graph/'+this_id;
         break;
       case ('storyline'):
         $("h1>img").attr("title", "{{i18n.i_memo.storyline}}");

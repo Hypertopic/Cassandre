@@ -7,7 +7,12 @@ function(o, req){
 
   const ALPHA = /[a-zàâçéêèëïîôöüùû0æœ0-9]+|[^a-zàâçéêèëïîôöüùûæœ0-9]+/gi;
   const SPACES = /^ +$/;
-
+  if (o.diary_name && !o.name) {
+    return {
+      "code": 302, 
+      "headers":{ "Location": "../../diary/" + o._id }
+    };
+  }
   var username = req.userCtx.name;
   var type = o.type || 'transcript';
   var editing = o.editing || false;

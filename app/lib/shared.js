@@ -27,8 +27,7 @@ var shared = {
   log: "\
     <ul class='mr-0 ml-auto navbar-nav nav-fill'><li class='form-inline justify-content-between'>\
       {{#diary}}\
-      {{^eager}}{{>rights}}{{/eager}}\
-      {{#eager}}{{>rights_eager}}{{/eager}}\
+      {{>rights}}\
       <button id='search-icon' class='btn' title='{{i18n.i_search}}'>\
         <svg class='bi' width='24' height='24' fill='currentColor'>\
           <use xlink:href='../style/bootstrap-icons.svg#search'/>\
@@ -100,20 +99,10 @@ var shared = {
       {{#type}}{{#authorized}}{{^statements}}\
       <button class='btn hidden {{#public}}{{#logged}}text-dark bg-warning{{/logged}}{{/public}}' id='modify_rights' data-html='true' title='\
         {{#rights}}{{^editing}}<h5>{{i18n.i_modify_rights}}</h5>{{/editing}}{{/rights}}\
-        {{#public}}{{#logged}}<h5 class=\"text-warning\">{{i18n.i_public_memo}}</h5>{{/logged}}{{/public}}'>\
-        <span {{#rights}}{{^editing}}data-toggle='modal' data-target='#modify_rights_dialog'{{/editing}}{{/rights}}>\
-          <svg class='bi' width='24' height='24' fill='currentColor'>\
-            <use xlink:href='../style/bootstrap-icons.svg#{{^public}}key{{/public}}{{#public}}unlock{{/public}}'/>\
-          </svg>\
-        </span>\
-      </button>\
-      {{/statements}}{{/authorized}}{{/type}}",
-  rights_eager:"\
-      {{#type}}{{#authorized}}{{^statements}}\
-      <button class='btn hidden {{#public}}{{#logged}}text-dark bg-warning{{/logged}}{{/public}}' id='modify_rights' data-html='true' title='\
-        {{#rights}}{{^editing}}<h5>{{i18n.i_modify_rights}}</h5>{{/editing}}{{/rights}}\
-        <p><strong>{{i18n.i_editable-by}}</strong><br/>{{#contributors_fullnames}}{{fullname}}<br/>{{/contributors_fullnames}}{{^contributors_fullnames}}{{i18n.i_everyone}}{{/contributors_fullnames}}</p>\
-        <p><strong>{{i18n.i_readable-by}}</strong><br/>{{#readers_fullnames}}{{fullname}}<br/>{{/readers_fullnames}}{{^readers_fullnames}}{{i18n.i_everyone}}{{/readers_fullnames}}\
+        {{#eager}}<p><strong>{{i18n.i_editable-by}}</strong><br/>{{#contributors_fullnames}}{{fullname}}<br/>{{/contributors_fullnames}}\
+        {{^contributors_fullnames}}{{i18n.i_everyone}}{{/contributors_fullnames}}</p>\
+        <p><strong>{{i18n.i_readable-by}}</strong><br/>{{#readers_fullnames}}{{fullname}}<br/>{{/readers_fullnames}}\
+        {{^readers_fullnames}}{{i18n.i_everyone}}{{/readers_fullnames}}{{/eager}}\
         {{#public}}{{#logged}}<h5 class=\"text-warning\">{{i18n.i_public_memo}}</h5>{{/logged}}{{/public}}'>\
         <span {{#rights}}{{^editing}}data-toggle='modal' data-target='#modify_rights_dialog'{{/editing}}{{/rights}}>\
           <svg class='bi' width='24' height='24' fill='currentColor'>\

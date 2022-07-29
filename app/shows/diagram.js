@@ -8,6 +8,7 @@ function(o, req){
   const ALPHA = /[a-zàâçéêèëïîôöüùû0æœ0-9]+|[^a-zàâçéêèëïîôöüùûæœ0-9]+/gi;
   const SPACES = /^ +$/;
 
+  if (!o) return Mustache.to_html(templates.deleted, {i18n: localized()}, shared);
   var contributors = o.contributors || [];
   var readers = o.readers || [];
   var username = req.userCtx.name,
@@ -65,11 +66,7 @@ function(o, req){
       });
     }
   }
-  if (data) {
-    return Mustache.to_html(templates.diagram, data, shared);
-  } else {
-    return Mustache.to_html(templates.deleted, {i18n: localized()}, shared);
-  }
+  return Mustache.to_html(templates.diagram, data, shared);
 }
 
 

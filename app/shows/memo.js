@@ -7,6 +7,7 @@ function(o, req){
 
   const ALPHA = /[a-zàâçéêèëïîôöüùû0æœ0-9]+|[^a-zàâçéêèëïîôöüùûæœ0-9]+/gi;
   const SPACES = /^ +$/;
+  if (!o) return Mustache.to_html(templates.deleted, {i18n: localized()}, shared);
   if (o.diary_name && !o.name) {
     return {
       "code": 302, 
@@ -96,9 +97,5 @@ function(o, req){
     }
   }
   data.groundable = data.editable;
-  if (data._id) {
-    return Mustache.to_html(templates.memo, data, shared);
-  } else {
-    return Mustache.to_html(templates.deleted, {i18n: localized()}, shared);
-  }
+  return Mustache.to_html(templates.memo, data, shared);
 }

@@ -9,12 +9,13 @@ function(o, req){
   const SPACES = /^ +$/;
 
   if (!o) return Mustache.to_html(templates.deleted, {i18n: localized()}, shared);
-  var contributors = o.contributors || [];
-  var readers = o.readers || [];
-  var username = req.userCtx.name,
-      type = o.type || 'transcript',
+  var contributors = o.contributors || [],
       diary = o.diary || o.corpus,
+      first = o.first || 'default',
       i18n = localized(),
+      readers = o.readers || [],
+      type = o.type || 'transcript',
+      username = req.userCtx.name,
       data = {
     i18n: i18n,
     _id: o._id,
@@ -28,6 +29,7 @@ function(o, req){
     date: o.date,
     diary: diary,
     editable: !o.contributors || o.contributors && o.contributors.indexOf(username)>-1 || req.userCtx.roles.indexOf("_admin")>-1,
+    first: first,
     rights: !o.contributors || o.contributors && o.contributors.indexOf(username)>-1
            || (o.history[0].user == username && o.contributors.length == 0 && (o.readers && o.readers.length == 0))
            || (o.readers && o.readers.indexOf(username)>-1)

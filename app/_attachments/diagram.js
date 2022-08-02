@@ -46,6 +46,10 @@ $("#add_negative-case").click(function () {
   $('html, body').scrollTop($(document).height());
 });
 
+$(".dropdown-menu").on('show.bs.dropdown', function () {
+  $(".dropdown-toggle").tooltip('hide');
+});
+
 $("#situation_done").click(function () {
   adapt({situation: $('#situation').find('input').val().trim()});
 });

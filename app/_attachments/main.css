@@ -269,7 +269,7 @@ button.comment {
   padding-bottom: 5px;
 }
 
-a.dropdown-item, .create-leave, a.dropdown-toggle,
+.dropdown-item, .create-leave, a.dropdown-toggle,
 #add, #create, #create-table, #diaries, #diary, #corpus,
 #all-activity, #only-created, #only-modified, #only-commented,
 .nav-link, #show-activity, #tasklist-alert {

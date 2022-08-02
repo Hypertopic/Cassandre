@@ -63,6 +63,7 @@
     "i_collection": "a collection",
     "i_in": "to",
     "i_sort": "Sort",
+    "i_orient": "Orient",
     "i_by": "By",
     "i_show": "Show",
     "i_layout": "Render",
@@ -86,7 +87,7 @@
     "i_tasklist-alert": "Some tasks have to be completed",
     "i_todo": "To do",
     "i_to-be-resumed": "Currently edited memo(s)",
-    "i_to-be-articulated": "To be articulated",
+    "i_to-be-articulated": "To be connected",
     "i_unchecked-comment": "Unchecked comment(s)",
     "i_checked_by": "Checked by",
     "i_unnamed": "Unnamed memo(s)",
@@ -246,12 +247,12 @@
       "in-progress": "Conversion to PDF in progress...",
       "done": "Your PDF is ready"
     },
-    "i_link": "Linking",
+    "i_link": "Connecting",
     "i_link_properties": "two bars varying in the same direction",
     "i_link_dimensions": "two triangles varying in the same direction",
     "i_inverse_link_between_properties": "two bars varying in the same direction",
     "i_inverse_link_between_dimensions": "two triangles varying in the same direction",
-    "i_current-link": "Current link"
+    "i_current-link": "Current connection"
   },
   "fr": {
     "i_qda": "Analyse qualitative de textes",
@@ -315,7 +316,8 @@
     "i_timeline": "Ligne du temps",
     "i_collection": "une collection",
     "i_in": "à",
-    "i_sort":	"Trier",
+    "i_sort": "Trier",
+    "i_orient": "Orienter",
     "i_by":	"Par",
     "i_show": "Visualiser",
     "i_layout": "Forme",

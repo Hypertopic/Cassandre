@@ -66,12 +66,14 @@ function(head, req) {
           if (row.doc.link) {
             var color = 'green';
             if (row.doc.link == 'ipp' || row.doc.link == 'idd' ) color = 'red';
-            data.edges.push({
+            var e = {
               id: row.value._id,
               from: row.doc.groundings[0],
               to: row.doc.groundings[1],
               color: color
-            });
+            }
+            if (row.doc.first) e.first = row.doc.first; 
+            data.edges.push(e);
             data.connected_nodes.push(row.doc.groundings[0],row.doc.groundings[1]);
           }
           if (row.doc.negative && row.doc.negative.trim().length > 0) {

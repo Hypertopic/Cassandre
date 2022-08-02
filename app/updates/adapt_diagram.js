@@ -6,6 +6,9 @@ function (doc, req) {
     default:
       if (doc.groundings.indexOf(o.grounding) == -1 && doc.groundings.length < 2) doc.groundings.push(o.grounding);
     break;
+    case('first'):
+      doc.first = o.first;
+    break;
     case('link'):
       doc.link = o.link;
     break;
@@ -24,7 +27,7 @@ function (doc, req) {
   doc.name = body.name.replace(/\s/g, ' ');
   doc.groundings = doc.groundings.sort();
   if (!doc.history) doc.history = [];
-  if (Object.keys(o)[0] !== 'rename') doc.history.push({
+  if (['rename', 'first', 'link'].indexOf(Object.keys(o)[0]) == -1) doc.history.push({
     "user": req.userCtx.name,
     "date": new Date().toJSON()
   });

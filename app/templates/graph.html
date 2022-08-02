@@ -197,12 +197,21 @@
     {{/nodes}}
     {{#edges}}
       {{^dashes}}
-        edges.push({
+        var o = {
           id: "{{id}}",
           from: "{{from}}",
           to: "{{to}}",
           color: "{{color}}"
-        });
+        };
+        switch("{{first}}") {
+          case "{{from}}":
+            o.arrows = 'to';
+          break;
+          case "{{to}}":
+            o.arrows = 'from';
+          break;
+        }
+        edges.push(o);
       {{/dashes}}
       {{#dashes}}
         var label = wrap("{{label}}");
@@ -227,7 +236,7 @@
     renderPreviews(converter);
     $('#modify_rights').removeClass('hidden');
     {{#editable}}
-    if ($('#groundings').length < 2) inform('info', "{{i18n.i_content.graph}}".replace('@show', "<strong>{{i18n.i_show_groundings}}</strong>").replace('@add', "<strong>{{i18n.i_add_groundings}}</strong>"));
+    if ($('#groundings li').length < 2) inform('info', "{{i18n.i_content.graph}}".replace('@show', "<strong>{{i18n.i_show_groundings}}</strong>").replace('@add', "<strong>{{i18n.i_add_groundings}}</strong>"));
     {{/editable}}
     poller('memo', '{{update_seq}}');
   });
@@ -316,16 +325,25 @@
   function drawGraphViz() {
     destroyGraphViz();
     var viz = new Viz(),
-        graphviz = 'graph "{{name}}" {overlap=false; graph [fontname = "helvetica"]; node [fontname = "helvetica" style="filled" fillcolor="white"]; edge [fontname = "helvetica"];';
+        graphviz = 'digraph "{{name}}" {overlap=false; graph [fontname = "helvetica"]; node [fontname = "helvetica" style="filled" fillcolor="white"]; edge [fontname = "helvetica", dir=none];';
     for (var n of nodes) {
       graphviz += 'node'+n.id + '[label="' + n.label.replace(/['"]/g, '\'').replace(/\n/g, '\\n') + '", shape='+n.shape+']; ';
     }
     for (var e of edges) {
       if (nodes.findIndex(x => x.id === e.to) > -1 && nodes.findIndex(x => x.id === e.from) > -1) {
+        var option = '';
+        if (e.arrows) switch(e.arrows) {
+          case 'to':
+            option = ', dir=forward '
+          break;
+          case 'from':
+            option = ', dir=back '
+          break;
+        }
         if (e.dashes == null) {
-          graphviz += 'node'+e.from + ' -- ' + 'node'+e.to + '[color=' +e.color+ ']; ';
+          graphviz += 'node'+e.from + ' -> ' + 'node'+e.to + '[color=' +e.color+option+ ']; ';
         } else {
-          graphviz += 'node'+e.from + ' -- ' + 'node'+e.to + '[style=dashed,color='+e.color+',label="' +e.label.replace(/['"]/g, '\'').replace(/\n/g, '\\n')+ '"]; ';
+          graphviz += 'node'+e.from + ' -> ' + 'node'+e.to + '[style=dashed,color='+e.color+',label="' +e.label.replace(/['"]/g, '\'').replace(/\n/g, '\\n')+ '"]; ';
         }
       }
     }

@@ -314,6 +314,7 @@ function(req2) {
     case 'modify_rights':
     case 'reader_unsubscribe':
     case 'username':
+    case 'user_in_cohort':
       reply.path = '_update/'+path[0]+'/'+path[1];
     break;
     case 'user':

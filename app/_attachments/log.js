@@ -18,6 +18,7 @@ $('#sign-in').on('click', function() {
   $('#show_delete').addClass('hidden');
   $('#signin').append($('#reload'));
   $('#reload').removeClass('hidden');
+  $('#logged').parent().parent('.nav-fill').removeClass('hidden');
   if ($('#signin').find('input').first().val().length > 0) $('#signin button').removeAttr('disabled');
 });
 $('#search-icon').on('click', function() {

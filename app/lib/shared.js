@@ -111,6 +111,11 @@ var shared = {
         </span>\
       </button>\
       {{/statements}}{{/authorized}}{{/type}}",
+  sponsor_rights:"\
+    <p id='authorization'>\
+      {{i18n.i_readable-by}} <span class='readers'>\
+      {{#readers_fullnames}}{{fullname}} {{/readers_fullnames}}</span>\
+    </p>",
   existing_memo_dialog:"\
     <div id='existing_memo' class='modal fade' role='dialog'>\
       <div class='modal-dialog' role='document'>\

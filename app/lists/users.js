@@ -18,6 +18,9 @@ function(head, req) {
       fullname: r.value.fullname
     });
   }
+  provides("json", function() {
+    send(toJSON(data.users));
+  });
   provides("html", function() {
     return Mustache.to_html(templates.users, data, shared);
   });

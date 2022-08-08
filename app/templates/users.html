@@ -22,14 +22,15 @@
         {{#logged}}
         <h1> {{i18n.i_username}}</h1>
 	<div class="card-columns mb-3 pb-3">
-        <ul>
-        {{#users}}
-          <li>
-          <a href="../user/{{id}}">{{fullname}}</a>
-          <span title="{{i18n.i_integrate}} {{i18n.i_in}} {{i18n.i_collection}}" class="in-collection d-none"><img src="../style/chevron-down.svg" alt="v" /></span>
-          </li>
-        {{/users}}
-        </ul>
+        <ul>{{#users}}
+        <li id="{{id}}"><a href="../user/{{id}}">{{fullname}}</a>
+          <span style="vertical-align: middle" title="{{i18n.i_integrate}} {{i18n.i_in}} {{i18n.i_cohort}}" class="d-inline-block">
+            <svg class="bi to-cohort" width="20" height="20" fill="currentColor">
+              <use xlink:href="../style/bootstrap-icons.svg#box-arrow-in-down-right"/>
+            </svg>
+          </span>
+        </li>
+        {{/users}}</ul>
 	</div>
         {{/logged}}
       </main>
@@ -40,22 +41,110 @@
           </svg>
         </a>
       </nav>
+      <div id="in_cohort" class="modal fade" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">{{i18n.i_integrate}} {{i18n.i_in}} {{i18n.i_cohort}}</div>
+            <div class="modal-body">
+              <p>{{i18n.i_integrate}} <span class="font-italic diary"></span> {{i18n.i_in}}<br/>
+                <input id="target_cohort" class="form-control input-sm" placeholder="{{i18n.i_cohort}}"/>
+              </p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal" title="{{i18n.i_cancel}}">
+                <svg class="bi" width="24" height="24" fill="currentColor">
+                  <use xlink:href="../style/bootstrap-icons.svg#x-lg"/>
+                </svg>
+              </button>
+              <button type="button" class="btn btn-primary" title="{{i18n.i_integrate}}">
+                <svg class="bi" width="24" height="24" fill="currentColor">
+                  <use xlink:href="../style/bootstrap-icons.svg#check-lg"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   {{>script}}
+  <script src="../script/users.js"></script>
   <script>
+  var fullnames = source = [],
+      id = '';
   $(document).ready(function() {
     stickToHeader();
     {{#logged}}
+    $.ajax({
+      url: "../{{logged}}",
+      type: "GET",
+      dataType: "json",
+      success: function(data) {
+        if(data.fullname) {
+          updateTooltip('signout', "{{i18n.i_sign-out}} <br/>"+data.fullname);
+        }
+        for (var o in data.order) {
+          if (typeof data.order[o].cohort !== 'undefined') {
+            let cohort = data.order[o].cohort,
+                users = data.order[o].users;
+            if (document.getElementById(cohort) == null) $("#content").append("<h3 class='collection d-none'>"+cohort+"</h3><div id='"+cohort+"' class='card-columns mb-3 pb-3'><ul></ul></div>");
+            for (var u in users) {
+              if (document.getElementById(users[u]) !== null) {
+                show_user_in_cohort(users[u], cohort)
+                $('#'+cohort).prev().removeClass('d-none');
+              }
+            }
+            if (source.indexOf(cohort) < 0) source.push(cohort);
+          }
+        }
+      }
+    });
     var n = $('#content ul>li').length;
     $('h1').prepend(n);
     if (n > 1) $('h1').append('s');
     if (n == 0) $('h1').text('{{i18n.i_nothing-to-show}}');
     {{/logged}}
+    $('a').each(function(){
+     var name = $(this).text();
+     if (fullnames[name]){
+        fullnames[name] += 1;
+        $(this).parent().addClass('alert-danger');
+      } else {
+        fullnames[name] = 1;
+      }
+    });
   });
 
-  $('#diaries').on('click', function() {
-    self.location = '../diary/';
+  $('#target_cohort').autocomplete({
+    minLength: 1,
+    appendTo: '#in_cohort',
+    select: function (event, ui) {
+      move_user_in_cohort(ui.item.value);
+    },
+    source: source.sort()
   });
+
+  function move_user_in_cohort(cohort) {
+    var origin_cohort = $('li[id="'+id+'"]').parent().parent().attr("id")
+    $.ajax({
+      url: '../user_in_cohort/'+user,
+      type: 'PUT',
+      contentType: 'application/json',
+      data: JSON.stringify({
+        'user': id,
+        'cohort': cohort
+      })
+    }).done(function(){
+      $('#in_cohort').modal('hide');
+      if (document.getElementById(cohort) == null) {
+        $("#content").append("<h3 class='collection'>"+cohort+"</h3><div id='"+cohort+"' class='card-columns mb-3 pb-3'><ul></ul></div>");
+        source.push(cohort);
+      } else {
+        $('#'+cohort).prev('h3').removeClass('d-none');
+      }
+      show_user_in_cohort(id, cohort)
+    });
+  }
+
 
   {{>layoutscript}}
   {{>logscript}}

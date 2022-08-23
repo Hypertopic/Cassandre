@@ -93,11 +93,11 @@
     }).fail(function() {
         $('#storing_fullname_dialog').modal('show');
     }).done(function(data) {
-        if(data.fullname.length == 0) $('#storing_fullname_dialog').modal('show');
-        if(data.fullname) $('#signout')
-          .tooltip('dispose')
-          .attr('title', "{{i18n.i_sign-out}}<br/>"+data.fullname)
-          .tooltip({ offset: "0, 8" });
+        if(data.fullname && data.fullname.length > 0) {
+          updateTooltip('signout', '{{i18n.i_sign-out}}<br/>'+data.fullname);
+        } else {
+          $('#storing_fullname_dialog').modal('show');
+        }
         for (var o of data.order) {
           if (typeof o.collection !== 'undefined') {
             let collection = o.collection,

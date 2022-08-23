@@ -12,6 +12,7 @@ function stickToHeader() {
     $('#header a').tooltip({ trigger: 'hover', offset: "0, 8" })
     $('a').tooltip({ trigger: 'hover', offset: "0, 11" })
     $('#footer button').tooltip({ trigger: 'hover', offset: "0, 10" })
+    $('.editor-toolbar button').tooltip({ trigger: 'hover', offset: "0, 14" })
     $('button').tooltip({ trigger: 'hover', offset: "0, 8" })
   })
 }

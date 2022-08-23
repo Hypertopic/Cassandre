@@ -249,10 +249,10 @@
       "done": "Your PDF is ready"
     },
     "i_link": "Connecting",
-    "i_link_properties": "two bars varying in the same direction",
-    "i_link_dimensions": "two triangles varying in the same direction",
-    "i_inverse_link_between_properties": "two bars varying in the same direction",
-    "i_inverse_link_between_dimensions": "two triangles varying in the same direction",
+    "i_rectangles": "two bars",
+    "i_triangles": "two triangles",
+    "i_same-direction": "in the same direction",
+    "i_opposite-direction": "in opposite directions",
     "i_current-link": "Current connection"
   },
   "fr": {
@@ -504,10 +504,10 @@
       "done": "Votre PDF est prêt"
     },
     "i_link": "Articuler",
-    "i_link_properties": "deux bâtonnets variant dans le même sens",
-    "i_link_dimensions": "deux triangles variant dans le même sens",
-    "i_inverse_link_between_properties": "deux bâtonnets variant en sens contraire",
-    "i_inverse_link_between_dimensions": "deux triangles variant en sens contraire",
+    "i_rectangles": "deux bâtonnets",
+    "i_triangles": "deux triangles",
+    "i_same-direction": "dans le même sens",
+    "i_opposite-direction": "en sens contraire",
     "i_current-link": "Articulation actuelle"
   }
 }

@@ -423,8 +423,8 @@
 
   function toDoAfter(){
     {{>render}}
-    if ($('#groundings li').length == 1) $("#groundings").find('legend').text("{{i18n.i_grounding}}");
-    if ($('#groundings li').length < 1) $("#groundings").addClass('hidden');
+    if ($('#groundings>li:not(.hidden)').length == 1) $("#groundings").find('legend').text("{{i18n.i_grounding}}");
+    if ($('#groundings>li:not(.hidden)').length < 1) $("#groundings").addClass('hidden');
     {{#editable}}
     if ($('#leaves li').length < 1) {
       var tip = '';

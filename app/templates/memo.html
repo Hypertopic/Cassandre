@@ -243,6 +243,7 @@
     }),
       metrics = {},
       trigrams = {},
+      logged_is_editing = false,
       leaf_type = leaf_id = resume = '',
       anchor = 0,
       candidates = [],
@@ -439,21 +440,22 @@
     {{#logged}}
     {{#editing}}
     {{#editable}}
-    if ('{{logged}}' == '{{editing.user}}') {
+    if ('{{logged}}' == '{{editing.user}}') logged_is_editing = true;
+    if (logged_is_editing) {
       $('#edit')
         .removeAttr("disabled")
         .removeClass("disabled")
         .addClass("bg-warning");
-      $('#editing .user').text(fullnames['{{editing.user}}']);
-      $('#edit')
-        .attr("data-html", 'true')
-        .attr("title", $('#editing').text().replace(/\s+/g, " ")+"<h5>{{i18n.i_resume}}</h5>");
+      $('#edit').attr("data-html", 'true')
       resume = ". {{i18n.i_next.resume}} <strong>{{i18n.i_resume}}</strong>"
     } else {
-      $('#edit').attr("title", $('#editing').text().replace(/\s+/g, " "));
       document.getElementById('edit').disabled = true
     }
     {{/editable}}
+    $('#editing .user').text(fullnames['{{editing.user}}'])
+    var editing_tooltip = $('#editing').text().replace(/\s+/g, " ")
+    if (logged_is_editing) editing_tooltip += '<h5>{{i18n.i_resume}}</h5>'
+    $('#edit').attr("title", editing_tooltip)
     if ("{{contributors}}".split(',').length > 1) $('#editing').append(". {{i18n.i_no-edit-by-others}}");
     inform('warning', $('#editing').text().replace(/\s+/g, " ") + resume);
     {{/editing}}
@@ -461,7 +463,9 @@
     {{/logged}}
     {{^statements}}
     $('#revert').attr('title', "{{i18n.i_versions.list}} "+$('#creator').text())
+    {{^editing}}
     $('#revert').removeClass('hidden');
+    {{/editing}}
     $('#kwic').parent().parent().prepend($('#revert'));
     $('#modify_rights').removeClass('hidden');
     poller('memo', 'now');

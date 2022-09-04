@@ -10,7 +10,7 @@ $('#comment_create').click(function () {
   $('#modify_rights').remove();
   $('a').removeAttr('href');
   $('#diary').addClass('disabled');
-  $('#signout').prop('disabled', true);
+  $('#header button').prop('disabled', true).tooltip('dispose');
   $('#add-leaves').addClass('hidden');
   $('.toast').toast('hide');
   $('#comments').find('textarea').removeClass('hidden');

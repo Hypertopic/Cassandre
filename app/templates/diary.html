@@ -160,6 +160,9 @@
     });
     announceMaintenance(maintenance, maintenance_in_progress);
     {{#logged}}
+    {{^logged_fullname}}
+    $('#storing_fullname_dialog').modal('show')
+    {{/logged_fullname}}
     for (var m of memos) {
       var j = activity.map(function(a){return a.doc}).indexOf(m.id);
       if (activity.length > -1 && j > -1) {

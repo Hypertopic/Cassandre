@@ -300,33 +300,26 @@ var shared = {
   {{/list}}\
   if ('{{logged}}') user = '{{logged}}';\
   function track(memo) {\
+    {{^list}}track_memo(user, memo){{/list}}\
+    {{#list}}\
     $.ajax({\
-      {{^list}}\
-      url: '../track_memo/'+user,\
-      {{/list}}\
-      {{#list}}\
       url: '../save_diary_order/'+user,\
-      {{/list}}\
       type: 'PUT',\
       contentType: 'application/json',\
-      {{^list}}\
-      data: memo,\
-      {{/list}}\
-      {{#list}}\
       data: JSON.stringify({\
         'diary': '{{diary}}',\
         'by': memo\
       }),\
-      {{/list}}\
-    }).done({{#list}}reload{{/list}})\
-    .fail({{#list}}function(data){$('#storing_fullname_dialog').modal('show')}{{/list}});\
+    }).done(reload)\
+    .fail(function(data){$('#storing_fullname_dialog').modal('show')});\
+    {{/list}}\
   }",
   render: "\
     render();\
     {{^statements}}\
     {{^link}}if (($('#groundings>li[id]').length > 1) || ('{{type}}' == 'coding' && $('#groundings li').first().find('.preview a').length > 1))\
         $('#remove_grounding_btn').removeClass('d-none');{{/link}}\
-    {{#type}}{{#logged}}setTimeout(function() {track('{{_id}}')}, 9000);{{/logged}}{{/type}}\
+    {{#type}}{{#logged}}track('{{_id}}'){{/logged}}{{/type}}\
     {{/statements}}\
   "
 };

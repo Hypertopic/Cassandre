@@ -108,6 +108,36 @@ function updateTooltip(id, content) {
     .tooltip({ trigger: 'hover', offset: "0, 8" });
 }
 
+function track_memo(user, memoid) {
+  $.ajax({
+    url: '../'+user,
+    type: 'GET'
+  }).done(function(u){
+    u = JSON.parse(u);
+    if (!u.contributors) u.contributors = [user]
+    if (!u.activity) u.activity = []
+    var obj = {
+      'doc': memoid,
+      'date': new Date().toJSON()
+    };
+    var i = -1, j = 0;
+    for (j = 0; j < u.activity.length; j++) {
+      if (u.activity[j].doc === memoid) i = j
+    }
+    if (i > -1) {
+      u.activity.splice(i, 1, obj)
+    } else {
+      u.activity.push(obj)
+    }
+    $.ajax({
+      url: '../'+user+'?batch=ok',
+      type: 'PUT',
+      contentType: 'application/json',
+      data: JSON.stringify(u),
+    })
+  })
+}
+
 function createUserDoc(user, sponsor, success, error) {
   $.ajax({
     url: relpath+'userfullname/'+fullname,

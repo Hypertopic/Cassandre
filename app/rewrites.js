@@ -310,7 +310,6 @@ function(req2) {
     case 'rename_diagram':
     case 'adapt_diagram':
     case 'adapt_graph':
-    case 'track_memo':
     case 'modify_rights':
     case 'reader_unsubscribe':
     case 'username':

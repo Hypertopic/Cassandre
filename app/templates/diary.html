@@ -113,7 +113,7 @@
         </svg>
       </a>
     </nav>
-    {{^logged_fullname}}{{>storing_fullname_dialog}}{{/logged_fullname}}
+    {{#by}}{{^logged_fullname}}{{>storing_fullname_dialog}}{{/logged_fullname}}{{/by}}
   {{>script}}
   {{#list}}<script src="../script/showdown.min.js"></script>{{/list}}
   {{^list}}<script src="../script/vis.min.js"></script>{{/list}}
@@ -160,9 +160,9 @@
     });
     announceMaintenance(maintenance, maintenance_in_progress);
     {{#logged}}
-    {{^logged_fullname}}
+    {{#by}}{{^logged_fullname}}
     $('#storing_fullname_dialog').modal('show')
-    {{/logged_fullname}}
+    {{/logged_fullname}}{{/by}}
     for (var m of memos) {
       var j = activity.map(function(a){return a.doc}).indexOf(m.id);
       if (activity.length > -1 && j > -1) {

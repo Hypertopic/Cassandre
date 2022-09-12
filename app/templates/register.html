@@ -52,7 +52,8 @@
     </div>
   {{>script}}
   <script>
-  var email = fullname = sponsor = "";
+  var email = fullname = sponsor = "",
+      relpath = '../';
   $(document).ready(function() {
     $.ajax({
       type: 'DELETE',

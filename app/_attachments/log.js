@@ -146,12 +146,14 @@ function createUserDoc(user, sponsor, success, error) {
     if (u.rows.length > 0) fullname += ' ('+user+')';
     var obj = {
       '_id': user,
+      'activity': [],
       'contributors': [user],
-      'fullname': fullname
+      'fullname': fullname,
+      'order': []
     };
     if (sponsor && sponsor.length > 0) obj.readers = sponsor;
     $.ajax({
-      url: '../'+user,
+      url: relpath+user,
       type: 'PUT',
       contentType: 'application/json',
       data: JSON.stringify(obj)

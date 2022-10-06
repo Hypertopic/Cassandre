@@ -316,10 +316,8 @@
         $("#leave-name").attr("placeHolder", "{{i18n.i_name.theoretical}}");
         if ($('#name').val().length > 0) {
           $('#create')
-            .removeClass('hidden')
             .addClass('diagram')
             .attr("title", "{{i18n.i_create.diagram}}");
-          $('#create-table').removeClass('hidden');
         }
         $('#add').parent().append($('#create'));
         $('#add').parent().append($('#create-table'));

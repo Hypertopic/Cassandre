@@ -8,6 +8,8 @@ function render(){
 function renderLeaves(){
   if ($('#name').val().length > 0) {
     $('#add').removeClass('hidden');
+    $('.input-group-append > #create').removeClass('hidden');
+    $('.input-group-append > #create-table').removeClass('hidden');
     $('#leave-name').removeClass('hidden');
   }
   if ($('#leaves li').length > 0) {

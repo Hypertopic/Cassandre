@@ -49,7 +49,10 @@
           <legend>{{i18n.i_groundings}}</legend>
           <div class="" title="{{i18n.i_loading}}"><span class="spinner spinner-border spinner-border-sm" role="status"></span></div>
           {{#groundings}}
-          <li class="d-inline d-sm-block hidden"><a href="">...</a></li>
+          <li class="d-inline d-sm-block hidden"><a href="">...</a>
+            <span class="toggle dropdown-toggle hidden"> </span>
+            <div class="preview hidden"></div>
+          </li>
           {{/groundings}}
         </div>
         {{/authorized}}

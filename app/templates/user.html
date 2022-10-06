@@ -116,7 +116,7 @@
       for (var e of data) {
         $("#events").append('<li class="'+e.action+'">'
           +'<span id="'+e.date+'" class="'+e.date+' moment"></span>&nbsp;– '
-          +'<a href="../'+e.type+'/'+e.diary+'/'+e.id+'">'+e.name+'</a>'
+          +'<a href="../'+e.type+'/'+e.id+'">'+e.name+'</a>'
           +'</li>');
       }
     }).done(function(){

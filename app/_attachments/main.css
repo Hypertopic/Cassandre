@@ -188,6 +188,10 @@ div.post {
   font-size:70%;
 }
 
+.cells {
+  border: 1px solid lightgray;
+}
+
 #toasts {
   position: absolute;
   top: 15px;

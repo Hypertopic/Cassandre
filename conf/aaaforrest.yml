@@ -2,7 +2,7 @@ port: 80
 service: proxy
 path: ''
 secret: TO_BE_CHANGED
-logFormat: dev
+logFormat: :date[iso] :remote-addr :remote-user :method :url :status :response-time[0]ms :total-time[0]ms ":user-agent"
 session:
   proxy: true
   cookie:

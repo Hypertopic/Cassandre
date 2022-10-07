@@ -96,8 +96,9 @@ function toUserDoc() {
     url: relpath+'config',
     dataType: 'json'
   }).done(function(data){
-    if (fullname.length > 0) 
+    if (fullname.length > 0) { 
       createUserDoc(user, data.sponsors.ldap, reload, updateUserDoc);
+    } else alert($('#user_fullname').siblings('.text-info').text());
   });
 }
 

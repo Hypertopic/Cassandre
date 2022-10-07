@@ -424,6 +424,16 @@ button.comment {
   transition-delay: 2s;
 }
 
+.coding-candidate {
+  background-image: url('coding.svg');
+  background-repeat: no-repeat;
+  background-position: right bottom;
+  background-color: lightgrey;
+  transition: 
+    background-color 1s,
+    background-image 5s 10s;
+}
+
 .fadeout {
   background-color: transparent;
   color: black;

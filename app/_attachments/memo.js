@@ -74,7 +74,16 @@ $('#content').on('mouseup', function() {
         p = 1 + ([].indexOf.call(posts[0].childNodes, selected))/2;
     if (this_type == 'interview') p = [].indexOf.call(posts[0].childNodes, selected.parentNode);
     if (p > -1 && Number.isInteger(p)) anchor = p;
+    if ($("#add").length > 0 && ['interview', 'field'].indexOf(this_type) > -1 && document.getSelection().toString().length > 0) {
+      $('.post').children().eq(p-1)
+        .removeClass('highlight fadeout')
+        .addClass('coding-candidate');
+    }
   }
+});
+
+$('#content').on('mousedown', function() {
+  $('.coding-candidate').removeClass('coding-candidate');
 });
 
 $('#create').on('click', function() {

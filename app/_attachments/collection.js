@@ -45,6 +45,10 @@ $('#target_collection').on('keypress', function(key) {
   }
 });
 
+$('#in_collection .btn-primary').on('click', function() {
+  save_diary_collection($('#target_collection').val().trim().replace(/[^0-9A-Za-zÀ-ȕ-]/g, '_'))
+});
+
 $('div').on('click', '.in-collection', function(event) {
   let name = $(this).parent().find('a').text();
   id = $(this).parent().find('span').attr("id");

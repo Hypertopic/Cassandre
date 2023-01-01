@@ -1,5 +1,4 @@
 function(o) {
-  // !code lib/shared.js
   var diary = o.diary || o.corpus || o._id,
       type = o.type || 'transcript',
       name = o.name || '...',
@@ -82,7 +81,9 @@ function(o) {
       emit([diary, 'name', user, 'M', name], obj);
       emit([diary, 'date', user, 'M', date], obj);
       emit([diary, 'update', user, 'M', update], obj);
-      var sortkey = replaceDiacritics(name.substr(0,10)).toLowerCase().replace(/\W/g, '_');
+      let sortkey = name.substr(0,10)
+        .normalize('NFD').replace(/\p{Diacritic}/gu, '')
+        .toLowerCase().replace(/\W/g, '_');
       emit([diary, 'type', user, 'M', type+sortkey+o._id], obj);
       if (o.statement) {
         var ov = {

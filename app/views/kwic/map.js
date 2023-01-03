@@ -15,7 +15,7 @@ function (o) {
         return {'text': i+'  '};
       }));
     }
-    for (var [p, speech] of Object.entries(body)) {
+    for (var [p, speech] of Object.entries(body || {})) {
       var speech_text = speech.text;
       var speech_end = speech_begin + speech_text.length
         + (speech.actor? speech.actor.length : 0)

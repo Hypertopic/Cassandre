@@ -330,10 +330,8 @@ function type2path(type) {
     case 'graph':
     case 'diagram':
       return type;
-    break;
     default:
       return 'memo';
-    break;
   }
 }
 
@@ -342,11 +340,11 @@ function dSort(array, locale){
     return replaceDiacritics(a.name).localeCompare(replaceDiacritics(b.name), locale);
   });
   return array;
-};
+}
 
 function replaceDiacritics(str){
   diacritics.forEach(function(letter){
     str = str.replace(letter.base, letter.char);
   });
   return str;
-};
+}

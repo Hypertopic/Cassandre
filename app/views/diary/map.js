@@ -13,7 +13,9 @@ function(o) {
     var contributors = [].concat(o.readers, o.contributors).sort();
     var users = contributors.filter(function(item, pos, ary) {return !pos || item != ary[pos - 1];} );
     for (var user of users) {
-      var update = o.date || o.history.slice(-1)[0].date || '';
+      var update = '';
+      if (o.date) update = o.date;
+      if (o.history) update = o.history.slice(-1)[0].date;
       emit([diary, user, 'M', o._id, update], '1');
     }
   }

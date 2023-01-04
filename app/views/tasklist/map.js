@@ -4,7 +4,10 @@ function(o) {
     emit([o._id, null, 'B'], {diary_name: o.diary_name});
   if (o.commented && o.text && !o.checked)
     emit([o.diary, null, 'C', o.date], {'id': o.commented, '_id': o.commented, 'name': o.text});
-  var contributors = [].concat(o.readers, o.contributors).sort();
+  var contributors = [];
+  if (typeof o.readers !== "undefined") contributors = o.readers;
+  if (typeof o.contributors !== "undefined") contributors = contributors.concat(o.contributors);
+  contributors = contributors.sort();  
   var users = contributors.filter(function(item, pos, ary) {return !pos || item != ary[pos - 1];} );
   if (o.readers == undefined || o.readers.length == 0) users.push(null);
   for (user of users) {

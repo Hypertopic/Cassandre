@@ -2,9 +2,15 @@ function(o) {
   var diary = o.diary || o.corpus,
       type = o.type || 'transcript',
       name = o.name || '...',
-      contributors = [].concat(o.readers, o.contributors).sort(),
+      contributors = [],
       users = [];
-  if (typeof o.readers === "undefined" || o.readers.length == 0) contributors.push(null);
+  if (typeof o.readers === "undefined" || o.readers.length == 0) {
+    contributors.push(null);
+  } else {
+    contributors = o.readers;
+  }
+  if (typeof o.contributors !== "undefined") contributors = contributors.concat(o.contributors);
+  contributors = contributors.sort();  
   users = contributors.filter(function(item, pos, ary) {return !pos || item != ary[pos - 1];} );
   if (!o.commented && !o.diary_name) {
     for (var user of users) {

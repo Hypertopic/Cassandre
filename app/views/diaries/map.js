@@ -9,7 +9,7 @@ function(o) {
       if (o.readers.length < 1) {
         emit([null, diary], {'_id': diary});
       } else {
-        for (var r of o.readers) {
+        if (o.contributors) for (var r of o.readers) {
           if (o.contributors.indexOf(r) < 0)
             emit([r, diary], {'_id': diary});
         }

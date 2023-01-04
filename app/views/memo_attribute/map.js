@@ -4,9 +4,15 @@ function(o) {
       name = o.name || '...',
       date = o.date,
       update = o.date,
-      contributors = [].concat(o.readers, o.contributors).sort(),
+      contributors = [],
       users = [];
-  if (typeof o.readers === "undefined" || o.readers.length == 0) contributors.push(null);
+  if (typeof o.readers === "undefined" || o.readers.length == 0) {
+    contributors.push(null);
+  } else {
+    contributors = o.readers;
+  }
+  if (typeof o.contributors !== "undefined") contributors = contributors.concat(o.contributors);
+  contributors = contributors.sort();
   users = contributors.filter(function(item, pos, ary) {return !pos || item != ary[pos - 1];} );
   if (o.history) {
     date = o.history[0].date;

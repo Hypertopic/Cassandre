@@ -10,8 +10,9 @@ function(o) {
   contributors = contributors.sort();  
   var users = contributors.filter(function(item, pos, ary) {return !pos || item != ary[pos - 1];} );
   if (o.readers == undefined || o.readers.length == 0) users.push(null);
-  for (user of users) {
-    var history_first = history_last = 0;
+  for (var user of users) {
+    var history_first = 0,
+        history_last = 0;
     if (o.history) {
       history_first = o.history[0].date; 
       history_last = o.history[o.history.length -1].date;

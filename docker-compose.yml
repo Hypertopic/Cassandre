@@ -40,7 +40,7 @@ services:
 
   push_app:
     image: benel/couchapp
-    command: push .
+    command: pushapps ddocs/.
     environment:
       - URI=http://couchdb:5984/cassandre
     volumes:

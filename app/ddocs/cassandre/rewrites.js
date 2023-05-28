@@ -283,7 +283,7 @@ function(req2) {
           };
         break;
         case 3:
-          reply.path = '_list/kwic/kwic';
+          reply.path = '../search/_list/kwic/kwic';
           reply.query = {
             "startkey": toJSON([path[1], path[2]]),
             "endkey":   toJSON([path[1], path[2]+'\ufff0']),

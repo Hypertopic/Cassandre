@@ -388,6 +388,7 @@
   async function includePublic() {
     if (list.length > 0) {
       from = list[list.length-1].sortkey;
+      if ("{{by}}" == "type" && list[list.length-1].path == 'statements') from = 'storylinez';
     }
     if (result !== undefined) results.push(result);
     result = await getMore(from);

@@ -13,7 +13,10 @@ $('#comment_create').click(function () {
   $('#header button').prop('disabled', true).tooltip('dispose');
   $('#add-leaves').addClass('hidden');
   $('.toast').toast('hide');
+  $('#comments').append($('#comments').find('textarea'));
   $('#comments').find('textarea').removeClass('hidden');
+  $('.comment').off('click');
+  $('.comment_check').prop('disabled', true);
   $('#commented').removeClass('hidden');
   $('#reload').removeClass('hidden');
   $('html, body').scrollTop($(document).height());
@@ -43,6 +46,7 @@ $('.comment').click(function(event) {
     $('#reload').removeClass('hidden');
     $('#comment_updated').removeClass('hidden');
     $('.comment').off('click');
+    $('.comment_check').prop('disabled', true);
     $('#kwic').parent().children().addClass('hidden');
     $('#signout').prop('disabled', true);
     $('#diary').addClass('disabled');

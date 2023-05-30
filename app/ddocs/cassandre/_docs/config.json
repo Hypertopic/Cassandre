@@ -1,0 +1,15 @@
+{
+  "_id": "config",
+  "maintenance": {
+    "date": "2023-05-17T10:00:00Z",
+    "duration": 30
+  },
+  "sponsors": {
+    "ldap": [
+      "u182180"
+    ],
+    "local": [
+      "u182180"
+    ]
+  }
+}

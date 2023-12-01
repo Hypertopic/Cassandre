@@ -60,7 +60,7 @@ function(req2) {
     case 'satellites':
       var diary = path[1],
           memo = path[2];
-      reply.path = "_list/satellites/memo";
+      reply.path = "../memo/_list/satellites/memo";
       reply.query = {
         "startkey": '["'+memo+'"]',
         "endkey":   '["'+memo+'", {}]',
@@ -211,7 +211,7 @@ function(req2) {
       reply.path = '_show/'+path[0]+'/'+path[1];
     break;
     case 'editable_memo':
-      reply.path = "_list/editable_memo/memo";
+      reply.path = "../memo/_list/editable_memo/memo";
       reply.query = {
         "startkey": '["'+path[1]+'"]',
         "endkey":   '["'+path[1]+'", {}]',
@@ -219,7 +219,7 @@ function(req2) {
       };
     break;
     case 'revert':
-      reply.path = "_list/revert/memo";
+      reply.path = "../memo/_list/revert/memo";
       reply.query = {
         "startkey": '["'+path[1]+'"]',
         "endkey":   '["'+path[1]+'", {}]',
@@ -227,7 +227,7 @@ function(req2) {
       };
     break;
     case 'graph':
-      reply.path = "_list/graph/memo";
+      reply.path = "../memo/_list/graph/memo";
       reply.query = {
         "startkey": '["'+path[1]+'"]',
         "endkey":   '["'+path[1]+'", {}]',
@@ -243,7 +243,7 @@ function(req2) {
       };
     break;
     case 'table':
-      reply.path = "_list/table/memo";
+      reply.path = "../memo/_list/table/memo";
       reply.query = {
         "startkey": '["'+path[1]+'"]',
         "endkey":   '["'+path[1]+'", {}]',

@@ -20,7 +20,7 @@ nav, #header, #footer {
   background-color: #663366;
 }
 
-#leaves a,
+#leaves a, .fr a,
 #groundings a, #content a {
   color: gray !important;
 }
@@ -34,6 +34,19 @@ nav, #header, #footer {
   background-image: url(cassandre_background.svg);
   background-position: 100% 20%;
   background-repeat: no-repeat;
+}
+
+.library{
+
+  background: linear-gradient(
+    rgba(0, 0, 0, 0.7), 
+    rgba(0, 0, 0, 0.7)
+  ),
+  url(library.jpg);
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+  background-attachment: fixed;
+  color:white !important;
 }
 
 .words .post p {

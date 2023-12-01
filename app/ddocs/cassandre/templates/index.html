@@ -4,22 +4,69 @@
     <title>{{i18n.i_diary}}</title>
     {{>links}}
   </head>
-  <body id="watermark">
-    <div id="container" class='container-fluid h-100'>
-      <div id="content" class="h-100 d-flex justify-content-center align-items-center" style="height:100px;">
-        <div><h1><a href="diary/">{{i18n.i_diary}}</a></h1></div>
-      </div>
-      <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
-        <div id="last-maintenance" class="nav-item"></div>
-        <div class="navbar-text"><a class="nav-link" href="https://github.com/Hypertopic/Cassandre/wiki">
-          <svg class="bi" width="24" height="24" fill="currentColor">
-            <use xlink:href="../style/bootstrap-icons.svg#info-circle"/>
-          </svg>
-        </a></div>
-      </nav>
+  <body>
+    <nav class="navbar navbar-expand navbar-light bg-light">
+      <a class="navbar-brand" href="https://hypertopic.org/">Hypertopic</a>
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active"><a class="nav-link" href="https://hypertopic.org/porphyry">Porphyry</a></li>
+        <li class="nav-item active"><a class="nav-link" href="https://hypertopic.org/steatite">Steatite</a></li>
+        <li class="nav-item"><a class="nav-link disabled" href="/">Cassandre</a></li>
+        <li class="nav-item active"><a class="nav-link" href="https://hypertopic.org/agorae">Agorae</a></li>
+        <li class="nav-item active"><a class="nav-link" href="https://hypertopic.org/traduxio">TraduXio</a></li>
+        <li class="nav-item active"><a class="nav-link" href="https://hypertopic.org/installer">Installer</a></li>
+        <li class="nav-item active"><a class="nav-link" href="https://hypertopic.org/approfondir">Approfondir</a></li>
+      </ul>
+    </nav>
+    <div id="last-maintenance" class="alert alert-danger alert-dismissible d-none fade" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden='true'>&times;</span></button>
     </div>
+    <div class="jumbotron jumbotron-fluid library">
+      <div class="container">
+        <h1 class="display-4">Cassandre</h1>
+        <p class="lead">{{i18n.i_diary}}</p>
+        <a class="btn btn-outline-light btn-lg" href="diary/" role="button">{{i18n.i_try}}</a>
+      </div>
+    </div>
+    <div class="mr-4 ml-4 fr hidden">
+
+ <p>Le logiciel tire son nom du personnage de la mythologie, doué de clairvoyance mais condamné à ne jamais être cru.</p>
+
+<h3>Fonctionnalités</h3>
+
+<p>Cassandre est une plateforme de journaux de bord permettant de :</p>
+
+<ul>
+  <li>Rédiger une contribution (comme le billet sur un blog), appelée compte-rendu ;</li>
+  <li>Adosser chaque compte-rendu à un compte-rendu existant (<a href="http://hdl.handle.net/2268/204690">RQ 2016, fig. 3</a>), et ainsi expliciter le fondement de chaque compte-rendu ;</li>
+  <li>Distinguer la nature des différents comptes-rendus (par des pictogrammes) (<a href="http://hdl.handle.net/2268/204690">RQ 2016, fig. 2</a>) : note de lecture <img src="/style/theoretical.svg" alt="Compte-rendu théorique" />, observation de terrain <img src="/style/field.svg" alt="Compte-rendu de terrain" />, analyse <img src="/style/coding.svg" alt="Compte-rendu de codage" />, considérations logistiques <img src="/style/operational.svg" alt="Compte-rendu opérationnel" />, mise en forme des résultats <img src="/style/graph.svg" alt="Schématisation" />…</li>
+  <li>Localiser un mot ou une expression dans le matériau empirique (<a href="https://hdl.handle.net/2268/125414">JADT 2012</a>) et l’afficher sous forme de concordances (<a href="https://hdl.handle.net/2268/61105">DN 2010, section 3.1</a>);</li>
+  <li>Choisir ce qui reste privé et ce que l’on partage (et avec qui) (<a href="http://hdl.handle.net/2268/204690">RQ 2016, fig. 2</a>);</li>
+  <li>Solliciter des commentaires sur des résultats intermédiaires ;</li>
+  <li>Schématiser ses conceptualisations (<a href="https://hdl.handle.net/2268/301109">RQ 2023</a>).</li>
+</ul>
+
+<p>Attention, Cassandre ne fait pas tout. Si votre objectif apparaît dans les suivants, mieux vaut <strong>ne pas l’utiliser</strong> :</p>
+
+<ul>
+  <li>Analyser un corpus de textes déjà constitué,</li>
+  <li>Conduire une réanalyse ou une analyse secondaire,</li>
+  <li>Quantifier des entretiens, compter les mots, faire de la lexicométrie,</li>
+  <li>Établir des tableaux de fréquences, générer automatiquement des plans factoriels ou des cartes de thèmes.</li>
+</ul>
+
+<p class="mb-4">&nbsp;</p>
+    
+    </div>
+    <nav id="footer" class="fixed-bottom hidden">
+      <div class="navbar-text"><a class="nav-link" href="https://github.com/Hypertopic/Cassandre/wiki">
+        <svg class="bi" width="24" height="24" fill="currentColor">
+          <use xlink:href="../style/bootstrap-icons.svg#info-circle"/>
+        </svg>
+      </a></div>
+    </nav>
     {{>script}}
     <script>
+      if ("{{locale}}" === "fr") $('.fr').removeClass('hidden');
       $.ajax({
         url: "../config",
         type: "GET",
@@ -28,6 +75,7 @@
         if (new Date().toISOString().substr(0,10) == c.maintenance.date.substr(0,10)) {
           $('#last-maintenance').prepend("{{i18n.i_maintenance-scheduled}}".replace('@duration', c.maintenance.duration));
           $('#last-maintenance').append(new Intl.DateTimeFormat('{{locale}}', {hour: "numeric", minute: "numeric"}).format(new Date(c.maintenance.date)));
+          $('#last-maintenance').removeClass("d-none").addClass("show");
         }
       });
     </script>

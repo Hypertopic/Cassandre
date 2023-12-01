@@ -2,6 +2,7 @@
   "en": {
     "i_qda": "Texts Qualitative Analysis",
     "i_diary": "Diary for Qualitative Analysis",
+    "i_try": "Try online",
     "i_corpora": "Corpora",
     "i_loading": "Loading...",
     "i_patience-during-conversion": "This conversion may take some time. Please do not close the page",
@@ -258,6 +259,7 @@
   "fr": {
     "i_qda": "Analyse qualitative de textes",
     "i_diary": "Journal pour l'analyse qualitative",
+    "i_try": "Essayer en ligne",
     "i_loading": "En chargement...",
     "i_patience-during-conversion": "Merci de ne pas quitter cette page. Cette conversion pourrait prendre quelques minutes",
     "i_maintenance": "La plateforme sera mise à jour @moment et sera inaccessible pendant @duration minutes. Afin d'éviter de perdre votre travail, sauvegardez vos comptes-rendus avant cette opération de maintenance",

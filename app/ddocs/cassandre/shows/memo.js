@@ -20,6 +20,7 @@ function(o, req){
   var diary = o.diary || o.corpus;
   var contributors = o.contributors || [];
   var readers = o.readers || [];
+  var creator = o.user || o.history[0].user;
   var data = {
     i18n: localized(),
     _id: o._id,
@@ -28,17 +29,17 @@ function(o, req){
              || o.contributors.length==0 || o.readers.indexOf(username)>-1 
              || (o.contributors && o.contributors.indexOf(username)>-1) || req.userCtx.roles.indexOf("_admin")>-1,
     body: [],
-    creator: [o.history[0].user],
+    creator: [creator],
     contributors: contributors,
     contributors_fullnames: contributors.map((i) => ({id: i, fullname: i})),
     comments: [],
     date: o.date || o.history[0].date,
     diary: diary,
     editable: !o.contributors || o.contributors && o.contributors.indexOf(username)>-1
-           || (o.history[0].user == username && o.contributors.length == 0 && (o.readers && o.readers.length == 0))
+           || (creator == username && o.contributors.length == 0 && (o.readers && o.readers.length == 0))
            || req.userCtx.roles.indexOf("_admin")>-1,
     rights: !o.contributors || o.contributors && o.contributors.indexOf(username)>-1
-           || (o.history[0].user == username && o.contributors.length == 0 && (o.readers && o.readers.length == 0))
+           || (creator == username && o.contributors.length == 0 && (o.readers && o.readers.length == 0))
            || (o.readers && o.readers.indexOf(username)>-1)
            || req.userCtx.roles.indexOf("_admin")>-1,
     editing: editing,

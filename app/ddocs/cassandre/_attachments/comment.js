@@ -14,12 +14,16 @@ $('#comment_create').click(function () {
   $('#add-leaves').addClass('hidden');
   $('.toast').toast('hide');
   $('#comments').append($('#comments').find('textarea'));
+  let anchor = $('h1').text().trim();
+  if ($('#kwic').val()) anchor = $('#kwic').val();
+  $('#comments').find('textarea').val('> '+ anchor+"\n \n");
   $('#comments').find('textarea').removeClass('hidden');
   $('.comment').off('click');
   $('.comment_check').prop('disabled', true);
   $('#commented').removeClass('hidden');
   $('#reload').removeClass('hidden');
   $('html, body').scrollTop($(document).height());
+  document.querySelector("textarea").focus();
 });
 $('#commented').on('click', function() {
   if ($('#comments').find('textarea').val().trim() == '') {

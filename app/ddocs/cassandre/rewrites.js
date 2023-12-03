@@ -374,7 +374,7 @@ function(req2) {
       reply.path = "_view/userid/";
       reply.query = {
         "startkey": '"'+path[1]+'"',
-        "limit": '5'
+        "limit": '8'
       };
     break;
     case 'userfullname':

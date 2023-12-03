@@ -121,7 +121,8 @@ $('#existing_memo').on('hidden.bs.modal', function () {
 })
 function create(type, name, highlight, anchor) {
   $('.spinner').removeClass('d-none');
-  name = name.replace(/\t/g, ' ');
+  name = name.replace(/\t/g, ' ').trim();
+  name = name.substr(0,1).toUpperCase()+name.substr(1);
   if (name.replace(/[ ,]/g, '') == '' && type != 'diagram') {
     $('.spinner').addClass('d-none');
     switch (type) {

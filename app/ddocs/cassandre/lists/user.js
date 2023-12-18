@@ -25,6 +25,7 @@ function(head, req) {
       case ('graph'):
       case ('table'):
       case ('diagram'):
+      case ('diary'):
         type = row.value.type;
         break;
     }

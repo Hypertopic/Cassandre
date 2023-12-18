@@ -7,7 +7,7 @@ function(o) {
       var operation = 'E';
       if (key == 0) operation = 'C';
       if (o.diary_name) {
-        emit([h.user, h.date, operation], {'diary': o._id, '_id': '?by=name', 'name': o.diary_name, 'type': 'diary'});
+        emit([h.user, h.date, operation], {'diary': o._id, '_id': o._id, 'name': o.diary_name, 'type': 'diary'});
       } else {
         emit([h.user, h.date, operation], {'diary': diary, '_id': o._id , 'name': o.name, 'type': o.type});
       }

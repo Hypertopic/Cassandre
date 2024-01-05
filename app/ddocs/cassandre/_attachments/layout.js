@@ -275,7 +275,14 @@ function inform(type, msg){
   $('#toasts').append(t);
   $('#top-right').append(t);
   $('.toast').toast({autohide: false});
-  $('.toast').toast('show');
+  if (type == 'danger') {
+    $('#toasts').prepend($('.toast>.bg-danger').parent());
+    $('.toast>.bg-danger').parent().toast('show');
+  } else {
+    setTimeout(() => {
+      $('.toast').toast('show');
+    }, 60000);
+  }
 }
 
 function poller(what, since) {

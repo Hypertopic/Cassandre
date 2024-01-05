@@ -2,6 +2,10 @@ function render(){
   announceMaintenance(maintenance, maintenance_in_progress);
   renderLeaves()
   momentRelative('')
+  $('#memo_creator')
+    .append($('#creator>.username').text().split(" ").map((n) => n[0]).join('').toUpperCase())
+    .attr('title', $('#creator').text())
+    .removeClass('hidden')
   stickToHeader()
   let refresh = true;
 }

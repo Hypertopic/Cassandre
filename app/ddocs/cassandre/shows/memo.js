@@ -29,7 +29,7 @@ function(o, req){
              || o.contributors.length==0 || o.readers.indexOf(username)>-1 
              || (o.contributors && o.contributors.indexOf(username)>-1) || req.userCtx.roles.indexOf("_admin")>-1,
     body: [],
-    creator: [creator],
+    creator: creator,
     contributors: contributors,
     contributors_fullnames: contributors.map((i) => ({id: i, fullname: i})),
     comments: [],

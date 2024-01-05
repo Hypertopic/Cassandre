@@ -135,7 +135,7 @@
         </div>
       </div>
     </div>
-    <button id="revert" class="btn hidden" data-toggle="tooltip" data-placement="bottom">
+    <button id="revert" class="btn hidden" data-toggle="tooltip" data-placement="bottom" title="{{i18n.i_versions.list}}">
       <svg class="bi" width="24" height="24" fill="currentColor">
         <use xlink:href="../style/bootstrap-icons.svg#arrow-counterclockwise"/>
       </svg>
@@ -459,11 +459,10 @@
     $('#edit').removeClass('d-none');
     {{/logged}}
     {{^statements}}
-    $('#revert').attr('title', "{{i18n.i_versions.list}} "+$('#creator').text())
     {{^editing}}
     $('#revert').removeClass('hidden');
     {{/editing}}
-    $('#kwic').parent().parent().prepend($('#revert'));
+    $('#kwic').parent().parent().prepend($('#revert')).prepend($('#memo_creator'));;
     $('#modify_rights').removeClass('hidden');
     poller('memo', 'now');
     {{/statements}}

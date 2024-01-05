@@ -26,6 +26,9 @@ var shared = {
   viscss: "<link rel='stylesheet' type='text/css' href='../style/vis.min.css' />",
   log: "\
     <ul class='mr-0 ml-auto navbar-nav nav-fill'><li class='form-inline justify-content-between'>\
+      {{#type}}{{^statements}}\
+      <button id='memo_creator' class='btn btn-outline-{{>contrastcolor}} hidden' disabled></button>\
+      {{/statements}}{{/type}}\
       {{#diary}}\
       {{>rights}}\
       <button id='search-icon' class='btn' title='{{i18n.i_search}}'>\

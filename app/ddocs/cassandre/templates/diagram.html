@@ -62,7 +62,6 @@
           {{/authorized}}
           {{#authorized}}
           <h1> <img title="{{i18n.i_memo.diagram}}" src="../style/{{type}}.svg"/> <span id="name"> {{name}} </span> </h1>
-          {{>creator}}
           <svg id="diagram" viewBox="0 0 508 300" class="{{link}}"></svg>
           <p class="spacer">&nbsp;</p>
           <div id="situation" class="hidden">
@@ -84,6 +83,7 @@
             {{/editable}}
           </div>
           {{>comments}}
+          {{>creator}}
           {{/authorized}}
           <div aria-live="polite" aria-atomic="true" class="position-0">
             <div id="toasts"></div>

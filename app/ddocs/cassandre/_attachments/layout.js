@@ -275,13 +275,17 @@ function inform(type, msg){
   $('#toasts').append(t);
   $('#top-right').append(t);
   $('.toast').toast({autohide: false});
-  if (type == 'danger') {
-    $('#toasts').prepend($('.toast>.bg-danger').parent());
-    $('.toast>.bg-danger').parent().toast('show');
-  } else {
-    setTimeout(() => {
-      $('.toast').toast('show');
-    }, 60000);
+  switch (type) {
+    case 'danger':
+    case 'warning':
+      $('#toasts').prepend($('.toast>.alert-'+type).parent());
+      $('.toast>.alert-'+type).parent().toast('show');
+    break;
+    default:
+      setTimeout(() => {
+        $('.toast').toast('show');
+      }, 30000);
+    break;
   }
 }
 

@@ -330,7 +330,7 @@
       if ($('.statement_text').text().length < 1)
         inform('basic', "{{{i18n.i_next.statement}}} <strong>{{i18n.i_write_statement}}</strong>");
       if ($('.negative_text').text().length < 1 && $('#leaves li.theoretical').length < 1) {
-        inform('warning', "{{i18n.i_next.negative-case}} {{i18n.i_hereunder_button}}");
+        inform('secondary', "{{i18n.i_next.negative-case}} {{i18n.i_hereunder_button}}");
       }
     }
     {{/editable}}

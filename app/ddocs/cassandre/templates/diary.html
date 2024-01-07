@@ -117,8 +117,10 @@
   {{>script}}
   {{#list}}<script src="../script/showdown.min.js"></script>{{/list}}
   {{^list}}<script src="../script/vis.min.js"></script>{{/list}}
+  <script src="../script/diary.js"></script>
   <script>
   const activity = {{{activity}}},
+        by = '{{by}}',
         diary_id = '{{diary}}',
         memos = {{{memos}}},
         this_id = '{{diary}}';
@@ -144,10 +146,10 @@
         ungrounded: "{{i18n.i_ungrounded}}",
         unnamed: "{{i18n.i_unnamed}}",
       };
-  if (["date","update"].indexOf("{{by}}") > -1) horizon = '1970';
+  if (["date","update"].indexOf(by) > -1) horizon = '1970';
   $(document).ready(function() {
     $.ajax({
-      url: "../{{diary}}",
+      url: '../'+diary_id,
       type: "GET",
       dataType: "json"
     }).done(function(d){
@@ -176,15 +178,15 @@
       $('#size').prepend('{{size}}');
       $('#size').addClass('badge-secondary');
     }
-    if ("{{by}}".length <= 0) track('update');
+    if (by.length <= 0) track('update');
     {{/logged}}
-    if (["date","update"].indexOf("{{by}}") > -1) {
+    if (["date","update"].indexOf(by) > -1) {
       from = 'a';
       origin = 'a';
     }
     includePublic();
     let sort_by ='sort-alpha-down';
-    switch('{{by}}') {
+    switch(by) {
       case 'date':
         sort_by ='sort-numeric-down-alt';
       break;
@@ -200,7 +202,7 @@
     {{#list}}
     var pendingtasks = function() {
       return $.ajax({
-        url: "../tasklist/{{diary}}",
+        url: '../tasklist/'+diary_id,
         type: "GET",
         async: false,
         dataType: "json"
@@ -208,7 +210,7 @@
     }
     var uncheckedcomments = function() {
       return $.ajax({
-        url: "../comments/{{diary}}",
+        url: '../comments/'+diary_id,
         type: "GET",
         async: false,
         dataType: "json"
@@ -221,7 +223,7 @@
     if (number > 0) $('#tasklist-alert').removeClass("hidden");
     {{/list}}
     $.ajax({
-      url: "../kwic/{{diary}}",
+      url: '../kwic/'+diary_id,
       type: "GET",
       dataType: "json"
     }).done(function(kwic){
@@ -230,109 +232,17 @@
     poller('diary', '{{update_seq}}');
   });
 
-  $('#header')
-    .on('click', '#diaries', function() {
-      self.location = '.';
-    })
-    .on('click', '#drawTimeline', function() {
-      self.location = '../network/{{diary}}';
-    })
-    .on('click', '#patterns', function() {
-      self.location = '../kwic/{{diary}}';
-    });
-
-  $('#footer')
-    .on('click', '#show_delete', function() {
-      $("#network").addClass("hidden");
-      $("#memos>li>input").removeClass("hidden");
-      $("#cancel").removeClass("hidden");
-      $("#delete").removeClass("hidden");
-      $(".custom-switch").removeClass("hidden");
-      $("#show_delete").tooltip('hide');
-      $("#show_delete").addClass("hidden");
-      $("#footer .more").addClass("hidden");
-    })
-    .on('click', '#toggle', function() {
-      var checked = $("#toggle").is(":checked");
-      $("input:enabled[type='checkbox']").each(function() {
-        $(this).prop("checked", checked);
-      });
-    })
-    .on('click', '#delete', function() {
-      var checked = $("input.deletable:checked");
-      var countdown = checked.length;
-      if (!countdown) {
-        resetUI();
-      }
-      checked.each(function() {
-        var memo = $(this).closest(".memo");
-        $.ajax({
-          type: "DELETE",
-          url: "../" + $(this).attr("id") + "?rev=" + $(this).attr("name"),
-          success: function() {
-            countdown--;
-            if (countdown<1) {
-              location.reload();
-            }
-          }
-        });
-      });
-    });
-
-  $('.dropdown').on('show.bs.dropdown', function () {
-    $('#sort').tooltip('hide');
-  })
-
   $('.dropdown-menu a').on('click', function(e) {
     var by = $(this).attr('value');
     {{#logged}}track(by).done();{{/logged}}
   });
-
-  $('#tasklist-alert').on('click', function() {
-    self.location = "../tasklist/{{diary}}";
-  });
-
-  $('#show-activity').on('click', function() {
-    self.location = "../activity/{{diary}}";
-  });
-
-  function resetUI() {
-    $("#memos>li>input").addClass("hidden");
-    $("#footer .form-check-inline").children().addClass("hidden");
-    $("#show_delete").removeClass("hidden");
-    $("#footer .more").removeClass("hidden");
-  }
-
-  function taskreport(task, count) {
-    if (count > 0) {
-      $("#tasklist-alert").append($('<div>', {
-        id: task,
-        class: "list-group-item list-group-item-action list-group-item-secondary d-flex justify-content-between align-items-center",
-        text: text[task],
-        title: text[task]
-      }));
-      $('#'+task).append($('<span>', {
-        class: "badge badge-pill badge-info",
-        text: count
-      }));
-    }
-    number = number + count;
-  }
-
-  $('.more').on('click', function() {
-    includePublic();
-  });
-
-  function showMore() {
-    includePublic();
-  };
 
   function showList(data) {
     for (var m of data) {
       if(document.getElementById(m.id) == null) {
         var unread = 'unread';
         var date = m.date;
-        if('{{by}}' == 'update') date = m.update;
+        if(by == 'update') date = m.update;
         var sort_key = m.sortkey;
         var j = activity.findIndex(e => e.doc === m.id);
         if (j > -1 && activity[j].date > m.update) unread = '';
@@ -348,8 +258,8 @@
         $("#memos").append(li);
       }
     }
-    $('#{{diary}}').next('.moment').removeClass('unread');
-    $('#{{diary}}').next('.moment').next('.mytooltip').find('.unread').removeClass('unread');
+    $('#'+diary_id).next('.moment').removeClass('unread');
+    $('#'+diary_id).next('.moment').next('.mytooltip').find('.unread').removeClass('unread');
     momentRelative('#memos');
     converter.setFlavor('github');
     $('.preview').html(function(i, text) {
@@ -362,40 +272,17 @@
     ready = true;
   }
 
-  async function getMore(coord) {
-    if (ready == true) return new Promise((resolve, reject) => {
-      ready = false; 
-      $.ajax({
-        url: "../memos/{{diary}}/{{by}}/"+coord,
-        type: "GET",
-        dataType: "json",
-        success: function(data) {
-          list = list.concat(data);
-          if (data.length > 0) {
-            resolve(data[data.length-1].sortkey);
-          } else {
-            if (list.length > 0) {
-              resolve(list[list.length-1].sortkey);
-            } else {
-              resolve(horizon);
-            }
-          }
-        }
-      });
-    });
-  }
-
   async function includePublic() {
     if (list.length > 0) {
       from = list[list.length-1].sortkey;
-      if ("{{by}}" == "type" && list[list.length-1].path == 'statements') from = 'storylinez';
+      if (by == "type" && list[list.length-1].path == 'statements') from = 'storylinez';
     }
     if (result !== undefined) results.push(result);
     result = await getMore(from);
     if (results.indexOf(result) > -1) result = horizon;
     await getMore(origin+'/'+result);
     list = list.filter((v, i, a) => a.findIndex((t) => (t.id === v.id)) === i);
-    if (["date","update"].indexOf("{{by}}") > -1) {
+    if (["date","update"].indexOf(by) > -1) {
       list.sort((a, b) => (a.sortkey < b.sortkey) ? 1 : -1);
       if (list.length > 0 && from > list[list.length-1].sortkey) from = list[list.length-1].sortkey;
     } else {

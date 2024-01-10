@@ -302,19 +302,15 @@ var shared = {
       readers = '{{readers}}';\
   {{/list}}\
   if ('{{logged}}') user = '{{logged}}';\
-  function track(memo) {\
-    {{^list}}track_memo(user, memo){{/list}}\
+  function track(by) {\
+    {{^list}}track_memo(user, by){{/list}}\
     {{#list}}\
     $.ajax({\
-      url: '../save_diary_order/'+user,\
+      url: '../save_diary_order/{{diary}}_'+user,\
       type: 'PUT',\
       contentType: 'application/json',\
-      data: JSON.stringify({\
-        'diary': '{{diary}}',\
-        'by': memo\
-      }),\
+      data: by,\
     }).done(reload)\
-    .fail(function(data){$('#storing_fullname_dialog').modal('show')});\
     {{/list}}\
   }",
   render: "\

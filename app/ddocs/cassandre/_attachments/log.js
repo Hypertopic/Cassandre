@@ -110,28 +110,27 @@ function updateTooltip(id, content) {
 }
 
 function track_memo(user, memoid) {
+  var uri = '../'+diary_id+'_'+user
   $.ajax({
-    url: '../'+user,
+    url: uri,
     type: 'GET'
   }).done(function(u){
     u = JSON.parse(u);
-    if (!u.contributors) u.contributors = [user]
-    if (!u.activity) u.activity = []
     var obj = {
       'doc': memoid,
       'date': new Date().toJSON()
     };
     var i = -1, j = 0;
-    for (j = 0; j < u.activity.length; j++) {
-      if (u.activity[j].doc === memoid) i = j
+    for (j = 0; j < u.user_activity.length; j++) {
+      if (u.user_activity[j].doc === memoid) i = j
     }
     if (i > -1) {
-      u.activity.splice(i, 1, obj)
+      u.user_activity.splice(i, 1, obj)
     } else {
-      u.activity.push(obj)
+      u.user_activity.push(obj)
     }
     $.ajax({
-      url: '../'+user+'?batch=ok',
+      url: '../'+uri+'?batch=ok',
       type: 'PUT',
       contentType: 'application/json',
       data: JSON.stringify(u),

@@ -117,7 +117,6 @@
   {{>script}}
   {{#list}}<script src="../script/showdown.min.js"></script>{{/list}}
   {{^list}}<script src="../script/vis.min.js"></script>{{/list}}
-  <script src="../script/diary.js"></script>
   <script>
   const activity = {{{activity}}},
         by = '{{by}}',
@@ -142,6 +141,7 @@
         comments: "{{i18n.i_unchecked-comment}}",
         diagram: "{{i18n.i_to-be-articulated}}",
         editing: "{{i18n.i_to-be-resumed}}",
+        patience_during_conversion: "{{i18n.i_patience-during-conversion}}",
         pending: "{{i18n.i_todo}}",
         ungrounded: "{{i18n.i_ungrounded}}",
         unnamed: "{{i18n.i_unnamed}}",
@@ -162,9 +162,20 @@
     });
     announceMaintenance(maintenance, maintenance_in_progress);
     {{#logged}}
-    {{#by}}{{^logged_fullname}}
-    $('#storing_fullname_dialog').modal('show')
-    {{/logged_fullname}}{{/by}}
+    $.ajax({
+      url: "../{{logged}}",
+      type: "GET",
+      dataType: "json"
+    }).fail(function() {
+      $('#storing_fullname_dialog').modal('show');
+    }).done(function(data) {
+      if(data.fullname && data.fullname.length > 0) {
+        updateTooltip('signout', '{{i18n.i_sign-out}}<br/>'+data.fullname);
+      } else {
+        $('#storing_fullname_dialog').modal('show');
+      }
+    });
+    relocateActivity(by);
     for (var m of memos) {
       var j = activity.map(function(a){return a.doc}).indexOf(m.id);
       if (activity.length > -1 && j > -1) {
@@ -306,6 +317,7 @@
   {{>layoutscript}}
   {{>logscript}}
   </script>
+  <script src="../script/diary.js"></script>
   </body>
 </html>
 

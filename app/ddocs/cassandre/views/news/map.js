@@ -1,10 +1,10 @@
 function(o) {
   var diary = o.diary || o.corpus;
-  if (o.activity) {
-    for (var a of o.activity) {
-      emit([a.doc, a.date, o._id]);
+  if (o.user_activity) {
+    for (var a of o.user_activity) {
+      emit([a.doc, a.date, o.user]);
     }
-  } else if (!o.diary_name) { 
+  } else if (!o.diary_name && !o.fullname) { 
     var lastedit = "1";
     if (o.history) lastedit = o.history[o.history.length-1].date;
     if (o.contributors) {

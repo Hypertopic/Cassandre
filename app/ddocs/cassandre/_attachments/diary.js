@@ -112,3 +112,81 @@ async function getMore(coord) {
     });
   });
 }
+
+function informingUser() {
+  refresh = false;
+  $("#content").append($('<div>', {
+    text: text.patience_during_conversion,
+    class: "alert alert-primary justify-content-between",
+    role: "alert"
+  }));
+  $('a').removeAttr('href');
+  $('.btn').addClass('disabled');
+  $('button').prop('disabled', true).tooltip('dispose');
+  $('#tasklist-alert').remove();
+  $('#content>.alert').append($('.spinner-border'));
+}
+
+function cleaningUserDoc(d) {
+  d = JSON.parse(d);
+  var b = d.user_activity.filter(function(m) {
+    var p = memos.map(function(a){return a.id}).indexOf(m.doc);
+    return p > -1;
+  });
+  var data = {
+    'memos': b.map(function(a){return a.doc})
+  };
+  if (d.memo_order && d.memo_order.length > 0) data.order = diary_id
+  $.ajax({
+    type: "PUT",
+    url: '../clean_user_activity/'+user,
+    contentType: "application/json",
+    data: JSON.stringify(data)
+  })
+}
+
+function creatingDiaryUserDoc(by) {
+  var user_activity = [],
+      obj = {
+    'diary': diary_id,
+    'user': user,
+    'memo_order': by,
+    'user_activity': [],
+    'contributors': [user],
+    'readers': [user]
+  };
+  $.ajax({
+    url: '../'+user,
+    type: "GET",
+    dataType: "json"
+  }).done(function(u) {
+    if(u.activity && u.activity.length > 0) {
+      user_activity = u.activity.filter(function(m) {
+        var p = memos.map(function(a){return a.id}).indexOf(m.doc);
+        return p > -1 && memos[p].date < m.date;
+      });
+    }
+    obj.user_activity = user_activity
+    $.ajax({
+      url: relpath+diary_id+'_'+user,
+      type: 'PUT',
+      contentType: 'application/json',
+      data: JSON.stringify(obj)
+    }).done(function() {
+      refresh = true;
+      reload();
+    })
+  });
+}
+
+function relocateActivity(by) {
+  $.ajax({
+    url: relpath+diary_id+'_'+user,
+    type: 'GET'
+  }).done(function(d){
+    cleaningUserDoc(d);
+  }).fail(function(){
+    informingUser()
+    creatingDiaryUserDoc(by)
+  });
+}

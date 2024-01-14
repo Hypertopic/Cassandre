@@ -54,7 +54,7 @@ function(o) {
     ['name', 'date', 'update', 'type'].forEach(function(order) {
       emit([o._id, order, null, 'D'], { diary_name: o.diary_name });
     });
-  } else if (!o.commented) {
+  } else if (!o.commented && !o.user_activity) {
     var groundings = o.groundings || [],
         preview = ' ';
     if (o.statement) {

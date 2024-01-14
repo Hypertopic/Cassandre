@@ -1,14 +1,12 @@
 function(o) {
   if (o.diary_name)
     emit([o._id, 'D'], { diary_name: o.diary_name });
-  if (o.order)
-    for (var item of o.order) {
-      var value = { by: item.by };
-      if (o.fullname) value.fullname = o.fullname;
-      if (o.activity) value.activity = o.activity;
-      emit([item.diary, o._id, '0'], value);
-    }
-  if (!o.commented && !o.diary_name && !o.activity) {
+  if (o.user_activity) {
+    var value = { activity: o.user_activity };
+    if (o.memo_order) value.by = o.memo_order;
+    emit([o.diary, o.user, '0'], value);
+  }
+  if (!o.commented && !o.diary_name && !o.activity && !o.user_activity ) {
     var diary = o.diary || o.corpus;
     var contributors = [];
     if (typeof o.readers !== "undefined") contributors = o.readers;

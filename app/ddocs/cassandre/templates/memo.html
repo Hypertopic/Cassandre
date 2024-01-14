@@ -189,6 +189,7 @@
       {{#authorized}}
       <div role="group">
         {{#editable}}
+        {{^initial}}
         <button class="groundings btn navbar-btn btn-sm collapse show" data-toggle="modal" data-target="#add_grounding">
           <span data-toggle="tooltip" data-placement="top" title="{{i18n.i_add_groundings}}">
             <svg class="bi" width="24" height="24" fill="currentColor">
@@ -196,6 +197,7 @@
             </svg>
           </span>
         </button>
+        {{/initial}}
         <button class="groundings btn navbar-btn btn-sm collapse show d-none" data-toggle="modal" data-target="#remove_grounding" id="remove_grounding_btn">
           <span data-toggle="tooltip" data-placement="top" title="{{i18n.i_remove_grounding}}">
             <svg class="bi" width="24" height="24" fill="currentColor">

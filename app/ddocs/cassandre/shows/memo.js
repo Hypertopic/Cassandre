@@ -43,12 +43,10 @@ function(o, req){
            || (o.readers && o.readers.indexOf(username)>-1)
            || req.userCtx.roles.indexOf("_admin")>-1,
     editing: editing,
-    groundings: o.groundings,
     peer: req.peer,
     locale: req.headers["Accept-Language"].split(',')[0].substring(0,2),
     leaves: [],
     logged: username,
-//    logged_fullname: false,
     name: o.name.replace(/\s/g, ' '),
     public: (!o.readers || o.readers.length==0 || !o.contributors || o.contributors.length==0),
     readers: readers,
@@ -56,6 +54,11 @@ function(o, req){
     roles: req.userCtx.roles,
     type: type,
     update_seq: req.info.update_seq
+  }
+  if (o.initial) {
+    data.initial = o.initial;
+  } else {
+    data.groundings = o.groundings;
   }
   if (data.peer == '127.0.0.1' && req.headers['X-Forwarded-For'] ) {
     var ips = req.headers['X-Forwarded-For'].split(',');

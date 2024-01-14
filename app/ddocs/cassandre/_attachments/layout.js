@@ -138,7 +138,7 @@ function create(type, name, highlight, anchor) {
       break;
     }
   } else {
-    let i = 0;
+    let i = 0, j = 0;
     $.ajax({
       url: '../memo_attribute/'+diary_id+'',
       type: 'GET',
@@ -147,7 +147,11 @@ function create(type, name, highlight, anchor) {
       if (type == 'diagram') {
         i = -1;
       } else {
-        i = existing_memos.rows.map(function(e) { return e.value.name; }).indexOf(name);
+        for (j in existing_memos.rows) {
+          if (existing_memos.rows[j].key[4] === name) {
+            i = j;
+          }
+        }
       }
       if (i != -1) {
         if(existing_memos.rows[i].value.groundings.indexOf(this_id) != -1 && highlight.length < 1) {
@@ -156,7 +160,7 @@ function create(type, name, highlight, anchor) {
         } else {
           leaf_type = existing_memos.rows[i].value.type,
           leaf_id = existing_memos.rows[i].value.id;
-          if (['diagram','graph','table'].indexOf(leaf_type) > -1) {
+          if (['diagram','graph','table'].indexOf(leaf_type) > -1 || existing_memos.rows[i].value.initial) {
             $('.linkLeaf').addClass('d-none');
             $('#existing_memo').modal('show');
           } else {

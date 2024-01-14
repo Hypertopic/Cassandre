@@ -83,6 +83,7 @@ function(o) {
         groundings: groundings,
         preview: preview.substr(0,3000)
       };
+      if (o.initial) obj.initial = true;
       emit([diary, 'name', user, 'M', name], obj);
       emit([diary, 'date', user, 'M', date], obj);
       emit([diary, 'update', user, 'M', update], obj);

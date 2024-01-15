@@ -138,7 +138,7 @@ function create(type, name, highlight, anchor) {
       break;
     }
   } else {
-    let i = 0, j = 0;
+    let i = -1;
     $.ajax({
       url: '../memo_attribute/'+diary_id+'',
       type: 'GET',
@@ -147,7 +147,7 @@ function create(type, name, highlight, anchor) {
       if (type == 'diagram') {
         i = -1;
       } else {
-        for (j in existing_memos.rows) {
+        for (let j in existing_memos.rows) {
           if (existing_memos.rows[j].key[4] === name) {
             i = j;
           }
@@ -160,7 +160,8 @@ function create(type, name, highlight, anchor) {
         } else {
           leaf_type = existing_memos.rows[i].value.type,
           leaf_id = existing_memos.rows[i].value.id;
-          if (['diagram','graph','table'].indexOf(leaf_type) > -1 || existing_memos.rows[i].value.initial) {
+          if (['diagram','graph','table'].indexOf(leaf_type) > -1 
+           || typeof (existing_memos.rows[i].value.initial) !== 'undefined') {
             $('.linkLeaf').addClass('d-none');
             $('#existing_memo').modal('show');
           } else {

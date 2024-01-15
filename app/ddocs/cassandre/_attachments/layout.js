@@ -121,8 +121,7 @@ $('#existing_memo').on('hidden.bs.modal', function () {
 })
 function create(type, name, highlight, anchor) {
   $('.spinner').removeClass('d-none');
-  name = name.replace(/\t/g, ' ').trim();
-  name = name.substr(0,1).toUpperCase()+name.substr(1);
+  name = capitalize(name.replace(/\t/g, ' ').trim());
   if (name.replace(/[ ,]/g, '') == '' && type != 'diagram') {
     $('.spinner').addClass('d-none');
     switch (type) {
@@ -449,4 +448,7 @@ function getFullname(o) {
     async: false,
     dataType: "json"
   }).done(data => fullnames[data.rows[0].id] = data.rows[0].value.fullname);
+}
+function capitalize(n) {
+  return n.substr(0,1).toUpperCase()+n.substr(1)
 }

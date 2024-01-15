@@ -38,7 +38,8 @@ $('#name').on('keypress', function(key) {
   if (key.which == 13) rename();
 });
 function rename() {
-  if ($('#name').val().trim() == '') {
+  let memo_name = $('#name').val().trim()
+  if (memo_name == '') {
     switch(this_type){
       case ('graph'):
         alert(enter_graph_name);
@@ -58,14 +59,14 @@ function rename() {
       break;
     }
   } else {
-    renameDiagrams(diagram_leaves,$('#name').val().trim());
+    renameDiagrams(diagram_leaves, capitalize(memo_name));
   }
 };
 async function renameDiagrams(ids,name) {
   ids.forEach(async (id) => {
     await renameDiagram(id,name);
   })
-  edit_name();
+  edit_name()
 }
 function renameDiagram(id,name) {
   $.ajax({
@@ -83,9 +84,9 @@ function edit_name() {
     url: '../edit_name/'+this_id,
     type: 'PUT',
     contentType: 'application/json',
-    data: $('#name').val().trim()
+    data: capitalize($('#name').val().trim())
   }).fail(error_alert)
   .done(function(){
     refresh = true;
   }).done(reload);
-};
+}

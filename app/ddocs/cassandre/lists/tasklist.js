@@ -11,6 +11,7 @@ function(head, req) {
     deadend: [],
     diagram: [],
     editing: [],
+    initial: [],
     i18n: localized(),
     list: true,
     locale: req.headers["Accept-Language"].split(',')[0].substring(0,2),
@@ -39,6 +40,9 @@ function(head, req) {
       case ('G'):
         if (!r.doc) data.ungrounded.push(obj);
       break;
+      case ('I'):
+        data.initial.push(obj);
+      break;
       case ('L'):
         if (!r.doc) data.deadend.push(obj);
       break;
@@ -56,7 +60,14 @@ function(head, req) {
       break;
     }
   }
-  data.ungrounded.shift();
+  if (data.initial.length < 1) {
+    data.ungrounded.shift();
+  } else {
+    for (var i of data.initial.map((e) => (e.id))) {
+      var j = data.ungrounded.map((f) => (f.id)).indexOf(i);
+      if (j > -1) data.ungrounded.splice(j, 1);
+    }
+  }
   provides("html", function() {
     return Mustache.to_html(templates.todo, data, shared);
   });

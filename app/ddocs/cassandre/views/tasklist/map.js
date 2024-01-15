@@ -28,6 +28,7 @@ function(o) {
         emit([o.diary, user, 'O', history_last], {'id': o._id, 'name': match});
       }
     }
+    if (o.initial) emit([diary, user, 'I', history_first], {'id': o._id, '_id': o._id, 'name': o.name});
     if (o.groundings && o.groundings.length < 1)
       emit([diary, user, 'G', history_first], {'id': o._id, '_id': null, 'name': o.name});
     if (o.groundings && o.groundings.length == 1) {

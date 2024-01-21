@@ -230,7 +230,7 @@
       } else {
         momentRelative('#activity ul');
         $('#activities li a').html(function(i, text) {
-          var md = converter.makeHtml(text.replace(/&gt;/g, '>').trim());
+          var md = converter.makeHtml(text.replace(/&gt;/g, '>').replace(/\[([^\]]*)\]\([^\)]*\)/, '$1').trim());
           if (md.substring(0,3) == '<p>') md = md.replace(/<\/?p>/g, '');
           return md;
         });

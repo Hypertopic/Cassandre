@@ -380,7 +380,7 @@ function renderComments(converter){
 function renderPreviews(converter){
   $('.preview').html(function(i, text) {
     var md = converter.makeHtml(text.replace(/&gt;/g, '>').trim());
-    md = md.replace(/<\/?p>/g, '');
+    md = md.replace(/<\/?p>/g, '').replace(/!?\[(.*)\]\(.*/, '$1').replace(/~~|_|\[|\*\*|\*/, '');
     return md;
   });
 };

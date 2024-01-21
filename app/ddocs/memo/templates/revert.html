@@ -53,13 +53,16 @@
       </nav>
   {{>script}}
   <script>
-  var revisions = [], current = {{current}}, bodies = [], selected = current,
+  let revisions = [], current = {{current}}, bodies = [], selected = current, fullnames = [],
       converter = new showdown.Converter({
     parseImgDimensions: 'true',
     tables: 'true',
     tasklists: 'true',
     strikethrough: 'true'
   });
+  {{#fullnames}}
+  fullnames['{{user}}'] = '{{name}}'; 
+  {{/fullnames}}
   converter.setFlavor('github');
   let diary_id = "{{diary}}"
   $(document).ready(function() {
@@ -75,7 +78,11 @@
           $('#bodies').append($('<div>', { class: 'version d-none', id: 'v'+t })); 
           $('#groundings').append($('<li>', { id: 'tab_'+t}));
       }
-      $('#tab_'+current).append($('<button>', { class: "btn btn-outline-secondary active", text: hr_time('{{date}}')}))
+      var doc = {
+        name: '{{{name}}}',
+        history: [{'user': '{{user}}', 'date': '{{date}}'}]
+      }
+      $('#tab_'+current).append($('<button>', { class: "btn btn-outline-secondary active", html: version_tab(doc)}))
         .on('click', function(){showOnly($(this).prop('id').split('_')[1]); });
       for (var r of revisions) {
         if(r.status == 'available') {
@@ -90,6 +97,13 @@
     stickToHeader();
   });
 
+  function version_tab(o){
+    let u = o.history[o.history.length-1].user, 
+        d = o.history[o.history.length-1].date
+    if (!fullnames[u]) getFullname(u)
+    let tab_text = o.name.substr(0, 20)+'<br/>'+fullnames[u]+'<br/>'+ hr_time(d)
+    return tab_text
+  }
   function getPrevious(rev){
     $.ajax({
       url: '../rev/{{_id}}/'+rev+'/',
@@ -103,7 +117,7 @@
         bodies.push({
           version: n, name: old.name, body: old.body
         })
-        $('#tab_'+n).append($('<button>', { class: "btn btn-outline-secondary", text: hr_time(old.history[old.history.length-1].date)}))
+        $('#tab_'+n).append($('<button>', { class: "btn btn-outline-secondary", html: version_tab(old)}))
         .on('click', function(){showOnly($(this).prop('id').split('_')[1]); });
         $('#v'+n).append($('<h2>', { text: old.name }))
           .append($('<div>', { class: 'content', text: old.body}))

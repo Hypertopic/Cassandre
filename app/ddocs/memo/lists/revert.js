@@ -33,6 +33,7 @@ function(head, req){
           current: row.doc._rev.split('-')[0],
           editable: !row.doc.contributors || row.doc.contributors && row.doc.contributors.indexOf(username)>-1 || req.userCtx.roles.indexOf("_admin")>-1,
           editing: row.doc.editing || false,
+          fullnames: [],
           name: row.doc.name,
           locale: req.headers["Accept-Language"].split(',')[0].substring(0,2),
           logged: username,
@@ -40,6 +41,7 @@ function(head, req){
           peer: req.peer,
           type: row.doc.type,
           date: row.doc.history[row.doc.history.length-1].date,
+          user: row.doc.history[row.doc.history.length-1].user,
           diary: row.doc.diary,
           body: row.doc.body,
           groundings:[]
@@ -47,6 +49,12 @@ function(head, req){
       break;
       }
     if (fullnames[username]) data.logged_fullname = fullnames[username];
+  }
+  for (var i in fullnames) {
+    data.fullnames.push({
+      user: i,
+      name: fullnames[i]
+    })
   }
   return Mustache.to_html(templates.revert, data, shared);
 }

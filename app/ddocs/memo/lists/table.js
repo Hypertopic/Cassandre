@@ -43,7 +43,8 @@ function(head, req) {
         var user = row.value._id;
         if (row.doc && !fullnames[user]) fullnames[user] = row.doc.fullname;
         if (row.doc) user = row.doc.fullname;
-        data.creator = user;
+        data.creator_fullname = user;
+        data.creator = row.value._id;
         data.date = row.value.date;
       break;
       case ('G'):

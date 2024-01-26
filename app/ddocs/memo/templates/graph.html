@@ -64,7 +64,6 @@
           {{#authorized}}
           <h1 {{#editable}}class="editable"{{/editable}}> <img title="{{i18n.i_memo.graph}}" src="../style/{{type}}.svg"/> {{name}} </h1>
           <input id="name" type="search" class="form-control hidden" value="{{name}}"/>
-          {{>creator}}
           <div id="graph" class="d-none"></div>
           {{>comments}}
           <div aria-live="polite" aria-atomic="true" class="position-0">
@@ -169,6 +168,7 @@
       articulations = [],
       candidates = [],
       edges = [],
+      fullnames = [],
       main = document.getElementById("content"),
       container = document.getElementById('graph'),
       userids = [],

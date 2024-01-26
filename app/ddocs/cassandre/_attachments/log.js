@@ -28,7 +28,7 @@ $('#search-icon').on('click', function() {
   $('#reload').removeClass('hidden');
   $('#reload').addClass('ml-0');
   $('#header .dropdown').remove();
-  $('#header #memo_creator').remove();
+  $('#header .creator').remove();
   $('#footer').remove();
   $('#diary').remove();
   $('#show-activity').addClass('hidden');

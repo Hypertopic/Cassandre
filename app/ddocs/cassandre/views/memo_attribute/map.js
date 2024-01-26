@@ -2,6 +2,7 @@ function(o) {
   var diary = o.diary || o.corpus || o._id,
       type = o.type || 'transcript',
       name = o.name || '...',
+      creator = o.user || '',
       date = o.date,
       update = o.date,
       contributors = [],
@@ -16,6 +17,7 @@ function(o) {
   users = contributors.filter(function(item, pos, ary) {return !pos || item != ary[pos - 1];} );
   if (o.history) {
     date = o.history[0].date;
+    creator = o.history[0].user;
     update = o.history[o.history.length-1].date;
     for (var [id, h] of Object.entries(o.history)) {
       var value = {
@@ -78,6 +80,7 @@ function(o) {
         rev: o._rev,
         name: name,
         type: type,
+        creator: creator,
         date: date,
         update: update,
         groundings: groundings,

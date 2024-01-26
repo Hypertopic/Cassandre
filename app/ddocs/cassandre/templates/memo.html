@@ -37,7 +37,6 @@
           </div>
           {{^statements}}
           {{>comments}}
-          {{>creator}}
           {{/statements}}
           <div aria-live="polite" aria-atomic="true" class="position-0">
             <div id="toasts"></div>
@@ -464,7 +463,7 @@
     {{^editing}}
     $('#revert').removeClass('hidden');
     {{/editing}}
-    $('#kwic').parent().parent().prepend($('#revert')).prepend($('#memo_creator'));;
+    $('#kwic').parent().parent().prepend($('#revert')).prepend($('.creator'));;
     $('#modify_rights').removeClass('hidden');
     poller('memo', 'now');
     {{/statements}}

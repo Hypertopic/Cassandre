@@ -16,6 +16,25 @@ function stickToHeader() {
     $('button').tooltip({ trigger: 'hover', offset: "0, 8" })
   })
 }
+function showCreator() {
+  $('.creator').each(function( index ) {
+    let u = $(this).attr('class').split(' ')[1];
+    if (!fullnames[u]) getFullname(u)
+    let n = fullnames[u]
+    if (typeof (n) === 'undefined' || n.length < 1) {
+      n = u
+      fullnames[u] = u
+    }
+    let i = n.split(/[ -\.]+/).map((n) => n.substr(0,1).normalize('NFD').replace(/\p{Diacritic}/gu, '')).join('').toUpperCase();
+    $(this).siblings().children('.username').text(n);
+    let t = $(this).siblings('.creator_title').text();
+    $(this)
+      .text(i)
+      .attr('title', t)
+      .removeClass('hidden')
+    coloringCreatorTag(u)
+  })
+}
 $(window).resize(function() {
   stickToHeader();
 });
@@ -433,13 +452,30 @@ function momentRelative(what) {
     }
   });
   if (what != '') {
-    let items = $(what+' li .moment'),
+    let items = $(what+' li .moment').not('.creator_title > .moment'),
         n = items.length / 30;
     if (n !== parseInt(n, 10)) $('#next').prop('disabled', true);
     items.each(function() {
-      $(this).text($(this).text().replace(/./, function(x) { return x.toUpperCase(); }));
+      $(this).text(capitalize($(this).text()));
     });
   }
+}
+function coloringCreatorTag(userid){
+  let name = fullnames[userid]
+  if (typeof (name) === 'undefined' || name.length < 1) name = userid
+  let initials = name.split(/[ -\.]+/).map((n) => n[0].normalize('NFD').replace(/\p{Diacritic}/gu, '')),
+      rgb = [],
+      contrast = 'light';
+  for (i of initials) rgb.push((i.charCodeAt() - 60) * 16)
+  if (initials.length === 2) rgb.splice(1, 0, (name.length - 7) * 11)
+  if (rgb.reduce((a, b) => a + b, 0) > 600) contrast = 'dark'
+  $('.creator')
+    .filter(function( index ) {
+      return $(this).attr('class').split(' ')[1] === userid;
+    })
+    .addClass('text-'+contrast)
+    .addClass('border-'+contrast)
+    .css('background-color', 'rgb('+rgb.join(',')+')')
 }
 function getFullname(o) {
   $.ajax({

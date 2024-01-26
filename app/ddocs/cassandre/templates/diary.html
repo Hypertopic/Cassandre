@@ -129,6 +129,7 @@
         strikethrough: 'true'
       }),
       from = '0',
+      fullnames = [],
       horizon = '{}',
       list = [],
       number = 0,
@@ -170,6 +171,7 @@
       $('#storing_fullname_dialog').modal('show');
     }).done(function(data) {
       if(data.fullname && data.fullname.length > 0) {
+        fullnames['{{logged}}'] = data.fullname
         updateTooltip('signout', '{{i18n.i_sign-out}}<br/>'+data.fullname);
       } else {
         $('#storing_fullname_dialog').modal('show');
@@ -257,21 +259,27 @@
         var sort_key = m.sortkey;
         var j = activity.findIndex(e => e.doc === m.id);
         if (j > -1 && activity[j].date > m.update) unread = '';
-        var checkbox = '<input type="checkbox" id="'+m.id+'" name="'+m.rev+'" class="hidden deletable" />';
-        if (m.rev == 'statement') checkbox = '<input type="checkbox" class="hidden" disabled />';
+        var checkbox = '<input type="checkbox" id="'+m.id+'" name="'+m.rev+'" class="hidden deletable" />',
+            creator = ' <span class="creator '+m.creator+' badge"></span>'
+                    + '<span class="hidden creator_title">'+"{{i18n.i_created-by}} "+'<span class="username '+m.creator+'"></span> <span class="'+m.date+' moment"></span>';
+        if (m.rev == 'statement') {
+          checkbox = '<input type="checkbox" class="hidden" disabled />';
+          creator = '';
+        }
         var li = '<li class="'+m.type+'" name="'+sort_key+'">' + checkbox
           +' <span id="'+m.id+'" name="'+m.update+'" class="'+date+' moment '+unread+'"></span>&nbsp;– '
           +'<span class="mytooltip">'
           +'<a href="../'+m.path+'/'+m.id+'" class="'+unread+'">'+m.name+'</a>';
         if (typeof m.preview !== 'undefined' && m.preview.trim().length > 0)
           li += '<span class="preview text-{{>contrastcolor}} bg-{{>menucolor}}">'+m.preview+'</span>';
-        li += '</span></li>';
+        li += '</span>'+creator+'</li>';
         $("#memos").append(li);
       }
     }
     $('#'+diary_id).next('.moment').removeClass('unread');
     $('#'+diary_id).next('.moment').next('.mytooltip').find('.unread').removeClass('unread');
     momentRelative('#memos');
+    showCreator()
     converter.setFlavor('github');
     $('.preview').html(function(i, text) {
       return converter.makeHtml(text.replace(/&gt;/g, '>').trim());

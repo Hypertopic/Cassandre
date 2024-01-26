@@ -18,6 +18,7 @@ function(head, req) {
     switch (row.key[3]) {
       case ('M'):
         var name = row.value.name.replace(/"/g, '&#34;').replace(/\s/g, ' '),
+            creator = row.value.creator,
             date = row.value.date,
             path = 'memo';
         switch (row.value.type) {
@@ -49,6 +50,7 @@ function(head, req) {
           }
           data.memos.push({
             preview: preview,
+            creator: creator,
             diary: diary,
             id: id,
             name: name,

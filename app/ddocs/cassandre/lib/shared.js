@@ -27,7 +27,8 @@ var shared = {
   log: "\
     <ul class='mr-0 ml-auto navbar-nav nav-fill'><li class='form-inline justify-content-between'>\
       {{#type}}{{^statements}}\
-      <button id='memo_creator' class='btn btn-outline-{{>contrastcolor}} hidden' disabled></button>\
+      <button class='creator {{creator}} btn btn-outline-{{>contrastcolor}} d-none d-sm-block hidden' disabled></button>\
+      <span class='hidden creator_title'>{{i18n.i_created-by}} <span class='username {{creator}}'>{{creator_fullname}}</span> <span class='{{date}} moment'></span></span>\
       {{/statements}}{{/type}}\
       {{#diary}}\
       {{>rights}}\
@@ -94,10 +95,6 @@ var shared = {
   menucolor:"dark",
   contrastcolor:"light",
   navbarstyle:"navbar navbar-{{>menucolor}} text-{{>contrastcolor}}",
-  creator:"\
-    <div class='hidden' id='creator'>\
-      {{i18n.i_created-by}} <span class='username {{creator}}'>{{creator}}</span> <span class='{{date}} moment'></span>\
-    </div>",
   rights:"\
       {{#type}}{{#authorized}}{{^statements}}\
       <button class='btn hidden {{#public}}{{#logged}}text-dark bg-warning{{/logged}}{{/public}}' id='modify_rights' data-html='true' title='\

@@ -190,3 +190,11 @@ function relocateActivity(by) {
     creatingDiaryUserDoc(by)
   });
 }
+function setDiaryName(dn) {
+  if (dn) {
+    $('h1').prepend(dn);
+    $('h1 .spinner-border').addClass("d-none");
+    $('#name').val(dn);
+    $('title').prepend(dn);
+  }
+}

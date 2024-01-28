@@ -131,6 +131,7 @@
       from = '0',
       fullnames = [],
       horizon = '{}',
+      logged = "{{logged}}",
       list = [],
       number = 0,
       origin = '0',
@@ -149,35 +150,42 @@
       };
   if (["date","update"].indexOf(by) > -1) horizon = '1970';
   $(document).ready(function() {
-    $.ajax({
-      url: '../'+diary_id,
-      type: "GET",
-      dataType: "json"
-    }).done(function(d){
-      if (d.diary_name) {
-        $('h1').prepend(d.diary_name);
-        $('h1 .spinner-border').addClass("d-none");
-        $('#name').val(d.diary_name);
-        $('title').prepend(d.diary_name);
-      }
-    });
+    let diary_name = localStorage.getItem(diary_id)
+    if (diary_name) {
+      setDiaryName(diary_name)
+    } else {
+      $.ajax({
+        url: '../'+diary_id,
+        type: "GET",
+        dataType: "json"
+      }).done(function(d){
+        setDiaryName(d.diary_name)
+        localStorage.setItem(diary_id, d.diary_name)
+      });
+    }
     announceMaintenance(maintenance, maintenance_in_progress);
     {{#logged}}
-    $.ajax({
-      url: "../{{logged}}",
-      type: "GET",
-      dataType: "json"
-    }).fail(function() {
-      $('#storing_fullname_dialog').modal('show');
-    }).done(function(data) {
-      if(data.fullname && data.fullname.length > 0) {
-        fullnames['{{logged}}'] = data.fullname
-        updateTooltip('signout', '{{i18n.i_sign-out}}<br/>'+data.fullname);
-      } else {
+    fullnames[logged] = localStorage.getItem(logged)
+    if (fullnames[logged]) {
+      updateTooltip('signout', '{{i18n.i_sign-out}}<br/>'+fullnames[logged])
+    } else {
+      $.ajax({
+        url: '../'+logged,
+        type: "GET",
+        dataType: "json"
+      }).fail(function() {
         $('#storing_fullname_dialog').modal('show');
-      }
-    });
-    relocateActivity(by);
+      }).done(function(data) {
+        if(data.fullname && data.fullname.length > 0) {
+          fullnames[logged] = data.fullname
+          localStorage.setItem(logged, data.fullname)
+          updateTooltip('signout', '{{i18n.i_sign-out}}<br/>'+fullnames[logged])
+        } else {
+          $('#storing_fullname_dialog').modal('show');
+        }
+      });
+    }
+    relocateActivity(by)
     for (var m of memos) {
       var j = activity.map(function(a){return a.doc}).indexOf(m.id);
       if (activity.length > -1 && j > -1) {

@@ -80,6 +80,7 @@ function renameDiagram(id,name) {
   });
 }
 function edit_name() {
+  localStorage.removeItem(this_id);
   $.ajax({
     url: '../edit_name/'+this_id,
     type: 'PUT',

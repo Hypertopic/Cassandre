@@ -181,15 +181,6 @@
     showMore($('li').last().find('span').attr('id'));
   });
 
-  function getFullname(o) {
-    $.ajax({
-      url: "../userlist/"+o,
-      type: "GET",
-      async: false,
-      dataType: "json"
-    }).done(data => fullnames[data.rows[0].id] = data.rows[0].value.fullname);
-  }
-
   function showMore(start) {
     $.ajax({
       url: '../activity/'+diary_id+'/'+start,

@@ -474,7 +474,7 @@ function momentRelative(what) {
 function coloringCreatorTag(userid){
   let name = fullnames[userid]
   if (typeof (name) === 'undefined' || name.length < 1) name = userid
-  let initials = name.split(/[ -\.]+/).map((n) => n[0].normalize('NFD').replace(/\p{Diacritic}/gu, '')),
+  let initials = name.split(/[ -\.]+/).map((n) => n.substr(0,1).normalize('NFD').replace(/\p{Diacritic}/gu, '').toUpperCase()).filter((e) => e !== ''),
       rgb = [],
       contrast = 'light';
   for (i of initials) rgb.push((i.charCodeAt() - 60) * 16)

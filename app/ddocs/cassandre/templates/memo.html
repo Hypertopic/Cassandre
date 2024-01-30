@@ -468,16 +468,28 @@
     poller('memo', 'now');
     {{/statements}}
     {{#statements}}
-    $.ajax({
-      url: '../' + diary_id,
-      type: "GET",
-      dataType: "json"
-    }).done(function(data) {
-      if(data.diary_name) {
-        updateTooltip('diary', data.diary_name)
-        $('title').prepend(data.diary_name);
+    $('#groundings li').each(function() {
+      let preview = $(this).find('.preview').text()
+      if (preview) {
+        $(this).find('.toggle').removeClass('hidden')
+        $(this).find('.preview').removeClass('hidden')
       }
-    });
+    })
+    let diary_name = localStorage.getItem(diary_id)
+    if (diary_name) {
+      setDiaryName(diary_name)
+    } else {
+      $.ajax({
+        url: '../'+diary_id,
+        type: "GET",
+        dataType: "json"
+      }).done(function(d){
+        if(data.diary_name) {
+          setDiaryName(d.diary_name)
+          localStorage.setItem(diary_id, d.diary_name)
+        }
+      });
+    }
     poller('statements', '{{update_seq}}');
     {{/statements}}
     stickToHeader();

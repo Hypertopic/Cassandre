@@ -150,19 +150,8 @@
       };
   if (["date","update"].indexOf(by) > -1) horizon = '1970';
   $(document).ready(function() {
-    let diary_name = localStorage.getItem(diary_id)
-    if (diary_name) {
-      setDiaryName(diary_name)
-    } else {
-      $.ajax({
-        url: '../'+diary_id,
-        type: "GET",
-        dataType: "json"
-      }).done(function(d){
-        setDiaryName(d.diary_name)
-        localStorage.setItem(diary_id, d.diary_name)
-      });
-    }
+    let diary_name = getDiaryname(diary_id)
+    setDiaryName(diary_name)
     announceMaintenance(maintenance, maintenance_in_progress);
     {{#logged}}
     fullnames[logged] = localStorage.getItem(logged)

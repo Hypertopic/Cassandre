@@ -69,8 +69,9 @@
     {char: "'", base: /[\u2018-\u2019]/g},
     {char: 'EUR', base: /\u20AC/g}
   ];
-  var diary_id = '{{_id}}',
-      fullnames = types = [];
+  let diary_id = '{{_id}}',
+      fullnames = types = [],
+      logged = '{{logged}}';
   types["field"] = "{{i18n.i_memo.field}}";
   types["interview"] = "{{i18n.i_memo.transcript}}";
   types["transcript"] = "{{i18n.i_memo.transcript}}";
@@ -94,29 +95,12 @@
     $('.content').html(function(i, text) {
       return converter.makeHtml(text.trim());
     });
-    getFullname('{{logged}}');
-    $('#signout')
-      .tooltip('dispose')
-      .attr('title', "{{i18n.i_sign-out}}<br/>"+fullnames['{{logged}}'])
-      .tooltip({ offset: "0, 8" });
-    if ('{{diary}}') $.ajax({
-      url: "../{{diary}}",
-      type: "GET",
-      dataType: "json",
-      success: function(data) {
-        if(data.diary_name) {
-          $('title').text(data.diary_name);
-          $('#diary')
-            .tooltip('dispose')
-            .attr('title', data.diary_name)
-            .tooltip({ offset: "0, 8" });
-          $('#json').prop('href', $('#json').prop('href')+data.diary_name);
-          $('#xml').prop('href', $('#xml').prop('href')+data.diary_name);
-        }
-      }
-    }).done(function(){
-      $('#pdf').removeClass('disabled');
-    });
+    setSignoutTooltip(logged)
+    setDiaryTooltip(diary_id)
+    let diary_name = getDiaryname(diary_id)
+    $('#json').prop('href', $('#json').prop('href')+diary_name)
+    $('#xml').prop('href', $('#xml').prop('href')+diary_name)
+    $('#pdf').removeClass('disabled');
     $('.type').each(function() {
       let i = $(this).attr('data');
       $(this).text(types[i].replace('&#39;', "'"));
@@ -150,15 +134,6 @@
     .on('click', '#pdf', function() {
       printPDF();
     });
-
-  function getFullname(o) {
-    $.ajax({
-      url: "../userlist/"+o,
-      type: "GET",
-      async: false,
-      dataType: "json"
-    }).done(data => fullnames[data.rows[0].id] = data.rows[0].value.fullname);
-  }
 
   function inform(type, msg){
     $('.alert-primary').remove();

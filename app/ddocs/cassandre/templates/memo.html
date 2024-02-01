@@ -475,21 +475,7 @@
         $(this).find('.preview').removeClass('hidden')
       }
     })
-    let diary_name = localStorage.getItem(diary_id)
-    if (diary_name) {
-      setDiaryName(diary_name)
-    } else {
-      $.ajax({
-        url: '../'+diary_id,
-        type: "GET",
-        dataType: "json"
-      }).done(function(d){
-        if(data.diary_name) {
-          setDiaryName(d.diary_name)
-          localStorage.setItem(diary_id, d.diary_name)
-        }
-      });
-    }
+    setDiaryTooltip(diary_id)
     poller('statements', '{{update_seq}}');
     {{/statements}}
     stickToHeader();

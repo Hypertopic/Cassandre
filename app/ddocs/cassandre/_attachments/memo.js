@@ -143,11 +143,6 @@ function filter(type) {
   });
 }
 
-function setDiaryName(dn) {
-  updateTooltip('diary', dn)
-  $('title').prepend(dn)
-}
-
 function record(action, value) {
   $('#'+action+' .modal-body').append($('#loading').removeClass('hidden'));
   $.ajax({

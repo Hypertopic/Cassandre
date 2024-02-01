@@ -83,24 +83,15 @@
   {{>script}}
   <script>
   const diary_id = '{{diary}}';
+  let fullnames = []
   $(document).ready(function() {
-    var payload = '',
+    let payload = '',
         nComments = 0,
         converter = new showdown.Converter({strikethrough: 'true'}),
         nothing_to_show = '{{i18n.i_nothing-to-show}}';
     {{^logged}}nothing_to_show +='. {{i18n.i_sign-in-for-more}}';{{/logged}}
     {{#logged}}
-    $.ajax({
-      url: "../{{logged}}",
-      type: "GET",
-      dataType: "json",
-      success: function(data) {
-        if(data.fullname) $('#signout')
-          .tooltip('dispose')
-          .attr('title', "{{i18n.i_sign-out}}<br/>"+data.fullname)
-          .tooltip({ offset: "0, 8" });
-      }
-    });
+    setSignoutTooltip(logged)
     {{/logged}}
     $.ajax({
       url: "../comments/{{diary}}",

@@ -43,9 +43,11 @@
   <script>
   const diary_id = '{{diary}}';
   let from = '0',
+      fullnames = [],
       list = [],
       origin = '0',
       horizon = '{}',
+      logged = '{{logged}}',
       main = document.getElementById("content"),
       container = document.getElementById('graph'),
       result,
@@ -53,33 +55,9 @@
   $(document).ready(function() {
     drawGraphViz();
     {{#logged}}
-    $.ajax({
-      url: "../{{logged}}",
-      type: "GET",
-      dataType: "json",
-      success: function(data) {
-        if(data.fullname) {
-          $('#signout')
-            .tooltip('dispose')
-            .attr('title', "{{i18n.i_sign-out}}<br/>"+data.fullname)
-            .tooltip({ offset: "0, 8" });
-        }
-      }
-    });
-    $.ajax({
-      url: '../'+diary_id,
-      type: "GET",
-      dataType: "json",
-      success: function(data) {
-        if(data.diary_name) {
-          $('#diary')
-          .tooltip('dispose')
-          .attr('title',data.diary_name)
-          .tooltip({ offset: "0, 8" });
-          $('title').prepend(data.diary_name+' - ');
-        }
-      }
-    }).done(stickToHeader());
+    setSignoutTooltip(logged)
+    setDiaryTooltip(diary_id)
+    stickToHeader()
     {{/logged}}
   });
 

@@ -338,20 +338,7 @@ var getSatellites = function(logged, toDoAfter){
     for (var c of data.comments) {
       show_comment(c.id, c.user, c.date, c.text, c.checked);
     }
-    if (logged.length > 0) {
-      logged_fullname = localStorage.getItem(logged)
-      if (!logged_fullname) {
-        if (data.logged_fullname) {
-          logged_fullname = data.logged_fullname
-          localStorage.setItem(logged, logged_fullname)
-          if (!fullnames[logged]) fullnames[logged] = logged_fullname
-        } else {
-          if (!fullnames[logged]) getFullname(logged)
-          logged_fullname = fullnames[logged];
-        }
-      }
-      $('#signout').attr('title', sign_out+'<br/>'+logged_fullname);
-    }
+    setSignoutTooltip(logged)
     if (data.diary_name) {
       $('#diary').attr('title', data.diary_name)
       $('title').prepend(data.diary_name)
@@ -487,6 +474,31 @@ function coloringCreatorTag(userid){
     .addClass('text-'+contrast)
     .addClass('border-'+contrast)
     .css('background-color', 'rgb('+rgb.join(',')+')')
+}
+function setDiaryTooltip(id) {
+  let diary_name = getDiaryname(id)
+  if ($('title').text().trim().length > 0) $('title').prepend(' - ')
+  $('title').prepend(diary_name)
+  updateTooltip('diary', diary_name)
+}
+function setSignoutTooltip(u) {
+  if (!fullnames[u]) getFullname(u)
+  updateTooltip('signout', sign_out+'<br/>'+fullnames[u])
+}
+function getDiaryname(id) {
+  let diary_name = localStorage.getItem(id)
+  if (!diary_name) {
+    $.ajax({
+      url: '../'+id,
+      type: "GET",
+      async: false,
+      dataType: "json"
+    }).done(function(data) {
+      localStorage.setItem(id, data.diary_name)
+      diary_name = data.diary_name
+    })
+  }
+  return diary_name
 }
 function getFullname(o) {
   if (localStorage.getItem(o)) {

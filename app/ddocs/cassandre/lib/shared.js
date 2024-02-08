@@ -293,9 +293,10 @@ var shared = {
         sign_out = '{{i18n.i_sign-out}}',\
         updated_diary = '{{i18n.i_updated-diary}}',\
         wrong_password = '{{i18n.i_wrong-password}}'.replace('&#39;','\\'');\
+  getFullname('{{logged}}');\
   let refresh = true,\
       fullname = null,\
-      logged_fullname = '{{logged_fullname}}'.replace('&#39;','\\''),\
+      logged_fullname = fullnames['{{logged}}'],\
       nothing_to_show = '{{i18n.i_nothing-to-show}}';\
   var user = '{{peer}}';\
   {{^list}}\

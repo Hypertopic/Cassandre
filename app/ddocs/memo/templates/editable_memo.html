@@ -115,7 +115,8 @@
   });
   {{/editing}}
   {{/authorized}}
-  var warning = 'Save your content';
+  let fullnames = [],
+      warning = 'Save your content';
   $(document).ready(function() {
     {{^editing}}
     self.location = '../memo/{{_id}}';

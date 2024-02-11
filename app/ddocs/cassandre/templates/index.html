@@ -73,7 +73,13 @@
         dataType: "json"
       }).done(function(c){
         if (new Date().toISOString().substr(0,10) == c.maintenance.date.substr(0,10)) {
-          $('#last-maintenance').prepend("{{i18n.i_maintenance-scheduled}}".replace('@duration', c.maintenance.duration));
+          let now = new Date().getTime(),
+              interruption = new Date(c.maintenance.date).getTime();
+          if (now < interruption) {
+            $('#last-maintenance').prepend("{{i18n.i_maintenance-today_pre}}".replace('@duration', c.maintenance.duration))
+          } else {
+            $('#last-maintenance').prepend("{{i18n.i_maintenance-today_post}}".replace('@duration', c.maintenance.duration))
+          }
           $('#last-maintenance').append(new Intl.DateTimeFormat('{{locale}}', {hour: "numeric", minute: "numeric"}).format(new Date(c.maintenance.date)));
           $('#last-maintenance').removeClass("d-none").addClass("show");
         }

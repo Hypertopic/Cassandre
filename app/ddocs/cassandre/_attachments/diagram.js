@@ -7,20 +7,24 @@ $('.articulate').on('click', function() {
   adapt({link: $(this).attr('id')});
 });
 
-$("#write_statement").click(function () {
+function edit_statement() {
   refresh = false;
   $("#write_statement").tooltip('hide');
   $(".statement_text").remove();
   $('#statement .meta').text(name_statement+': ');
   $("#add-leaves").addClass('hidden');
   $("#footer .btn").addClass('hidden');
-  $("#statement").find('input').removeClass('hidden');
+  $("#statement").find('textarea').removeClass('hidden');
   $('#statement_done').removeClass('hidden');
   $('#reload').removeClass('hidden');
   $('html, body').scrollTop($(document).height());
+}
+
+$("#write_statement").click(function () {
+  edit_statement()
 });
 
-$("#add_situation").click(function () {
+function edit_situation() {
   refresh = false;
   $("#add_situation").tooltip('hide');
   $(".situation_text").remove();
@@ -31,9 +35,13 @@ $("#add_situation").click(function () {
   $('#situation_done').removeClass('hidden');
   $('#reload').removeClass('hidden');
   $('html, body').scrollTop($(document).height());
+}
+
+$("#add_situation").click(function () {
+  edit_situation()
 });
 
-$("#add_negative-case").click(function () {
+function edit_negative_case() {
   refresh = false;
   $("#add_negative-case").tooltip('hide');
   $(".negative_text").remove();
@@ -44,6 +52,10 @@ $("#add_negative-case").click(function () {
   $('#negative-case_done').removeClass('hidden');
   $('#reload').removeClass('hidden');
   $('html, body').scrollTop($(document).height());
+}
+
+$("#add_negative-case").click(function () {
+  edit_negative_case()
 });
 
 $(".dropdown-menu").on('show.bs.dropdown', function () {
@@ -55,16 +67,22 @@ $("#situation_done").click(function () {
 });
 
 $("#statement_done").click(function () {
-  adapt({statement: $('#statement').find('input').val().trim()});
+  adapt({statement: $('#statement').find('textarea').val().trim()});
 });
 
 $("#negative-case_done").click(function () {
   adapt({negative: $('#negative-case').find('input').val().trim()});
 });
 
-$('#statement > input').on('keypress', function(key) {
+$('#statement > textarea').on('keypress', function(key) {
   if (key.which == 13) {
-    adapt({statement: $('#statement').find('input').val().trim()});
+    adapt({statement: $('#statement').find('textarea').val().trim()});
+  }
+});
+
+$("#situation > input").on('keypress', function(key) {
+  if (key.which == 13) {
+    adapt({situation: $('#situation').find('input').val().trim()});
   }
 });
 

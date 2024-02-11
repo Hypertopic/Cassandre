@@ -79,7 +79,7 @@
           <div id="statement" class="hidden">
             <span class="meta"></span><span class="statement_text">{{statement}}</span>
             {{#editable}}
-            <input type="text" size="35" class="form-control hidden" placeHolder="{{i18n.i_content.statement}}" value="{{statement}}"/>
+            <textarea type="text" row="5" class="form-control hidden" placeHolder="{{i18n.i_content.statement}}">{{statement}}</textarea>
             {{/editable}}
           </div>
           {{>comments}}
@@ -336,6 +336,17 @@
     $('#modify_rights').removeClass('hidden');
     poller('memo', 'now');
   };
+  {{#editable}}
+  $('.situation_text').click(function(event) {
+    edit_situation()
+  })
+  $('.negative_text').click(function(event) {
+    edit_negative_case()
+  })
+  $('.statement_text').click(function(event) {
+    edit_statement()
+  })
+  {{/editable}}
   {{/authorized}}
 
   {{>layoutscript}}

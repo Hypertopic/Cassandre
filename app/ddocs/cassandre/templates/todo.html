@@ -83,7 +83,8 @@
   {{>script}}
   <script>
   const diary_id = '{{diary}}';
-  let fullnames = []
+  let fullnames = [],
+      logged = '{{logged}}'
   $(document).ready(function() {
     let payload = '',
         nComments = 0,

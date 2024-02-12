@@ -92,11 +92,7 @@
   $(document).ready(function() {
     {{^logged}}nothing_to_show +='. {{i18n.i_sign-in-for-more}}';{{/logged}}
     {{#logged}}
-    getFullname(logged);
-    $('#signout')
-      .tooltip('dispose')
-      .attr('title', sign_out+'<br/>'+fullnames[logged])
-      .tooltip({ offset: "0, 8" });
+    setSignoutTooltip(logged)
     {{/logged}}
     showMore("Z");
     stickToHeader();

@@ -6,7 +6,7 @@
     "i_corpora": "Corpora",
     "i_loading": "Loading...",
     "i_patience-during-conversion": "This conversion may take some time. Please do not close the page",
-    "i_maintenance": "The server will be updated at @moment. You will experience a @duration downtime. To avoid data loss, save your work before this maintenance",
+    "i_maintenance": "The server will be updated @moment. You will experience a @duration minutes downtime. To avoid data loss, save your work before this maintenance",
     "i_maintenance-today_pre": "A @duration minutes downtime is scheduled today and will start at ",
     "i_maintenance-today_post": "A scheduled maintenance (with @duration minutes downtime) occured today at ",
     "i_maintenance-in-progress": "The server is currently being updated. To avoid loss of data, do not modify your memos",

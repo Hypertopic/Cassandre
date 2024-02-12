@@ -34,7 +34,7 @@ function(head, req){
           editable: !row.doc.contributors || row.doc.contributors && row.doc.contributors.indexOf(username)>-1 || req.userCtx.roles.indexOf("_admin")>-1,
           editing: row.doc.editing || false,
           fullnames: [],
-          name: row.doc.name,
+          name: row.doc.name.replaceAll('"', '&quot;'),
           locale: req.headers["Accept-Language"].split(',')[0].substring(0,2),
           logged: username,
           logged_fullname: username,

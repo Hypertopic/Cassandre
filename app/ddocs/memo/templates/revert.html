@@ -79,7 +79,7 @@
           $('#groundings').append($('<li>', { id: 'tab_'+t}));
       }
       var doc = {
-        name: '{{{name}}}',
+        name: "{{{name}}}",
         history: [{'user': '{{user}}', 'date': '{{date}}'}]
       }
       $('#tab_'+current).append($('<button>', { class: "btn btn-outline-secondary active", html: version_tab(doc)}))

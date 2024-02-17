@@ -63,7 +63,7 @@
           {{/authorized}}
           {{#authorized}}
           <h1 {{#editable}}class="editable"{{/editable}}> <img title="{{i18n.i_memo.graph}}" src="../style/{{type}}.svg"/> {{name}} </h1>
-          <input id="name" type="search" class="form-control hidden" value="{{name}}"/>
+          <input id="name" type="search" class="form-control hidden" value="{{name}}" autocomplete="off"/>
           <div id="graph" class="d-none"></div>
           {{>comments}}
           <div aria-live="polite" aria-atomic="true" class="position-0">

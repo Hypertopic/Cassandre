@@ -48,7 +48,7 @@
           {{/authorized}}
           {{#authorized}}
           <h1 {{#editable}}class="editable"{{/editable}}> <img title="{{i18n.i_memo.table}}" src="../style/{{type}}.svg"/> {{name}} </h1>
-          <input id="name" type="search" class="form-control hidden" value="{{name}}"/>
+          <input id="name" type="search" class="form-control hidden" value="{{name}}" autocomplete="off"/>
           <div class="table-responsive">
             <table id="table" class="table-striped">
               <thead><tr><td></td></tr></thead>

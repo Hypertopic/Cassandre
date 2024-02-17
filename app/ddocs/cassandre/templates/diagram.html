@@ -67,19 +67,19 @@
           <div id="situation" class="hidden">
             <span class="meta"></span><span class="situation_text">{{situation}}</span>
             {{#editable}}
-            <input type="text" size="35" class="form-control hidden" placeHolder="{{i18n.i_content.situation}}" value="{{situation}}"/>
+            <input type="text" size="35" class="form-control hidden" placeHolder="{{i18n.i_content.situation}}" value="{{situation}}" autocomplete="off"/>
             {{/editable}}
           </div>
           <div id="negative-case" class="hidden">
             <span class="meta"></span><span id="temp" class="negative_text">{{negative}}</span>
             {{#editable}}
-            <input type="text" size="35" class="form-control hidden" placeHolder="{{i18n.i_content.negative-case}}" value="{{negative}}"/>
+            <input type="text" size="35" class="form-control hidden" placeHolder="{{i18n.i_content.negative-case}}" value="{{negative}}" autocomplete="off"/>
             {{/editable}}
           </div>
           <div id="statement" class="hidden">
             <span class="meta"></span><span class="statement_text">{{statement}}</span>
             {{#editable}}
-            <textarea type="text" row="5" class="form-control hidden" placeHolder="{{i18n.i_content.statement}}">{{statement}}</textarea>
+            <textarea type="text" row="5" class="form-control hidden" placeHolder="{{i18n.i_content.statement}}" autocomplete="off">{{statement}}</textarea>
             {{/editable}}
           </div>
           {{>comments}}

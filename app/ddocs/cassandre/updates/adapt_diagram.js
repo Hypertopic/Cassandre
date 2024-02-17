@@ -15,16 +15,16 @@ function (doc, req) {
     case('rename'):
     break;
     case('statement'):
-      doc.statement = o.statement;
+      doc.statement = o.statement.replace(/\s+/g, ' ');
     break;
     case('situation'):
-      doc.situation = o.situation;
+      doc.situation = o.situation.replace(/\s+/g, ' ');
     break;
     case('negative'):
-      doc.negative = o.negative;
+      doc.negative = o.negative.replace(/\s+/g, ' ');
     break;
   }
-  doc.name = body.name.replace(/\s/g, ' ');
+  doc.name = body.name.replace(/\s+/g, ' ');
   doc.groundings = doc.groundings.sort();
   if (!doc.history) doc.history = [];
   if (['rename', 'first', 'link'].indexOf(Object.keys(o)[0]) == -1) doc.history.push({

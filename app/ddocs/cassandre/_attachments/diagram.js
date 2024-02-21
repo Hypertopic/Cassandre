@@ -129,8 +129,8 @@ function adapt(o) {
   .fail(error_alert)
 }
 
-function draw_diagram(content1, content2, link, negative_case) {
-  var shape1 = shape2 = articulated = negative = '';
+function draw_diagram(content1, content2, link, situation, negative_case) {
+  var shape1 = shape2 = articulated = negative = negative_color = connection_color = '';
   switch (link) {
     case 'pp':
     case 'ipp':
@@ -189,20 +189,27 @@ function draw_diagram(content1, content2, link, negative_case) {
     break;
   }
   if (link == 'pp') {
-    articulated = '<path d="M170 30 H 330" stroke="green" stroke-width="2"/>'
+    articulated = '<path id="basic_connection" d="M170 30 H 330" stroke="green" stroke-width="2"/>'
       +'<path d="M170 270 H 330" stroke="green" stroke-width="2"/>';
     negative = '<path stroke-dasharray="10,10" d="M170 30 330 270" stroke="red" stroke-width="2"/>'
     +'<path id="negative-case_situation" stroke-dasharray="10,10" d="M170 270 330 30" stroke="red" stroke-width="2"/>';
+    connection_color = 'green';
+    negative_color = 'red';
   }
   if (link == 'ipp') {
-    articulated = '<path d="M170 30 330 270" stroke="red" stroke-width="2"/>'
+    articulated = '<path id="basic_connection" d="M170 30 330 270" stroke="red" stroke-width="2"/>'
       +'<path d="M170 270 330 30" stroke="red" stroke-width="2"/>';
     negative = '<path id="negative-case_situation" stroke-dasharray="10,10"  d="M170 30 H 330" stroke="green" stroke-width="2"/>'
       +'<path stroke-dasharray="10,10" d="M170 270 H 330" stroke="green" stroke-width="2"/>';
+    connection_color = 'red';
+    negative_color = 'green';
   }
   if (negative_case) {
     articulated += negative
-    +'<text fill=""><textPath href="#negative-case_situation" startOffset="50%" text-anchor="middle">'+negative_case+'</textPath></text>';
+    +'<text fill="'+negative_color+'"><textPath href="#negative-case_situation" startOffset="50%" text-anchor="middle">'+negative_case+'</textPath></text>';
+  }
+  if (situation) {
+    articulated += '<text fill="'+connection_color+'"><textPath href="#basic_connection" startOffset="50%" text-anchor="middle">'+situation+'</textPath></text>';
   }
   if ($('#groundings>li').length == 1) shape2 = content2 = '';
   $('#diagram').html(shape1+content1+shape2+content2+articulated);

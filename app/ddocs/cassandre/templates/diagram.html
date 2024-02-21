@@ -267,8 +267,8 @@
       }));
     });
     $("#firstList .dropdown-item[name={{first}}]").prop('disabled', 'disabled').addClass("disabled")
-    if("{{name}}".replace(/&#39;|&quot;/g, '').replace(/\t/g, ' ').trim().indexOf(one.replace(/"|'/g, '').replace(/\s/g, ' ').trim()) == -1
-    || "{{name}}".replace(/&#39;|&quot;/g, '').replace(/\t/g, ' ').trim().indexOf(two.replace(/"|'/g, '').replace(/\s/g, ' ').trim()) == -1) {
+    if("{{name}}".replace(/&#39;|&quot;/g, '').replace(/\t/g, ' ').trim().indexOf(one.replace(/"|'/g, '').replace(/\s+/g, ' ').trim()) == -1
+    || "{{name}}".replace(/&#39;|&quot;/g, '').replace(/\t/g, ' ').trim().indexOf(two.replace(/"|'/g, '').replace(/\s+/g, ' ').trim()) == -1) {
       if ($('#groundings>li').length == 2) adapt({rename: true});
     }
     {{/editable}}

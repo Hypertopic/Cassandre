@@ -9,7 +9,11 @@
       <header>
         <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
           <ul class="navbar-nav mr-auto">
-            <li style="max-width: 200px;" class="nav-item navbar-text d-none d-md-block text-{{>contrastcolor}} text-truncate">{{diary_name}}</li>
+            <li><button class="d-inline-block btn navbar-btn d-none" data-toggle="tooltip" data-placement="bottom" title="{{diary_name}}">
+              <svg class="bi" width="24" height="24" fill="currentColor">
+                <use xlink:href="../style/bootstrap-icons.svg#book"/>
+              </svg>
+            </button></li>
             {{#authorized}}{{#editing}}
             <li><button title="{{i18n.i_double}}" class="btn text-{{>contrastcolor}} d-none d-sm-inline" id="double">¶²</button></li>
             {{/editing}}{{/authorized}}
@@ -101,7 +105,7 @@
   placeHolder["storyline"] = {name : "{{i18n.i_name.storyline}}", content: "{{{i18n.i_content.storyline}}}"};
   $("#name").attr("placeHolder", placeHolder["{{type}}"]["name"]);
   {{#authorized}}
-  {{#editing}}
+  {{#editing}}  
   var easymde = new EasyMDE({
     element: $("#body")[0],
     autosave: {
@@ -128,7 +132,7 @@
         return warning;
       }
     });
-    $("#kwic").parent().addClass('hidden');
+    $("#search-icon").remove();
     var converter = new showdown.Converter({
       parseImgDimensions: 'true',
       tables: 'true',

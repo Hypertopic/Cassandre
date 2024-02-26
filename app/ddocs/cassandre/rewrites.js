@@ -105,7 +105,7 @@ function(req2) {
               "startkey": '["'+diary+'", "'+order+'", '+logged+', "M", "'+start+'"]',
               "endkey":   '["'+diary+'", "'+order+'", '+logged+', "M"]',
               "descending": 'true',
-              "limit": '40',
+              "limit": '45',
               "include_docs": 'true'
             };
           break;
@@ -113,7 +113,7 @@ function(req2) {
             reply.query = {
               "startkey": '["'+diary+'", "'+order+'", '+logged+', "M", "'+start+'"]',
               "endkey":   '["'+diary+'", "'+order+'", '+logged+', "M", {}]',
-              "limit": '40',
+              "limit": '45',
               "include_docs": 'true'
             };
           break;

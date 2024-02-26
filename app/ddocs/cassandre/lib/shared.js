@@ -145,7 +145,7 @@ var shared = {
           <div class='modal-body'>\
             {{#editable}}\
             <table><tr><th>{{i18n.i_contributors}}</th><th>{{i18n.i_readers}}</th></tr><tr><td>\
-              <input id='add_contributor' type='search' placeholder='{{i18n.i_add_contributor}}'/><br/>\
+              <input id='add_contributor' type='search' placeholder='{{i18n.i_add_contributor}}' autocomplete='off'/><br/>\
               <p>{{i18n.i_editable-by}}</p>\
               <div class='contributors'>\
               {{#contributors_fullnames}}\
@@ -154,7 +154,7 @@ var shared = {
               {{^contributors_fullnames}}{{i18n.i_everyone}}{{/contributors_fullnames}}\
               </div>\
             </td><td>\
-              <input id='add_reader' type='search' placeholder='{{i18n.i_add_reader}}'/><br/>\
+              <input id='add_reader' type='search' placeholder='{{i18n.i_add_reader}}' autocomplete='off'/><br/>\
               <p>{{i18n.i_readable-by}}</p>\
               <div class='readers'>\
               {{#readers_fullnames}}\

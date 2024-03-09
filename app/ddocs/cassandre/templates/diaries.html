@@ -14,12 +14,6 @@
         <div id="content" class='col'>
           <h1>{{i18n.i_diaries}}</h1>
           <div class="card-columns">
-            {{#logged}}
-            <div id="loading" class="d-flex justify-content-center progress-bar progress-bar-striped progress-bar-animated alert" title="{{i18n.i_loading}}">
-              <div class="d-none d-sm-inline-block">{{i18n.i_loading}}</div>
-              <div class="d-sm-none spinner-border spinner-border-sm ml-auto  mr-auto mr-sm-0" role="status" aria-hidden="true"></div>
-            </div>
-            {{/logged}}
             {{#diaries}}
             <div class="card text-center bg-light mb-3">
               <div title="{{i18n.i_integrate}} {{i18n.i_in}} {{i18n.i_collection}}" class="in-collection d-none">
@@ -44,6 +38,9 @@
       </div>
       <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
         <div role="group">
+          {{#logged}}
+          <div id="loading" title="{{i18n.i_loading}}" class="spinner spinner-border spinner-border-sm"></div>
+          {{/logged}}
           <button class="btn navbar-btn btn-outline-{{>contrastcolor}} btn-sm d-none" id="show">{{i18n.i_last-visit}}</button>
           <button class="btn navbar-btn btn-sm d-none" type='button' id='create_diary' title="{{i18n.i_create.diary}}">
             <svg class="bi" width="24" height="24" fill="currentColor">
@@ -91,15 +88,30 @@
   {{>script}}
   <script src="../script/collection.js"></script>
   <script>
-  let register = [],
+  let added = [],
+      register = [],
       fullnames = [],
       id = '',
-      logged = "{{logged}}";
+      logged = "{{logged}}",
   $(document).ready(function() {
     {{^logged}}nothing_to_show +='. {{i18n.i_sign-in-for-more}}';{{/logged}}
     stickToHeader();
     {{#logged}}
-    var added = [];
+    if ("{{user_fullname}}".length > 0) {
+      var username_candidates = [
+        "{{user_fullname}}",
+        "{{user_fullname}}".split(' ').pop()+' '+"{{user_fullname}}".split(' ').shift()
+      ]
+      $('#user_fullname').autocomplete('option', 'source', username_candidates)
+    }
+    if (localStorage.getItem('my_diaries')){
+      let my_diaries = JSON.parse(localStorage.getItem('my_diaries'))
+      for (x of my_diaries) {
+        if (localStorage.getItem(x)) {
+          addToDom(x, localStorage.getItem(x))
+        }
+      }
+    }
     $.ajax({
       url: "../"+logged,
       type: "GET",
@@ -117,6 +129,9 @@
           if (typeof o.collection !== 'undefined') {
             let collection = o.collection,
                 diary = o.diary;
+            if (localStorage.getItem(diary)) {
+              addToDom(diary, localStorage.getItem(diary))
+            }
             if (document.getElementById(collection) == null) $("#content").append("<h3 class='collection d-none'>"+collection+"</h3><div id='"+collection+"' class='card-columns'></div>");
             if (document.getElementById(diary) !== null) {
               $('#'+collection).append($('#'+diary).parent().parent());
@@ -136,27 +151,15 @@
         for (var d of data) {
           let id = d.id;
           if (!$('#'+id).length) {
-            var card = '<div class="card text-center bg-light mb-3">'
-              +'<div title="{{i18n.i_integrate}} {{i18n.i_in}} {{i18n.i_collection}}" class="in-collection d-none">'
-              +'<svg class="bi" width="16" height="16" fill="currentColor"><use xlink:href="../style/bootstrap-icons.svg#chevron-down"/></svg></div>'
-              +'<h5><a href="../diary/'+id+'">'+d.name+'</a></h5>'
-              +'<div title="{{i18n.i_restricted-access}}" class="card-icons text-secondary">'
-              +'<svg class="bi" width="16" height="16" fill="currentColor"><use xlink:href="../style/bootstrap-icons.svg#lock"/></svg>'
-              +'</div>'
-              +'<p><span id="'+id+'" title="{{i18n.i_memos}}" class="badge badge-pill badge-secondary progress-bar-striped progress-bar-animated d-none">{{i18n.i_loading}}</span></p>'
-              +'</div>';
-            if (register[id]) {
-              $('#'+register[id]).append(card);
-            } else {
-              $('#loading').after(card);
-            }
-            added.push(d.id);
+            addToDom(id, d.name)
           }
         }
       }
     }).done(function(){
       if (added.length > 1) $("#show").removeClass('d-none');
       if (added.length > 3) $(".in-collection").removeClass('d-none');
+      if (!localStorage.getItem('my_diaries') || localStorage.getItem('my_diaries') !== JSON.stringify(added))
+        localStorage.setItem('my_diaries', JSON.stringify(added))
       $(".collection").each(function() {
         if($(this).next().children().length < 1 && $(this).text().length > 0) {
           $(this).next().remove();
@@ -175,6 +178,32 @@
     {{/logged}}
   });
 
+  function addToDom(id, name) {
+    let card = toCard(id, name)
+    if (document.getElementById(id) === null) {
+      if (register[id]) {
+        $('#'+register[id]).append(card)
+      } else {
+        $('.card-columns').first().prepend(card)
+      }
+      added.push(id)
+    }
+  }
+
+  function toCard(id, name) {
+    if (!localStorage.getItem(id)) localStorage.setItem(id, name)
+    let card = '<div class="card text-center bg-light mb-3">'
+              +'<div title="{{i18n.i_integrate}} {{i18n.i_to}} {{i18n.i_collection}}" class="in-collection d-none">'
+              +'<svg class="bi" width="16" height="16" fill="currentColor"><use xlink:href="../style/bootstrap-icons.svg#chevron-down"/></svg></div>'
+              +'<h5><a href="../diary/'+id+'">'+name+'</a></h5>'
+              +'<div title="{{i18n.i_restricted-access}}" class="card-icons text-secondary">'
+              +'<svg class="bi" width="16" height="16" fill="currentColor"><use xlink:href="../style/bootstrap-icons.svg#lock"/></svg>'
+              +'</div>'
+              +'<p><span id="'+id+'" title="{{i18n.i_memos}}" class="badge badge-pill badge-secondary progress-bar-striped progress-bar-animated d-none">{{i18n.i_loading}}</span></p>'
+              +'</div>';
+    return card
+  }
+
   {{>layoutscript}}
   {{>logscript}}
   </script>
@@ -182,4 +211,3 @@
   </script>
   </body>
 </html>
-

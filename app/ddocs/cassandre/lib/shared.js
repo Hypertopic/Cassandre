@@ -144,21 +144,21 @@ var shared = {
           </div>\
           <div class='modal-body'>\
             {{#editable}}\
-            <table><tr><th>{{i18n.i_contributors}}</th><th>{{i18n.i_readers}}</th></tr><tr><td>\
-              <input id='add_contributor' type='search' placeholder='{{i18n.i_add_contributor}}' autocomplete='off'/><br/>\
+            <table><tr><th>{{i18n.i_add_contributor_right}}</th><th>{{i18n.i_add_reader_right}}</th></tr><tr><td>\
+              <input id='add_contributor' type='search' placeholder='{{i18n.i_to_whom}}' autocomplete='off'/><br/>\
               <p>{{i18n.i_editable-by}}</p>\
               <div class='contributors'>\
               {{#contributors_fullnames}}\
-                <p><span class='username {{id}}'>{{fullname}}</span><button class='remove_contributor' value='{{id}}'>x</button></p>\
+                <p><span class='username {{id}}'>{{fullname}}</span><button class='remove_contributor' title='{{i18n.i_remove_contributor_right}}' value='{{id}}'>x</button></p>\
               {{/contributors_fullnames}}\
               {{^contributors_fullnames}}{{i18n.i_everyone}}{{/contributors_fullnames}}\
               </div>\
             </td><td>\
-              <input id='add_reader' type='search' placeholder='{{i18n.i_add_reader}}' autocomplete='off'/><br/>\
+              <input id='add_reader' type='search' placeholder='{{i18n.i_to_whom}}' autocomplete='off'/><br/>\
               <p>{{i18n.i_readable-by}}</p>\
               <div class='readers'>\
               {{#readers_fullnames}}\
-                <p><span class='username {{id}}'>{{fullname}}</span><button class='remove_reader' value='{{id}}'>x</button></p>\
+                <p><span class='username {{id}}'>{{fullname}}</span><button class='remove_reader' title='{{i18n.i_remove_reader_right}}' value='{{id}}'>x</button></p>\
               {{/readers_fullnames}}\
               {{^readers_fullnames}}{{i18n.i_everyone}}{{/readers_fullnames}}\
               </div>\

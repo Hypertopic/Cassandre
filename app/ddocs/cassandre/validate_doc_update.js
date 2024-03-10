@@ -5,9 +5,9 @@ function(o2, o, userCtx) {
 
   else if (o && o.contributors && o.contributors.indexOf(userCtx.name)==-1) {
     var one = o,
-        two = o2;
-    delete one.readers;
-    delete two.readers;
+        two = o2,
+        i = one.readers.indexOf(userCtx.name);
+    one.readers.splice(i, 1);
     if (JSON.stringify(one) === JSON.stringify(two)) return;
 
     throw({

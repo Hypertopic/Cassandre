@@ -16,7 +16,7 @@
           <div class="card-columns">
             {{#diaries}}
             <div class="card text-center bg-light mb-3">
-              <div title="{{i18n.i_integrate}} {{i18n.i_in}} {{i18n.i_collection}}" class="in-collection d-none">
+              <div title="{{i18n.i_integrate}} {{i18n.i_to}} {{i18n.i_collection}}" class="in-collection d-none">
                 <svg class="bi" width="16" height="16" fill="currentColor">
                   <use xlink:href="../style/bootstrap-icons.svg#chevron-down"/>
                 </svg>
@@ -63,9 +63,9 @@
       <div id="in_collection" class="modal fade" role="dialog">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-            <div class="modal-header">{{i18n.i_integrate}} {{i18n.i_in}} {{i18n.i_collection}}</div>
+            <div class="modal-header">{{i18n.i_integrate}} {{i18n.i_to}} {{i18n.i_collection}}</div>
             <div class="modal-body">
-              <p>{{i18n.i_integrate}} <span class="font-italic diary"></span> {{i18n.i_in}}<br/>
+              <p>{{i18n.i_integrate}} <span class="font-italic diary"></span> {{i18n.i_to}}<br/>
                 <input id="target_collection" class="form-control input-sm" placeholder="{{i18n.i_collection}}"/>
               </p>
             </div>
@@ -93,6 +93,7 @@
       fullnames = [],
       id = '',
       logged = "{{logged}}",
+      to = ' {{i18n.i_to}} ';
   $(document).ready(function() {
     {{^logged}}nothing_to_show +='. {{i18n.i_sign-in-for-more}}';{{/logged}}
     stickToHeader();

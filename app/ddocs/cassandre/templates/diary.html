@@ -75,6 +75,11 @@
     </div>
     <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
       <div role="group" class="form-check-inline">
+        <button class="btn navbar-btn btn-sm" id='modify_rights' data-html='true' data-toggle='modal' data-target='#modify_rights_dialog' title='{{i18n.i_modify_rights}}'>
+          <svg class='bi' width='24' height='24' fill='currentColor'>
+            <use xlink:href='../style/bootstrap-icons.svg#gear'/>
+          </svg>
+        </button>
         <button class="btn navbar-btn btn-sm" id="show_delete" type="button" data-toggle="tooltip" data-placement="top" title="{{i18n.i_delete}}...">
           <svg class="bi" width="24" height="24" fill="currentColor">
             <use xlink:href="../style/bootstrap-icons.svg#trash"/>
@@ -122,7 +127,8 @@
         by = '{{by}}',
         diary_id = '{{diary}}',
         memos = {{{memos}}},
-        this_id = '{{diary}}';
+        this_id = '{{diary}}',
+        to = ' {{i18n.i_to}} ';
   var converter = new showdown.Converter({
         tables: 'true',
         tasklists: 'true',
@@ -140,13 +146,22 @@
       results = [];
       ready = true;
       text = {
+        add_contributor_right: '{{i18n.i_add_contributor_right}}',
+        add_reader_right: '{{i18n.i_add_reader_right}}',
+        apply_to_all_memos: '{{i18n.i_apply}} {{i18n.i_to}} '+'{{i18n.i_all-memos}}'.toLowerCase(),
+        cancel: "{{i18n.i_cancel}}",
         comments: "{{i18n.i_unchecked-comment}}",
         diagram: "{{i18n.i_to-be-articulated}}",
         editing: "{{i18n.i_to-be-resumed}}",
+        loading: "{{i18n.i_loading}}",
+        modify_rights: "{{i18n.i_modify_rights}}",
         patience_during_conversion: "{{i18n.i_patience-during-conversion}}",
         pending: "{{i18n.i_todo}}",
+        remove_contributor_right: '{{i18n.i_remove_contributor_right}}',
+        remove_reader_right: '{{i18n.i_remove_reader_right}}',
+        to_whom: "{{i18n.i_to_whom}}",
         ungrounded: "{{i18n.i_ungrounded}}",
-        unnamed: "{{i18n.i_unnamed}}",
+        unnamed: "{{i18n.i_unnamed}}"
       };
   if (["date","update"].indexOf(by) > -1) horizon = '1970';
   $(document).ready(function() {

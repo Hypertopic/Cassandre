@@ -59,9 +59,135 @@ $('#show-activity').on('click', function() {
   self.location = '../activity/'+diary_id;
 });
 
+let action = action_name = candidate_id = candidate_fullname = '',
+    userids = []
+$('body').on('click', '#add_reader_right, #add_contributor_right, #remove_reader_right, #remove_contributor_right', function() {
+  action = $(this).attr("id").replace('_right', '')
+  action_name = eval('text.'+$(this).attr("id")).replace('&#39;', "'")
+  $('#candidate_username').prop('placeholder', text.to_whom+' '+action_name.toLowerCase())
+  $('#modify_rights_dialog .modal-title').html(action_name)
+  if (action) {
+    $('#who').removeClass('hidden')
+    $('#modify_rights_dialog #loading').addClass('hidden')
+    if (candidate_id) {
+      $('#all_memos').prop('disabled', false)
+      $('#modify').html(action_name+to+candidate_fullname)
+    }
+  }
+});
+
+$('body').on('change', '#all_memos', function() {
+  if ($(this).is(':checked') && action && candidate_id) {
+    $('#modify').prop('disabled', false)
+  } else {
+    $('#modify').prop('disabled', true)
+  }
+});
+
+$('#modify_rights').on('click', function() {
+  $("body").append("<div id='modify_rights_dialog' class='modal fade' role='dialog'>\
+    <div class='modal-dialog' role='document'>\
+      <div class='modal-content'>\
+        <div class='modal-header'>\
+          <h5 class='modal-title'>"+text.modify_rights+"</h5>\
+          <button type='button' class='close' data-dismiss='modal' aria-label='Close'>\
+            <span aria-hidden='true'>×</span>\
+          </button>\
+        </div>\
+        <div class='modal-body'>\
+          <div class='form-check form-check-inline'>\
+            <input class='form-check-input' type='radio' name='action' id='add_reader_right' value='field' autocomplete='off' required>\
+            <label class='form-check-label' for='add_reader_right'>"+text.add_reader_right+"</label>\
+          </div>\
+          <div class='form-check form-check-inline'>\
+            <input class='form-check-input' type='radio' name='action' id='remove_reader_right' value='field' autocomplete='off' required>\
+            <label class='form-check-label' for='remove_reader_right'>"+text.remove_reader_right+"</label>\
+          </div>\
+          <div class='form-check form-check-inline'>\
+            <input class='form-check-input' type='radio' name='action' id='add_contributor_right' value='field' autocomplete='off' required>\
+            <label class='form-check-label' for='add_contributor_right'>"+text.add_contributor_right+"</label>\
+          </div>\
+          <div class='form-check form-check-inline'>\
+            <input class='form-check-input' type='radio' name='action' id='remove_contributor_right' value='field' autocomplete='off' required>\
+            <label class='form-check-label' for='remove_contributor_right'>"+text.remove_contributor_right+"</label>\
+          </div>\
+        </div>\
+        <div id='who' class='modal-body justify-content-center hidden'>\
+        </div>\
+        <div id='check' class='modal-body justify-content-center'>\
+          <div class='form-check'>\
+            <input class='form-check-input' type='checkbox' id='all_memos' autocomplete='off' disabled>\
+            <label class='form-check-label' for='all_memos'>"+text.apply_to_all_memos+"</label><br/>\
+          </div>\
+        </div>\
+        <div class='modal-footer hidden'>\
+          <button type='button' class='btn btn-secondary' data-dismiss='modal'>"+text.cancel+"</button>\
+          <button id='modify' type='button' class='btn btn-primary' disabled>Ok</button>\
+          <div id='loading' class='' title='"+text.loading+"'><span class='spinner spinner-border spinner-border-sm' role='status'></span></div>\
+        </div>\
+      </div>\
+    </div>\
+  </div>")
+  if (!$('#candidate_username').length)
+  $("<input id='candidate_username' class='form-control' type='search' placeholder='' autocomplete='off'/>")
+  .appendTo($('#who'))
+  .autocomplete({
+    minLength: 3,
+    appendTo: '#modify_rights_dialog',
+    source: function(request, response) {
+      $.getJSON('../userlist/' + request.term, function (data) {
+        response($.map(data.rows, function (value, key) {
+          let concerned = action_name.replace('add_','')+'s'
+          if (userids.indexOf(value.id) == -1) {
+            userids.push(value.id);
+            return {
+              label: value.value.fullname,
+              value: value.id
+            };
+          }
+        }));
+        userids = [];
+      });
+    },
+    select: function (event, ui) {
+      candidate_id = ui.item.value
+      candidate_fullname = ui.item.label
+      $('#all_memos').prop('disabled', false)
+      $('#modify_rights_dialog .modal-footer').removeClass('hidden')
+      $('#who').addClass('hidden')
+      $('#modify')
+        .html(action_name+to+candidate_fullname)
+        .prop('disabled', true)
+    }
+  })
+  $('#modify_rights_dialog').modal('show')
+});
+
+$('body').on('click', '#modify', function() {
+  $('#loading').removeClass('hidden')
+  let last_memo = memos[memos.length - 1]
+  last_memo = last_memo.id
+  for (let m of memos) {
+    $.ajax({
+      url: '../modify_rights/'+m.id,
+      type: 'PUT',
+      contentType: 'application/json',
+      data: JSON.stringify({
+       'action': action,
+       'value': candidate_id
+      })
+    }).always(function(){
+      if (last_memo === m.id) {
+        $('#loading').addClass('hidden')
+        reload()
+      }
+    })
+  }
+});
+
 function resetUI() {
   $("#memos>li>input").addClass("hidden");
-  $("#footer .form-check-inline").children().addClass("hidden");
+  $("#footer .form-check-inline").children().not('#modify_rights').addClass("hidden");
   $("#show_delete").removeClass("hidden");
   $("#footer .more").removeClass("hidden");
 }

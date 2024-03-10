@@ -24,7 +24,7 @@
 	<div class="card-columns mb-3 pb-3">
         <ul>{{#users}}
         <li id="{{id}}"><a href="../user/{{id}}">{{fullname}}</a>
-          <span style="vertical-align: middle" title="{{i18n.i_integrate}} {{i18n.i_in}} {{i18n.i_cohort}}" class="d-inline-block">
+          <span style="vertical-align: middle" title="{{i18n.i_integrate}} {{i18n.i_to}} {{i18n.i_cohort}}" class="d-inline-block">
             <svg class="bi to-cohort" width="20" height="20" fill="currentColor">
               <use xlink:href="../style/bootstrap-icons.svg#box-arrow-in-down-right"/>
             </svg>
@@ -44,9 +44,9 @@
       <div id="in_cohort" class="modal fade" role="dialog">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-            <div class="modal-header">{{i18n.i_integrate}} {{i18n.i_in}} {{i18n.i_cohort}}</div>
+            <div class="modal-header">{{i18n.i_integrate}} {{i18n.i_to}} {{i18n.i_cohort}}</div>
             <div class="modal-body">
-              <p>{{i18n.i_integrate}} <span class="font-italic diary"></span> {{i18n.i_in}}<br/>
+              <p>{{i18n.i_integrate}} <span class="font-italic diary"></span> {{i18n.i_to}}<br/>
                 <input id="target_cohort" class="form-control input-sm" placeholder="{{i18n.i_cohort}}"/>
               </p>
             </div>

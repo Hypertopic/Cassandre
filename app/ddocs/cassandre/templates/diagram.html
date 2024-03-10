@@ -277,7 +277,7 @@
       $('.articulate').addClass('hidden');
       $("#groundings").find('legend').text("{{i18n.i_grounding}}");
       $('#add_grounding_btn').attr('title', "{{i18n.i_add_groundings}}");
-      $("#add_grounding").find('.modal-title').append(" <em>"+$('#groundings>li').first().find('a').html()+"</em> {{i18n.i_in}}");
+      $("#add_grounding").find('.modal-title').append(" <em>"+$('#groundings>li').first().find('a').html()+"</em> {{i18n.i_to}}");
       $("#add_grounding").find('select').prepend($('<option>', {
         text: "{{i18n.i_select_grounding}}"
       }));

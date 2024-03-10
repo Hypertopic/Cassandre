@@ -477,7 +477,7 @@ function coloringCreatorTag(userid){
 }
 function setDiaryTooltip(id) {
   let diary_name = getDiaryname(id)
-  if ($('title').text().trim().length > 0) $('title').prepend(' - ')
+  if ($('title').text().trim().length > 0 && $('title').text().trim().slice(0, 1) !== '-') $('title').prepend(' - ')
   $('title').prepend(diary_name)
   updateTooltip('diary', diary_name)
 }

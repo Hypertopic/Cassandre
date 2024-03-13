@@ -32,11 +32,7 @@ $('.remove_reader, .remove_contributor').on('click', function() {
   modify_rights($(this).attr("class"), $(this).val());
 });
 $('#unsubscribe').on('click', function() {
-  $.ajax({
-    url: '../reader_unsubscribe/'+this_id,
-    type: 'PUT',
-    contentType: 'application/json'
-  }).done(reload)
+  modify_rights('remove_reader', user);
 });
 $('#modify_rights_dialog').on('show.bs.modal', function () {
   $('#modify_rights').tooltip('hide');

@@ -8,6 +8,7 @@ function(o2, o, userCtx) {
         two = o2,
         i = one.readers.indexOf(userCtx.name);
     one.readers.splice(i, 1);
+    if (one.readers.length < 1) delete one.readers;
     if (JSON.stringify(one) === JSON.stringify(two)) return;
 
     throw({

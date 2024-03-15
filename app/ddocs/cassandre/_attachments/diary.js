@@ -85,6 +85,7 @@ $('body').on('change', '#all_memos', function() {
 });
 
 $('#modify_rights').on('click', function() {
+  refresh = false
   $("body").append("<div id='modify_rights_dialog' class='modal fade' role='dialog'>\
     <div class='modal-dialog' role='document'>\
       <div class='modal-content'>\
@@ -165,8 +166,8 @@ $('#modify_rights').on('click', function() {
 
 $('body').on('click', '#modify', function() {
   $('#loading').removeClass('hidden')
-  let last_memo = memos[memos.length - 1]
-  last_memo = last_memo.id
+  let i = 0, 
+      n_memo = memos.length
   for (let m of memos) {
     $.ajax({
       url: '../modify_rights/'+m.id,
@@ -177,8 +178,10 @@ $('body').on('click', '#modify', function() {
        'value': candidate_id
       })
     }).always(function(){
-      if (last_memo === m.id) {
+      i++
+      if (i == n_memo) {
         $('#loading').addClass('hidden')
+        refresh = true
         reload()
       }
     })

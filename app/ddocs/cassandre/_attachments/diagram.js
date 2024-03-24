@@ -10,13 +10,15 @@ $('.articulate').on('click', function() {
 function edit_statement() {
   refresh = false;
   $("#write_statement").tooltip('hide');
-  $(".statement_text").remove();
+  $(".statement_text").addClass('hidden')
   $('#statement .meta').text(name_statement+': ');
   $("#add-leaves").addClass('hidden');
   $("#footer .btn").addClass('hidden');
   $("#statement").find('textarea').removeClass('hidden');
   $('#statement_done').removeClass('hidden');
   $('#reload').removeClass('hidden');
+  close_input('situation')
+  close_input('negative')
   $('html, body').scrollTop($(document).height());
 }
 
@@ -24,16 +26,38 @@ $("#write_statement").click(function () {
   edit_statement()
 });
 
+function close_input(i) {
+  switch (i) {
+    case 'situation':
+      if(!$("#situation").find('input').hasClass('hidden')) $("#situation").find('input').addClass('hidden')
+      $(".situation_text").removeClass('hidden')
+      if(!$("#situation_done").hasClass('hidden')) $("#situation_done").addClass('hidden')
+    break;
+    case 'negative':
+      if(!$("#negative-case").find('input').hasClass('hidden')) $("#negative-case").find('input').addClass('hidden')
+      $(".negative_text").removeClass('hidden')
+      if(!$("#negative-case_done").hasClass('hidden')) $("#negative-case_done").addClass('hidden')
+    break;
+    case 'statement':
+      if(!$('#statement').find('textarea').hasClass('hidden')) $('#statement').find('textarea').addClass('hidden')
+      $(".statement_text").removeClass('hidden')
+      if(!$("#statement_done").hasClass('hidden')) $("#statement_done").addClass('hidden')
+    break;
+  }
+}
+
 function edit_situation() {
   refresh = false;
   $("#add_situation").tooltip('hide');
-  $(".situation_text").remove();
+  $(".situation_text").addClass('hidden')
   $('#situation .meta').text(name_situation+': ');
   $("#add-leaves").addClass('hidden');
   $("#footer .btn").addClass('hidden');
-  $("#situation").find('input').removeClass('hidden');
+  $("#situation").find('input').removeClass('hidden')
   $('#situation_done').removeClass('hidden');
   $('#reload').removeClass('hidden');
+  close_input('negative')
+  close_input('statement')
   $('html, body').scrollTop($(document).height());
 }
 
@@ -44,13 +68,15 @@ $("#add_situation").click(function () {
 function edit_negative_case() {
   refresh = false;
   $("#add_negative-case").tooltip('hide');
-  $(".negative_text").remove();
+  $(".negative_text").addClass('hidden')
   $('#negative-case .meta').text(name_negative_case+': ');
   $("#add-leaves").addClass('hidden');
   $("#footer .btn").addClass('hidden');
   $("#negative-case").find('input').removeClass('hidden');
   $('#negative-case_done').removeClass('hidden');
   $('#reload').removeClass('hidden');
+  close_input('situation')
+  close_input('statement')
   $('html, body').scrollTop($(document).height());
 }
 
@@ -112,8 +138,9 @@ function adapt(o) {
   } else if (typeof(gid[1]) !== 'undefined') {
     var second = {
       id: gid[1],
-      text: $('#'+gid[1]+' > a').html().trim()
+      text: '...'
     }
+    if (gid[1].length > 0) second.text = $('#'+gid[1]+' > a').html().trim()
   }
   if (gid[0].localeCompare(second.id) < 0) {
     data.name += ' & '+second.text;

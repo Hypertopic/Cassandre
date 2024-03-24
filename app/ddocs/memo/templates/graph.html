@@ -220,6 +220,7 @@
           to: "{{to}}",
           color: "{{color}}",
           label: label,
+          font: {color: "{{color}}"},
           dashes: true
         });
       {{/dashes}}
@@ -343,7 +344,7 @@
         if (e.dashes == null) {
           graphviz += 'node'+e.from + ' -> ' + 'node'+e.to + '[color=' +e.color+option+ ']; ';
         } else {
-          graphviz += 'node'+e.from + ' -> ' + 'node'+e.to + '[style=dashed,color='+e.color+',label="' +e.label.replace(/['"]/g, '\'').replace(/\n/g, '\\n')+ '"]; ';
+          graphviz += 'node'+e.from + ' -> ' + 'node'+e.to + '[style=dashed, fontcolor='+e.color+', color='+e.color+',label="' +e.label.replace(/['"]/g, '\'').replace(/\n/g, '\\n')+ '"]; ';
         }
       }
     }

@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Lejeune"
+  given-names: "Christophe"
+  orcid: "https://orcid.org/0000-0002-3622-7050"
+title: "Cassandre. Diary for qualitative analysis"
+version: 3.24.03.30
+date-released: 2024-03-30
+url: "https://github.com/Hypertopic/Cassandre/"
+preferred-citation:
+  type: article
+  authors:
+  - family-names: "Lejeune"
+    given-names: "Christophe"
+    orcid: "https://orcid.org/0000-0002-3622-7050"
+  doi: "10.7202/1108606ar"
+  journal: "Recherches Qualitatives"
+  start: 4
+  end: 25
+  title: "Ce que l’informatique fait à l'analyse qualitative. L'histoire croisée des CAQDAS et de Cassandre"
+  issue: 42
+  volume: 2
+  year: 2023

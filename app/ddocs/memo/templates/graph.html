@@ -341,10 +341,12 @@
             option = ', dir=back '
           break;
         }
+        let ecolor = e.color
+        if (e.color === 'green') ecolor = 'darkgreen'
         if (e.dashes == null) {
-          graphviz += 'node'+e.from + ' -> ' + 'node'+e.to + '[color=' +e.color+option+ ']; ';
+          graphviz += 'node'+e.from + ' -> ' + 'node'+e.to + '[color=' +ecolor+option+ ']; ';
         } else {
-          graphviz += 'node'+e.from + ' -> ' + 'node'+e.to + '[style=dashed, fontcolor='+e.color+', color='+e.color+',label="' +e.label.replace(/['"]/g, '\'').replace(/\n/g, '\\n')+ '"]; ';
+          graphviz += 'node'+e.from + ' -> ' + 'node'+e.to + '[style=dashed, fontcolor='+ecolor+', color='+ecolor+',label="' +e.label.replace(/['"]/g, '\'').replace(/\n/g, '\\n')+ '"]; ';
         }
       }
     }

@@ -16,7 +16,6 @@ function(head, req) {
         readers_fullnames: [],
         readers: []
       },
-      diary = req.query.startkey[0],
       fullnames = [],
       username = req.userCtx.name;
 
@@ -78,7 +77,6 @@ function(head, req) {
             if (preview != null) preview = preview.substr(0, 200);
           }
           if (row.value.anchor) ground_path += '#'+row.value.anchor;
-          if (row.value._id !== diary)
           data.groundings.push({
             id: row.value._id,
             href: ground_path,

@@ -28,7 +28,7 @@ function (doc, req) {
           doc.groundings.push(grounding);
         }
       } else {
-        if (i == -1) doc.groundings.push(obj.value);
+        if (i == -1 && doc.diary !== obj.value) doc.groundings.push(obj.value);
       }
     break;
     case ('remove_grounding'):

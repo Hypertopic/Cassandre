@@ -6,8 +6,10 @@ function(o) {
     emit([o._id, 'D'], {'_id': o.corpus});
   if (o.groundings) for (var g of o.groundings) {
     if (typeof g === 'string' || g instanceof String) {
-      emit([o._id, 'G'], {'_id': g});
-      emit([g, 'L']);
+      if ([o.diary, o._id].indexOf(g) < 0) {
+        emit([o._id, 'G'], {'_id': g});
+        emit([g, 'L']);
+      }
     } else {
       emit([o._id, 'G'], g);
       emit([g._id, 'L']);

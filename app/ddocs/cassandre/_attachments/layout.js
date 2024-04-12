@@ -320,7 +320,7 @@ function poller(what, since) {
       localStorage.removeItem(this_id)
       reload();
     } else {
-      $.ajax({
+      if (what === 'memo') $.ajax({
         url: '../memo_update_seq/'+this_id
       }).done(function(o){
         var memo_seq = JSON.parse(o);

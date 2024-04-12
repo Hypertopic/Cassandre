@@ -2,7 +2,7 @@ let action = ''
 $('#add_contributor, #add_reader').on('keypress', function(key) {
   if (key.which == 13) {
     action = $(this).attr("id")
-    modify_rights(action, $('#'.action).val().trim().toLowerCase());
+    modify_rights(action, $('#'+action).val().trim().toLowerCase())
   }
 });
 $('#add_contributor, #add_reader').autocomplete({

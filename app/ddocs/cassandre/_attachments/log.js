@@ -15,6 +15,7 @@ $('#sign-in').on('click', function() {
   $('#toggle-groundings').addClass('hidden');
   $('#comment_create').addClass('hidden');
   $('#search-icon').addClass('hidden');
+  $('#header .creator').addClass('hidden')
   $('#show_delete').addClass('hidden');
   $('#signin').append($('#reload'));
   $('#reload').removeClass('hidden');

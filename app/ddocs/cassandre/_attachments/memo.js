@@ -48,7 +48,7 @@ $('#leave-name').on('keypress', function(key) {
       source: function(request, response) {
         $.getJSON('../codes/'+diary_id+'/'+request.term, function (data) {
           response($.map(data.rows, function (value, key) {
-            return {
+            if([this_id,diary_id].indexOf(value.id) < 0) return {
               key: value.id,
               title: value.value.name,
               value: value.value.name

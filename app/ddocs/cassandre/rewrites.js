@@ -322,7 +322,7 @@ function(req2) {
     case 'user':
       switch (path.length) {
         case 3:
-          reply.path = "_list/user/user";
+          reply.path = "../user/_list/user/user";
           reply.query = {
             "startkey": '["'+path[1]+'", "'+path[2]+'"]',
             "endkey":   '["'+path[1]+'"]',
@@ -332,7 +332,7 @@ function(req2) {
           };
         break;
         case 2:
-          reply.path = "_list/user/user";
+          reply.path = "../user/_list/user/user";
           reply.query = {
             "startkey": '["'+path[1]+'", {}]',
             "endkey":   '["'+path[1]+'"]',
@@ -341,7 +341,7 @@ function(req2) {
           };
         break;
         case 1:
-          reply.path = "_list/users/users";
+          reply.path = "../user/_list/users/users";
           reply.query = {
             "startkey": '['+logged+']',
             "endkey":   '['+logged+', {}]'
@@ -374,21 +374,21 @@ function(req2) {
       };
     break;
     case 'userlist':
-      reply.path = "_view/userid/";
+      reply.path = "../user/_view/userid/";
       reply.query = {
         "startkey": '"'+path[1]+'"',
         "limit": '8'
       };
     break;
     case 'userfullname':
-      reply.path = "_view/userfullname/";
+      reply.path = "../user/_view/userfullname/";
       reply.query = {
         "key": '"'+path[1]+'"',
         "reduce": "false"
       };
     break;
     case 'users_count':
-      reply.path = "_view/userfullname/";
+      reply.path = "../user/_view/userfullname/";
       reply.query = {
         "reduce": "true"
       };

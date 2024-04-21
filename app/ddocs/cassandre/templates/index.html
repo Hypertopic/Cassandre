@@ -17,9 +17,6 @@
         <li class="nav-item active"><a class="nav-link" href="https://hypertopic.org/approfondir">Approfondir</a></li>
       </ul>
     </nav>
-    <div id="last-maintenance" class="alert alert-danger alert-dismissible d-none fade" role="alert">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden='true'>&times;</span></button>
-    </div>
     <div class="jumbotron jumbotron-fluid library">
       <div class="container">
         <h1 class="display-4">Cassandre</h1>
@@ -57,6 +54,7 @@
 <p class="mb-4">&nbsp;</p>
     
     </div>
+    <div id="toasts" class="mt-4"></div>
     <nav id="footer" class="fixed-bottom hidden">
       <div class="navbar-text"><a class="nav-link" href="https://github.com/Hypertopic/Cassandre/wiki">
         <svg class="bi" width="24" height="24" fill="currentColor">
@@ -67,23 +65,67 @@
     {{>script}}
     <script>
       if ("{{locale}}" === "fr") $('.fr').removeClass('hidden');
+      let count = {'diaries': 0, 'memos': 0, 'users': 0},
+          filled_diaries = 0
+      $.ajax({
+        url: "../diaries_count/",
+        type: "GET",
+        dataType: "json"
+      }).done(function(d){
+        count.diaries = d.rows.length
+        for (r of d.rows) {
+          if (r.key[0] !== null && r.value > 2) filled_diaries++
+        }
+        count['filled'] = filled_diaries
+        stats_prompt(count)
+      });
+      $.ajax({
+        url: "../memos_count/",
+        type: "GET",
+        dataType: "json"
+      }).done(function(m){
+        count.memos = m.rows[0].value
+        stats_prompt(count)
+      });
+      $.ajax({
+        url: "../users_count/",
+        type: "GET",
+        dataType: "json"
+      }).done(function(n){
+        count.users = n.rows[0].value
+        stats_prompt(count)
+      });
       $.ajax({
         url: "../config",
         type: "GET",
         dataType: "json"
       }).done(function(c){
+        let maintenance_announce = ''
         if (new Date().toISOString().substr(0,10) == c.maintenance.date.substr(0,10)) {
           let now = new Date().getTime(),
               interruption = new Date(c.maintenance.date).getTime();
           if (now < interruption) {
-            $('#last-maintenance').prepend("{{i18n.i_maintenance-today_pre}}".replace('@duration', c.maintenance.duration))
+            maintenance_announce = "{{i18n.i_maintenance-today_pre}}".replace('@duration', c.maintenance.duration)
           } else {
-            $('#last-maintenance').prepend("{{i18n.i_maintenance-today_post}}".replace('@duration', c.maintenance.duration))
+            maintenance_announce = "{{i18n.i_maintenance-today_post}}".replace('@duration', c.maintenance.duration)
           }
-          $('#last-maintenance').append(new Intl.DateTimeFormat('{{locale}}', {hour: "numeric", minute: "numeric"}).format(new Date(c.maintenance.date)));
-          $('#last-maintenance').removeClass("d-none").addClass("show");
+          maintenance_announce += new Intl.DateTimeFormat('{{locale}}', {hour: "numeric", minute: "numeric"}).format(new Date(c.maintenance.date))
+          inform('danger', maintenance_announce)
         }
       });
+      function stats_prompt(count){
+        if (Object.values(count).every((v) => v > 0)) {
+          let stats = "{{i18n.i_on_this_server}}"
+          for (key of Object.keys(count)) {
+            if (count[key] > 5000) {
+              count[key] = String(Math.trunc(count[key] / 1000))+'k+'
+            }
+            stats = stats.replace('@'+key, count[key])
+          }
+          inform('white', stats)
+          $('.alert-white').addClass('bg-white')
+        }
+      }
     </script>
   </body>
 </html>

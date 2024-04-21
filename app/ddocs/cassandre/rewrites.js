@@ -74,7 +74,8 @@ function(req2) {
           reply.path = "_list/diary/diary";
           reply.query = {
             "startkey": '["'+diary+'", '+logged+']',
-            "endkey":   '["'+diary+'", '+logged+', {}]'
+            "endkey":   '["'+diary+'", '+logged+', {}]',
+            "reduce": "false"
           };
         break;
         default:
@@ -182,6 +183,7 @@ function(req2) {
         reply.query = {
           "startkey": '["'+logged+'", "'+path[1]+'", "D"]',
           "endkey":   '["'+logged+'", "'+path[1]+'", "Mdate", {}]',
+          "reduce": "false",
           "include_docs": "true"
         };
       } else {
@@ -381,7 +383,27 @@ function(req2) {
     case 'userfullname':
       reply.path = "_view/userfullname/";
       reply.query = {
-        "key": '"'+path[1]+'"'
+        "key": '"'+path[1]+'"',
+        "reduce": "false"
+      };
+    break;
+    case 'users_count':
+      reply.path = "_view/userfullname/";
+      reply.query = {
+        "reduce": "true"
+      };
+    break;
+    case 'diaries_count':
+      reply.path = "_view/diary";
+      reply.query = {
+        "reduce":   'true',
+        "group_level": "1"
+      };
+    break;
+    case 'memos_count':
+      reply.path = "_view/item/";
+      reply.query = {
+        "reduce": "true"
       };
     break;
     case 'network':

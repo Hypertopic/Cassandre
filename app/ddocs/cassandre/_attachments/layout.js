@@ -282,17 +282,33 @@ function create(type, name, highlight, anchor) {
     });
   }
 }
+const close = '<button type="button" class="ml-auto mr-1 mb-1 close" data-dismiss="toast">&times;</button>'
+function toast_header(type){
+  var text_color = 'dark',
+      icon = 'info-circle',
+      icon_color = 'primary',
+      title = 'Usage'
+  if (type == 'danger') {
+    text_color = 'light',
+    icon_color = 'light',
+    icon = 'cone-striped',
+    title = 'Maintenance'
+  }
+  return '<div class="toast-header bg-'+type+'"><span class="text-'+icon_color+'">'
+    + '<svg class="bi mr-1 ml-auto" width="20" height="20" fill="currentColor"><use xlink:href="../style/bootstrap-icons.svg#'+icon+'"/></svg></span>'
+    + '<strong class="mr-auto text-'+text_color+'">'+title+'</strong>'+close+'</div>'
+}
 function inform(type, msg){
   var t = '<div class="toast" role="alert">',
-      body = '<div class="toast-body alert-'+type+'">',
-      close = '<button type="button" class="ml-auto mr-1 mb-1 close" data-dismiss="toast">&times;</button>', 
-      header = '<div class="toast-header bg-'+type+'"><span class="text-light">'
-    + '<svg class="bi mr-1 ml-auto" width="20" height="20" fill="currentColor"><use xlink:href="../style/bootstrap-icons.svg#cone-striped"/></svg></span>'
-    + '<strong class="mr-auto text-light">Maintenance</strong>'+close+'</div>';
-  if (type == 'danger') {
-    t += header + body;
-  } else {
-    t += body + close;
+      body = '<div class="toast-body alert-'+type+'">'
+  switch (type) {
+    case 'danger':
+    case 'white':
+      t += toast_header(type) + body
+    break
+    default:
+    t += body + close
+    break
   }
   t += msg +'</div></div>';
   $('#toasts').append(t);

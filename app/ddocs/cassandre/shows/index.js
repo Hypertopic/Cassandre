@@ -7,7 +7,7 @@ function(o, req) {
     return {
       body: JSON.stringify({
         service: 'Cassandre',
-        revision: '3.24.04.14',
+        revision: '3.24.04.21',
         update_seq: req.info.update_seq
       })
     }

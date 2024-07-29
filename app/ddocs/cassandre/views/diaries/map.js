@@ -1,6 +1,6 @@
 function(o) {
   var diary = o.diary || o.corpus;
-  if (!o.diary_name) {
+  if (!o.diary_name && !o.memo_order) {
     if (o.contributors)
       for (var c of o.contributors) {
         emit([c, diary], {'_id': diary});

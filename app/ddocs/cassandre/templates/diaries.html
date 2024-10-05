@@ -90,6 +90,7 @@
   <script>
   let added = [],
       register = [],
+      restricted = [],
       fullnames = [],
       id = '',
       logged = "{{logged}}",
@@ -154,11 +155,16 @@
           if (!$('#'+id).length) {
             addToDom(id, d.name)
           }
+          restricted.push(id)
         }
       }
     }).done(function(){
       if (added.length > 1) $("#show").removeClass('d-none');
       if (added.length > 3) $(".in-collection").removeClass('d-none');
+      let past = added.filter(x => !restricted.includes(x))
+      for (var p of past) {
+        localStorage.removeItem(p)
+      }
       if (!localStorage.getItem('my_diaries') || localStorage.getItem('my_diaries') !== JSON.stringify(added))
         localStorage.setItem('my_diaries', JSON.stringify(added))
       $(".collection").each(function() {

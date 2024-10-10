@@ -164,6 +164,7 @@
       let past = added.filter(x => !restricted.includes(x))
       for (var p of past) {
         localStorage.removeItem(p)
+        $('#'+p).parents('.card').remove()
       }
       if (!localStorage.getItem('my_diaries') || localStorage.getItem('my_diaries') !== JSON.stringify(added))
         localStorage.setItem('my_diaries', JSON.stringify(added))

@@ -216,6 +216,11 @@ div.post {
   order: 1;
 }
 
+.avatar:hover{
+  cursor: default !important;
+  background-color: var(--dark) !important;
+}
+
 .spacer {
   order: 3;
 }
@@ -341,6 +346,12 @@ button.comment {
 .editor-toolbar > button:hover {
   background-color: white;
   color: black !important;
+}
+
+#avatar_dialog img {
+  background-color: white !important;
+  height: 5rem;
+  width: 5rem;
 }
 
 .create {

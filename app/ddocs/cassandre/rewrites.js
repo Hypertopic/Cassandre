@@ -315,6 +315,7 @@ function(req2) {
     case 'modify_rights':
     case 'reader_unsubscribe':
     case 'username':
+    case 'avatar':
     case 'clean_user_activity':
     case 'user_in_cohort':
       reply.path = '_update/'+path[0]+'/'+path[1];
@@ -385,6 +386,11 @@ function(req2) {
       reply.query = {
         "key": '"'+path[1]+'"',
         "reduce": "false"
+      };
+    case 'useravatar':
+      reply.path = "../user/_view/useravatar/";
+      reply.query = {
+        "key": '"'+path[1]+'"'
       };
     break;
     case 'users_count':

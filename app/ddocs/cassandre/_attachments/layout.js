@@ -475,6 +475,7 @@ function momentRelative(what) {
   }
 }
 function coloringCreatorTag(userid){
+  if (!avatars[userid]) getAvatar(userid)
   let name = fullnames[userid]
   if (typeof (name) === 'undefined' || name.length < 1) name = userid
   let initials = name.split(/[ -\.]+/).map((n) => n.substr(0,1).normalize('NFD').replace(/\p{Diacritic}/gu, '').toUpperCase()).filter((e) => e !== ''),
@@ -483,13 +484,29 @@ function coloringCreatorTag(userid){
   for (i of initials) rgb.push((i.charCodeAt() - 60) * 16)
   if (initials.length === 2) rgb.splice(1, 0, (name.length - 7) * 11)
   if (rgb.reduce((a, b) => a + b, 0) > 600) contrast = 'dark'
-  $('.creator')
-    .filter(function( index ) {
-      return $(this).attr('class').split(' ')[1] === userid;
-    })
-    .addClass('text-'+contrast)
-    .addClass('border-'+contrast)
-    .css('background-color', 'rgb('+rgb.join(',')+')')
+  if (avatars[userid] && avatars[userid] !== 'undefined') {
+    $('.creator')
+      .filter(function( index ) {
+        return $(this).attr('class').split(' ')[1] === userid;
+      })
+      .html('<img src="/style/avatar_'+avatars[userid]+'.svg" height ="30" width="30">')
+      .removeClass('btn-outline-'+contrast)
+      .removeClass('border-'+contrast)
+    $('#header .creator').addClass('avatar')
+    $('#header .creator img')
+      .css({
+        'background-color': 'white',
+        'border-radius': '25px'
+      })
+  } else {
+    $('.creator')
+      .filter(function( index ) {
+        return $(this).attr('class').split(' ')[1] === userid;
+      })
+      .addClass('text-'+contrast)
+      .addClass('border-'+contrast)
+      .css('background-color', 'rgb('+rgb.join(',')+')')
+  }
 }
 function setDiaryTooltip(id) {
   let diary_name = getDiaryname(id)
@@ -516,6 +533,28 @@ function getDiaryname(id) {
   }
   return diary_name
 }
+function getAvatar(a) {
+  if (localStorage.getItem(a+'_avatar')) {
+    avatars[a] = localStorage.getItem(a+'_avatar')
+  } else {
+    $.ajax({
+      url: "../useravatar/"+a,
+      type: "GET",
+      async: false,
+      dataType: "json"
+    }).done(function(data){
+      if (data.rows[0]) {
+        avatars[a] = data.rows[0].value
+      } else {
+        avatars[a] = 'undefined'
+      }
+    })
+    .then(function() {
+      if (avatars[a] && avatars[a] !== 'undefined') localStorage.setItem(a+'_avatar', avatars[a])
+    })
+  }
+}
+
 function getFullname(o) {
   if (localStorage.getItem(o)) {
     fullnames[o] = localStorage.getItem(o)
@@ -526,7 +565,9 @@ function getFullname(o) {
       async: false,
       dataType: "json"
     }).done(data => fullnames[data.rows[0].id] = data.rows[0].value.fullname)
-    .then(function() {localStorage.setItem(o, fullnames[o])})
+    .then(function() {
+      if (fullnames[o]) localStorage.setItem(o, fullnames[o])
+    })
   }
 }
 function capitalize(n) {

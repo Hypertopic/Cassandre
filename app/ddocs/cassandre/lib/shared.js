@@ -27,7 +27,7 @@ var shared = {
   log: "\
     <ul class='mr-0 ml-auto navbar-nav nav-fill'><li class='form-inline justify-content-between'>\
       {{#type}}{{^statements}}\
-      <button class='creator {{creator}} btn btn-outline-{{>contrastcolor}} d-none d-sm-block hidden' disabled></button>\
+      <button class='creator {{creator}} btn btn-outline-{{>contrastcolor}} d-none d-sm-block hidden'></button>\
       <span class='hidden creator_title'>{{i18n.i_created-by}} <span class='username {{creator}}'>{{creator_fullname}}</span> <span class='{{date}} moment'></span></span>\
       {{/statements}}{{/type}}\
       {{#diary}}\

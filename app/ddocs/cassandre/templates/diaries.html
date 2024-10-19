@@ -106,8 +106,8 @@
       ]
       $('#user_fullname').autocomplete('option', 'source', username_candidates)
     }
-    if (localStorage.getItem('my_diaries')){
-      let my_diaries = JSON.parse(localStorage.getItem('my_diaries'))
+    if (localStorage.getItem(logged+'_diaries')){
+      let my_diaries = JSON.parse(localStorage.getItem(logged+'_diaries'))
       for (x of my_diaries) {
         if (localStorage.getItem(x)) {
           addToDom(x, localStorage.getItem(x))
@@ -166,8 +166,8 @@
         localStorage.removeItem(p)
         $('#'+p).parents('.card').remove()
       }
-      if (!localStorage.getItem('my_diaries') || localStorage.getItem('my_diaries') !== JSON.stringify(added))
-        localStorage.setItem('my_diaries', JSON.stringify(added))
+      if (!localStorage.getItem(logged+'_diaries') || localStorage.getItem(logged+'_diaries') !== JSON.stringify(added))
+        localStorage.setItem(logged+'_diaries', JSON.stringify(added))
       $(".collection").each(function() {
         if($(this).next().children().length < 1 && $(this).text().length > 0) {
           $(this).next().remove();

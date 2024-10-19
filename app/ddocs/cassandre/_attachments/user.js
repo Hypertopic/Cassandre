@@ -24,7 +24,7 @@ $('#only-modified').on('click', function() {
 $('#avatar').on('click', function() {
   $('#avatar_dialog').modal('show');
 });
-$('#avatar_dialog img').on('click', function() {
+$('#avatar_dialog button').children().on('click', function() {
   let avatar = $(this).parent().attr('id')
   $.ajax({
     url: "../avatar/" + user_id,

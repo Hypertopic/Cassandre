@@ -11,11 +11,13 @@ function(head, req) {
         comments: [],
         contributors: [],
         contributors_fullnames: [],
+        contributors_avatar: [],
         groundings: [],
         leaves: [],
         readers_fullnames: [],
         readers: []
       },
+      contributors_avatar = [],
       fullnames = [],
       username = req.userCtx.name;
 
@@ -28,6 +30,7 @@ function(head, req) {
         if (row.doc && row.doc.fullname) fullname = row.doc.fullname;
         if (row.doc && !fullnames[id]) fullnames[id] = fullname;
         data.contributors_fullnames.push({'id': id, 'fullname': fullname});
+        if (row.doc && row.doc.avatar && !contributors_avatar[id]) contributors_avatar[id] = row.doc.avatar;
       break;
       case ('D'):
         if (row.doc) data.diary_name = row.doc.diary_name;
@@ -54,6 +57,8 @@ function(head, req) {
       break;
       case ('H'):
         var user = row.value._id;
+        data.creator_id = user
+        if (contributors_avatar[user]) data.creator_avatar = contributors_avatar[user]
         if (row.doc && !fullnames[user]) fullnames[user] = row.doc.fullname;
         if (row.doc && row.doc.fullname) user = row.doc.fullname;
         data.creator = user;

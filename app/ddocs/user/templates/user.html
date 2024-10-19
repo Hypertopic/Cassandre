@@ -70,30 +70,26 @@
               </button>
             </div>
             <div class="modal-body text-center">
-              <button id="fox" type="button" class="btn btn-outline-secondary"><img src="/style/avatar_fox.svg"></button>
-              <button id="ghost" type="button" class="btn btn-outline-secondary"><img src="/style/avatar_ghost.svg"></button>
               <button id="abstract_01" type="button" class="btn btn-outline-secondary"><img src="/style/avatar_abstract_01.svg"></button>
               <button id="abstract_02" type="button" class="btn btn-outline-secondary"><img src="/style/avatar_abstract_02.svg"></button>
               <button id="abstract_03" type="button" class="btn btn-outline-secondary"><img src="/style/avatar_abstract_03.svg"></button>
-              <button id="heart" type="button" class="btn btn-outline-secondary"><img src="/style/avatar_heart.svg"></button>
-              <button id="balloon" type="button" class="btn btn-outline-secondary"><img src="/style/avatar_balloon.svg"></button>
               <button id="house" type="button" class="btn btn-outline-secondary"><img src="/style/avatar_house.svg"></button>
-              <button id="book" type="button" class="btn btn-outline-secondary"><img src="/style/avatar_book.svg"></button>
-              <button id="incognito" type="button" class="btn btn-outline-secondary"><img src="/style/avatar_incognito.svg"></button>
-              <button id="briefcase" type="button" class="btn btn-outline-secondary"><img src="/style/avatar_briefcase.svg"></button>
-              <button id="melon" type="button" class="btn btn-outline-secondary"><img src="/style/avatar_melon.svg"></button>
               <button id="cat" type="button" class="btn btn-outline-secondary"><img src="/style/avatar_cat.svg"></button>
               <button id="pig" type="button" class="btn btn-outline-secondary"><img src="/style/avatar_pig.svg"></button>
-              <button id="celebration" type="button" class="btn btn-outline-secondary"><img src="/style/avatar_celebration.svg"></button>
+              <button id="fox" type="button" class="btn btn-outline-secondary"><img src="/style/avatar_fox.svg"></button>
+              <button id="ghost" type="button" class="btn btn-outline-secondary"><img src="/style/avatar_ghost.svg"></button>
               <button id="sloth" type="button" class="btn btn-outline-secondary"><img src="/style/avatar_sloth.svg"></button>
               <button id="dinosour" type="button" class="btn btn-outline-secondary"><img src="/style/avatar_dinosour.svg"></button>
-              <button id="soccerball" type="button" class="btn btn-outline-secondary"><img src="/style/avatar_soccerball.svg"></button>
+              <button id="tucan" type="button" class="btn btn-outline-secondary"><img src="/style/avatar_tucan.svg"></button>
               <button id="dog" type="button" class="btn btn-outline-secondary"><img src="/style/avatar_dog.svg"></button>
+              <button id="incognito" type="button" class="btn btn-outline-secondary"><img src="/style/avatar_incognito.svg"></button>
+              <button id="melon" type="button" class="btn btn-outline-secondary"><img src="/style/avatar_melon.svg"></button>
               <button id="sunset" type="button" class="btn btn-outline-secondary"><img src="/style/avatar_sunset.svg"></button>
-              <button id="drink" type="button" class="btn btn-outline-secondary"><img src="/style/avatar_drink.svg"></button>
+              <button id="soccerball" type="button" class="btn btn-outline-secondary"><img src="/style/avatar_soccerball.svg"></button>
               <button id="surfboard" type="button" class="btn btn-outline-secondary"><img src="/style/avatar_surfboard.svg"></button>
               <button id="football" type="button" class="btn btn-outline-secondary"><img src="/style/avatar_football.svg"></button>
-              <button id="tucan" type="button" class="btn btn-outline-secondary"><img src="/style/avatar_tucan.svg"></button>
+              <button id="cassandre" type="button" class="btn btn-outline-secondary"><img src="/style/avatar_cassandre.svg"></button>
+              <button id="" type="button" class="btn btn-outline-secondary"><div></div></button>
             </div>
           </div>
         </div>
@@ -122,6 +118,9 @@
   {{/stats}}
   $(document).ready(function() {
     coloringCreatorTag(user_id)
+    let n = fullnames[user_id]
+    let i = n.split(/[ -\.]+/).map((n) => n.substr(0,1).normalize('NFD').replace(/\p{Diacritic}/gu, '')).join('').toUpperCase()
+    $('#avatar_dialog .btn:last div').html(i)
     stickToHeader();
     {{#activity}}
     if('{{date}}' > start.toJSON()) {

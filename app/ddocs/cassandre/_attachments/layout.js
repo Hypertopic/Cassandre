@@ -19,6 +19,7 @@ function stickToHeader() {
 function showCreator() {
   $('.creator').each(function( index ) {
     let u = $(this).attr('class').split(' ')[1];
+    if (!avatars[u]) getAvatar(u)
     if (!fullnames[u]) getFullname(u)
     let n = fullnames[u]
     if (typeof (n) === 'undefined' || n.length < 1) {
@@ -29,10 +30,14 @@ function showCreator() {
     $(this).siblings().children('.username').text(n);
     let t = $(this).siblings('.creator_title').text();
     $(this)
-      .text(i)
       .attr('title', t)
       .removeClass('hidden')
-    coloringCreatorTag(u)
+    if (avatars[u] && avatars[u] !== 'undefined') {
+      if ($(this).find('img').length === 0) setAvatar(u, avatars[u])
+    } else {
+      $(this).text(i)
+      coloringCreatorTag(u)
+    }
   })
 }
 $(window).resize(function() {
@@ -361,6 +366,11 @@ var getSatellites = function(logged, toDoAfter){
       if (!localStorage.getItem(diary_id) || localStorage.getItem(diary_id) !== data.diary_name)
         localStorage.setItem(diary_id, data.diary_name)
     }
+    if (data.creator_id && data.creator_avatar) {
+      setAvatar(data.creator_id, data.creator_avatar)
+      if (!localStorage.getItem(data.creator_id+'_avatar') || localStorage.getItem(data.creator_id+'_avatar') !== data.creator_avatar)
+        localStorage.setItem(data.creator_id+'_avatar', data.creator_avatar)
+    }
     for (var [i, g] of data.groundings.entries()) {
       show_grounding(i, g.id, g.type, g.name, g.href, g.preview);
     }
@@ -475,7 +485,6 @@ function momentRelative(what) {
   }
 }
 function coloringCreatorTag(userid){
-  if (!avatars[userid]) getAvatar(userid)
   let name = fullnames[userid]
   if (typeof (name) === 'undefined' || name.length < 1) name = userid
   let initials = name.split(/[ -\.]+/).map((n) => n.substr(0,1).normalize('NFD').replace(/\p{Diacritic}/gu, '').toUpperCase()).filter((e) => e !== ''),
@@ -484,29 +493,28 @@ function coloringCreatorTag(userid){
   for (i of initials) rgb.push((i.charCodeAt() - 60) * 16)
   if (initials.length === 2) rgb.splice(1, 0, (name.length - 7) * 11)
   if (rgb.reduce((a, b) => a + b, 0) > 600) contrast = 'dark'
-  if (avatars[userid] && avatars[userid] !== 'undefined') {
-    $('.creator')
-      .filter(function( index ) {
-        return $(this).attr('class').split(' ')[1] === userid;
-      })
-      .html('<img src="/style/avatar_'+avatars[userid]+'.svg" height ="30" width="30">')
-      .removeClass('btn-outline-'+contrast)
-      .removeClass('border-'+contrast)
-    $('#header .creator').addClass('avatar')
-    $('#header .creator img')
-      .css({
-        'background-color': 'white',
-        'border-radius': '25px'
-      })
-  } else {
-    $('.creator')
-      .filter(function( index ) {
-        return $(this).attr('class').split(' ')[1] === userid;
-      })
-      .addClass('text-'+contrast)
-      .addClass('border-'+contrast)
-      .css('background-color', 'rgb('+rgb.join(',')+')')
-  }
+  $('.creator')
+    .filter(function( index ) {
+      return $(this).attr('class').split(' ')[1] === userid;
+    })
+    .addClass('text-'+contrast)
+    .addClass('border-'+contrast)
+    .css('background-color', 'rgb('+rgb.join(',')+')')
+}
+function setAvatar(u, a) {
+  $('.creator')
+    .filter(function( index ) {
+      return $(this).attr('class').split(' ')[1] === u;
+    })
+    .html('<img src="/style/avatar_'+a+'.svg" height ="30" width="30">')
+    .removeClass('btn-outline-dark')
+    .removeClass('btn-outline-light')
+  $('#header .creator').addClass('avatar')
+  $('#header .creator img')
+    .css({
+      'background-color': 'white',
+      'border-radius': '25px'
+    })
 }
 function setDiaryTooltip(id) {
   let diary_name = getDiaryname(id)

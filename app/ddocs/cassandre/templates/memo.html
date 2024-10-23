@@ -242,7 +242,6 @@
       tasklists: 'true',
       strikethrough: 'true'
     }),
-      avatars = [],
       metrics = {},
       trigrams = {},
       logged_is_editing = false,
@@ -459,6 +458,7 @@
     inform('warning', $('#editing').text().replace(/\s+/g, " ") + resume);
     {{/editing}}
     $('#edit').removeClass('d-none');
+    responsiveUserMenu()
     {{/logged}}
     {{^statements}}
     {{^editing}}

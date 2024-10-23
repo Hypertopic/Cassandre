@@ -80,7 +80,7 @@
       dataType: "json",
       success: function(data) {
         if(data.fullname) {
-          updateTooltip('signout', "{{i18n.i_sign-out}} <br/>"+data.fullname);
+          fullnames['{{logged}}'] = data.fullname
         }
         for (var o in data.order) {
           if (typeof data.order[o].cohort !== 'undefined') {
@@ -102,6 +102,7 @@
     $('h1').prepend(n);
     if (n > 1) $('h1').append('s');
     if (n == 0) $('h1').text('{{i18n.i_nothing-to-show}}');
+    setSignoutTooltip('{{logged}}')
     {{/logged}}
     $('a').each(function(){
      var name = $(this).text();

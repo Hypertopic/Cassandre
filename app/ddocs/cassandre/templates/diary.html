@@ -135,7 +135,6 @@
         strikethrough: 'true'
       }),
       from = '0',
-      avatars = [],
       fullnames = [],
       horizon = '{}',
       logged = "{{logged}}",
@@ -170,9 +169,10 @@
     setDiaryName(diary_name)
     announceMaintenance(maintenance, maintenance_in_progress);
     {{#logged}}
+    responsiveUserMenu()
     fullnames[logged] = localStorage.getItem(logged)
     if (fullnames[logged]) {
-      updateTooltip('signout', '{{i18n.i_sign-out}}<br/>'+fullnames[logged])
+      setSignoutTooltip(logged)
     } else {
       $.ajax({
         url: '../'+logged,
@@ -184,7 +184,7 @@
         if(data.fullname && data.fullname.length > 0) {
           fullnames[logged] = data.fullname
           localStorage.setItem(logged, data.fullname)
-          updateTooltip('signout', '{{i18n.i_sign-out}}<br/>'+fullnames[logged])
+          setSignoutTooltip(logged)
         } else {
           $('#storing_fullname_dialog').modal('show');
         }

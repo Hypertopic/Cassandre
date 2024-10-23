@@ -7,17 +7,13 @@
     {{>viscss}}
   </head>
   <body id="container">
-    <nav id="header" class="{{>navbarstyle}} justify-content-between fixed-top">
+    <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
       <a class="d-inline-block btn navbar-btn" id="diary">
         <svg class="bi" width="24" height="24" fill="currentColor">
           <use xlink:href="../style/bootstrap-icons.svg#book"/>
         </svg>
       </a>
-      <ul class="navbar-nav">
-        <li class="form-inline justify-content-between">
-          {{>log}}
-        </li>
-      </ul>
+      {{>log}}
     </nav>
     <main class="col pb-5" id="content">
       <h1>{{i18n.i_timeline}}</h1>

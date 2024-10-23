@@ -94,6 +94,9 @@
       if ($('#groundings li').length == 1) $('#groundings').append($('<div>', { text: "{{i18n.i_versions.single}}".replace('&#39;', "'")  }));
     })
     vlayout();
+    {{#logged}}
+    setSignoutTooltip('{{logged}}')
+    {{/logged}}
     stickToHeader();
   });
 

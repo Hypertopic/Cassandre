@@ -165,7 +165,6 @@
   <script src="../script/grounding.js"></script>
   <script>
   let connected_nodes = "{{connected_nodes}}".split(','),
-      avatars = [],
       articulations = [],
       candidates = [],
       edges = [],
@@ -178,6 +177,9 @@
       this_id = "{{_id}}",
       this_type = "{{type}}";
   $(document).ready(function() {
+    {{#logged}}
+    setSignoutTooltip('{{logged}}')
+    {{/logged}}
     {{>render}}
     $('#groundings').collapse({toggle: false});
     {{#nodes}}

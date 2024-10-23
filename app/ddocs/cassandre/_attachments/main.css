@@ -348,6 +348,11 @@ button.comment {
   color: black !important;
 }
 
+#user-menu .dropdown-menu {
+  min-width: 4rem !important;
+  text-align: center !important;
+}
+
 #avatar_dialog .modal-body div, #avatar_dialog img {
   height: 5rem;
   width: 5rem;

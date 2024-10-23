@@ -126,6 +126,7 @@
     self.location = '../memo/{{_id}}';
     {{/editing}}
     {{#editing}}
+    setSignoutTooltip('{{logged}}')
     window.addEventListener("beforeunload", function (e) {
       if (warning != false) {
         (e || window.event).returnValue = warning;

@@ -21,22 +21,6 @@ $('#only-commented').on('click', function() {
 $('#only-modified').on('click', function() {
   cal.update(modified);
 });
-$('#avatar').on('click', function() {
-  $('#avatar_dialog').modal('show');
-});
-$('#avatar_dialog button').children().on('click', function() {
-  let avatar = $(this).parent().attr('id')
-  $.ajax({
-    url: "../avatar/" + user_id,
-    type: "PUT",
-    contentType: "application/json",
-    data: avatar
-  }).done(function(){
-    localStorage.setItem(user_id+'_avatar', avatar)
-  }).then(reload)
-  .fail(error_alert)
-  
-});
 function showMore(start) {
   $.ajax({
     url: '../user/'+user_id+'/'+start,

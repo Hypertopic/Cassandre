@@ -85,11 +85,22 @@ var shared = {
       </form>\
       {{/logged}}\
       {{#logged}}\
-      <button class='btn navbar-btn' data-html='true' title='{{i18n.i_sign-out}}<br/>{{#logged_fullname}}{{logged_fullname}}{{/logged_fullname}}' id='signout'>\
-        <svg class='bi' width='24' height='24' fill='currentColor'>\
-          <use xlink:href='../style/bootstrap-icons.svg#person-circle'/>\
-        </svg>\
-      </button>\
+      <div id='user-menu' class='dropdown'>\
+        <button class='btn navbar-btn dropdown-toggle' data-toggle='dropdown' title='{{#logged_fullname}}{{logged_fullname}}{{/logged_fullname}}' id='user-menu-btn'>\
+        </button>\
+        <div class='dropdown-menu dropdown-menu-right'>\
+          <button class='btn' data-placement='left' title='{{i18n.i_select_avatar}}' id='avatar'>\
+            <svg class='bi' width='24' height='24' fill='currentColor'>\
+              <use xlink:href='../style/bootstrap-icons.svg#person-circle'/>\
+            </svg>\
+          </button>\
+          <button class='btn navbar-btn' data-placement='left' data-html='true' title='{{i18n.i_sign-out}}<br/>{{#logged_fullname}}{{logged_fullname}}{{/logged_fullname}}' id='signout'>\
+            <svg class='bi' width='24' height='24' fill='currentColor'>\
+              <use xlink:href='../style/bootstrap-icons.svg#box-arrow-right'/>\
+            </svg>\
+          </button>\
+        </div>\
+      </div>\
       {{/logged}}\
     </div></li></ul>",
   menucolor:"dark",
@@ -290,11 +301,13 @@ var shared = {
         reuse = '{{i18n.i_reuse}}',\
         readable_by = '{{i18n.i_readable-by}}',\
         relpath = '../',\
+        select_avatar ='{{i18n.i_select_avatar}}',\
         sign_out = '{{i18n.i_sign-out}}',\
         updated_diary = '{{i18n.i_updated-diary}}',\
         wrong_password = '{{i18n.i_wrong-password}}'.replace('&#39;','\\'');\
   getFullname('{{logged}}');\
-  let refresh = true,\
+  let avatars = [],\
+      refresh = true,\
       fullname = null,\
       logged_fullname = fullnames['{{logged}}'],\
       nothing_to_show = '{{i18n.i_nothing-to-show}}';\

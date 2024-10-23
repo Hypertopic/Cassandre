@@ -78,7 +78,7 @@ $('#signin').on('submit', function(e) {
 $('#signin').find('input').first().on('input', function() {
   if ($(this).val().length > 0) $('#signin button').removeAttr('disabled');
 });
-$('#signout').on('click', function() {
+$('#header').on('click', '#signout, #signout-small', function() {
   $.ajax({
     type: 'DELETE',
     url: '/_session'

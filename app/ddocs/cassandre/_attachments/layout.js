@@ -1,3 +1,36 @@
+$('#avatar').on('click', function() {
+  if (!fullnames[user]) getFullname(user)
+  let n = fullnames[user],
+      i = getInitials(n)
+  $('#avatar_dialog .btn:last div').html(i)
+  $('#avatar_dialog .modal-title').html(select_avatar)
+  $('#avatar').tooltip('dispose')
+  $('#avatar_dialog').modal('show')
+})
+$('body').on('click', '#avatar_dialog button:not(.close)', function() {
+  let avatar = $(this).attr('id')
+  $.ajax({
+    url: "../avatar/" + user,
+    type: "PUT",
+    contentType: "application/json",
+    data: avatar
+  }).done(function(){
+    localStorage.setItem(user+'_avatar', avatar)
+  }).then(reload)
+  .fail(error_alert)
+})
+$('#user-menu').on('show.bs.dropdown', function() {
+  $('#user-menu-btn').tooltip('dispose')
+})
+function responsiveUserMenu() {
+  $('#user-menu').addClass('d-none d-lg-block')
+  $('#signout')
+    .clone()
+    .attr('id', 'signout-small')
+    .attr('data-placement', 'bottom')
+    .addClass('d-lg-none')
+    .insertAfter('#user-menu')
+}
 function stickToHeader() {
   var h = document.getElementById('header').offsetHeight;
   $('#container>#memo').css({'padding-top': h});
@@ -18,7 +51,7 @@ function stickToHeader() {
 }
 function showCreator() {
   $('.creator').each(function( index ) {
-    let u = $(this).attr('class').split(' ')[1];
+    let u = $(this).attr('class').split(' ')[1]
     if (!avatars[u]) getAvatar(u)
     if (!fullnames[u]) getFullname(u)
     let n = fullnames[u]
@@ -26,9 +59,9 @@ function showCreator() {
       n = u
       fullnames[u] = u
     }
-    let i = n.split(/[ -\.]+/).map((n) => n.substr(0,1).normalize('NFD').replace(/\p{Diacritic}/gu, '')).join('').toUpperCase();
-    $(this).siblings().children('.username').text(n);
-    let t = $(this).siblings('.creator_title').text();
+    let i = getInitials(n)
+    $(this).siblings().children('.username').text(n)
+    let t = $(this).siblings('.creator_title').text()
     $(this)
       .attr('title', t)
       .removeClass('hidden')
@@ -524,7 +557,15 @@ function setDiaryTooltip(id) {
 }
 function setSignoutTooltip(u) {
   if (!fullnames[u]) getFullname(u)
-  updateTooltip('signout', sign_out+'<br/>'+fullnames[u])
+  let n = fullnames[u],
+      bg_color = $('#header').attr('class').split(' ')[1].replace('navbar', 'bg'),
+      i = getInitials(n)
+  $("#user-menu").find(".dropdown-menu")
+    .addClass(bg_color)
+  $('#user-menu-btn').attr('title', n).html(i)  
+  $("body").append('<div id="dialogs"></div>')
+  $("#dialogs").load( "/script/avatar_dialog.html" )
+  updateTooltip('signout', sign_out+'<br/>'+n)
 }
 function getDiaryname(id) {
   let diary_name = localStorage.getItem(id)
@@ -577,6 +618,9 @@ function getFullname(o) {
       if (fullnames[o]) localStorage.setItem(o, fullnames[o])
     })
   }
+}
+function getInitials(n) {    
+  return n.split(/[ -\.]+/).map((n) => n.substr(0,1).normalize('NFD').replace(/\p{Diacritic}/gu, '')).join('').toUpperCase()
 }
 function capitalize(n) {
   return n.substr(0,1).toUpperCase()+n.substr(1)

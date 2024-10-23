@@ -123,7 +123,7 @@
     }).done(function(data) {
         if(data.fullname && data.fullname.length > 0) {
           if (!localStorage.getItem(logged)) localStorage.setItem(logged, data.fullname)
-          updateTooltip('signout', '{{i18n.i_sign-out}}<br/>'+data.fullname);
+          setSignoutTooltip(logged)
         } else {
           $('#storing_fullname_dialog').modal('show');
         }

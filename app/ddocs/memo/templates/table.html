@@ -157,8 +157,7 @@
   {{>script}}
   <script src="../script/grounding.js"></script>
   <script>
-  let avatars = [],
-      candidates = [],
+  let candidates = [],
       fullnames = [],
       userids = [],
       selected = tip = '',
@@ -166,6 +165,9 @@
       this_id = "{{_id}}",
       this_type = "{{type}}";
   $(document).ready(function() {
+    {{#logged}}
+    setSignoutTooltip('{{logged}}')
+    {{/logged}}
     {{>render}}
     var cells = {{{cells}}};
     var tbl_body = document.getElementById("table");

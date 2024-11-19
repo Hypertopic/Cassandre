@@ -480,6 +480,10 @@
     poller('statements', '{{update_seq}}');
     {{/statements}}
     stickToHeader();
+    let codes = document.getElementsByTagName("code")
+    for (let c of codes) {
+      codeToGraph(c)
+    }
   };
   {{/authorized}}
 

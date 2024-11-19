@@ -232,6 +232,9 @@
   {{>script}}
   <script src="../script/grounding.js"></script>
   <script src="../script/memo.js"></script>
+  <script src="../script/d3.min.js"></script>
+  <script src="../script/hpcc.min.js" type="javascript/worker"></script>
+  <script src="../script/d3-graphviz.min.js"></script>
   <script>
   {{^authorized}}
   stickToHeader();
@@ -253,168 +256,77 @@
       help = [],
       diary_id = '{{diary}}',
       this_id = '{{_id}}',
-      this_type = '{{type}}';
-  converter.setFlavor('github');
+      this_type = '{{type}}',
+      type = []
+  converter.setFlavor('github')
+  type["field"] = {
+    placeHolder: "{{i18n.i_name.field}}",
+    title: "{{i18n.i_memo.field}}".replace('&#39;',"'")
+  }
+  type["coding"] = {
+    placeHolder: "{{i18n.i_name.coding}}",
+    title: "{{i18n.i_memo.coding}}"
+  }
+  type["transcript"] = {
+    placeHolder: "{{i18n.i_name.transcript}}",
+    title: "{{i18n.i_memo.transcript}}".replace('&#39;',"'")
+  }
+  type["theoretical"] = {
+    placeHolder: "{{i18n.i_name.theoretical}}",
+    title: "{{i18n.i_memo.theoretical}}"
+  }
+  type["operational"] = {
+    placeHolder: "{{i18n.i_name.operational}}",
+    title: "{{i18n.i_memo.operational}}"
+  }
+  type["storyline"] = {
+    placeHolder: "{{i18n.i_name.storyline}}",
+    title: "{{i18n.i_memo.storyline}}"
+  }
   {{#authorized}}
   help["field"] = {
     init: "{{{i18n.i_content.field}}}", 
     next: "{{{i18n.i_next.field}}}",
-    create: "{{i18n.i_create.field}}", 
+    create: "{{i18n.i_create.field}}".replace('&#39;',"'"), 
     location: "{{i18n.i_content.location.field}}".replace('&#39;',"'"), 
     date: "{{i18n.i_content.date.field}}".replace('&#39;',"'")
   };
   help["transcript"] = {
     init: "{{{i18n.i_content.transcript}}}",
     next: "{{{i18n.i_next.transcript}}}",
-    create: "{{i18n.i_create.transcript}}",
+    create: "{{i18n.i_create.transcript}}".replace('&#39;',"'"),
     location: "{{i18n.i_content.location.transcript}}".replace('&#39;',"'"),
     date: "{{i18n.i_content.date.transcript}}".replace('&#39;',"'")
   };
   help["interview"] = {init: "{{{i18n.i_content.transcript}}}", next: "{{{i18n.i_next.transcript}}}"};
-  help["coding"] = {init: "{{{i18n.i_content.coding}}}", next: "{{{i18n.i_next.coding}}}"};
-  help["theoretical"] = {init: "{{{i18n.i_content.theoretical}}}", next: "{{{i18n.i_next.theoretical}}}"};
-  help["operational"] = {init: "{{{i18n.i_content.operational}}}", next: "{{{i18n.i_next.operational}}}"};
-  help["storyline"] = {init: "{{{i18n.i_content.storyline}}}", next: "{{{i18n.i_next.storyline}}}"};
+  help["coding"] = {
+    create: "{{{i18n.i_create.coding}}}",
+    init: "{{{i18n.i_content.coding}}}",
+    next: "{{{i18n.i_next.coding}}}"
+  }
+  help["theoretical"] = {
+    create: "{{{i18n.i_create.theoretical}}}",
+    init: "{{{i18n.i_content.theoretical}}}",
+    next: "{{{i18n.i_next.theoretical}}}"
+  }
+  help["operational"] = {
+    create: "{{{i18n.i_create.operational}}}",
+    init: "{{{i18n.i_content.operational}}}",
+    next: "{{{i18n.i_next.operational}}}"
+  }
+  help["storyline"] = {
+    create: "{{{i18n.i_create.storyline}}}",
+    init: "{{{i18n.i_content.storyline}}}",
+    next: "{{{i18n.i_next.storyline}}}"
+  }
+  help["diagram"] = {create: "{{{i18n.i_create.diagram}}}"}
   $(document).ready(function() {
     {{#statements}}
     {{^logged}}nothing_to_show +='. {{i18n.i_sign-in-for-more}}';{{/logged}}
     if ($('.post').text().trim().length == 0) $('.post').text(nothing_to_show);
     {{/statements}}
-    switch (this_type) {
-      case ('field'):
-        $("h1>img").attr("title", "{{i18n.i_memo.field}}".replace('&#39;',"'"));
-        $("#name").attr("placeHolder", "{{i18n.i_name.field}}");
-        $('#add')
-          .addClass('coding')
-          .attr("title", "{{i18n.i_create.coding}}");
-        $("#leave-name").attr("placeHolder", "{{i18n.i_name.coding}}");
-        break;
-      case ('transcript'):
-        $("h1>img").attr("title", "{{i18n.i_memo.transcript}}".replace('&#39;',"'"));
-        $("#name").attr("placeHolder", "{{{i18n.i_name.transcript}}}");
-        $('#add')
-          .addClass('coding')
-          .attr("title", "{{i18n.i_create.coding}}");
-        $("#leave-name").attr("placeHolder", "{{i18n.i_name.coding}}");
-        $('.writing').removeClass('writing').addClass('words');
-        break;
-      case ('interview'):
-        $("h1>img").attr("title", "{{i18n.i_memo.transcript}}".replace('&#39;',"'"));
-        $("#name").attr("placeHolder", "{{{i18n.i_name.transcript}}}");
-        $('#add')
-           .addClass('coding')
-          .attr("title", "{{i18n.i_create.coding}}");
-        $("#leave-name").attr("placeHolder", "{{i18n.i_name.coding}}");
-        $('#lexical').removeClass('hidden');
-        $('.post').children('font').wrapAll('<p></p>');
-        break;
-      case ('coding'):
-        $("h1>img").attr("title", "{{i18n.i_memo.coding}}");
-        $("#name").attr("placeHolder", "{{i18n.i_name.coding}}");
-        $('#add')
-          .addClass('theoretical')
-          .attr("title", "{{i18n.i_create.theoretical}}");
-        $("#leave-name").attr("placeHolder", "{{i18n.i_name.theoretical}}");
-        if ($('#name').val().length > 0) {
-          $('#create')
-            .addClass('diagram')
-            .attr("title", "{{i18n.i_create.diagram}}");
-        }
-        $('#add').parent().append($('#create'));
-        $('#add').parent().append($('#create-table'));
-        break;
-      case ('theoretical'):
-        $("h1>img").attr("title", "{{i18n.i_memo.theoretical}}");
-        $("#name").attr("placeHolder", "{{i18n.i_name.theoretical}}");
-        $('#add')
-          .addClass('operational')
-          .attr("title", "{{i18n.i_create.operational}}");
-        $("#leave-name").attr("placeHolder", "{{i18n.i_name.operational}}");
-        break;
-      case ('operational'):
-        $("h1>img").attr("title", "{{i18n.i_memo.operational}}");
-        $("#name").attr("placeHolder", "{{i18n.i_name.operational}}");
-        $('#create')
-          .addClass('interview')
-          .attr("title", "{{i18n.i_create.transcript}}".replace('&#39;',"'"));
-        $("#leave-name")
-          .attr("placeHolder", "{{i18n.i_name.field}}")
-          .prop("disabled", true);
-        $('#add')
-          .addClass('field')
-          .attr("title", "{{i18n.i_create.field}}".replace('&#39;',"'"))
-          .parent().append($('#create'));
-        break;
-      case ('diagram'):
-        self.location = '../diagram/'+this_id;
-        break;
-      case ('table'):
-        self.location = '../table/'+this_id;
-        break;
-      case ('graph'):
-        self.location = '../graph/'+this_id;
-        break;
-      case ('storyline'):
-        $("h1>img").attr("title", "{{i18n.i_memo.storyline}}");
-        $("#name").attr("placeHolder", "{{i18n.i_name.storyline}}");
-        $('#add').addClass('storyline').attr("title", "{{i18n.i_create.storyline}}");
-        $("#leave-name").attr("placeHolder", "{{i18n.i_name.storyline}}");
-        break;
-    }
-    $('.post').html(function(i, text) {
-      if (this_type == 'interview') {
-        return text.replace(/\n \n/g, '</font></p><p><font>');
-      } else {
-        return converter.makeHtml(text.replace(/&gt;/g, '>').trim());
-      }
-    });
-    if (this_type === 'interview') {
-      $.ajax({
-        url: '../corpus_words/'+diary_id,
-        type: "GET",
-        dataType: "json",
-        success: function(lexcorpus) {
-          var corpus = {};
-          for (var c of lexcorpus.rows) {
-            corpus[c.key[1]] = c.value;
-          }
-          $.ajax({
-            url: "../text_words/" + this_id,
-            type: "GET",
-            dataType: "json",
-            success: function(lexdoc) {
-              var max_specific = 0;
-              for (var d of lexdoc.rows) {
-                var word = d.key[1],
-                    inCorpus = corpus[word];
-                metrics[word] = {
-                  rare: 1/inCorpus.sum,
-                  specific: Math.sqrt(d.value)/inCorpus.count,
-                };
-                max_specific = Math.max(max_specific, metrics[word].specific);
-              }
-              for (var k in metrics) {
-                var m = metrics[k];
-                m.specific /= max_specific;
-              }
-              $('#rare').removeClass('disabled');
-              $('#specific').removeClass('disabled');
-            }
-          });
-        }
-      });
-      $.ajax({
-        url: '../phrase/'+diary_id,
-        type: "GET",
-        dataType: "json",
-        success: function(phrases) {
-          for (var r of phrases.rows) {
-            trigrams[[r.key[1], r.key[2], r.key[3]]] = r.value;
-          }
-          $('#repeated').removeClass('disabled');
-        }
-      });
-    }
+    memoType(this_type, this_id)
+    if (this_type === 'interview') prepareLexicalFeatures(diary_id, this_id)
     const par = window.location.hash.substring(1);
     if (par !== '') highlight(par);
     getSatellites('{{logged}}', toDoAfter)
@@ -479,7 +391,7 @@
     setDiaryTooltip(diary_id)
     poller('statements', '{{update_seq}}');
     {{/statements}}
-    stickToHeader();
+    stickToHeader()
     let codes = document.getElementsByTagName("code")
     for (let c of codes) {
       codeToGraph(c)

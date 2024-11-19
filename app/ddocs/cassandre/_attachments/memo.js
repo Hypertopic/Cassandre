@@ -201,6 +201,146 @@ function wordMetrics(metrics, word, type) {
   return (w)?w[type]:.05;
 }
 
+function memoType(this_type, this_id) {
+    switch (this_type) {
+      case ('field'):
+        $("h1>img").attr("title", type["field"]["title"])
+        $("#name").attr("placeHolder", type["field"]["placeHolder"])
+        $('#add')
+          .addClass('coding')
+          .attr("title", help["coding"]["create"])
+        $("#leave-name").attr("placeHolder", type["coding"]["placeHolder"])
+        break;
+      case ('transcript'):
+        $("h1>img").attr("title", type["transcript"]["title"])
+        $("#name").attr("placeHolder", type["transcript"]["placeHolder"])
+        $('#add')
+          .addClass('coding')
+          .attr("title", help["coding"]["create"])
+        $("#leave-name").attr("placeHolder", type["coding"]["placeHolder"])
+        $('.writing').removeClass('writing').addClass('words');
+        break;
+      case ('interview'):
+        $("h1>img").attr("title", type["transcript"]["title"])
+        $("#name").attr("placeHolder", type["transcript"]["placeHolder"])
+        $('#add')
+           .addClass('coding')
+          .attr("title", help["coding"]["create"])
+        $("#leave-name").attr("placeHolder", type["coding"]["placeHolder"])
+        $('#lexical').removeClass('hidden');
+        $('.post').children('font').wrapAll('<p></p>')
+        break;
+      case ('coding'):
+        $("h1>img").attr("title", type["coding"]["title"])
+        $("#name").attr("placeHolder", type["coding"]["placeHolder"])
+        $('#add')
+          .addClass('theoretical')
+          .attr("title", help["theoretical"]["create"])
+        $("#leave-name").attr("placeHolder", type["theoretical"]["placeHolder"])
+        if ($('#name').val().length > 0) {
+          $('#create')
+            .addClass('diagram')
+            .attr("title", help["diagram"]["create"])
+        }
+        $('#add').parent().append($('#create'))
+        $('#add').parent().append($('#create-table'))
+        break;
+      case ('theoretical'):
+        $("h1>img").attr("title", type["theoretical"]["title"])
+        $("#name").attr("placeHolder", type["theoretical"]["placeHolder"])
+        $('#add')
+          .addClass('operational')
+          .attr("title", help["operational"]["create"])
+        $("#leave-name").attr("placeHolder", type["operational"]["placeHolder"])
+        break;
+      case ('operational'):
+        $("h1>img").attr("title", type["operational"]["title"])
+        $("#name").attr("placeHolder", type["operational"]["placeHolder"])
+        $('#create')
+          .addClass('interview')
+          .attr("title", help["transcript"]["create"])
+        $("#leave-name")
+          .attr("placeHolder", type["field"]["placeHolder"])
+          .prop("disabled", true)
+        $('#add')
+          .addClass('field')
+          .attr("title", help["field"]["create"])
+          .parent().append($('#create'))
+        break;
+      case ('diagram'):
+        self.location = '../diagram/'+this_id
+        break;
+      case ('table'):
+        self.location = '../table/'+this_id
+        break;
+      case ('graph'):
+        self.location = '../graph/'+this_id
+        break;
+      case ('storyline'):
+        $("h1>img").attr("title", type["storyline"]["title"])
+        $("#name").attr("placeHolder", type["storyline"]["placeHolder"])
+        $('#add').addClass('storyline').attr("title", help["storyline"]["create"])
+        $("#leave-name").attr("placeHolder", type["storyline"]["placeHolder"])
+        break;
+    }
+    $('.post').html(function(i, text) {
+      if (this_type == 'interview') {
+        return text.replace(/\n \n/g, '</font></p><p><font>')
+      } else {
+        return converter.makeHtml(text.replace(/&gt;/g, '>').trim())
+      }
+    })
+
+}
+
+function prepareLexicalFeatures(diary_id, this_id) {
+  $.ajax({
+    url: '../corpus_words/'+diary_id,
+    type: "GET",
+    dataType: "json",
+    success: function(lexcorpus) {
+      let corpus = {}
+      for (var c of lexcorpus.rows) {
+        corpus[c.key[1]] = c.value
+      }
+      $.ajax({
+        url: "../text_words/" + this_id,
+        type: "GET",
+        dataType: "json",
+        success: function(lexdoc) {
+          let max_specific = 0
+          for (var d of lexdoc.rows) {
+            let word = d.key[1],
+                inCorpus = corpus[word]
+            metrics[word] = {
+              rare: 1/inCorpus.sum,
+              specific: Math.sqrt(d.value)/inCorpus.count,
+            }
+            max_specific = Math.max(max_specific, metrics[word].specific)
+          }
+          for (var k in metrics) {
+            let m = metrics[k]
+            m.specific /= max_specific
+          }
+          $('#rare').removeClass('disabled')
+          $('#specific').removeClass('disabled')
+        }
+      })
+    }
+  })
+  $.ajax({
+    url: '../phrase/'+diary_id,
+    type: "GET",
+    dataType: "json",
+    success: function(phrases) {
+      for (var r of phrases.rows) {
+        trigrams[[r.key[1], r.key[2], r.key[3]]] = r.value
+      }
+      $('#repeated').removeClass('disabled')
+    }
+  })
+}
+
 function codeToGraph(c) {
   let par = c.parentElement,
       dot = c.innerText,
@@ -212,3 +352,4 @@ function codeToGraph(c) {
     d3.select(c).style('display', 'none')
   }
 }
+

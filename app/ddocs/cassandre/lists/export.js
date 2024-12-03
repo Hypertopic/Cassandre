@@ -101,6 +101,9 @@ function(head, req) {
     case('xml'):
       data.diary_name = req.query.diary_name;
       start({"headers":{"Content-Type":"application/xml;charset=utf-8"}});
+      for (var m of data.memos) {
+        if (m.body) m.body = m.body.replace(/\n \n/g, '</p><p>')
+      }
       return Mustache.to_html(templates.toxml, data);
     break;
     case('json'):

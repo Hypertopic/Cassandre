@@ -122,13 +122,17 @@
   {{>script}}
   {{#list}}<script src="../script/showdown.min.js"></script>{{/list}}
   {{^list}}<script src="../script/vis.min.js"></script>{{/list}}
+  <script src="../script/d3.min.js"></script>
+  <script src="../script/hpcc.min.js" type="javascript/worker"></script>
+  <script src="../script/d3-graphviz.min.js"></script>
   <script>
   const activity = {{{activity}}},
         by = '{{by}}',
         diary_id = '{{diary}}',
         memos = {{{memos}}},
         this_id = '{{diary}}',
-        to = ' {{i18n.i_to}} ';
+        to = ' {{i18n.i_to}} ',
+        contrastcolor = '{{>contrastcolor}}';
   var converter = new showdown.Converter({
         tables: 'true',
         tasklists: 'true',
@@ -297,6 +301,10 @@
     $('.preview').html(function(i, text) {
       return converter.makeHtml(text.replace(/&gt;/g, '>').trim());
     });
+    let codes = document.getElementsByTagName("code")
+    for (let c of codes) {
+      codeToGraph(c, contrastcolor)
+    }
     var nothing_to_show = '{{i18n.i_nothing-to-show}}';
     {{^logged}}nothing_to_show +='. {{i18n.i_sign-in-for-more}}';{{/logged}}
     if ({{size}} == 0) $('#memos').text(nothing_to_show);

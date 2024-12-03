@@ -340,16 +340,3 @@ function prepareLexicalFeatures(diary_id, this_id) {
     }
   })
 }
-
-function codeToGraph(c) {
-  let par = c.parentElement,
-      dot = c.innerText,
-      first = dot.split(' ')[0]
-  dot = dot.replace(/{/, '{overlap = false; splines = true; node [fontname="Helvetica,Arial,sans-serif"]; ')
-  if( first === 'graph') dot = dot.replace(/{/, '{layout = neato ')
-  if (['graph', 'digraph'].indexOf(first) > -1) {
-    d3.select(par).append('div').graphviz().renderDot(dot)
-    d3.select(c).style('display', 'none')
-  }
-}
-

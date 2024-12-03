@@ -459,7 +459,21 @@ function renderPreviews(converter){
     md = md.replace(/<\/?p>/g, '').replace(/!?\[(.*)\]\(.*/, '$1').replace(/~~|_|\[|\*\*|\*/, '');
     return md;
   });
-};
+}
+function codeToGraph(c, context) {
+  let par = c.parentElement,
+      dot = c.innerText,
+      first = dot.split(' ')[0],
+      color = '',
+      gOptions = 'overlap = false; splines = true; bgcolor=transparent'
+  if (context === 'light') color += 'color=white; fontcolor=white; fill=white; '
+  dot = dot.replace(/{/, '{'+gOptions+'; edge ['+color+']; node [ '+color+'fontname="Helvetica,Arial,sans-serif"]; ')
+  if( first === 'graph') dot = dot.replace(/{/, '{layout = neato ')
+  if (['graph', 'digraph'].indexOf(first) > -1) {
+    d3.select(par).append('div').graphviz().renderDot(dot).zoom(false)
+    d3.select(c).style('display', 'none')
+  }
+}
 function announceMaintenance(before, during){
   $.ajax({
     type: 'GET',

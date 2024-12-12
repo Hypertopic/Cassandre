@@ -21,6 +21,52 @@ $('#only-commented').on('click', function() {
 $('#only-modified').on('click', function() {
   cal.update(modified);
 });
+$('#search-comments .input-group-text').on('click', function() {
+  searchComments()
+})
+$('#search-comments .form-control').on('keypress', function(key) {
+  if (key.which == 13) searchComments()
+})
+function searchComments() {
+  let search_input = $('#search-comments .form-control').val(),
+      request = {
+    "selector": {
+      "$and": [
+        {"text": {"$regex": search_input}},
+        {"user": user_id}
+      ]
+    },
+    "fields": ["date", "commented", "text"],
+    "skip": 0,
+    "execution_stats": true
+  }
+  $.ajax({
+    url: '../search/'+search_input,
+    type: "POST",
+    dataType: "json",
+    contentType: "application/json",
+    data: JSON.stringify(request),
+  }).done(function(data){
+    $("#activities").removeClass('hidden')
+    $("#events").addClass('hidden')
+    $("#next").remove()
+    if (search_input.length > 0) {
+      for (var c of data.docs.sort((a, b) => new Date(a.date) - new Date(b.date))) {
+        $("#activities").prepend('<li class="commented"><span id="'+c.date+'" class="'+c.date+' moment">'
+        +'</span>&nbsp;– <a href="../memo/'+c.commented+'">'+c.text+'</a></li>')
+      }
+    }
+    rendering('#activities')
+  })
+}
+function rendering(o) {
+  momentRelative(o)
+  $('.commented>a').html(function(i, text) {
+    let md = converter.makeHtml(text.replace(/&gt;/g, '>').replace(/\[([^\]]*)\]\([^\)]*\)/, '$1').trim())
+    if (md.substring(0,3) == '<p>') md = md.replace(/<\/?p>/g, '');
+    return md;
+  })
+}
 function showMore(start) {
   $.ajax({
     url: '../user/'+user_id+'/'+start,
@@ -34,12 +80,7 @@ function showMore(start) {
         +'</li>');
     }
   }).done(function(){
-    momentRelative('#events');
-    $('.commented>a').html(function(i, text) {
-      var md = converter.makeHtml(text.replace(/&gt;/g, '>').replace(/\[([^\]]*)\]\([^\)]*\)/, '$1').trim())
-      if (md.substring(0,3) == '<p>') md = md.replace(/<\/?p>/g, '');
-      return md;
-    });
+    rendering('#events')
   }).then(function(){
     if ($('#events li').length == 0) $('#events').text(nothing_to_show);
   });

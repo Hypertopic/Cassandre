@@ -276,6 +276,9 @@ function(req2) {
         "reduce": "false"
       };
     break;
+    case 'search':
+      reply.path = "../../_find";
+    break;
     case 'kwic':
       switch (path.length) {
         case 2:

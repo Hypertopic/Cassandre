@@ -434,6 +434,7 @@ button.comment {
   background-image: url('storyline.svg');
 }
 
+#search-comments>.input-group-append>.input-group-text,
 .search {
   cursor: pointer;
   color: transparent;

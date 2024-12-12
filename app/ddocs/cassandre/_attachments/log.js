@@ -22,6 +22,11 @@ $('#sign-in').on('click', function() {
   $('#logged').parent().parent('.nav-fill').removeClass('hidden');
   if ($('#signin').find('input').first().val().length > 0) $('#signin button').removeAttr('disabled');
 });
+$('#search-button').on('click', function() {
+  $('#header .btn').addClass('disabled');
+  $('#search-comments').removeClass('hidden');
+  $('#search-button').addClass('hidden');
+});
 $('#search-icon').on('click', function() {
   $('#header .btn').addClass('disabled');
   $('#search-input').parent().append($('#reload'));

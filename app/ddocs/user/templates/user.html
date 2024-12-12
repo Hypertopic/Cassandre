@@ -13,6 +13,17 @@
             <use xlink:href="../style/bootstrap-icons.svg#journals"/>
           </svg>
         </a>
+        <button id='search-button' class="btn hidden" title="{{i18n.i_search}} {{i18n.i_comments}}">
+          <svg class='bi' width='24' height='24' fill='currentColor'>
+            <use xlink:href='../style/bootstrap-icons.svg#search'/>
+          </svg>
+        </button>
+        <div id='search-comments' class='input-group mr-1 hidden'>
+          <input id='' type='search' class='form-control' placeholder="{{i18n.i_search}} {{i18n.i_comments}}" />
+          <div class='input-group-append'>
+            <span class='input-group-text'>?</span>
+          </div>
+        </div>
         <ul class="navbar-nav mr-auto"></ul>
         {{>log}}
       </nav>
@@ -35,8 +46,8 @@
           </legend>
         </fieldset>
         {{>sponsor_rights}}
-        <ul id="events">
-        </ul>
+        <ul id="events"></ul>
+        <ul id="activities" class="hidden"></ul>
         {{/authorized}}
       </main>
       <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
@@ -78,6 +89,7 @@
   {{/stats}}
   $(document).ready(function() {
     setSignoutTooltip('{{logged}}')
+    $('#logged').parent().append($('#search-button').removeClass('hidden'))
     stickToHeader();
     {{#activity}}
     if('{{date}}' > start.toJSON()) {
@@ -98,6 +110,7 @@
     {{#stats}}
     drawChart(all);
     if ({{commented}} > 0) $('#only-commented').removeClass('d-none');
+    if ({{commented}} < 1) $('#search-comments').addClass('d-none');
     if ({{created}} > 0) $('#only-created').removeClass('d-none');
     if ({{modified}} > 0) $('#only-modified').removeClass('d-none');
     {{/stats}}

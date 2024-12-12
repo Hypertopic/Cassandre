@@ -32,13 +32,13 @@ var shared = {
       {{/statements}}{{/type}}\
       {{#diary}}\
       {{>rights}}\
-      <button id='search-icon' class='btn' title='{{i18n.i_search}}'>\
+      <button id='search-icon' class='btn' title='{{i18n.i_search}} {{i18n.i_the-diary}}'>\
         <svg class='bi' width='24' height='24' fill='currentColor'>\
           <use xlink:href='../style/bootstrap-icons.svg#search'/>\
         </svg>\
       </button>\
       <div id='search-input' class='input-group flex-grow-1 mr-1 hidden'>\
-        <input id='kwic' type='search' class='form-control' placeholder='{{i18n.i_search}}' />\
+        <input id='kwic' type='search' class='form-control' placeholder='{{i18n.i_search}} {{i18n.i_the-diary}}' />\
         <div class='input-group-append'>\
           <span class='input-group-text kwic search'>?</span>\
         </div>\

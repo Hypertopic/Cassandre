@@ -20,7 +20,9 @@ Installation requirements
 Installation procedure
 ----------------------
 
-    docker-compose up -d
+    export COUCHDB_USER="TO_BE_CHANGED"
+    export COUCHDB_PASSWORD="TO_BE_CHANGED"
+    docker compose up --detach
 
 Two services are now available:
 

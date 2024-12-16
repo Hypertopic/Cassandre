@@ -1,6 +1,6 @@
 port: 80
-service: proxy
-path: ''
+service: couchdb:5984
+path: /cassandre/_design/cassandre/_rewrite
 secret: TO_BE_CHANGED
 logFormat: :date[iso] :remote-addr :remote-user :method :url :status :response-time[0]ms :total-time[0]ms ":user-agent"
 session:

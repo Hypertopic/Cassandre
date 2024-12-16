@@ -9,6 +9,9 @@ services:
     volumes:
       - ./data:/opt/couchdb/data
       - ./conf/couchdb.ini:/opt/couchdb/etc/local.d/docker.ini
+    environment:
+      - COUCHDB_USER
+      - COUCHDB_PASSWORD
     logging:
       options:
         max-size: "1M"

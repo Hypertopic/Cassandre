@@ -22,7 +22,7 @@ Installation procedure
 
     export COUCHDB_USER="TO_BE_CHANGED"
     export COUCHDB_PASSWORD="TO_BE_CHANGED"
-    docker compose up --detach
+    docker compose up -d
 
 Two services are now available:
 

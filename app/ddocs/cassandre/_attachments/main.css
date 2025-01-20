@@ -312,6 +312,17 @@ button.comment {
   text-align: center;
 }
 
+.ui-datepicker-prev, .ui-datepicker-next {
+  color: black;
+  text-align: center;
+}
+.ui-datepicker-prev:after {
+  content: '◁';
+}
+.ui-datepicker-next:after {
+  content: '▷';
+}
+
 .spinner-border, .create-leave:hover {
   color: black !important;
 }

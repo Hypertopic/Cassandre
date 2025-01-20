@@ -134,6 +134,11 @@
         </div>
       </div>
     </div>
+    <button id="create_tasklist" class="btn navbar-btn btn-sm hidden" data-toggle="tooltip" data-placement="top" title="{{i18n.i_create_task}}">
+      <svg class="bi" width="24" height="24" fill="currentColor">
+        <use xlink:href="../style/bootstrap-icons.svg#calendar-check"/>
+      </svg>
+    </button>
     <button id="revert" class="btn hidden" data-toggle="tooltip" data-placement="bottom" title="{{i18n.i_versions.list}}">
       <svg class="bi" width="24" height="24" fill="currentColor">
         <use xlink:href="../style/bootstrap-icons.svg#arrow-counterclockwise"/>
@@ -239,7 +244,7 @@
   {{^authorized}}
   stickToHeader();
   {{/authorized}}
-  var converter = new showdown.Converter({
+  let converter = new showdown.Converter({
       parseImgDimensions: 'true',
       tables: 'true',
       tasklists: 'true',
@@ -376,7 +381,7 @@
     {{^editing}}
     $('#revert').removeClass('hidden');
     {{/editing}}
-    $('#kwic').parent().parent().prepend($('#revert')).prepend($('.creator'));;
+    $('#kwic').parent().parent().prepend($('#revert')).prepend($('.creator'))
     $('#modify_rights').removeClass('hidden');
     poller('memo', 'now');
     {{/statements}}

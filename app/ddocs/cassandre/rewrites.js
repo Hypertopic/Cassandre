@@ -212,6 +212,12 @@ function(req2) {
     case 'memo':
       reply.path = '_show/'+path[0]+'/'+path[1];
     break;
+    case 'task':
+      reply.path = '_show/'+path[0]+'/'+path[1];
+      reply.query = {
+        "task": ""+req2.raw_path.split('?').slice(-1)
+      };
+    break;
     case 'editable_memo':
       reply.path = "../memo/_list/editable_memo/memo";
       reply.query = {
@@ -320,6 +326,7 @@ function(req2) {
     case 'username':
     case 'avatar':
     case 'clean_user_activity':
+    case 'task_update':
     case 'user_in_cohort':
       reply.path = '_update/'+path[0]+'/'+path[1];
     break;

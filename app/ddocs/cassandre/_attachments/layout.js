@@ -216,7 +216,7 @@ function create(type, name, highlight, anchor) {
         } else {
           leaf_type = existing_memos.rows[i].value.type,
           leaf_id = existing_memos.rows[i].value.id;
-          if (['diagram','graph','table'].indexOf(leaf_type) > -1 
+          if (['diagram','graph','table'].indexOf(leaf_type) > -1
            || typeof (existing_memos.rows[i].value.initial) !== 'undefined') {
             $('.linkLeaf').addClass('d-none');
             $('#existing_memo').modal('show');
@@ -320,6 +320,43 @@ function create(type, name, highlight, anchor) {
     });
   }
 }
+$('#create_tasklist').on('click', function() {
+  $.ajax({
+    url: '../'+diary_id+'_tasklist',
+    type: "GET",
+    dataType: "json"
+  }).fail(function(){
+    data = {
+      _id: diary_id+'_tasklist',
+      contributors: [],
+      diary: diary_id,
+      deadlines: [],
+      readers: [],
+    }
+    if (contributors.length > 0) {
+      data.contributors = contributors.split(',');
+    } else if (user) {
+      data.contributors = [user];
+    }
+    if (readers.length > 0) {
+      data.readers = readers.split(',');
+    }
+    $.ajax({
+      url: '../'+diary_id+'_tasklist',
+      type: "PUT",
+      dataType: 'json',
+      contentType: 'application/json',
+      data: JSON.stringify(data)
+    }).done(function(){
+      create_task()
+    })
+  }).done(function(){
+    create_task()
+  })
+})
+function create_task() {
+  self.location = '../task/'+diary_id+'_tasklist'
+}
 const close = '<button type="button" class="ml-auto mr-1 mb-1 close" data-dismiss="toast">&times;</button>'
 function toast_header(type){
   var text_color = 'dark',
@@ -389,7 +426,7 @@ function poller(what, since) {
 }
 var getSatellites = function(logged, toDoAfter){
   $.ajax({
-    url:  '../satellites/'+diary_id+'/'+ this_id, 
+    url:  '../satellites/'+diary_id+'/'+ this_id,
     type: "GET",
     dataType: "json"
   }).done(function(data){
@@ -431,13 +468,7 @@ var getSatellites = function(logged, toDoAfter){
     var t = $('#modify_rights').attr('title') + modify_rights_details+'</p>'
     $('#modify_rights').attr('title', t)
   }).done(function(){
-    $('.username').each(function() {
-      var f = $(this).attr('class').split(' ').pop()
-      if (f.length > 0) {
-        if (!fullnames[f]) getFullname(f)
-        if (fullnames[f]) $(this).text(fullnames[f]);
-      }
-    });
+    getAllFullnames()
     renderPreviews(converter);
     renderComments(converter);
     toDoAfter()
@@ -512,15 +543,16 @@ function momentRelative(what) {
     jstime = jstime[0];
     var mmtime = new Date(jstime);
     var delta = mmtime.getTime() - new Date(Date.now()).getTime();
-    var daydiff = delta / (1000 * 60 * 60 * 24);  
-    if(daydiff >= 0 && (delta / (1000 * 60 * 60)) > 1.2) { 
+    var daydiff = delta / (1000 * 60 * 60 * 24);
+    if(daydiff >= 0 && (delta / (1000 * 60 * 60)) > 1.2) {
       $(this).text(on_a_date+' '+hr_time(mmtime));
-    } else if(daydiff >= 0 && (delta / (1000 * 60 * 60)) <= 1.2) { 
+      if ($(this).parent('.deadline').length) $(this).text(on_a_date+' '+hr_date(mmtime))
+    } else if(daydiff >= 0 && (delta / (1000 * 60 * 60)) <= 1.2) {
       $(this).text(rtf.format(Math.round(delta / (1000 * 60)), 'minute'));
       $(this).wrap("<strong></strong>");
-    } else if(daydiff >= -1) { 
+    } else if(daydiff >= -1) {
       $(this).text(rtf.format(Math.round(delta / (1000 * 60 * 60)), 'hour'));
-    } else if(daydiff >= -3) { 
+    } else if(daydiff >= -3) {
       $(this).text(rtf.format(Math.round(daydiff), 'day'));
     } else {
       $(this).text(on_a_date+' '+hr_date(mmtime));
@@ -531,8 +563,12 @@ function momentRelative(what) {
         n = items.length / 30;
     if (n !== parseInt(n, 10)) $('#next').prop('disabled', true);
     items.each(function() {
-      $(this).text(capitalize($(this).text()));
-    });
+      if ($(this).parent('.deadline, .expired').length) {
+        $(this).text(before_a_date+' '+$(this).text())
+      } else {
+        $(this).text(capitalize($(this).text()))
+      }
+    })
   }
 }
 function coloringCreatorTag(userid){
@@ -580,7 +616,7 @@ function setSignoutTooltip(u) {
       i = getInitials(n)
   $("#user-menu").find(".dropdown-menu")
     .addClass(bg_color)
-  $('#user-menu-btn').attr('title', n).html(i)  
+  $('#user-menu-btn').attr('title', n).html(i)
   $("body").append('<div id="dialogs"></div>')
   $("#dialogs").load( "/script/avatar_dialog.html" )
   updateTooltip('signout', sign_out+'<br/>'+n)
@@ -621,7 +657,15 @@ function getAvatar(a) {
     })
   }
 }
-
+function getAllFullnames(){
+  $('.username').each(function() {
+    let f = $(this).attr('class').split(' ').pop()
+    if (f.length > 0) {
+      if (!fullnames[f]) getFullname(f)
+      if (fullnames[f]) $(this).text(fullnames[f])
+    }
+  })
+}
 function getFullname(o) {
   if (localStorage.getItem(o)) {
     fullnames[o] = localStorage.getItem(o)
@@ -636,8 +680,9 @@ function getFullname(o) {
       if (fullnames[o]) localStorage.setItem(o, fullnames[o])
     })
   }
+  return fullnames[o]
 }
-function getInitials(n) {    
+function getInitials(n) {
   return n.split(/[ -\.]+/).map((n) => n.substr(0,1).normalize('NFD').replace(/\p{Diacritic}/gu, '')).join('').toUpperCase()
 }
 function capitalize(n) {

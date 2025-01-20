@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+  <head>
+    <title></title>
+    {{>links}}
+  </head>
+  <body>
+    <header>
+      <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
+        <ul class="navbar-nav mr-auto">
+          <a class="d-inline-block btn navbar-btn" id="diary">
+            <svg class="bi" width="24" height="24" fill="currentColor">
+              <use xlink:href="../style/bootstrap-icons.svg#book"/>
+            </svg>
+          </a>
+        </ul>
+        {{>log}}
+      </nav>
+    </header>
+    <div id="container" class='container-fluid h-100'>
+      <div id="memo" class='row h-100'>
+        <main class="col pb-0 pb-sm-5" id="content">
+          {{^authorized}}
+          <h1>{{i18n.i_sign-in_required}}</h1>
+          {{/authorized}}
+          {{#authorized}}
+          <h1>{{i18n.i_create_task}}</h1>
+        <form>
+          <label for="who" class="col-sm-3 col-form-label pseudonym">{{i18n.i_task_assignee}}</label>
+          <select id="who"></select><br/>
+          <label for="what" class="col-sm-3 col-form-label">{{i18n.i_task_definition}}</label>
+          <input id="what" type="text" placeholder="{{i18n.i_task_definition}}" value="{{#task}}{{action}}{{/task}}"/><br/>
+          <label for="when" class="col-sm-3 col-form-label">{{i18n.i_task_date}}</label>
+          <input id="when" type="text" class="datepicker" placeholder="" value="{{#task}}{{date}}{{/task}}"/>
+          <input id="id" type="text" class="hidden" value="{{#task}}{{id}}{{/task}}"/>
+        </form>
+        {{/authorized}}
+        </main>
+      </div>
+    </div>
+    <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
+      {{#authorized}}
+      <div role="group">
+        <button type="button" class="btn btn-outline-{{>contrastcolor}} btn-sm" id="tasklist">{{i18n.i_cancel}}</button>
+        <button type="button" class="btn btn-outline-{{>contrastcolor}} btn-sm" id="save_task" disabled>{{i18n.i_save}}</button>
+      </div>
+      {{/authorized}}
+      <a class="navbar-text" href="https://github.com/Hypertopic/Cassandre/wiki">
+        <svg class="bi" width="24" height="24" fill="currentColor">
+          <use xlink:href="../style/bootstrap-icons.svg#info-circle"/>
+        </svg>
+      </a>
+    </nav>
+    {{>modify_rights_dialog}}
+  {{>script}}
+  <script>
+  let fullnames = [], userids = [], diary_id = "{{diary}}", this_id = "{{_id}}", assigned_user = "{{#task}}{{user}}{{/task}}",
+      converter = new showdown.Converter({parseImgDimensions: 'true', tables: 'true', tasklists: 'true', strikethrough: 'true'})
+  $(document).ready(function() {
+    {{#logged}}    
+    getSatellites('{{logged}}', toDoAfter)
+    responsiveUserMenu()
+    {{/logged}}
+    setDiaryTooltip(diary_id)
+    populate_task_plan("{{contributors}}".split(','), assigned_user)
+  })
+  function toDoAfter(){
+    stickToHeader()
+    $('#modify_rights').removeClass('hidden')
+  }
+  {{>layoutscript}}
+  {{>logscript}}
+  </script>
+  <script src="../script/task.js"></script>
+  </body>
+</html>

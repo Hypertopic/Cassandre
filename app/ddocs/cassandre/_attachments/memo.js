@@ -266,6 +266,7 @@ function memoType(this_type, this_id) {
           .addClass('field')
           .attr("title", help["field"]["create"])
           .parent().append($('#create'))
+        $('#create_tasklist').removeClass('hidden').insertAfter($('#edit'))
         break;
       case ('diagram'):
         self.location = '../diagram/'+this_id

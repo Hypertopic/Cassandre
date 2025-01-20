@@ -6,7 +6,7 @@ function(o) {
     if (o.memo_order) value.by = o.memo_order;
     emit([o.diary, o.user, '0'], value);
   }
-  if (!o.commented && !o.diary_name && !o.activity && !o.user_activity ) {
+  if (!o.commented && !o.diary_name && !o.activity && !o.user_activity && !o.deadlines) {
     var diary = o.diary || o.corpus;
     var contributors = [];
     if (typeof o.readers !== "undefined") contributors = o.readers;

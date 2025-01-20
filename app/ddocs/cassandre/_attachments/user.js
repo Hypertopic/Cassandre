@@ -47,8 +47,8 @@ function searchComments() {
     contentType: "application/json",
     data: JSON.stringify(request),
   }).done(function(data){
-    $("#activities").removeClass('hidden')
-    $("#events").addClass('hidden')
+    $("#activities").removeClass('hidden').children('.commented').remove()
+    $("#events").remove()
     $("#next").remove()
     if (search_input.length > 0) {
       for (var c of data.docs.sort((a, b) => new Date(a.date) - new Date(b.date))) {
@@ -68,7 +68,7 @@ function rendering(o) {
   })
 }
 function showMore(start) {
-  $.ajax({
+  if ($("#events").length > 0) $.ajax({
     url: '../user/'+user_id+'/'+start,
     type: "GET",
     dataType: "json"
@@ -104,4 +104,3 @@ function drawChart(array) {
     domainLabelFormat: ""
   });
 }
-

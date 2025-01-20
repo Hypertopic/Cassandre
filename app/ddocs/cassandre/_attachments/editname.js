@@ -23,9 +23,10 @@ $('h1.editable').on('click', function() {
   $('#logged').children().prop('disabled', true).tooltip('dispose');
   $('#search-icon').prop('disabled', true).tooltip('dispose');
   $('#revert').prop('disabled', true).tooltip('dispose');
-  $('.toast').toast('hide');
+  $('#toasts').remove()
   $('.close').remove();
   $('button.create').prop('disabled', true);
+  $('#user-menu-btn').prop('disabled', true)
   $('#modify_rights').remove();
   $('#renamed').removeClass('hidden');
   $('#reload').removeClass('hidden');

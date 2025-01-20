@@ -12,7 +12,7 @@ $('#comment_create').click(function () {
   $('#diary').addClass('disabled');
   $('#header button').prop('disabled', true).tooltip('dispose');
   $('#add-leaves').addClass('hidden');
-  $('.toast').toast('hide');
+  $('#toasts').remove()
   $('#comments').append($('#comments').find('textarea'));
   let anchor = $('h1').text().trim();
   if ($('#kwic').val()) anchor = $('#kwic').val();
@@ -55,7 +55,8 @@ $('.comment').click(function(event) {
     $('#signout').prop('disabled', true);
     $('#diary').addClass('disabled');
     $('#modify_rights').remove();
-    $('.toast').toast('hide');
+    $('#toasts').remove()
+    $('#user-menu-btn').prop('disabled', true)
     $('a').removeAttr('href');
   }
 });

@@ -359,9 +359,13 @@ function inform(type, msg){
       $('.toast>.alert-'+type).parent().toast('show');
     break;
     default:
-      setTimeout(() => {
-        $('.toast').toast('show');
-      }, 30000);
+      const start = Date.now()
+      const loop = () => {
+        (Date.now() - start < 30000)
+          ? requestAnimationFrame(loop)
+          : $('.toast').toast('show')
+        }
+      requestAnimationFrame(loop)
     break;
   }
 }

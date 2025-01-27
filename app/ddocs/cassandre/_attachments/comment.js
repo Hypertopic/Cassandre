@@ -14,7 +14,7 @@ $('#comment_create').click(function () {
   $('#add-leaves').addClass('hidden');
   $('#toasts').remove()
   $('#comments').append($('#comments').find('textarea'));
-  let anchor = $('h1').text().trim();
+  let anchor = $('#content>h1').text().trim();
   if ($('#kwic').val()) anchor = $('#kwic').val();
   $('#comments').find('textarea').val('> '+ anchor+"\n \n");
   $('#comments').find('textarea').removeClass('hidden');

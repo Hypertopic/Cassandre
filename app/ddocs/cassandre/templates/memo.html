@@ -171,7 +171,7 @@
             <use xlink:href="../style/bootstrap-icons.svg#layout-sidebar"/>
           </svg>
         </span>
-      </a>      
+      </a>
       <ul class="mr-auto navbar-nav">
         {{#authorized}}
         <div id='lexical' class="btn-group justify-content-between hidden" role="group">
@@ -285,10 +285,10 @@
   }
   {{#authorized}}
   help["field"] = {
-    init: "{{{i18n.i_content.field}}}", 
+    init: "{{{i18n.i_content.field}}}",
     next: "{{{i18n.i_next.field}}}",
-    create: "{{i18n.i_create.field}}".replace('&#39;',"'"), 
-    location: "{{i18n.i_content.location.field}}".replace('&#39;',"'"), 
+    create: "{{i18n.i_create.field}}".replace('&#39;',"'"),
+    location: "{{i18n.i_content.location.field}}".replace('&#39;',"'"),
     date: "{{i18n.i_content.date.field}}".replace('&#39;',"'")
   };
   help["transcript"] = {
@@ -320,7 +320,9 @@
     next: "{{{i18n.i_next.storyline}}}"
   }
   help["diagram"] = {create: "{{{i18n.i_create.diagram}}}"}
+  {{/authorized}}
   $(document).ready(function() {
+    {{#authorized}}
     {{#statements}}
     {{^logged}}nothing_to_show +='. {{i18n.i_sign-in-for-more}}';{{/logged}}
     if ($('.post').text().trim().length == 0) $('.post').text(nothing_to_show);
@@ -330,8 +332,13 @@
     const par = window.location.hash.substring(1);
     if (par !== '') highlight(par);
     getSatellites('{{logged}}', toDoAfter)
+    {{/authorized}}
+    {{^authorized}}
+    stickToHeader()
+    setSignoutTooltip('{{logged}}')
+    {{/authorized}}
   });
-
+  {{#authorized}}
   function toDoAfter(){
     {{>render}}
     if ($('#groundings>li:not(.hidden)').length == 1) $("#groundings").find('legend').text("{{i18n.i_grounding}}");

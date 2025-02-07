@@ -19,6 +19,22 @@
       <main class="col pb-5" id="content">
         <h1>{{i18n.i_tasklist}}</h1>
         <div id="todo">
+          <h2 id='expired' class="hidden">{{i18n.i_expired}}</h2>
+          <ul>
+          {{#expired}}
+            <li class='expired'><input class="form-check-input" id="{{id}}" type="checkbox">
+              <span class="username {{user}}"></span> <a href='../task/{{diary}}_tasklist?{{id}}'> {{action}}</a> <span class="{{date}} moment"></span>
+            </li>
+          {{/expired}}
+          </ul>
+          <h2 id='deadline' class="hidden">{{i18n.i_deadline}}</h2>
+          <ul>
+          {{#deadline}}
+            <li class='deadline'><input class="form-check-input" id="{{id}}" type="checkbox">
+              <span class="username {{user}}"></span> <a href='../task/{{diary}}_tasklist?{{id}}'> {{action}}</a> <span class="{{date}} moment"></span>
+            </li>
+          {{/deadline}}
+          </ul>
           <h2 id='unchecked-todo' class="hidden">{{i18n.i_todo}}</h2>
           <ul>
           {{#todo}}
@@ -27,6 +43,15 @@
               <a href='../{{type}}/{{id}}'>{{name}}</a>
             </li>
           {{/todo}}
+          </ul>
+          <h2 id='completed' class="hidden">{{i18n.i_completed}}</h2>
+          <ul>
+          {{#completed}}
+            <li class='completed'><input class="form-check-input" id="{{id}}" type="checkbox" checked>
+              <span class="{{date}} moment"></span>&nbsp;–
+              <span class="username {{user}}"></span> {{action}} 
+            </li>
+          {{/completed}}
           </ul>
           <h2 id='editing' class="hidden">{{i18n.i_to-be-resumed}}</h2>
           <ul>
@@ -73,6 +98,11 @@
         </div>
       </main>
       <nav id="footer" class="{{>navbarstyle}} fixed-bottom">
+        <a class="d-inline-block btn navbar-btn hidden" id="create_task" title="{{i18n.i_create_task}}">
+          <svg class="bi" width="24" height="24" fill="currentColor">
+            <use xlink:href="../style/bootstrap-icons.svg#calendar-check"/>
+          </svg>
+        </a>
         <a class="navbar-text ml-auto" href="https://github.com/Hypertopic/Cassandre/wiki">
           <svg class="bi" width="24" height="24" fill="currentColor">
             <use xlink:href="../style/bootstrap-icons.svg#info-circle"/>
@@ -82,57 +112,25 @@
     </div>
   {{>script}}
   <script>
-  const diary_id = '{{diary}}';
+  const diary_id = '{{diary}}',
+        before_a_date = '{{i18n.i_before-a-date}}',
+        unchecked_comment = '{{i18n.i_unchecked-comment}}'
   let fullnames = [],
-      logged = '{{logged}}'
+      logged = '{{logged}}',
+      tasklist_created = false
   $(document).ready(function() {
-    let payload = '',
-        nComments = 0,
-        converter = new showdown.Converter({strikethrough: 'true'}),
-        nothing_to_show = '{{i18n.i_nothing-to-show}}';
+    let nothing_to_show = '{{i18n.i_nothing-to-show}}'
     {{^logged}}nothing_to_show +='. {{i18n.i_sign-in-for-more}}';{{/logged}}
     {{#logged}}
     setSignoutTooltip(logged)
     {{/logged}}
-    $.ajax({
-      url: "../comments/{{diary}}",
-      type: "GET",
-      dataType: "json",
-      success: function(d) {
-        $('#diary').attr('title',d.diary_name);
-        $('title').prepend(d.diary_name);
-        nComments = d.comments.length;
-        var data = d.comments;
-        for (var c of data) {
-          payload += "<li class='unchecked-comment'>"
-            +'<span class="'+c.date+' moment"></span>&nbsp;– '
-            +"<a href='../"+c.type+"/"+c.id+"'>"+c.name+"</a>"
-            +'</li>';
-        }
-      }
-    }).done(function(){
-      if (nComments > 0) $('#todo').append('<h2 id="unchecked-comment">{{i18n.i_unchecked-comment}}</h2><ul>'+payload+'</ul>');
-      $('.unchecked-comment a').html(function(i, text) {
-        var md = converter.makeHtml(text.replace(/&gt;/g, '>').trim())
-        if (md.substring(0,3) == '<p>') md = md.replace(/<\/?p>/g, '');
-        return md;
-      });
-      stickToHeader();
-    }).then(function(){
-      if ($('.unchecked-todo').length + $('.unchecked-comment').length + $('.editing').length + $('.unarticulated').length + $('.unnamed').length + $('.ungrounded').length + $('.unchecked-todo').length + $('.deadend').length == 0) {
-        $('#todo').text(nothing_to_show);
-      } else momentRelative('#todo');
-    })
-    if ($('.unchecked-todo').length > 0) $('#unchecked-todo').removeClass('hidden');
-    if ($('.editing').length > 0) $('#editing').removeClass('hidden');
-    if ($('.unarticulated').length > 0) $('#unarticulated').removeClass('hidden');
-    if ($('.unnamed').length > 0) $('#unnamed').removeClass('hidden');
-    if ($('.ungrounded').length > 0) $('#ungrounded').removeClass('hidden');
-  });
+    populate_and_render_tasklist()
+  })
 
   function showMore(){}
   {{>layoutscript}}
   {{>logscript}}
   </script>
+  <script src="../script/task.js"></script>
   </body>
 </html>

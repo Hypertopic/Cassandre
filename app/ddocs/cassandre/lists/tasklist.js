@@ -8,8 +8,12 @@ function(head, req) {
   var data = {
     diary: req.query.startkey[0],
     comment: [],
+    completed: [],
     deadend: [],
+    deadline: [],
     diagram: [],
+    done: [],
+    expired: [],
     editing: [],
     initial: [],
     i18n: localized(),
@@ -55,6 +59,20 @@ function(head, req) {
       case ('A'):
         data.diagram.push(obj);
       break;
+      case ('T'):
+        obj['user'] = r.value.user
+        obj['action'] = obj.name
+        if (r.value.completed) {
+          obj.date = r.value.completed
+          data.completed.push(obj)
+        } else {
+          if (new Date(obj.date) > new Date(Date.now())) {
+            data.deadline.push(obj)
+          } else {
+            data.expired.push(obj)
+          }
+        }
+      break;
       case ('O'):
         data.todo.push(obj);
       break;
@@ -74,6 +92,9 @@ function(head, req) {
   provides("json", function() {
     send(toJSON({
       diagram: data.diagram.length,
+      deadline: data.deadline.length,
+      done: data.done.length,
+      expired: data.expired.length,
       editing: data.editing.length,
       pending: data.todo.length,
       ungrounded: data.ungrounded.length,

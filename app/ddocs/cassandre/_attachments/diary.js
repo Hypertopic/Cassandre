@@ -196,15 +196,17 @@ function resetUI() {
 }
 
 function taskreport(task, count) {
+  let pill_color = 'info', alert_color = 'secondary'
+  if (['expired'].indexOf(task) > -1) alert_color = pill_color = 'danger'
   if (count > 0) {
     $("#tasklist-alert").append($('<div>', {
       id: task,
-      class: "list-group-item list-group-item-action list-group-item-secondary d-flex justify-content-between align-items-center",
+      class: 'list-group-item list-group-item-action list-group-item-'+alert_color+' d-flex justify-content-between align-items-center',
       text: text[task],
       title: text[task]
     }));
     $('#'+task).append($('<span>', {
-      class: "badge badge-pill badge-info",
+      class: 'badge badge-pill badge-'+pill_color,
       text: count
     }));
   }

@@ -28,6 +28,13 @@ function(o) {
         emit([o.diary, user, 'O', history_last], {'id': o._id, 'name': match});
       }
     }
+    if (o.deadlines) {
+      for (let t of o.deadlines) {
+        let task = {'id': t.id, 'user': t.user, 'name': t.action}
+        if (t.completed) task['completed'] = t.completed
+        emit([diary, user, 'T', t.date], task)
+      }
+    }
     if (o.initial) emit([diary, user, 'I', history_first], {'id': o._id, '_id': o._id, 'name': o.name});
     if (o.groundings && o.groundings.length < 1)
       emit([diary, user, 'G', history_first], {'id': o._id, '_id': null, 'name': o.name});

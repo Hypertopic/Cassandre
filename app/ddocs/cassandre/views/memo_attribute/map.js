@@ -6,7 +6,7 @@ function(o) {
       date = o.date,
       update = o.date,
       contributors = [],
-      users = [];
+      users = []
   if (typeof o.readers === "undefined" || o.readers.length == 0) {
     contributors.push(null);
   } else {
@@ -51,12 +51,11 @@ function(o) {
       user: o.user
     });
   }
-
   if (o.diary_name) {
     ['name', 'date', 'update', 'type'].forEach(function(order) {
       emit([o._id, order, null, 'D'], { diary_name: o.diary_name });
     });
-  } else if (!o.commented && !o.user_activity) {
+  } else if (!o.commented && !o.user_activity && !o.deadlines) {
     var groundings = o.groundings || [],
         preview = ' ';
     if (o.statement) {

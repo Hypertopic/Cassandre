@@ -53,7 +53,7 @@ function searchComments() {
     if (search_input.length > 0) {
       for (var c of data.docs.sort((a, b) => new Date(a.date) - new Date(b.date))) {
         $("#activities").prepend('<li class="commented"><span id="'+c.date+'" class="'+c.date+' moment">'
-        +'</span>&nbsp;– <a href="../memo/'+c.commented+'">'+c.text+'</a></li>')
+        +'</span>&nbsp;– <a href="../memo/'+c.commented+'">'+c.text.replace(search_input, '__'+search_input+'__')+'</a></li>')
       }
     }
     rendering('#activities')

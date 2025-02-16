@@ -278,11 +278,13 @@
         var sort_key = m.sortkey;
         var j = activity.findIndex(e => e.doc === m.id);
         if (j > -1 && activity[j].date > m.update) unread = '';
-        var checkbox = '<input type="checkbox" id="'+m.id+'" name="'+m.rev+'" class="hidden deletable" />',
+        var checkbox_visible = 'hidden'
+        if (!$('#delete').hasClass('hidden')) checkbox_visible = ''
+        var checkbox = '<input type="checkbox" id="'+m.id+'" name="'+m.rev+'" class="'+checkbox_visible+' deletable" />',
             creator = ' <span class="creator '+m.creator+' badge"></span>'
                     + '<span class="hidden creator_title">'+"{{i18n.i_created-by}} "+'<span class="username '+m.creator+'"></span> <span class="'+m.date+' moment"></span>';
         if (m.rev == 'statement') {
-          checkbox = '<input type="checkbox" class="hidden" disabled />';
+          checkbox = '<input type="checkbox" class="'+checkbox_visible+'" disabled />';
           creator = '';
         }
         var li = '<li class="'+m.type+'" name="'+sort_key+'">' + checkbox

@@ -31,6 +31,7 @@ function(o, req){
     readers: readers,
     readers_fullnames: readers.map((i) => ({id: i, fullname: i})),
   }
+  if (data.readers.length==1 && data.readers[0] == username) data.one_step_from_public = true
   if (o.deadlines && req.query.task.length > 0) {
     let selected_task = o.deadlines.find(t => t.id === req.query.task)
     data.task = selected_task

@@ -48,6 +48,7 @@ function(o, req){
     type: type,
     update_seq: req.info.update_seq
   }
+  if (data.readers.length==1 && data.readers[0] == username) data.one_step_from_public = true
   if (data.peer == '127.0.0.1' && req.headers['X-Forwarded-For'] ) {
     var ips = req.headers['X-Forwarded-For'].split(',');
     for (var ip of ips) {

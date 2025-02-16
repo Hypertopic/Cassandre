@@ -29,13 +29,13 @@ $('#add_contributor, #add_reader').autocomplete({
   }
 });
 $('.remove_reader, .remove_contributor').on('click', function() {
-  modify_rights($(this).attr("class"), $(this).val());
-});
+  modify_rights($(this).attr("class").split(' ')[0], $(this).val())
+})
 $('#unsubscribe').on('click', function() {
   modify_rights('remove_reader', user);
 });
 $('#modify_rights_dialog').on('show.bs.modal', function () {
-  $('#modify_rights').tooltip('hide');
+  $('#modify_rights').tooltip('hide')
 })
 function modify_rights(action, value) {
   $('#modify_rights_dialog .modal-body').append($('#loading').removeClass('hidden'));

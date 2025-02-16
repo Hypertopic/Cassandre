@@ -132,6 +132,7 @@ function(head, req) {
       }
     if (fullnames[username]) data.logged_fullname = fullnames[username];
   }
+  if (data.readers.length==1 && data.readers[0] == username) data.one_step_from_public = true
   data.groundings = dSort(data.groundings, data.locale);
   return Mustache.to_html(templates.table, data, shared);
 }

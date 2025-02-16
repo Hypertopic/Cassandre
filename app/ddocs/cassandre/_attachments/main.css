@@ -537,8 +537,8 @@ input.actor {
   vertical-align: top;
 }
 
+.remove_reader:not(.btn-warning),
 .remove_contributor,
-.remove_reader,
 .remove {
   border: none;
   color: transparent;

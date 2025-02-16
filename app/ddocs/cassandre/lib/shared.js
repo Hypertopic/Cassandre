@@ -148,7 +148,10 @@ var shared = {
       <div class='modal-dialog' role='document'>\
         <div class='modal-content'>\
           <div class='modal-header'>\
-            <h5 class='modal-title'>{{#editable}}{{i18n.i_modify_rights}}{{/editable}}{{^editable}}{{i18n.i_reader_unsubscribe}}{{/editable}}</h5>\
+            <h5 class='modal-title'>{{#editable}}{{i18n.i_modify_rights}}{{/editable}}\
+              {{^editable}}{{^one_step_from_public}}{{i18n.i_reader_unsubscribe}}{{/one_step_from_public}}\
+              {{#one_step_from_public}}{{i18n.i_make_public}}{{/one_step_from_public}}{{/editable}}\
+              </h5>\
             <button type='button' class='close' data-dismiss='modal' aria-label='Close'>\
               <span aria-hidden='true'>×</span>\
             </button>\
@@ -169,9 +172,13 @@ var shared = {
               <p>{{i18n.i_readable-by}}</p>\
               <div class='readers'>\
               {{#readers_fullnames}}\
-                <p><span class='username {{id}}'>{{fullname}}</span><button class='remove_reader' title='{{i18n.i_remove_reader_right}}' value='{{id}}'>x</button></p>\
+                <p><span class='username {{id}}'>{{fullname}}</span>{{#one_step_from_public}}<br/>{{/one_step_from_public}}\
+                <button class='remove_reader{{#one_step_from_public}} btn btn-warning{{/one_step_from_public}}' \
+                  {{^one_step_from_public}}title='{{i18n.i_remove_reader_right}}'{{/one_step_from_public}}\
+                    value='{{id}}'>{{^one_step_from_public}}x{{/one_step_from_public}}\
+                    {{#one_step_from_public}}{{i18n.i_make_public}}{{/one_step_from_public}}</button></p>\
               {{/readers_fullnames}}\
-              {{^readers_fullnames}}{{i18n.i_everyone}}{{/readers_fullnames}}\
+              {{^readers_fullnames}}<span class='badge badge-warning'>{{i18n.i_everyone}}</span>{{/readers_fullnames}}\
               </div>\
             </td></tr></table>\
             {{/editable}}\
@@ -182,7 +189,9 @@ var shared = {
           {{^editable}}\
           <div class='modal-footer'>\
             <button type='button' class='btn btn-primary' data-dismiss='modal'>{{i18n.i_cancel}}</button>\
-            <button id='unsubscribe' type='button' class='btn btn-secondary linkLeaf'>{{i18n.i_reader_unsubscribe}}</button>\
+            <button id='unsubscribe' type='button' class='btn btn-secondary linkLeaf'>\
+              {{^one_step_from_public}}{{i18n.i_reader_unsubscribe}}{{/one_step_from_public}}\
+              {{#one_step_from_public}}{{i18n.i_make_public}}{{/one_step_from_public}}</button>\
           </div>\
           {{/editable}}\
         </div>\

@@ -14,6 +14,8 @@ function (o) {
       body = body.concat(o.body.split("\n \n").map(function(i){
         return {'text': i+'  '};
       }));
+    } else if (o.statement) {
+      body = body.concat([{'text': o.statement}])
     }
     for (var [p, speech] of Object.entries(body || {})) {
       var speech_text = speech.text;

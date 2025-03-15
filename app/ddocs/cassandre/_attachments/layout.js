@@ -558,18 +558,16 @@ function momentRelative(what) {
       $(this).text(on_a_date+' '+hr_date(mmtime));
     }
   });
-  if (what != '') {
-    let items = $(what+' li .moment').not('.creator_title > .moment'),
-        n = items.length / 30;
-    if (n !== parseInt(n, 10)) $('#next').prop('disabled', true);
-    items.each(function() {
-      if ($(this).parent('.deadline, .expired').length) {
-        $(this).text(before_a_date+' '+$(this).text())
-      } else {
-        $(this).text(capitalize($(this).text()))
-      }
-    })
-  }
+  let items = $(what+' li .moment').not('.creator_title > .moment'),
+      n = items.length / 30;
+  if (n !== parseInt(n, 10)) $('#next').prop('disabled', true);
+  items.each(function() {
+    if ($(this).parent('.deadline, .expired').length) {
+      $(this).text(before_a_date+' '+$(this).text())
+    } else {
+      $(this).text(capitalize($(this).text()))
+    }
+  })  
 }
 function coloringCreatorTag(userid){
   let name = fullnames[userid]

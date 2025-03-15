@@ -116,7 +116,25 @@
     toolbar: ["bold", "italic", "strikethrough", "|", "heading-3", "unordered-list", "horizontal-rule", "|", "link", "image", "table", "|", "guide"],
     placeholder: placeHolder["{{type}}"]["content"],
     spellChecker: false
-  });
+  }), french = {
+    bold: 'Gras (ctrl-b)',
+    italic: 'Italique (ctrl-i)',
+    strikethrough: "Barré",
+    'heading-3': "Sous-titre (ctrl-alt-3)",
+    'unordered-list': "Liste (ctrl-l)",
+    'horizontal-rule': "Insérer une ligne horizontale",
+    link: "Créer un lien (ctrl+k)",
+    image: "Insérer une image (ctrl-alt-i)",
+    table: "Insérer un tableau",
+    guide: "Guide de mise en page (en anglais)"
+  };
+  if ("{{locale}}" === "fr") {
+    for (const [btn, title] of Object.entries(french)) {
+      $('.editor-toolbar .'+btn).prop('title', title)
+    }
+    $('.editor-toolbar .bold').html('<strong>G</strong>')
+    $('.editor-toolbar .heading-3').html('T')
+  }
   {{/editing}}
   {{/authorized}}
   let fullnames = [],

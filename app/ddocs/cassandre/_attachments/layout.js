@@ -549,7 +549,7 @@ function momentRelative(what) {
       if ($(this).parent('.deadline').length) $(this).text(on_a_date+' '+hr_date(mmtime))
     } else if(daydiff >= 0 && (delta / (1000 * 60 * 60)) <= 1.2) {
       $(this).text(rtf.format(Math.round(delta / (1000 * 60)), 'minute'));
-      $(this).wrap("<strong></strong>");
+      $(this).addClass('font-weight-bold')
     } else if(daydiff >= -1) {
       $(this).text(rtf.format(Math.round(delta / (1000 * 60 * 60)), 'hour'));
     } else if(daydiff >= -3) {
@@ -567,7 +567,7 @@ function momentRelative(what) {
     } else {
       $(this).text(capitalize($(this).text()))
     }
-  })  
+  })
 }
 function coloringCreatorTag(userid){
   let name = fullnames[userid]

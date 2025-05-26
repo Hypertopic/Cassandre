@@ -30,6 +30,10 @@ $('h1.editable').on('click', function() {
   $('#modify_rights').remove();
   $('#renamed').removeClass('hidden');
   $('#reload').removeClass('hidden');
+  if (diary_id === this_id) {
+    localStorage.removeItem(this_id)
+    $('#name').val(getDiaryname(this_id))
+  }
   $('#name').removeClass('hidden');
 });
 $('#renamed').on('click', function() {

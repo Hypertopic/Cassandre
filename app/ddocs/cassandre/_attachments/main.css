@@ -187,6 +187,10 @@ div.post {
   border-left: 0px;
 }
 
+#local_diff, #remote_diff {
+  background: white;
+}
+
 .begin {
   overflow: hidden;
   max-height: 60em;

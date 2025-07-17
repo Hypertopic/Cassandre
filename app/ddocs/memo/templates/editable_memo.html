@@ -14,6 +14,21 @@
                 <use xlink:href="../style/bootstrap-icons.svg#book"/>
               </svg>
             </button></li>
+            <a class="d-inline-block btn navbar-btn hidden" id="diff" title="{{i18n.i_diff}}">
+              <svg class="bi" width="24" height="24" fill="currentColor">
+                <use xlink:href="../style/bootstrap-icons.svg#file-diff"/>
+              </svg>
+            </a>
+            <a class="d-inline-block btn navbar-btn hidden" id="mdown" title="{{i18n.i_layout}}">
+              <svg class="bi" width="24" height="24" fill="currentColor">
+                <use xlink:href="../style/bootstrap-icons.svg#file-richtext"/>
+              </svg>
+            </a>
+            <a class="d-inline-block btn navbar-btn hidden" id="showNotModified" title="{{i18n.i_show-more}}">
+              <svg class="bi" width="24" height="24" fill="currentColor">
+                <use xlink:href="../style/bootstrap-icons.svg#file-text"/>
+              </svg>
+            </a>
             {{#authorized}}{{#editing}}
             <li><button title="{{i18n.i_double}}" class="btn text-{{>contrastcolor}} d-none d-sm-inline" id="double">¶²</button></li>
             {{/editing}}{{/authorized}}
@@ -27,12 +42,12 @@
             <div id="cherrypick" class="col-12 alert-danger d-none">{{i18n.i_concurrent_versions}}
               <div class="row col-12">
                 <div class="col-6"> {{i18n.i_autosaved_version}}
-                  <textarea style="width: 100%" id="local" disabled></textarea>
-                  <button type="button" class="btn btn-primary" id="edit-local">{{i18n.i_edit}} {{i18n.i_this-one}}</button>
+                  <p id="local_diff" class="text-dark"></p>
+                  <textarea style="width: 100%" id="local" autocomplete="off" hidden></textarea>
                 </div>
                 <div class="col-6"> {{i18n.i_remote_version}}
-                  <textarea style="width: 100%" id="remote" disabled>{{body}}</textarea>
-                  <button type="button" class="btn btn-primary" id="edit-remote">{{i18n.i_edit}} {{i18n.i_this-one}}</button>
+                  <p id="remote_diff" class="text-dark"></p>
+                  <textarea style="width: 100%" id="remote" autocomplete="off" hidden>{{body}}</textarea>
                 </div>
               </div>
               <br /><div class="w-100"></div>
@@ -84,6 +99,8 @@
             </span>
           </button>
         </div>
+        <button type="button" class="btn btn-outline-{{>contrastcolor}} hidden" id="edit-local">{{i18n.i_edit}} {{i18n.i_this-one}}</button>
+        <button type="button" class="btn btn-outline-{{>contrastcolor}} hidden" id="edit-remote">{{i18n.i_edit}} {{i18n.i_this-one}}</button>
         {{/editing}}{{/authorized}}
         <a class="navbar-text" href="https://github.com/Hypertopic/Cassandre/wiki">
           <svg class="bi" width="24" height="24" fill="currentColor">
@@ -94,6 +111,9 @@
   {{>script}}
   <script src="../script/easymde.min.js"></script>
   <script src="../script/render.js"></script>
+  {{#editing}}
+  <script src="../script/editable_memo.js"></script>
+  {{/editing}}
   <script>
   var placeHolder = [];
   placeHolder["field"] = {name : "{{i18n.i_name.field}}", content: "{{{i18n.i_content.field}}}"};
@@ -137,11 +157,22 @@
   }
   {{/editing}}
   {{/authorized}}
-  let fullnames = [],
-      warning = 'Save your content';
+  let converter = new showdown.Converter({
+      parseImgDimensions: 'true',
+      tables: 'true',
+      tasklists: 'true',
+      strikethrough: 'true'
+    }),
+      fullnames = [], this_id ='{{_id}}', this_type ='{{type}}',
+      local_text = easymde.value(),
+      remote_text = $("#remote").val(),
+      local_content = local_text.split(/\r\n|\r|\n/),
+      remote_content =  remote_text.split(/\r\n|\r|\n/),
+      lost_connection = "{{i18n.i_lost_connection}}",
+      warning = 'Save your content'
   $(document).ready(function() {
     {{^editing}}
-    self.location = '../memo/{{_id}}';
+    self.location = '../memo/'+this_id
     {{/editing}}
     {{#editing}}
     setSignoutTooltip('{{logged}}')
@@ -152,12 +183,6 @@
       }
     });
     $("#search-icon").remove();
-    var converter = new showdown.Converter({
-      parseImgDimensions: 'true',
-      tables: 'true',
-      tasklists: 'true',
-      strikethrough: 'true'
-    });
     converter.setFlavor('github');
     renderPreviews(converter);
     if ($('#groundings li').length < 1) $("#groundings").addClass('hidden');
@@ -166,8 +191,8 @@
     $('#header > ul > li:first').after($('.editor-toolbar'));
     $('.editor-toolbar > button:last').addClass('d-none d-sm-inline');
     if ("{{type}}" == 'interview') $('.editor-toolbar').remove ();
-    if (easymde.value() == $('#remote').text()) {
-      easymde.clearAutosavedValue();
+    if (local_text == remote_text) {
+      easymde.clearAutosavedValue()
     } else {
       cherrypick()
     }
@@ -177,76 +202,6 @@
     {{/editing}}
     stickToHeader();
   });
-
-  {{#editing}}
-  function double() {
-    easymde.value(easymde.value().replace(/\n/g, "\n \n"))
-  }
-
-  function cherrypick(){
-    $("#groundings").addClass('hidden');
-    $('.editor-toolbar').addClass('hidden');
-    $('#double').addClass('hidden');
-    $('#local').attr("rows", easymde.value().split(/\r\n|\r|\n/).length + 2);
-    $('#remote').attr("rows", $("#remote").val().split(/\r\n|\r|\n/).length + 2);
-    $("#local").val(easymde.value());
-    $("#cherrypick").removeClass('d-none');
-  }
-
-  $('#edit-local').on('click', function() {
-    leaveChoice();
-  });
-
-  $('#edit-remote').on('click', function() {
-    easymde.clearAutosavedValue();
-    easymde.value($("#remote").val());
-    leaveChoice();
-  });
-
-  function leaveChoice() {
-    $("#groundings").removeClass('hidden');
-    $('.editor-toolbar').removeClass('hidden');
-    $('#double').removeClass('hidden');
-    $("#cherrypick").addClass('d-none');
-  }
-
-  function save(modify, toDoAfter) {
-    warning = false;
-    var data = {
-      name: 'false',
-      body: 'false'
-    }
-    if (modify) data.body = easymde.value().replace(/ *\n/g, " \n")
-    $.ajax({
-      url: "../update_memo_content/{{_id}}",
-      type: "PUT",
-      contentType: "application/json",
-      data: JSON.stringify(data)
-    }).done(toDoAfter)
-    .fail(function(request) {
-      if (request.status == 401) alert("{{i18n.i_lost_connection}}".replace(/&#39;/g,"'").replace(/&quot;/g,'"')); 
-      self.location = '../memo/{{_id}}';
-    })
-  }
-
-  $('#double').on('click', function() {
-    double();
-  });
-
-  var toDoAfter = function() {
-    easymde.clearAutosavedValue();
-    self.location = '../memo/{{_id}}';
-  };
-
-  $('#cancel').on('click', function() {
-    save(false, toDoAfter);
-  });
-
-  $('#done').on('click', function() {
-    save(true, toDoAfter);
-  });
-  {{/editing}}
-
   {{>layoutscript}}
   {{>logscript}}
   </script>

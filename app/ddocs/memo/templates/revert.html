@@ -13,6 +13,26 @@
                 <use xlink:href="../style/bootstrap-icons.svg#book"/>
               </svg>
             </a>
+            <a class="d-inline-block btn navbar-btn" id="diff" title="{{i18n.i_diff}}">
+              <svg class="bi" width="24" height="24" fill="currentColor">
+                <use xlink:href="../style/bootstrap-icons.svg#file-diff"/>
+              </svg>
+            </a>
+            <a class="d-inline-block btn navbar-btn hidden" id="only_diff" title="{{i18n.i_only_diff}}">
+              <svg class="bi" width="24" height="24" fill="currentColor">
+                <use xlink:href="../style/bootstrap-icons.svg#file-diff-fill"/>
+              </svg>
+            </a>
+            <a class="d-inline-block btn navbar-btn hidden" id="mdown" title="{{i18n.i_layout}}">
+              <svg class="bi" width="24" height="24" fill="currentColor">
+                <use xlink:href="../style/bootstrap-icons.svg#file-richtext"/>
+              </svg>
+            </a>
+            <a class="d-inline-block btn navbar-btn hidden" id="showNotModified" title="{{i18n.i_show-more}}">
+              <svg class="bi" width="24" height="24" fill="currentColor">
+                <use xlink:href="../style/bootstrap-icons.svg#file-text"/>
+              </svg>
+            </a>
           </ul>
           {{>log}}
         </nav>
@@ -52,8 +72,10 @@
         </a>
       </nav>
   {{>script}}
+  <script src="../script/revert.js"></script>
   <script>
-  let revisions = [], current = {{current}}, bodies = [], selected = current, fullnames = [],
+  let revisions = [], current = {{current}}, selected = current, fullnames = [],
+      bodies = [{version: current, name: '{{name}}', body: $('#v'+current+' .content').text()}],
       converter = new showdown.Converter({
     parseImgDimensions: 'true',
     tables: 'true',
@@ -64,10 +86,10 @@
   fullnames['{{user}}'] = '{{name}}'; 
   {{/fullnames}}
   converter.setFlavor('github');
-  let diary_id = "{{diary}}"
+  let this_id = "{{_id}}", this_type = "{{type}}", diary_id = "{{diary}}", last_content = ''
   $(document).ready(function() {
     $.ajax({
-      url: "../rev/{{_id}}/all/",
+      url: '../rev/'+this_id+'/all/',
       type: "GET",
       dataType: "json"
     }).done(function(all){
@@ -91,89 +113,20 @@
           $('#tab_'+r.rev.split('-')[0]).remove();
         }
       }
-      if ($('#groundings li').length == 1) $('#groundings').append($('<div>', { text: "{{i18n.i_versions.single}}".replace('&#39;', "'")  }));
+      if ($('#groundings li').length == 1) {
+        $('#groundings').append($('<div>', { text: "{{i18n.i_versions.single}}".replace('&#39;', "'")  }))
+        $('#diff').addClass('hidden')
+      }
     })
-    vlayout();
     {{#logged}}
     setSignoutTooltip('{{logged}}')
     {{/logged}}
-    stickToHeader();
-  });
-
-  function version_tab(o){
-    let u = o.history[o.history.length-1].user, 
-        d = o.history[o.history.length-1].date
-    if (!fullnames[u]) getFullname(u)
-    let tab_text = o.name.substr(0, 20)+'<br/>'+fullnames[u]+'<br/>'+ hr_time(d)
-    return tab_text
-  }
-  function getPrevious(rev){
-    $.ajax({
-      url: '../rev/{{_id}}/'+rev+'/',
-      type: "GET",
-      dataType: "json"
-    }).done(function(old){
-      var n = rev.split('-')[0];
-      if (old.editing) {
-        $('#tab_'+n).remove()
-      } else {
-        bodies.push({
-          version: n, name: old.name, body: old.body
-        })
-        $('#tab_'+n).append($('<button>', { class: "btn btn-outline-secondary", html: version_tab(old)}))
-        .on('click', function(){showOnly($(this).prop('id').split('_')[1]); });
-        $('#v'+n).append($('<h2>', { text: old.name }))
-          .append($('<div>', { class: 'content', text: old.body}))
-      }
-    });
-  }
-
-  function vlayout(){
-    $('#bodies .content').html(function(i, text) {
-      if ('{{type}}' == 'interview') {
-        return text.replace(/\n \n/g, '</font></p><p><font>');
-      } else {
-        return converter.makeHtml(text.replace(/&gt;/g, '>').trim());
-      }
-    });
-  }
-  
-  function showOnly(n){  
-    selected = n
-    $('#groundings li button').removeClass('active')
-    $('.version').addClass('d-none')
-    $('#v'+n).removeClass('d-none')
-    $('#tab_'+n+' button').addClass('active')
-    if (current == selected) {
-      $('#cancel').removeClass('d-none')
-      $('#revert').addClass('d-none')
-    } else {
-      $('#revert').removeClass('d-none')
-      $('#cancel').addClass('d-none')
-    }
-    vlayout();
-  }
-  
-  $('#cancel').on('click', function() {
-    self.location = '../memo/{{_id}}';
-  });
-
-  $('#revert').on('click', function() {
-    reverting();
-  });
-  
-  function reverting() {
-    var data = bodies.find(x => x.version === selected)
-    delete data.version
-    $.ajax({
-      url: "../update_memo_content/{{_id}}",
-      type: "PUT",
-      contentType: "application/json",
-      data: JSON.stringify(data)
-    }).done(function() {
-      self.location = '../memo/{{_id}}';
+    stickToHeader()
+    $(document).ajaxStop(function () {
+      mdownLayout()
+      $(this).unbind('ajaxStop')
     })
-  }
+  })
   {{>layoutscript}}
   {{>logscript}}
   </script>

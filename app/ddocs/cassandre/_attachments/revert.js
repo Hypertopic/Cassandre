@@ -38,7 +38,7 @@ function fullDiff(oldText, newText){
   }
   for (let p of coloredDiff) {
     if (p.status === 'deleted') output += '<p class="deleted"><span class="bg-danger text-light text-monospace">&nbsp;- </span><del class="alert-danger">&nbsp;'+p.turn+'</del></p>'
-    if (p.status === 'addition') output += '<p class"added"><span class="bg-success text-light text-monospace">&nbsp;+ </span> <span class="alert-success">&nbsp;'+p.turn+'</span></p>'
+    if (p.status === 'addition') output += '<p class="added"><span class="bg-success text-light text-monospace">&nbsp;+ </span> <span class="alert-success">&nbsp;'+p.turn+'</span></p>'
     if (p.status === '') output += '<p class="kept"><span class="alert-secondary text-monospace">&nbsp;=&nbsp;</span><span>'+p.turn+'</span></p>'
   }
   return output
@@ -63,11 +63,30 @@ function diffLayout(){
     last_content = v.body
   }
 }
+function diff_buttons(){
+  let a = $('.version:not(.d-none) .added').length,
+      d = $('.version:not(.d-none) .deleted').length,
+      k = $('.version:not(.d-none) .kept').length,
+      h = $('.version:not(.d-none) .hidden').length,
+      m = a+d,
+      t = a+d+k
+  if (t > 0 && h > 0) {
+    $('#showNotModified').removeClass('hidden')
+  } else {
+    if (!$('#showNotModified').hasClass('hidden')) $('#showNotModified').addClass('hidden')
+  }
+  if (m > 0 && k > 0 && h < 1) {
+    $('#only_diff').removeClass('hidden')
+  } else {
+    if (!$('#only_diff').hasClass('hidden')) $('#only_diff').addClass('hidden')
+  }
+}
 function showOnly(n){  
   selected = n
   $('#groundings li button').removeClass('active')
   $('.version').addClass('d-none')
   $('#v'+n).removeClass('d-none')
+  diff_buttons()
   $('#tab_'+n+' button').addClass('active')
   if (current == selected) {
     $('#cancel').removeClass('d-none')
@@ -86,20 +105,23 @@ $('#revert').on('click', function() {
 $('#diff').on('click', function() {
   diffLayout()
   $('#diff').addClass('hidden')
-  $('#mdown, #only_diff').removeClass('hidden')
+  $('#mdown').removeClass('hidden')
+  diff_buttons()
 })
 $('#only_diff').on('click', function() {
   $('#bodies p.kept, #diff, #only_diff').addClass('hidden')
-  $('#showNotModified').removeClass('hidden')
+  diff_buttons()
 })
 $('#mdown').on('click', function() {
   mdownLayout()
   $('#mdown, #showNotModified').addClass('hidden')
+  if (!$('#only_diff').hasClass('hidden')) $('#only_diff').addClass('hidden')
   $('#diff').removeClass('hidden')
 })
 $('#showNotModified').on('click', function() {
-  $('#bodies p.hidden, #onlydiff').removeClass('hidden')
+  $('#bodies p.hidden').removeClass('hidden')
   $('#showNotModified').addClass('hidden')
+  diff_buttons()
 })
 function reverting() {
   let data = bodies.find(x => x.version === selected)

@@ -104,7 +104,14 @@
         name: "{{{name}}}",
         history: [{'user': '{{user}}', 'date': '{{date}}'}]
       }
-      $('#tab_'+current).append($('<button>', { class: "btn btn-outline-secondary active", html: version_tab(doc)}))
+      let current_color = user_rgb('{{user}}'),
+          contrast = 'light'
+      if (current_color.reduce((a, b) => a + b, 0) > 600) contrast = 'dark'
+      $('#tab_'+current).append($('<button>', {
+          class: 'btn btn-outline-light active text-'+contrast,
+          style: 'background-color: rgb('+current_color.join(',')+'); border-color: rgb('+current_color.join(',')+')',
+          html: version_tab(doc)
+        }))
         .on('click', function(){showOnly($(this).prop('id').split('_')[1]); });
       for (var r of revisions) {
         if(r.status == 'available') {

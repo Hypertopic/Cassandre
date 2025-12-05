@@ -5,6 +5,12 @@ function version_tab(o){
   let tab_text = o.name.substr(0, 20)+'<br/>'+fullnames[u]+'<br/>'+ hr_time(d)
   return tab_text
 }
+function user_rgb(u){
+  if (!fullnames[u]) getFullname(u)
+  let initials = getInitials(fullnames[u]),
+      rgb = initialsToRGB(initials)
+  return rgb
+}
 function getPrevious(rev){
   $.ajax({
     url: '../rev/'+this_id+'/'+rev+'/',
@@ -18,8 +24,15 @@ function getPrevious(rev){
       bodies.push({
         version: n, name: old.name, body: old.body
       })
-      $('#tab_'+n).append($('<button>', { class: "btn btn-outline-secondary", html: version_tab(old)}))
-      .on('click', function(){showOnly($(this).prop('id').split('_')[1]); });
+      let user_color_array = user_rgb(old.history[old.history.length-1].user),
+          user_color = 'rgb('+ user_color_array.join(',')+')',
+          contrast = 'light'
+      if (user_color_array.reduce((a, b) => a + b, 0) > 600) contrast = 'dark'
+      $('#tab_'+n).append($('<button>', {
+        class: 'btn btn-outline-light active',
+        style: 'color:'+user_color+'; border-color:'+user_color,
+        html: version_tab(old)
+      })).on('click', function(){showOnly($(this).prop('id').split('_')[1]); });
       $('#v'+n).append($('<h2>', { text: old.name }))
         .append($('<div>').text(text).addClass('content'))
     }
@@ -83,11 +96,15 @@ function diff_buttons(){
 }
 function showOnly(n){  
   selected = n
-  $('#groundings li button').removeClass('active')
+  $('#groundings li button').each(function() {
+    let color = $(this).css('border-color')
+    $(this).removeClass('active').removeClass('text-dark').removeClass('text-light').css('color', color+' !important').css('border-color', color).css('background-color', '')
+  })
   $('.version').addClass('d-none')
   $('#v'+n).removeClass('d-none')
   diff_buttons()
-  $('#tab_'+n+' button').addClass('active')
+  let active_color = $('#tab_'+n+' button').css('border-color')
+  $('#tab_'+n+' button').addClass('active').css('background-color', active_color).css('color', 'white')
   if (current == selected) {
     $('#cancel').removeClass('d-none')
     $('#revert').addClass('d-none')

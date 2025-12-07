@@ -105,8 +105,8 @@ function(head, req) {
         });
       break;
     }
-    if (username && fullnames[username]) data.logged_fullname = fullnames[username];
+    if (username && fullnames[username]) data.logged_fullname = fullnames[username]
   }
-  data.groundings = dSort(data.groundings, data.locale);
-  return toJSON(data);
+  data.groundings = dSort(data.groundings, '')
+  return toJSON(data)
 }

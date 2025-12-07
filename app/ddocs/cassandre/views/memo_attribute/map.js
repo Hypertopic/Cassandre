@@ -1,18 +1,35 @@
 function(o) {
-  var diary = o.diary || o.corpus || o._id,
+  const diacritics = [
+    {char: 'A', base: /[\300-\306]/g},
+    {char: 'a', base: /[\340-\346]/g},
+    {char: 'E', base: /[\310-\313]/g},
+    {char: 'e', base: /[\350-\353]/g},
+    {char: 'I', base: /[\314-\317]/g},
+    {char: 'i', base: /[\354-\357]/g},
+    {char: 'O', base: /[\322-\330]/g},
+    {char: 'o', base: /[\362-\370]/g},
+    {char: 'U', base: /[\331-\334]/g},
+    {char: 'u', base: /[\371-\374]/g},
+    {char: 'N', base: /[\321]/g},
+    {char: 'n', base: /[\361]/g},
+    {char: 'C', base: /[\307]/g},
+    {char: 'c', base: /[\347]/g}
+  ]
+  let diary = o.diary || o.corpus || o._id,
       type = o.type || 'transcript',
       name = o.name || '...',
       creator = o.user || '',
       date = o.date,
       update = o.date,
       contributors = [],
+      sortkey = '',
       users = []
   if (typeof o.readers === "undefined" || o.readers.length == 0) {
     contributors.push(null);
   } else {
     contributors = o.readers;
   }
-  if (typeof o.contributors !== "undefined") contributors = contributors.concat(o.contributors);
+  if (typeof o.contributors !== "undefined") contributors = contributors.concat(o.contributors)
   contributors = contributors.sort();
   users = contributors.filter(function(item, pos, ary) {return !pos || item != ary[pos - 1];} );
   if (o.history) {
@@ -20,7 +37,7 @@ function(o) {
     creator = o.history[0].user;
     update = o.history[o.history.length-1].date;
     for (var [id, h] of Object.entries(o.history)) {
-      var value = {
+      let value = {
         user: h.user,
         _id: h.user
       }
@@ -56,7 +73,7 @@ function(o) {
       emit([o._id, order, null, 'D'], { diary_name: o.diary_name });
     });
   } else if (!o.commented && !o.user_activity && !o.deadlines) {
-    var groundings = o.groundings || [],
+    let groundings = o.groundings || [],
         preview = ' ';
     if (o.statement) {
       preview = o.statement;
@@ -66,7 +83,7 @@ function(o) {
     } else {
       if (o.speeches) {
         preview = o.speeches.map(function(a) {
-          var turn = a.text;
+          let turn = a.text;
           if (a.actor) turn = '**'+a.actor.trim()+'** '+turn;
           return turn;
         });
@@ -74,7 +91,7 @@ function(o) {
       }
     }
     for (var user of users) {
-      var obj = {
+      let obj = {
         id: o._id,
         rev: o._rev,
         name: name,
@@ -89,12 +106,13 @@ function(o) {
       emit([diary, 'name', user, 'M', name], obj);
       emit([diary, 'date', user, 'M', date], obj);
       emit([diary, 'update', user, 'M', update], obj);
-      let sortkey = name.substr(0,10)
-        .normalize('NFD').replace(/\p{Diacritic}/gu, '')
-        .toLowerCase().replace(/\W/g, '_');
+      sortkey = name.substring(0,10).toLowerCase().replace(/\W/g, '_')
+      diacritics.forEach(function(d){
+        sortkey = sortkey.replace(d.base, d.char)
+      })
       emit([diary, 'type', user, 'M', type+sortkey+o._id], obj);
       if (o.statement) {
-        var ov = {
+        let ov = {
           id: diary,
           rev: 'statement',
           name: 'P³',

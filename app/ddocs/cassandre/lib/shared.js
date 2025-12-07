@@ -15,7 +15,7 @@ const diacritics = [
     {char: 'c', base: /[\347]/g}
   ];
 
-var shared = {
+let shared = {
   links: "<meta charset='utf-8'>\
     <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no'>\
     <link rel='icon' type='image/svg' href='../style/favicon.svg' />\
@@ -315,7 +315,7 @@ var shared = {
         updated_diary = '{{i18n.i_updated-diary}}',\
         wrong_password = '{{i18n.i_wrong-password}}'.replace('&#39;','\\'');\
   getFullname('{{logged}}');\
-  let avatars = [],\
+  var avatars = [],\
       refresh = true,\
       fullname = null,\
       logged_fullname = fullnames['{{logged}}'],\
@@ -359,15 +359,19 @@ function type2path(type) {
 }
 
 function dSort(array, locale){
-  array.sort(function(a,b){
-    return replaceDiacritics(a.name).localeCompare(replaceDiacritics(b.name), locale);
-  });
+  array.sort((a, b) => {
+    const nameA = replaceDiacritics(a.name).toLowerCase()
+    const nameB = replaceDiacritics(b.name).toLowerCase()
+    if (nameA < nameB) return -1
+    if (nameA > nameB) return 1
+    return 0
+  })
   return array;
 }
 
 function replaceDiacritics(str){
   diacritics.forEach(function(letter){
     str = str.replace(letter.base, letter.char);
-  });
+  })
   return str;
 }

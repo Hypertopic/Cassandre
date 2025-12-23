@@ -12,7 +12,8 @@ const diacritics = [
     {char: 'N', base: /[\321]/g},
     {char: 'n', base: /[\361]/g},
     {char: 'C', base: /[\307]/g},
-    {char: 'c', base: /[\347]/g}
+    {char: 'c', base: /[\347]/g},
+    {char: '0',  base: /\W/g}
   ];
 
 let shared = {

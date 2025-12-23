@@ -13,7 +13,8 @@ function(o) {
     {char: 'N', base: /[\321]/g},
     {char: 'n', base: /[\361]/g},
     {char: 'C', base: /[\307]/g},
-    {char: 'c', base: /[\347]/g}
+    {char: 'c', base: /[\347]/g},
+    {char: '_',  base: /\W/g}
   ]
   let diary = o.diary || o.corpus || o._id,
       type = o.type || 'transcript',
@@ -103,13 +104,13 @@ function(o) {
         preview: preview.substr(0,3000)
       };
       if (o.initial) obj.initial = true;
-      emit([diary, 'name', user, 'M', name], obj);
       emit([diary, 'date', user, 'M', date], obj);
       emit([diary, 'update', user, 'M', update], obj);
-      sortkey = name.substring(0,10).toLowerCase().replace(/\W/g, '_')
+      sortkey = name.substring(0,10).toLowerCase()
       diacritics.forEach(function(d){
         sortkey = sortkey.replace(d.base, d.char)
       })
+      emit([diary, 'name', user, 'M', sortkey], obj);
       emit([diary, 'type', user, 'M', type+sortkey+o._id], obj);
       if (o.statement) {
         let ov = {

@@ -36,7 +36,7 @@ function(head, req) {
             name = i18n["i_name"]["statement"];
             diary = '.';
           }
-          var sortkey = replaceDiacritics(name).toLowerCase().replace(/\//g, ' '); 
+          let sortkey = replaceDiacritics(name).toLowerCase()
           switch(row.key[1]) {
             case'date':
               sortkey = date; 

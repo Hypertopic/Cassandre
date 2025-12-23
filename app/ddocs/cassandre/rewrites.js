@@ -119,6 +119,7 @@ function(req2) {
             };
           break;
         }
+        if (order === 'name') delete reply.query.limit
       }
       if (path[4]) {
         if (start !== end) {

@@ -4,7 +4,7 @@ function (o) {
     const OFFSET = 35;
     const FRAME = 80;
     const WORD_MATCHER = /\\[nt]|[^\s,;:\.!?…—–)(\][}{`'‘’"″“”«»&%<>€$*/+-]+/gi;
-    var body = [{'text': o.name}],
+    let body = [{'text': o.name}],
         diary = o.diary || o.corpus,
         speech_begin = 1,
         type = o.type || 'transcript';

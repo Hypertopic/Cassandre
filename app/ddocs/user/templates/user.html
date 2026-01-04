@@ -89,7 +89,7 @@
   {{/stats}}
   $(document).ready(function() {
     setSignoutTooltip('{{logged}}')
-    $('#logged').parent().append($('#search-button').removeClass('hidden'))
+    $('#logged').parent().append($('#search-button'))
     stickToHeader()
     {{#activity}}
     if('{{date}}' > start.toJSON()) {
@@ -109,8 +109,10 @@
     {{/activity}}
     {{#stats}}
     drawChart(all)
-    if ({{commented}} > 0) $('#only-commented').removeClass('d-none')
-    if ({{commented}} < 1) $('#search-button').addClass('d-none')
+    if ({{commented}} > 0) {
+      $('#only-commented').removeClass('d-none')
+      $('#search-button').removeClass('hidden')
+    }
     if ({{created}} > 0) $('#only-created').removeClass('d-none')
     if ({{modified}} > 0) $('#only-modified').removeClass('d-none')
     {{/stats}}

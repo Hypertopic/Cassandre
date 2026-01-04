@@ -36,5 +36,5 @@ function(o, req){
     let selected_task = o.deadlines.find(t => t.id === req.query.task)
     data.task = selected_task
   }
-  return Mustache.to_html(templates.task, data, shared);
+  return Mustache.to_html(templates.task, data, shared)
 }

@@ -1,5 +1,5 @@
 function(doc) {
   if (doc.name) {
-    emit(doc.corpus);
+    emit(doc.corpus)
   }
 }

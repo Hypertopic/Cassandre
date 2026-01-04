@@ -3,7 +3,7 @@ function(o, req){
   // !code lib/mustache.js
   // !code l10n/l10n.js
   // !code lib/shared.js
-  var username = req.userCtx.name;
+  var username = req.userCtx.name
   var data = {
     diary: o._id,
     diary_name: o.diary_name,
@@ -13,5 +13,5 @@ function(o, req){
     logged: username,
     logged_fullname: username
   }
-  return Mustache.to_html(templates.activity, data, shared);
+  return Mustache.to_html(templates.activity, data, shared)
 }

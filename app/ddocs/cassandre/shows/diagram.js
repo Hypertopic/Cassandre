@@ -5,10 +5,10 @@ function(o, req){
   // !code l10n/l10n.js
   // !code lib/shared.js
 
-  const ALPHA = /[a-zàâçéêèëïîôöüùû0æœ0-9]+|[^a-zàâçéêèëïîôöüùûæœ0-9]+/gi;
-  const SPACES = /^ +$/;
+  const ALPHA = /[a-zàâçéêèëïîôöüùû0æœ0-9]+|[^a-zàâçéêèëïîôöüùûæœ0-9]+/gi
+  const SPACES = /^ +$/
 
-  if (!o) return Mustache.to_html(templates.deleted, {i18n: localized()}, shared);
+  if (!o) return Mustache.to_html(templates.deleted, {i18n: localized()}, shared)
   var contributors = o.contributors || [],
       diary = o.diary || o.corpus,
       first = o.first || 'default',
@@ -50,26 +50,26 @@ function(o, req){
   }
   if (data.readers.length==1 && data.readers[0] == username) data.one_step_from_public = true
   if (data.peer == '127.0.0.1' && req.headers['X-Forwarded-For'] ) {
-    var ips = req.headers['X-Forwarded-For'].split(',');
+    var ips = req.headers['X-Forwarded-For'].split(',')
     for (var ip of ips) {
-      if (ip.trim() != '127.0.0.1') data.peer = ip.trim();
+      if (ip.trim() != '127.0.0.1') data.peer = ip.trim()
     }
   }
   if (o.link) {
-    data.link = o.link;
-    if (o.negative) data.negative = o.negative;
-    if (o.situation) data.situation = o.situation;
+    data.link = o.link
+    if (o.negative) data.negative = o.negative
+    if (o.situation) data.situation = o.situation
     if (o.statement) {
-      data.statement = o.statement;
+      data.statement = o.statement
       data.leaves.push({
         href: '../statements/'+diary,
         id: diary,
         name: i18n["i_name"]["statement"],
         type: 'storyline'
-      });
+      })
     }
   }
-  return Mustache.to_html(templates.diagram, data, shared);
+  return Mustache.to_html(templates.diagram, data, shared)
 }
 
 

@@ -5,33 +5,33 @@ function(head, req) {
   // !code l10n/l10n.js
   // !code lib/shared.js
 
-  start({"headers":{"Content-Type":"text/html;charset=utf-8"}});
-  var fullnames = [];
+  start({"headers":{"Content-Type":"text/html;charset=utf-8"}})
+  var fullnames = []
   while (row = getRow()) {
     switch (row.key[1]) {
       case ('C'):
-        var id = row.value._id;
-        var fullname = id;
-        data.contributors.push(id);
-        if (row.doc && row.doc.fullname) fullname = row.doc.fullname;
-        if (row.doc && !fullnames[id]) fullnames[id] = fullname;
-        data.contributors_fullnames.push({'id': id, 'fullname': fullname});
-      break;
+        var id = row.value._id
+        var fullname = id
+        data.contributors.push(id)
+        if (row.doc && row.doc.fullname) fullname = row.doc.fullname
+        if (row.doc && !fullnames[id]) fullnames[id] = fullname
+        data.contributors_fullnames.push({'id': id, 'fullname': fullname})
+      break
       case ('D'):
-        if (row.doc) data.diary_name = row.doc.diary_name;
-      break;
+        if (row.doc) data.diary_name = row.doc.diary_name
+      break
       case ('R'):
-        var id = row.value._id;
-        var fullname = id;
-        data.readers.push(id);
-        if (row.doc && row.doc.fullname) fullname = row.doc.fullname;
-        if (row.doc && !fullnames[id]) fullnames[id] = fullname;
-        data.readers_fullnames.push({'id': id, 'fullname': fullname});
-      break;
+        var id = row.value._id
+        var fullname = id
+        data.readers.push(id)
+        if (row.doc && row.doc.fullname) fullname = row.doc.fullname
+        if (row.doc && !fullnames[id]) fullnames[id] = fullname
+        data.readers_fullnames.push({'id': id, 'fullname': fullname})
+      break
       case ('M'):
-        var user = row.value._id;
-        if (row.doc && !fullnames[user]) fullnames[user] = row.doc.fullname;
-        if (row.doc) user = row.doc.fullname;
+        var user = row.value._id
+        if (row.doc && !fullnames[user]) fullnames[user] = row.doc.fullname
+        if (row.doc) user = row.doc.fullname
         data.comments.push({
           user: user,
           date: row.value.date,
@@ -39,23 +39,23 @@ function(head, req) {
           checked: row.value.checked,
           id: row.value.id,
           rev: row.value.rev
-        });
-      break;
+        })
+      break
       case ('H'):
-        var user = row.value._id;
-        if (row.doc && !fullnames[user]) fullnames[user] = row.doc.fullname;
-        if (row.doc) user = row.doc.fullname;
-        data.creator_fullname = user;
-        data.creator = row.value._id;
-        data.date = row.value.date;
-      break;
+        var user = row.value._id
+        if (row.doc && !fullnames[user]) fullnames[user] = row.doc.fullname
+        if (row.doc) user = row.doc.fullname
+        data.creator_fullname = user
+        data.creator = row.value._id
+        data.date = row.value.date
+      break
       case ('N'):
         if (row.doc && row.doc.name) data.nodes.push({
           id: row.value._id,
           shape: row.value.shape,
           label: row.doc.name.replace(/\s/g, ' ')
-        });
-      break;
+        })
+      break
       case ('G'):
         if (row.doc)  {
           data.groundings.push({
@@ -63,50 +63,50 @@ function(head, req) {
             href: '../diagram/'+ row.value._id,
             type: 'diagram',
             name: row.doc.name
-          });
+          })
           if (row.doc.link) {
-            var color = 'green';
-            if (row.doc.link == 'ipp' || row.doc.link == 'idd' ) color = 'red';
+            var color = 'green'
+            if (row.doc.link == 'ipp' || row.doc.link == 'idd' ) color = 'red'
             var e = {
               id: row.value._id,
               from: row.doc.groundings[0],
               to: row.doc.groundings[1],
               color: color
             }
-            if (row.doc.first) e.first = row.doc.first; 
-            data.edges.push(e);
-            data.connected_nodes.push(row.doc.groundings[0],row.doc.groundings[1]);
+            if (row.doc.first) e.first = row.doc.first
+            data.edges.push(e)
+            data.connected_nodes.push(row.doc.groundings[0],row.doc.groundings[1])
           }
           if (row.doc.negative && row.doc.negative.trim().length > 0) {
-            var color = 'red';
-            if (row.doc.link == 'ipp' || row.doc.link == 'idd' ) color = 'green';
+            var color = 'red'
+            if (row.doc.link == 'ipp' || row.doc.link == 'idd' ) color = 'green'
             data.edges.push({
               from: row.doc.groundings[1],
               to: row.doc.groundings[0],
               color: color,
               dashes: true,
               label: row.doc.negative
-            });
+            })
           }
         }
-      break;
+      break
       case ('L'):
         var type = row.doc.type || 'transcript',
             href = '../'+type2path(type)+'/'+row.doc._id,
             id = row.doc._id,
-            name = row.doc.name || '...';
+            name = row.doc.name || '...'
         data.leaves.push({
           href: href,
           id: id,
           name: name,
           type: type
-        });
-      break;
+        })
+      break
       default:
-      var username = req.userCtx.name;
-      var type = row.doc.type || 'transcript';
-      var diary = row.doc.diary || row.doc.corpus;
-      var name = row.doc.name || '...';
+      var username = req.userCtx.name
+      var type = row.doc.type || 'transcript'
+      var diary = row.doc.diary || row.doc.corpus
+      var name = row.doc.name || '...'
       var data = {
         i18n: localized(),
         _id: row.doc._id,
@@ -142,26 +142,26 @@ function(head, req) {
         update_seq: req.info.update_seq
       }
       if (data.peer == '127.0.0.1' && req.headers['X-Forwarded-For'] ) {
-        var ips = req.headers['X-Forwarded-For'].split(',');
+        var ips = req.headers['X-Forwarded-For'].split(',')
         for (var ip of ips) {
-          if (ip.trim() != '127.0.0.1') data.peer = ip.trim();
+          if (ip.trim() != '127.0.0.1') data.peer = ip.trim()
         }
       }
       if (row.doc.link) {
-        data.link = row.doc.link;
+        data.link = row.doc.link
         if (row.doc.negative) {
-          data.negative = row.doc.negative;
+          data.negative = row.doc.negative
         }
       }
-      break;
+      break
       }
-    if (fullnames[username]) data.logged_fullname = fullnames[username];
+    if (fullnames[username]) data.logged_fullname = fullnames[username]
   }
   if (data) {
     if (data.readers.length==1 && data.readers[0] == username) data.one_step_from_public = true
-    data.groundings = dSort(data.groundings, data.locale);
-    return Mustache.to_html(templates.graph, data, shared);
+    data.groundings = dSort(data.groundings, data.locale)
+    return Mustache.to_html(templates.graph, data, shared)
   } else {
-    return Mustache.to_html(templates.deleted, {i18n: localized()}, shared);
+    return Mustache.to_html(templates.deleted, {i18n: localized()}, shared)
   }
 }

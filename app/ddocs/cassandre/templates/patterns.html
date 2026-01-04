@@ -67,7 +67,7 @@
     </div>
   {{>script}}
   <script>
-  const diary_id = '{{diary}}';
+  const diary_id = '{{diary}}'
   $(document).ready(function() {
     $.ajax({
       url: "../{{diary}}",
@@ -75,81 +75,81 @@
       dataType: "json"
     }).done(function(d) {
       updateTooltip('diary', d.diary_name)
-    });
-    stickToHeader();
-    resetUI();
-  });
+    })
+    stickToHeader()
+    resetUI()
+  })
 
   $('#footer')
     .on('click', '#show_delete', function() {
-      $("#cancel").removeClass("hidden");
-      $("#delete").removeClass("hidden");
-      $(".custom-switch").removeClass("hidden");
-      $("#show_delete").tooltip("hide");
-      $("#show_delete").addClass("hidden");
-      $(".kwic>span").prepend("<input type='checkbox' />");
+      $("#cancel").removeClass("hidden")
+      $("#delete").removeClass("hidden")
+      $(".custom-switch").removeClass("hidden")
+      $("#show_delete").tooltip("hide")
+      $("#show_delete").addClass("hidden")
+      $(".kwic>span").prepend("<input type='checkbox' />")
     })
 
     .on('click', '#cancel', function() {
-      resetUI();
+      resetUI()
     })
 
     .on('click', '#toggle', function() {
-      var checked = $('#toggle').is(':checked');
+      var checked = $('#toggle').is(':checked')
       $('input[type="checkbox"]').each(function() {
-        $(this).attr('checked', checked);
-      });
+        $(this).attr('checked', checked)
+      })
     })
 
     .on('click', '#delete', function() {
       var checked = $(".kwic :checked"),
-          countdown = checked.length;
-      $("#loading").removeClass("hidden");
+          countdown = checked.length
+      $("#loading").removeClass("hidden")
       if (!countdown) {
-        resetUI();
+        resetUI()
       }
       checked.each(function() {
-        var kwic = $(this).closest(".kwic");
-        var text_id = "../" + kwic.data('text');
+        var kwic = $(this).closest(".kwic"),
+            text_id = "../" + kwic.data('text')
         $.ajax({
           url: text_id,
           type: "GET",
           dataType: "json",
           success: function(text) {
-            delete text.highlights[kwic.attr("id")];
+            delete text.highlights[kwic.attr("id")]
             $.ajax({
               url: text_id,
               type: "PUT",
               contentType: "application/json",
               data: JSON.stringify(text),
               success: function() {
-                countdown--;
+                countdown--
                 if (countdown<1) {
-                  location.reload();
+                  location.reload()
                 }
               }
-            });
+            })
           }
-        });
-      });
-    });
+        })
+      })
+    })
 
   $('#kwic').on('keypress', function(key) {
     if (key.which == 13) {
-      self.location = '../kwic/'+diary_id+'/' + $('#kwic').val().toLowerCase();
+      self.location = '../kwic/'+diary_id+'/' + $('#kwic').val().toLowerCase()
     }
-  });
+  })
 
   $('.search').on('click', function() {
     if ($('#kwic').val().length > 0) {
-      self.location = '../kwic/'+diary_id+'/' + $('#kwic').val().toLowerCase();
+      self.location = '../kwic/'+diary_id+'/' + $('#kwic').val().toLowerCase()
     }
-  });
+  })
 
   function resetUI() {
-    $('input[type="checkbox"]').addClass("hidden");
-    $("#footer .form-check-inline").children().addClass("hidden");
-    $("#show_delete").removeClass("hidden");    
+    $('input[type="checkbox"]').addClass("hidden")
+    $("#footer .form-check-inline").children().addClass("hidden")
+    $("#show_delete").removeClass("hidden")
   }
 
   {{>layoutscript}}

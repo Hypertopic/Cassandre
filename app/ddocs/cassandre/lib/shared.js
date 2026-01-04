@@ -14,7 +14,7 @@ const diacritics = [
     {char: 'C', base: /[\307]/g},
     {char: 'c', base: /[\347]/g},
     {char: '0',  base: /\W/g}
-  ];
+  ]
 
 let shared = {
   links: "<meta charset='utf-8'>\
@@ -346,16 +346,16 @@ let shared = {
     {{#type}}{{#logged}}track('{{_id}}'){{/logged}}{{/type}}\
     {{/statements}}\
   "
-};
+}
 
 function type2path(type) {
   switch (type) {
     case 'table':
     case 'graph':
     case 'diagram':
-      return type;
+      return type
     default:
-      return 'memo';
+      return 'memo'
   }
 }
 
@@ -367,12 +367,12 @@ function dSort(array, locale){
     if (nameA > nameB) return 1
     return 0
   })
-  return array;
+  return array
 }
 
 function replaceDiacritics(str){
   diacritics.forEach(function(letter){
-    str = str.replace(letter.base, letter.char);
+    str = str.replace(letter.base, letter.char)
   })
-  return str;
+  return str
 }

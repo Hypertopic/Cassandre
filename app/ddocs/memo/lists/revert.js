@@ -3,28 +3,28 @@ function(head, req){
   // !code lib/mustache.js
   // !code l10n/l10n.js
   // !code lib/shared.js
-  start({"headers":{"Content-Type":"text/html;charset=utf-8"}});
+  start({"headers":{"Content-Type":"text/html;charset=utf-8"}})
 
-  var fullnames = [];
+  var fullnames = []
   while (row = getRow()) {
     switch (row.key[1]) {
       case ('C'):
       case ('R'):
       case ('M'):
       case ('H'):
-        var id = row.value._id;
-        var fullname = id;
-        if (row.doc && row.doc.fullname) fullname = row.doc.fullname;
-        if (row.doc && !fullnames[id]) fullnames[id] = fullname;
-      break;
+        var id = row.value._id
+        var fullname = id
+        if (row.doc && row.doc.fullname) fullname = row.doc.fullname
+        if (row.doc && !fullnames[id]) fullnames[id] = fullname
+      break
       case ('D'):
-        if (row.doc) data.diary_name = row.doc.diary_name;
-      break;
+        if (row.doc) data.diary_name = row.doc.diary_name
+      break
       case ('L'):
       case ('G'):
-      break;
+      break
       default:
-        var username = req.userCtx.name;
+        var username = req.userCtx.name
         var data = {
           i18n: localized(),
           _id: row.doc._id,
@@ -46,9 +46,9 @@ function(head, req){
           body: row.doc.body,
           groundings:[]
         }
-      break;
+      break
       }
-    if (fullnames[username]) data.logged_fullname = fullnames[username];
+    if (fullnames[username]) data.logged_fullname = fullnames[username]
   }
   for (var i in fullnames) {
     data.fullnames.push({
@@ -56,5 +56,5 @@ function(head, req){
       name: fullnames[i]
     })
   }
-  return Mustache.to_html(templates.revert, data, shared);
+  return Mustache.to_html(templates.revert, data, shared)
 }

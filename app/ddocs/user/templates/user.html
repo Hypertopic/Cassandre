@@ -72,9 +72,9 @@
   <script type="text/javascript" src="../script/cal-heatmap.min.js"></script>
   <script>
   let fullnames = [],
-      user_id = '{{id}}';
+      user_id = '{{id}}'
   {{^authorized}}
-  stickToHeader();
+  stickToHeader()
   {{/authorized}}
   {{#authorized}}
   {{#stats}}
@@ -85,37 +85,37 @@
       commented = {},
       modified = {},
       end = new Date('{{end}}'),
-      start = new Date('{{start}}');
+      start = new Date('{{start}}')
   {{/stats}}
   $(document).ready(function() {
     setSignoutTooltip('{{logged}}')
     $('#logged').parent().append($('#search-button').removeClass('hidden'))
-    stickToHeader();
+    stickToHeader()
     {{#activity}}
     if('{{date}}' > start.toJSON()) {
-      all[unix_date('{{date}}')] = 1;
+      all[unix_date('{{date}}')] = 1
       switch('{{action}}') {
         case('commented'):
-          commented[unix_date('{{date}}')] = 1;
-        break;
+          commented[unix_date('{{date}}')] = 1
+        break
         case('created'):
-          created[unix_date('{{date}}')] = 1;
-        break;
+          created[unix_date('{{date}}')] = 1
+        break
         case('modified'):
-          modified[unix_date('{{date}}')] = 1;
-        break;
+          modified[unix_date('{{date}}')] = 1
+        break
       }
     }
     {{/activity}}
     {{#stats}}
-    drawChart(all);
-    if ({{commented}} > 0) $('#only-commented').removeClass('d-none');
-    if ({{commented}} < 1) $('#search-comments').addClass('d-none');
-    if ({{created}} > 0) $('#only-created').removeClass('d-none');
-    if ({{modified}} > 0) $('#only-modified').removeClass('d-none');
+    drawChart(all)
+    if ({{commented}} > 0) $('#only-commented').removeClass('d-none')
+    if ({{commented}} < 1) $('#search-button').addClass('d-none')
+    if ({{created}} > 0) $('#only-created').removeClass('d-none')
+    if ({{modified}} > 0) $('#only-modified').removeClass('d-none')
     {{/stats}}
-    showMore('a');
-  });
+    showMore('a')
+  })
 
   {{/authorized}}
   {{>layoutscript}}

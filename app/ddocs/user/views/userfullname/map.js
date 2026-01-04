@@ -1,3 +1,3 @@
 function(o) {
-  if (o.fullname) emit(o.fullname);
+  if (o.fullname) emit(o.fullname)
 }

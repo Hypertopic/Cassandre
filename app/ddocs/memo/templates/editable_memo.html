@@ -115,17 +115,17 @@
   <script src="../script/editable_memo.js"></script>
   {{/editing}}
   <script>
-  var placeHolder = [];
-  placeHolder["field"] = {name : "{{i18n.i_name.field}}", content: "{{{i18n.i_content.field}}}"};
-  placeHolder["interview"] = {name : "{{i18n.i_name.transcript}}", content: "{{{i18n.i_content.transcript}}}"};
-  placeHolder["transcript"] = {name : "{{i18n.i_name.transcript}}", content: "{{{i18n.i_content.transcript}}}"};
-  placeHolder["coding"] = {name : "{{i18n.i_name.coding}}", content: "{{{i18n.i_content.coding}}}"};
-  placeHolder["theoretical"] = {name : "{{i18n.i_name.theoretical}}", content: "{{{i18n.i_content.theoretical}}}"};
-  placeHolder["operational"] = {name : "{{i18n.i_name.operational}}", content: "{{{i18n.i_content.operational}}}"};
-  placeHolder["storyline"] = {name : "{{i18n.i_name.storyline}}", content: "{{{i18n.i_content.storyline}}}"};
-  $("#name").attr("placeHolder", placeHolder["{{type}}"]["name"]);
+  var placeHolder = []
+  placeHolder["field"] = {name : "{{i18n.i_name.field}}", content: "{{{i18n.i_content.field}}}"}
+  placeHolder["interview"] = {name : "{{i18n.i_name.transcript}}", content: "{{{i18n.i_content.transcript}}}"}
+  placeHolder["transcript"] = {name : "{{i18n.i_name.transcript}}", content: "{{{i18n.i_content.transcript}}}"}
+  placeHolder["coding"] = {name : "{{i18n.i_name.coding}}", content: "{{{i18n.i_content.coding}}}"}
+  placeHolder["theoretical"] = {name : "{{i18n.i_name.theoretical}}", content: "{{{i18n.i_content.theoretical}}}"}
+  placeHolder["operational"] = {name : "{{i18n.i_name.operational}}", content: "{{{i18n.i_content.operational}}}"}
+  placeHolder["storyline"] = {name : "{{i18n.i_name.storyline}}", content: "{{{i18n.i_content.storyline}}}"}
+  $("#name").attr("placeHolder", placeHolder["{{type}}"]["name"])
   {{#authorized}}
-  {{#editing}}  
+  {{#editing}}
   var easymde = new EasyMDE({
     element: $("#body")[0],
     autosave: {
@@ -147,7 +147,7 @@
     image: "Insérer une image (ctrl-alt-i)",
     table: "Insérer un tableau",
     guide: "Guide de mise en page (en anglais)"
-  };
+  }
   if ("{{locale}}" === "fr") {
     for (const [btn, title] of Object.entries(french)) {
       $('.editor-toolbar .'+btn).prop('title', title)
@@ -164,12 +164,14 @@
       strikethrough: 'true'
     }),
       fullnames = [], this_id ='{{_id}}', this_type ='{{type}}',
-      local_text = easymde.value(),
-      remote_text = $("#remote").val(),
-      local_content = local_text.split(/\r\n|\r|\n/),
-      remote_content =  remote_text.split(/\r\n|\r|\n/),
       lost_connection = "{{i18n.i_lost_connection}}",
       warning = 'Save your content'
+  {{#editing}}
+  let local_text = easymde.value(),
+      remote_text = $("#remote").val(),
+      local_content = local_text.split(/\r\n|\r|\n/),
+      remote_content =  remote_text.split(/\r\n|\r|\n/)
+  {{/editing}}
   $(document).ready(function() {
     {{^editing}}
     self.location = '../memo/'+this_id
@@ -178,30 +180,30 @@
     setSignoutTooltip('{{logged}}')
     window.addEventListener("beforeunload", function (e) {
       if (warning != false) {
-        (e || window.event).returnValue = warning;
-        return warning;
+        (e || window.event).returnValue = warning
+        return warning
       }
-    });
-    $("#search-icon").remove();
-    converter.setFlavor('github');
-    renderPreviews(converter);
-    if ($('#groundings li').length < 1) $("#groundings").addClass('hidden');
-    $('#groundings').find('.toggle').next().slideToggle('fast');
+    })
+    $("#search-icon").remove()
+    converter.setFlavor('github')
+    renderPreviews(converter)
+    if ($('#groundings li').length < 1) $("#groundings").addClass('hidden')
+    $('#groundings').find('.toggle').next().slideToggle('fast')
     {{#authorized}}
-    $('#header > ul > li:first').after($('.editor-toolbar'));
-    $('.editor-toolbar > button:last').addClass('d-none d-sm-inline');
-    if ("{{type}}" == 'interview') $('.editor-toolbar').remove ();
+    $('#header > ul > li:first').after($('.editor-toolbar'))
+    $('.editor-toolbar > button:last').addClass('d-none d-sm-inline')
+    if ("{{type}}" == 'interview') $('.editor-toolbar').remove ()
     if (local_text == remote_text) {
       easymde.clearAutosavedValue()
     } else {
       cherrypick()
     }
-    $('#username').addClass('d-none d-lg-inline');
-    $('#signout').addClass('d-none d-sm-inline');
+    $('#username').addClass('d-none d-lg-inline')
+    $('#signout').addClass('d-none d-sm-inline')
     {{/authorized}}
     {{/editing}}
-    stickToHeader();
-  });
+    stickToHeader()
+  })
   {{>layoutscript}}
   {{>logscript}}
   </script>

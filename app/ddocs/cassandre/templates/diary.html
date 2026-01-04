@@ -132,7 +132,7 @@
         memos = {{{memos}}},
         this_id = '{{diary}}',
         to = ' {{i18n.i_to}} ',
-        contrastcolor = '{{>contrastcolor}}';
+        contrastcolor = '{{>contrastcolor}}'
   var converter = new showdown.Converter({
         tables: 'true',
         tasklists: 'true',
@@ -147,8 +147,8 @@
       origin = '0',
       read = 0,
       result,
-      results = [];
-      ready = true;
+      results = [],
+      ready = true,
       text = {
         add_contributor_right: '{{i18n.i_add_contributor_right}}',
         add_reader_right: '{{i18n.i_add_reader_right}}',
@@ -168,12 +168,12 @@
         to_whom: "{{i18n.i_to_whom}}",
         ungrounded: "{{i18n.i_ungrounded}}",
         unnamed: "{{i18n.i_unnamed}}"
-      };
-  if (["date","update"].indexOf(by) > -1) horizon = '1970';
+      }
+  if (["date","update"].indexOf(by) > -1) horizon = '1970'
   $(document).ready(function() {
     let diary_name = getDiaryname(diary_id)
     setDiaryName(diary_name)
-    announceMaintenance(maintenance, maintenance_in_progress);
+    announceMaintenance(maintenance, maintenance_in_progress)
     {{#logged}}
     responsiveUserMenu()
     fullnames[logged] = localStorage.getItem(logged)
@@ -185,52 +185,52 @@
         type: "GET",
         dataType: "json"
       }).fail(function() {
-        $('#storing_fullname_dialog').modal('show');
+        $('#storing_fullname_dialog').modal('show')
       }).done(function(data) {
         if(data.fullname && data.fullname.length > 0) {
           fullnames[logged] = data.fullname
           localStorage.setItem(logged, data.fullname)
           setSignoutTooltip(logged)
         } else {
-          $('#storing_fullname_dialog').modal('show');
+          $('#storing_fullname_dialog').modal('show')
         }
-      });
+      })
     }
     relocateActivity(by)
     for (var m of memos) {
-      var j = activity.map(function(a){return a.doc}).indexOf(m.id);
+      var j = activity.map(function(a){return a.doc}).indexOf(m.id)
       if (activity.length > -1 && j > -1) {
-        if (m.date < activity[j].date) read++;
+        if (m.date < activity[j].date) read++
       }
     }
     if (memos.length - read > 0) {
-      $('#size').prepend(memos.length - read + ' / {{size}}');
-      $('#size').addClass('badge-success');
+      $('#size').prepend(memos.length - read + ' / {{size}}')
+      $('#size').addClass('badge-success')
     } else {
-      $('#size').prepend('{{size}}');
-      $('#size').addClass('badge-secondary');
+      $('#size').prepend('{{size}}')
+      $('#size').addClass('badge-secondary')
     }
-    if (by.length <= 0) track('update');
+    if (by.length <= 0) track('update')
     {{/logged}}
     if (["date","update"].indexOf(by) > -1) {
-      from = 'a';
-      origin = 'a';
+      from = 'a'
+      origin = 'a'
     }
-    includePublic();
-    let sort_by ='sort-alpha-down';
+    includePublic()
+    let sort_by ='sort-alpha-down'
     switch(by) {
       case 'date':
-        sort_by ='sort-numeric-down-alt';
-      break;
+        sort_by ='sort-numeric-down-alt'
+      break
       case 'update':
-        sort_by ='sort-down';
-      break;
+        sort_by ='sort-down'
+      break
       case 'type':
-        sort_by ='filter';
-      break;
+        sort_by ='filter'
+      break
     }
-    $('#sort svg use').attr('xlink:href','../style/bootstrap-icons.svg#'+sort_by);
-    resetUI();
+    $('#sort svg use').attr('xlink:href','../style/bootstrap-icons.svg#'+sort_by)
+    resetUI()
     {{#list}}
     var pendingtasks = function() {
       return $.ajax({
@@ -249,102 +249,106 @@
       })
     }
     pendingtasks().done(tasks => $.each(tasks, function(k,v) {
-      taskreport(k,v);
-    }));
-    uncheckedcomments().done(data => taskreport('comments', data.comments.length));
-    if (number > 0) $('#tasklist-alert').removeClass("hidden");
+      taskreport(k,v)
+    }))
+    uncheckedcomments().done(data => taskreport('comments', data.comments.length))
+    if (number > 0) $('#tasklist-alert').removeClass("hidden")
     {{/list}}
     $.ajax({
       url: '../kwic/'+diary_id,
       type: "GET",
       dataType: "json"
     }).done(function(kwic){
-      if (kwic.pending > 0) $('#patterns').removeClass("hidden");
-    });
-    poller('diary', '{{update_seq}}');
-  });
+      if (kwic.pending > 0) $('#patterns').removeClass("hidden")
+    })
+    poller('diary', '{{update_seq}}')
+  })
 
   $('.dropdown-menu a').on('click', function(e) {
-    var by = $(this).attr('value');
-    {{#logged}}track(by).done();{{/logged}}
-  });
+    var by = $(this).attr('value')
+    {{#logged}}
+    track(by).done()
+    {{/logged}}
+  })
 
   function showList(data) {
     for (var m of data) {
       if(document.getElementById(m.id) == null) {
-        var unread = 'unread';
-        var date = m.date;
-        if(by == 'update') date = m.update;
-        var sort_key = m.sortkey;
-        var j = activity.findIndex(e => e.doc === m.id);
-        if (j > -1 && activity[j].date > m.update) unread = '';
+        var unread = 'unread',
+            date = m.date
+        if(by == 'update') date = m.update
+        var sort_key = m.sortkey,
+            j = activity.findIndex(e => e.doc === m.id)
+        if (j > -1 && activity[j].date > m.update) unread = ''
         var checkbox_visible = 'hidden'
         if (!$('#delete').hasClass('hidden')) checkbox_visible = ''
         var checkbox = '<input type="checkbox" id="'+m.id+'" name="'+m.rev+'" class="'+checkbox_visible+' deletable" />',
             creator = ' <span class="creator '+m.creator+' badge"></span>'
-                    + '<span class="hidden creator_title">'+"{{i18n.i_created-by}} "+'<span class="username '+m.creator+'"></span> <span class="'+m.date+' moment"></span>';
+                    + '<span class="hidden creator_title">'+"{{i18n.i_created-by}} "+'<span class="username '+m.creator+'"></span> <span class="'+m.date+' moment"></span>'
         if (m.rev == 'statement') {
-          checkbox = '<input type="checkbox" class="'+checkbox_visible+'" disabled />';
-          creator = '';
+          checkbox = '<input type="checkbox" class="'+checkbox_visible+'" disabled />'
+          creator = ''
         }
         var li = '<li class="'+m.type+'" name="'+sort_key+'">' + checkbox
           +' <span id="'+m.id+'" name="'+m.update+'" class="'+date+' moment '+unread+'"></span>&nbsp;– '
           +'<span class="mytooltip">'
-          +'<a href="../'+m.path+'/'+m.id+'" class="'+unread+'">'+m.name+'</a>';
+          +'<a href="../'+m.path+'/'+m.id+'" class="'+unread+'">'+m.name+'</a>'
         if (typeof m.preview !== 'undefined' && m.preview.trim().length > 0)
-          li += '<span class="preview text-{{>contrastcolor}} bg-{{>menucolor}}">'+m.preview+'</span>';
-        li += '</span>'+creator+'</li>';
-        $("#memos").append(li);
+          li += '<span class="preview text-{{>contrastcolor}} bg-{{>menucolor}}">'+m.preview+'</span>'
+        li += '</span>'+creator+'</li>'
+        $("#memos").append(li)
       }
     }
-    $('#'+diary_id).next('.moment').removeClass('unread');
-    $('#'+diary_id).next('.moment').next('.mytooltip').find('.unread').removeClass('unread');
-    momentRelative('#memos');
+    $('#'+diary_id).next('.moment').removeClass('unread')
+    $('#'+diary_id).next('.moment').next('.mytooltip').find('.unread').removeClass('unread')
+    momentRelative('#memos')
     showCreator()
-    converter.setFlavor('github');
+    converter.setFlavor('github')
     $('.preview').html(function(i, text) {
-      return converter.makeHtml(text.replace(/&gt;/g, '>').trim());
-    });
+      return converter.makeHtml(text.replace(/&gt;/g, '>').trim())
+    })
     let codes = document.getElementsByTagName("code")
     for (let c of codes) {
       codeToGraph(c, contrastcolor)
     }
-    var nothing_to_show = '{{i18n.i_nothing-to-show}}';
-    {{^logged}}nothing_to_show +='. {{i18n.i_sign-in-for-more}}';{{/logged}}
-    if ({{size}} == 0) $('#memos').text(nothing_to_show);
-    if (document.getElementById("memos").childNodes.length >= {{size}}) $('.more').tooltip('hide').addClass("d-none");
-    ready = true;
+    var nothing_to_show = '{{i18n.i_nothing-to-show}}'
+    {{^logged}}
+    nothing_to_show +='. {{i18n.i_sign-in-for-more}}'
+    {{/logged}}
+    if ({{size}} == 0) $('#memos').text(nothing_to_show)
+    if (document.getElementById("memos").childNodes.length >= {{size}}) $('.more').tooltip('hide').addClass("d-none")
+    ready = true
   }
 
   async function includePublic() {
     if (list.length > 0) {
-      from = list[list.length-1].sortkey;
-      if (by == "type" && list[list.length-1].path == 'statements') from = 'storylinez';
+      from = list[list.length-1].sortkey
+      if (by == "type" && list[list.length-1].path == 'statements') from = 'storylinez'
     }
-    if (result !== undefined) results.push(result);
-    result = await getMore(from);
-    if (results.indexOf(result) > -1) result = horizon;
-    await getMore(origin+'/'+result);
-    list = list.filter((v, i, a) => a.findIndex((t) => (t.id === v.id)) === i);
+    if (result !== undefined) results.push(result)
+    result = await getMore(from)
+    if (results.indexOf(result) > -1) result = horizon
+    await getMore(origin+'/'+result)
+    list = list.filter((v, i, a) => a.findIndex((t) => (t.id === v.id)) === i)
     if (["date","update"].indexOf(by) > -1) {
-      list.sort((a, b) => (a.sortkey < b.sortkey) ? 1 : -1);
-      if (list.length > 0 && from > list[list.length-1].sortkey) from = list[list.length-1].sortkey;
+      list.sort((a, b) => (a.sortkey < b.sortkey) ? 1 : -1)
+      if (list.length > 0 && from > list[list.length-1].sortkey) from = list[list.length-1].sortkey
     } else {
-      list.sort((a, b) => (a.sortkey > b.sortkey) ? 1 : -1);
+      list.sort((a, b) => (a.sortkey > b.sortkey) ? 1 : -1)
     }
-    showList(list);
-    $('.theoretical').attr('title',"{{i18n.i_memo.theoretical}}");
-    $('.operational').attr('title',"{{i18n.i_memo.operational}}");
-    $('.field').attr('title',"{{i18n.i_memo.field}}".replace('&#39;',"'"));
-    $('.transcript').attr('title',"{{i18n.i_memo.transcript}}".replace('&#39;',"'"));
-    $('.interview').attr('title',"{{i18n.i_memo.transcript}}".replace('&#39;',"'"));
-    $('.coding').attr('title',"{{i18n.i_memo.coding}}");
-    $('.theoretical').attr('title',"{{i18n.i_memo.theoretical}}");
-    $('.storyline').attr('title',"{{i18n.i_memo.storyline}}");
-    $('.graph').attr('title',"{{i18n.i_memo.graph}}");
-    $('.diagram').attr('title',"{{i18n.i_memo.diagram}}");
-    $('.table').attr('title',"{{i18n.i_memo.table}}");
-    stickToHeader();
+    showList(list)
+    $('.theoretical').attr('title',"{{i18n.i_memo.theoretical}}")
+    $('.operational').attr('title',"{{i18n.i_memo.operational}}")
+    $('.field').attr('title',"{{i18n.i_memo.field}}".replace('&#39;',"'"))
+    $('.transcript').attr('title',"{{i18n.i_memo.transcript}}".replace('&#39;',"'"))
+    $('.interview').attr('title',"{{i18n.i_memo.transcript}}".replace('&#39;',"'"))
+    $('.coding').attr('title',"{{i18n.i_memo.coding}}")
+    $('.theoretical').attr('title',"{{i18n.i_memo.theoretical}}")
+    $('.storyline').attr('title',"{{i18n.i_memo.storyline}}")
+    $('.graph').attr('title',"{{i18n.i_memo.graph}}")
+    $('.diagram').attr('title',"{{i18n.i_memo.diagram}}")
+    $('.table').attr('title',"{{i18n.i_memo.table}}")
+    stickToHeader()
   }
 
   {{>layoutscript}}

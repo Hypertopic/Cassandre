@@ -186,7 +186,7 @@
             </button>
           </div>
           <div class="modal-body text-center">
-            <select onChange="adapt({grounding: this.value});"></select>
+            <select onChange="adapt({grounding: this.value})"></select>
             <button id="pp" type="button" class="btn btn-outline-secondary articulate">
               <svg width="70" height="44">
                 <rect x="1" y="1" width="25" height="40" stroke-width="2"/>
@@ -228,32 +228,32 @@
   <script src="../script/diagram.js"></script>
   <script>
   {{^authorized}}
-  stickToHeader();
+  stickToHeader()
   {{/authorized}}
   var userids = [], 
-      converter = new showdown.Converter({strikethrough: 'true'});
-  converter.setFlavor('github');
+      converter = new showdown.Converter({strikethrough: 'true'})
+  converter.setFlavor('github')
   let candidates = [],
       diary_id = "{{diary}}",
       fullnames = [],
       link = '{{link}}',
       this_id = "{{_id}}",
-      this_type = "{{type}}";
+      this_type = "{{type}}"
   {{#authorized}}
   $(document).ready(function() {
     getSatellites('{{logged}}', toDoAfter)
-  });
+  })
 
   function toDoAfter(){
     var one = $('#groundings>li').first().find('a').html(),
         two = $('#groundings>li').last().find('a').html(),
         one_id = $('#groundings>li').first().find('a').attr('href').split('/').pop(),
         two_id = $('#groundings>li').last().find('a').attr('href').split('/').pop(),
-        orders = [{id: one_id, name: one+' -> '+two}, {id: two_id, name: two+' -> '+one}, {id: 'default', name: one+' & '+two}];
+        orders = [{id: one_id, name: one+' -> '+two}, {id: two_id, name: two+' -> '+one}, {id: 'default', name: one+' & '+two}]
     if ('{{first}}' == $('#groundings>li').last().find('a').attr('href').split('/').pop()) {
-      var temp = one;
-      one = two;
-      two = temp;
+      var temp = one
+      one = two
+      two = temp
     }
     {{#editable}}
     orders.forEach((g) => {
@@ -264,40 +264,40 @@
         text: g.name
       }).click(function(){
         adapt({first: $(this).prop('name')})
-      }));
-    });
+      }))
+    })
     $("#firstList .dropdown-item[name={{first}}]").prop('disabled', 'disabled').addClass("disabled")
     if("{{name}}".replace(/&#39;|&quot;/g, '').replace(/\t/g, ' ').trim().indexOf(one.replace(/"|'/g, '').replace(/\s+/g, ' ').trim()) == -1
     || "{{name}}".replace(/&#39;|&quot;/g, '').replace(/\t/g, ' ').trim().indexOf(two.replace(/"|'/g, '').replace(/\s+/g, ' ').trim()) == -1) {
-      if ($('#groundings>li').length == 2) adapt({rename: true});
+      if ($('#groundings>li').length == 2) adapt({rename: true})
     }
     {{/editable}}
     if ($('#groundings>li').length == 1) {
-      $('#create').remove();
-      $('.articulate').addClass('hidden');
-      $("#groundings").find('legend').text("{{i18n.i_grounding}}");
-      $('#add_grounding_btn').attr('title', "{{i18n.i_add_groundings}}");
-      $("#add_grounding").find('.modal-title').append(" <em>"+$('#groundings>li').first().find('a').html()+"</em> {{i18n.i_to}}");
+      $('#create').remove()
+      $('.articulate').addClass('hidden')
+      $("#groundings").find('legend').text("{{i18n.i_grounding}}")
+      $('#add_grounding_btn').attr('title', "{{i18n.i_add_groundings}}")
+      $("#add_grounding").find('.modal-title').append(" <em>"+$('#groundings>li').first().find('a').html()+"</em> {{i18n.i_to}}")
       $("#add_grounding").find('select').prepend($('<option>', {
         text: "{{i18n.i_select_grounding}}"
-      }));
+      }))
     } else {
-      $('#create').removeClass('hidden');
-      $('#negative-case').removeClass('hidden');
-      $('#statement').removeClass('hidden');
-      $('#situation').removeClass('hidden');
-      if ('{{situation}}' != '') $('#situation .meta').text('{{i18n.i_name.situation}}: ');
-      if ('{{statement}}' != '') $('#statement .meta').text('{{i18n.i_name.statement}}: ');
-      if ('{{negative}}' != '') $('#negative-case .meta').text('{{i18n.i_name.negative-case}}: ');
-      $('#add_situation').removeClass('hidden');
-      $('#add_negative-case').removeClass('hidden');
-      $('#write_statement').removeClass('hidden');
-      $('#add_grounding_btn span').attr('title', "{{i18n.i_link}}");
-      $('#add_grounding_btn span svg use').attr('xlink:href', "../style/bootstrap-icons.svg#link");
-      $("#add_grounding").find('select').remove();
-      $('#'+'{{link}}').prop('title', '{{i18n.i_current-link}}').prop('disabled', true);
-      $('.articulate').removeClass('hidden');
-      $('#firstList').parent().removeClass('hidden');
+      $('#create').removeClass('hidden')
+      $('#negative-case').removeClass('hidden')
+      $('#statement').removeClass('hidden')
+      $('#situation').removeClass('hidden')
+      if ('{{situation}}' != '') $('#situation .meta').text('{{i18n.i_name.situation}}: ')
+      if ('{{statement}}' != '') $('#statement .meta').text('{{i18n.i_name.statement}}: ')
+      if ('{{negative}}' != '') $('#negative-case .meta').text('{{i18n.i_name.negative-case}}: ')
+      $('#add_situation').removeClass('hidden')
+      $('#add_negative-case').removeClass('hidden')
+      $('#write_statement').removeClass('hidden')
+      $('#add_grounding_btn span').attr('title', "{{i18n.i_link}}")
+      $('#add_grounding_btn span svg use').attr('xlink:href', "../style/bootstrap-icons.svg#link")
+      $("#add_grounding").find('select').remove()
+      $('#'+'{{link}}').prop('title', '{{i18n.i_current-link}}').prop('disabled', true)
+      $('.articulate').removeClass('hidden')
+      $('#firstList').parent().removeClass('hidden')
     }
     draw_diagram(one, two, '{{link}}', '{{situation}}', '{{negative}}')
     {{>render}}
@@ -310,32 +310,32 @@
       }).done((grounds) => {
         for (var r of grounds.rows) {
           var id = r.value['id'],
-              ground_href = r.value['id'];
-              ground_label = r.value['name'];
+              ground_href = r.value['id']
+              ground_label = r.value['name']
           if ($('#groundings>li').length < 2 && document.getElementById(id) == null && ground_href != this_id) {
             $("#add_grounding").find('select').append($('<option>', {
               id: ground_href,
               value: ground_href,
               title: ground_label,
               text: ground_label
-            }));
-          };
+            }))
+          }
         }
-      });
+      })
       $('#add_grounding').modal('show')
     } else {
       if ($('.situation_text').text().length < 1)
-        inform('info', "{{{i18n.i_next.situation}}} <strong>{{i18n.i_add_situation}}</strong>");
+        inform('info', "{{{i18n.i_next.situation}}} <strong>{{i18n.i_add_situation}}</strong>")
       if ($('.statement_text').text().length < 1)
-        inform('basic', "{{{i18n.i_next.statement}}} <strong>{{i18n.i_write_statement}}</strong>");
+        inform('basic', "{{{i18n.i_next.statement}}} <strong>{{i18n.i_write_statement}}</strong>")
       if ($('.negative_text').text().length < 1 && $('#leaves li.theoretical').length < 1) {
-        inform('secondary', "{{i18n.i_next.negative-case}} {{i18n.i_hereunder_button}}");
+        inform('secondary', "{{i18n.i_next.negative-case}} {{i18n.i_hereunder_button}}")
       }
     }
     {{/editable}}
-    $('#modify_rights').removeClass('hidden');
-    poller('memo', 'now');
-  };
+    $('#modify_rights').removeClass('hidden')
+    poller('memo', 'now')
+  }
   {{#editable}}
   $('.situation_text').click(function(event) {
     edit_situation()

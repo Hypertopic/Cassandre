@@ -6,6 +6,6 @@ function (doc, req) {
   }
   doc.user = req.userCtx.name
   doc.date = new Date().toJSON()
-  delete doc.checked;
+  delete doc.checked
   return [doc, 'Comment updated']
 }

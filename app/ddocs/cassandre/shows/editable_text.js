@@ -3,8 +3,8 @@ function(o, req){
   // !code lib/mustache.js
   // !code l10n/l10n.js
   // !code lib/shared.js
-  var username = req.userCtx.name;
-  var data = {
+  var username = req.userCtx.name,
+      data = {
     authorized: !o.readers || o.readers.indexOf(username)>-1 || o.contributors && o.contributors.indexOf(username)>-1 || req.userCtx.roles.indexOf("_admin")>-1,
     i18n: localized(),
     highlights: "{}",
@@ -28,24 +28,24 @@ function(o, req){
       case 'date':
       case 'readers':
       case 'speeches':
-        data[key] = o[key];
-        break;
+        data[key] = o[key]
+        break
       case 'highlights':
-        data.highlights = toJSON(o[key]);
-        break;
+        data.highlights = toJSON(o[key])
+        break
       case 'groundings':
-        data.groundings = o.groundings ;
-        break;
+        data.groundings = o.groundings
+        break
       case 'draft':
       case 'editing':
       case '_revisions':
-        break;
+        break
       default:
         data.attributes.push({
           "key": key,
           value: o[key]
-        });
+        })
     }
   }
-  return Mustache.to_html(templates.editable_text, data, shared);
+  return Mustache.to_html(templates.editable_text, data, shared)
 }

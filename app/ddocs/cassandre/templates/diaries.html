@@ -94,10 +94,12 @@
       fullnames = [],
       id = '',
       logged = "{{logged}}",
-      to = ' {{i18n.i_to}} ';
+      to = ' {{i18n.i_to}} '
   $(document).ready(function() {
-    {{^logged}}nothing_to_show +='. {{i18n.i_sign-in-for-more}}';{{/logged}}
-    stickToHeader();
+    {{^logged}}
+    nothing_to_show +='. {{i18n.i_sign-in-for-more}}'
+    {{/logged}}
+    stickToHeader()
     {{#logged}}
     if ("{{user_fullname}}".length > 0) {
       var username_candidates = [
@@ -119,39 +121,39 @@
       type: "GET",
       dataType: "json"
     }).fail(function() {
-        $('#storing_fullname_dialog').modal('show');
+        $('#storing_fullname_dialog').modal('show')
     }).done(function(data) {
         if(data.fullname && data.fullname.length > 0) {
           if (!localStorage.getItem(logged)) localStorage.setItem(logged, data.fullname)
           setSignoutTooltip(logged)
         } else {
-          $('#storing_fullname_dialog').modal('show');
+          $('#storing_fullname_dialog').modal('show')
         }
         for (var o of data.order) {
           if (typeof o.collection !== 'undefined') {
             let collection = o.collection,
-                diary = o.diary;
+                diary = o.diary
             if (localStorage.getItem(diary)) {
               addToDom(diary, localStorage.getItem(diary))
             }
-            if (document.getElementById(collection) == null) $("#content").append("<h3 class='collection d-none'>"+collection+"</h3><div id='"+collection+"' class='card-columns'></div>");
+            if (document.getElementById(collection) == null) $("#content").append("<h3 class='collection d-none'>"+collection+"</h3><div id='"+collection+"' class='card-columns'></div>")
             if (document.getElementById(diary) !== null) {
-              $('#'+collection).append($('#'+diary).parent().parent());
-              $('#'+collection).prev().removeClass('d-none');
+              $('#'+collection).append($('#'+diary).parent().parent())
+              $('#'+collection).prev().removeClass('d-none')
             }
-            register[diary] = collection;
-            if (source.indexOf(collection) < 0) source.push(collection);
+            register[diary] = collection
+            if (source.indexOf(collection) < 0) source.push(collection)
           }
         }
       }
-    );
+    )
     $.ajax({
       url: '../diaries/'+logged,
       type: "GET",
       dataType: "json",
       success: function(data) {
         for (var d of data) {
-          let id = d.id;
+          let id = d.id
           if (!$('#'+id).length) {
             addToDom(id, d.name)
           }
@@ -159,8 +161,8 @@
         }
       }
     }).done(function(){
-      if (added.length > 1) $("#show").removeClass('d-none');
-      if (added.length > 3) $(".in-collection").removeClass('d-none');
+      if (added.length > 1) $("#show").removeClass('d-none')
+      if (added.length > 3) $(".in-collection").removeClass('d-none')
       let past = added.filter(x => !restricted.includes(x))
       for (var p of past) {
         localStorage.removeItem(p)
@@ -170,21 +172,21 @@
         localStorage.setItem(logged+'_diaries', JSON.stringify(added))
       $(".collection").each(function() {
         if($(this).next().children().length < 1 && $(this).text().length > 0) {
-          $(this).next().remove();
-          $(this).remove();
-          source.splice(source.indexOf($(this).attr('id')), 1);
+          $(this).next().remove()
+          $(this).remove()
+          source.splice(source.indexOf($(this).attr('id')), 1)
         }
-      });
-      $(".collection").removeClass('d-none');
+      })
+      $(".collection").removeClass('d-none')
     }).done(function(){
-      $("#loading").addClass('d-none').removeClass('d-flex');
-      if ($(".card").length == 0) $('h1').after(nothing_to_show);
-    });
+      $("#loading").addClass('d-none').removeClass('d-flex')
+      if ($(".card").length == 0) $('h1').after(nothing_to_show)
+    })
     {{/logged}}
     {{^logged}}
-    if ($(".card").length == 0) $('h1').after(nothing_to_show);
+    if ($(".card").length == 0) $('h1').after(nothing_to_show)
     {{/logged}}
-  });
+  })
 
   function addToDom(id, name) {
     let card = toCard(id, name)
@@ -208,7 +210,7 @@
               +'<svg class="bi" width="16" height="16" fill="currentColor"><use xlink:href="../style/bootstrap-icons.svg#lock"/></svg>'
               +'</div>'
               +'<p><span id="'+id+'" title="{{i18n.i_memos}}" class="badge badge-pill badge-secondary progress-bar-striped progress-bar-animated d-none">{{i18n.i_loading}}</span></p>'
-              +'</div>';
+              +'</div>'
     return card
   }
 

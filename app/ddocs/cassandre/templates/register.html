@@ -53,7 +53,7 @@
   {{>script}}
   <script>
   var email = fullname = sponsor = "",
-      relpath = '../';
+      relpath = '../'
   $(document).ready(function() {
     $.ajax({
       type: 'DELETE',
@@ -64,45 +64,45 @@
         url: '../config',
         dataType: 'json'
       }).done(function(data){
-        sponsor = data.sponsors.local;
-      });
-      stickToHeader();
-    });
-  });
+        sponsor = data.sponsors.local
+      })
+      stickToHeader()
+    })
+  })
 
   $('#uliege').on('click', function() {
-    $("#utt").addClass("d-none");
-    $("#uliege").addClass("d-none");
-    $("#newaccount").addClass("d-none");
-    $("#message").html($("#uliege").next().text());
-    $("#message").addClass("alert-info");
-    $('#message').append($('#diaries'));
-    $("#message").removeClass("d-none");
-    $("#diaries").addClass("alert-link");
-    $("#diaries").removeClass("d-none");
-  });
+    $("#utt").addClass("d-none")
+    $("#uliege").addClass("d-none")
+    $("#newaccount").addClass("d-none")
+    $("#message").html($("#uliege").next().text())
+    $("#message").addClass("alert-info")
+    $('#message').append($('#diaries'))
+    $("#message").removeClass("d-none")
+    $("#diaries").addClass("alert-link")
+    $("#diaries").removeClass("d-none")
+  })
 
   $('#newaccount').on('click', function() {
-    $("#uliege").addClass("d-none");
-    $("#utt").addClass("d-none");
-    $("#newaccount").addClass("d-none");
-    $("#message").removeClass("d-none");
-    $("form").removeClass("d-none");
-    $("message").removeClass("d-none");
-    $("#register").removeClass("d-none");
-  });
+    $("#uliege").addClass("d-none")
+    $("#utt").addClass("d-none")
+    $("#newaccount").addClass("d-none")
+    $("#message").removeClass("d-none")
+    $("form").removeClass("d-none")
+    $("message").removeClass("d-none")
+    $("#register").removeClass("d-none")
+  })
 
   $('#register').on('click', function() {
-    register();
-    return false;
-  });
+    register()
+    return false
+  })
 
   function register() {
     if($("#password").val() == $("#confirm").val()) {
       try {
-        $("#register").attr("disabled", "disabled");
-        email = $("#email").val().trim().toLowerCase();
-        fullname = $("#fullname").val().trim();
+        $("#register").attr("disabled", "disabled")
+        email = $("#email").val().trim().toLowerCase()
+        fullname = $("#fullname").val().trim()
         $.ajax({
           type: "PUT",
           url: "/_users/org.couchdb.user:" + email,
@@ -115,25 +115,25 @@
             roles: [],
             type: "user"
           })
-        }).done(login).fail(registerFail);
+        }).done(login).fail(registerFail)
       } catch(err) {
-        $("#register").removeAttr("disabled");
-        onError(err);
+        $("#register").removeAttr("disabled")
+        onError(err)
       }
     } else {
-      onError("{{i18n.i_unmatch-password}}");
+      onError("{{i18n.i_unmatch-password}}")
     }
   }
 
   function onError(message) {
-    $("#message").addClass("alert-danger");
-    $("#message").html(message);
+    $("#message").addClass("alert-danger")
+    $("#message").html(message)
   }
 
   function registerFail(message) {
-    $("#register").removeAttr("disabled");
+    $("#register").removeAttr("disabled")
     onError(message.status == 409 ? "\"" + email + "\"" + " {{i18n.i_existing-username}}"
-      : "Your request produced an error. " + message.responseText);
+      : "Your request produced an error. " + message.responseText)
   }
 
   function login() {
@@ -143,18 +143,18 @@
       contentType: 'application/x-www-form-urlencoded',
       data: "name=" + email + "&password=" + $("#password").val()
     }).done(function(){
-      createUserDoc(email, sponsor, successfulRegistration, console.log('ko'));
-    });
+      createUserDoc(email, sponsor, successfulRegistration, console.log('ko'))
+    })
   }
 
   var successfulRegistration = function (){
-    $("#message").html("{{i18n.i_successful-registration}} ");
-    $("#message").removeClass("alert-danger");
-    $("#diaries").removeClass("d-none");
-    $("#register").addClass("d-none");
-    $("#message").addClass("alert-success");
-    $('#message').append($('#diaries'));
-    $("form").slideUp();
+    $("#message").html("{{i18n.i_successful-registration}} ")
+    $("#message").removeClass("alert-danger")
+    $("#diaries").removeClass("d-none")
+    $("#register").addClass("d-none")
+    $("#message").addClass("alert-success")
+    $('#message').append($('#diaries'))
+    $("form").slideUp()
   }
 
   {{>layoutscript}}

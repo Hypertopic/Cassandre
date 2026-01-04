@@ -155,7 +155,7 @@
               <input class="form-check-input" type="radio" name="type-of-field-memo" id="all-articulations" value="all" required>
               <label class="form-check-label" for="all-articulations">{{i18n.i_all-articulations}}</label>
             </div><br/>
-            <select id="select_grounding" onChange="record('add_grounding', this.value);" hidden><option>{{i18n.i_select_grounding}}</option></select>
+            <select id="select_grounding" onChange="record('add_grounding', this.value)" hidden><option>{{i18n.i_select_grounding}}</option></select>
           </div>
           <div class="modal-footer">
             <button id="integrate_all-articulations" type="button" class="d-none btn btn-secondary">Ok</button>
@@ -168,7 +168,7 @@
         <div class="modal-content">
           <div class="modal-header">{{i18n.i_remove_grounding}}</div>
           <div class="modal-body">
-            <select onChange="record('remove_grounding', this.value);"><option>{{i18n.i_select_grounding}}</option></select>
+            <select onChange="record('remove_grounding', this.value)"><option>{{i18n.i_select_grounding}}</option></select>
           </div>
         </div>
       </div>
@@ -192,22 +192,22 @@
       diary_id = "{{diary}}",
       graph_name = "{{name}}",
       this_id = "{{_id}}",
-      this_type = "{{type}}";
+      this_type = "{{type}}"
   $(document).ready(function() {
     {{#logged}}
     setSignoutTooltip('{{logged}}')
     {{/logged}}
     {{>render}}
-    $('#groundings').collapse({toggle: false});
+    $('#groundings').collapse({toggle: false})
     {{#nodes}}
-      var label = wrap("{{label}}");
+      var label = wrap("{{label}}")
       switch ("{{shape}}") {
         case ('diamond'):
-          var shape = 'hexagon';
-          break;
+          var shape = 'hexagon'
+          break
         default:
-          var shape = 'box';
-          break;
+          var shape = 'box'
+          break
       }
       nodes.push({
         id: "{{id}}",
@@ -222,7 +222,7 @@
           from: "{{from}}",
           to: "{{to}}",
           color: "{{color}}"
-        };
+        }
         switch("{{first}}") {
           case "{{from}}":
             o.arrows = 'to'
@@ -234,7 +234,7 @@
         edges.push(o)
       {{/dashes}}
       {{#dashes}}
-        var label = wrap("{{label}}");
+        var label = wrap("{{label}}")
         edges.push({
           from: "{{from}}",
           to: "{{to}}",
@@ -242,7 +242,7 @@
           label: label,
           font: {color: "{{color}}"},
           dashes: true
-        });
+        })
       {{/dashes}}
     {{/edges}}
     {{#editable}}
@@ -260,7 +260,7 @@
     if ($('#groundings li').length < 2) inform('info', "{{i18n.i_content.graph}}".replace('@show', "<strong>{{i18n.i_show_groundings}}</strong>").replace('@add', "<strong>{{i18n.i_add_groundings}}</strong>"))
     {{/editable}}
     poller('memo', '{{update_seq}}')
-  });
+  })
 
   {{>layoutscript}}
   {{>logscript}}

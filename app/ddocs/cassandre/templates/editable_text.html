@@ -37,15 +37,15 @@
       success: function(data) {
         if (!data.body) {
           var body = data.speeches.map(function(a) {
-            var turn = a.text;
-            if (a.actor) turn = a.actor.trim()+': '+turn;
-            return turn;
-          });
-          data.body = body.join('\n \n');
-          data.diary = data.corpus;
-          delete data.corpus;
-          delete data.speeches;
-          data.type = "interview";
+            var turn = a.text
+            if (a.actor) turn = a.actor.trim()+': '+turn
+            return turn
+          })
+          data.body = body.join('\n \n')
+          data.diary = data.corpus
+          delete data.corpus
+          delete data.speeches
+          data.type = "interview"
         }
         $.ajax({
           type: "PUT",
@@ -54,12 +54,12 @@
           data: JSON.stringify(data),
         })
         .done(function() {
-          self.location = '../editable_memo/{{_id}}';
-        });
+          self.location = '../editable_memo/{{_id}}'
+        })
       }
-    });
+    })
     {{/authorized}}
-  });
+  })
   </script>
   </body>
 </html>

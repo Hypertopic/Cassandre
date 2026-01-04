@@ -70,9 +70,9 @@
   <script src="../script/users.js"></script>
   <script>
   var fullnames = source = [],
-      id = '';
+      id = ''
   $(document).ready(function() {
-    stickToHeader();
+    stickToHeader()
     {{#logged}}
     $.ajax({
       url: "../{{logged}}",
@@ -85,44 +85,44 @@
         for (var o in data.order) {
           if (typeof data.order[o].cohort !== 'undefined') {
             let cohort = data.order[o].cohort,
-                users = data.order[o].users;
-            if (document.getElementById(cohort) == null) $("#content").append("<h3 class='collection d-none'>"+cohort+"</h3><div id='"+cohort+"' class='card-columns mb-3 pb-3'><ul></ul></div>");
+                users = data.order[o].users
+            if (document.getElementById(cohort) == null) $("#content").append("<h3 class='collection d-none'>"+cohort+"</h3><div id='"+cohort+"' class='card-columns mb-3 pb-3'><ul></ul></div>")
             for (var u in users) {
               if (document.getElementById(users[u]) !== null) {
                 show_user_in_cohort(users[u], cohort)
-                $('#'+cohort).prev().removeClass('d-none');
+                $('#'+cohort).prev().removeClass('d-none')
               }
             }
-            if (source.indexOf(cohort) < 0) source.push(cohort);
+            if (source.indexOf(cohort) < 0) source.push(cohort)
           }
         }
       }
-    });
-    var n = $('#content ul>li').length;
-    $('h1').prepend(n);
-    if (n > 1) $('h1').append('s');
-    if (n == 0) $('h1').text('{{i18n.i_nothing-to-show}}');
+    })
+    var n = $('#content ul>li').length
+    $('h1').prepend(n)
+    if (n > 1) $('h1').append('s')
+    if (n == 0) $('h1').text('{{i18n.i_nothing-to-show}}')
     setSignoutTooltip('{{logged}}')
     {{/logged}}
     $('a').each(function(){
-     var name = $(this).text();
+     var name = $(this).text()
      if (fullnames[name]){
-        fullnames[name] += 1;
-        $(this).parent().addClass('alert-danger');
+        fullnames[name] += 1
+        $(this).parent().addClass('alert-danger')
       } else {
-        fullnames[name] = 1;
+        fullnames[name] = 1
       }
-    });
-  });
+    })
+  })
 
   $('#target_cohort').autocomplete({
     minLength: 1,
     appendTo: '#in_cohort',
     select: function (event, ui) {
-      move_user_in_cohort(ui.item.value);
+      move_user_in_cohort(ui.item.value)
     },
     source: source.sort()
-  });
+  })
 
   function move_user_in_cohort(cohort) {
     var origin_cohort = $('li[id="'+id+'"]').parent().parent().attr("id")
@@ -135,15 +135,15 @@
         'cohort': cohort
       })
     }).done(function(){
-      $('#in_cohort').modal('hide');
+      $('#in_cohort').modal('hide')
       if (document.getElementById(cohort) == null) {
-        $("#content").append("<h3 class='collection'>"+cohort+"</h3><div id='"+cohort+"' class='card-columns mb-3 pb-3'><ul></ul></div>");
-        source.push(cohort);
+        $("#content").append("<h3 class='collection'>"+cohort+"</h3><div id='"+cohort+"' class='card-columns mb-3 pb-3'><ul></ul></div>")
+        source.push(cohort)
       } else {
-        $('#'+cohort).prev('h3').removeClass('d-none');
+        $('#'+cohort).prev('h3').removeClass('d-none')
       }
       show_user_in_cohort(id, cohort)
-    });
+    })
   }
 
 

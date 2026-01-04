@@ -76,7 +76,7 @@
         <div class="modal-content">
           <div class="modal-header">{{i18n.i_add_groundings}}</div>
           <div class="modal-body">
-            <div id="type_filter" hidden>{{i18n.i_filter}} <select onChange="filter(this.value);">
+            <div id="type_filter" hidden>{{i18n.i_filter}} <select onChange="filter(this.value)">
               <option>{{i18n.i_type}}</option>
               <option value="theoretical" hidden>{{i18n.i_memo.theoretical}}</option>
               <option value="operational" hidden>{{i18n.i_memo.operational}}</option>
@@ -89,7 +89,7 @@
               <option value="graph" hidden>{{i18n.i_memo.graph}}</option>
               <option value="storyline" hidden>{{i18n.i_memo.storyline}}</option>
             </select></div>
-            <select id="select_grounding" onChange="record('add_grounding', this.value);" hidden><option>{{i18n.i_select_grounding}}</option></select>
+            <select id="select_grounding" onChange="record('add_grounding', this.value)" hidden><option>{{i18n.i_select_grounding}}</option></select>
           </div>
         </div>
       </div>
@@ -99,7 +99,7 @@
         <div class="modal-content">
           <div class="modal-header">{{i18n.i_remove_grounding}}</div>
           <div class="modal-body">
-            <select onChange="record('remove_grounding', this.value);"><option>{{i18n.i_select_grounding}}</option></select>
+            <select onChange="record('remove_grounding', this.value)"><option>{{i18n.i_select_grounding}}</option></select>
           </div>
         </div>
       </div>
@@ -242,7 +242,7 @@
   <script src="../script/d3-graphviz.min.js"></script>
   <script>
   {{^authorized}}
-  stickToHeader();
+  stickToHeader()
   {{/authorized}}
   let converter = new showdown.Converter({
       parseImgDimensions: 'true',
@@ -295,15 +295,15 @@
     create: "{{i18n.i_create.field}}".replace('&#39;',"'"),
     location: "{{i18n.i_content.location.field}}".replace('&#39;',"'"),
     date: "{{i18n.i_content.date.field}}".replace('&#39;',"'")
-  };
+  }
   help["transcript"] = {
     init: "{{{i18n.i_content.transcript}}}",
     next: "{{{i18n.i_next.transcript}}}",
     create: "{{i18n.i_create.transcript}}".replace('&#39;',"'"),
     location: "{{i18n.i_content.location.transcript}}".replace('&#39;',"'"),
     date: "{{i18n.i_content.date.transcript}}".replace('&#39;',"'")
-  };
-  help["interview"] = {init: "{{{i18n.i_content.transcript}}}", next: "{{{i18n.i_next.transcript}}}"};
+  }
+  help["interview"] = {init: "{{{i18n.i_content.transcript}}}", next: "{{{i18n.i_next.transcript}}}"}
   help["coding"] = {
     create: "{{{i18n.i_create.coding}}}",
     init: "{{{i18n.i_content.coding}}}",
@@ -329,45 +329,47 @@
   $(document).ready(function() {
     {{#authorized}}
     {{#statements}}
-    {{^logged}}nothing_to_show +='. {{i18n.i_sign-in-for-more}}';{{/logged}}
-    if ($('.post').text().trim().length == 0) $('.post').text(nothing_to_show);
+    {{^logged}}
+    nothing_to_show +='. {{i18n.i_sign-in-for-more}}'
+    {{/logged}}
+    if ($('.post').text().trim().length == 0) $('.post').text(nothing_to_show)
     {{/statements}}
     memoType(this_type, this_id)
     if (this_type === 'interview') prepareLexicalFeatures(diary_id, this_id)
-    const par = window.location.hash.substring(1);
-    if (par !== '') highlight(par);
+    const par = window.location.hash.substring(1)
+    if (par !== '') highlight(par)
     getSatellites('{{logged}}', toDoAfter)
     {{/authorized}}
     {{^authorized}}
     stickToHeader()
     setSignoutTooltip('{{logged}}')
     {{/authorized}}
-  });
+  })
   {{#authorized}}
   function toDoAfter(){
     {{>render}}
-    if ($('#groundings>li:not(.hidden)').length == 1) $("#groundings").find('legend').text("{{i18n.i_grounding}}");
-    if ($('#groundings>li:not(.hidden)').length < 1) $("#groundings").addClass('hidden');
+    if ($('#groundings>li:not(.hidden)').length == 1) $("#groundings").find('legend').text("{{i18n.i_grounding}}")
+    if ($('#groundings>li:not(.hidden)').length < 1) $("#groundings").addClass('hidden')
     {{#editable}}
     if ($('#leaves li').length < 1) {
-      var tip = '';
+      var tip = ''
       if($('.post').text().trim().length == 0) {
-        tip = "{{i18n.i_fill-this-memo}}. " + help[this_type]["init"];
+        tip = "{{i18n.i_fill-this-memo}}. " + help[this_type]["init"]
       } else {
-        tip = help[this_type]["next"] + " {{i18n.i_hereunder_button}}";
+        tip = help[this_type]["next"] + " {{i18n.i_hereunder_button}}"
       }
-      inform('info', tip);
+      inform('info', tip)
     }
     {{/editable}}
     {{#logged}}
     {{#editing}}
     {{#editable}}
-    if ('{{logged}}' == '{{editing.user}}') logged_is_editing = true;
+    if ('{{logged}}' == '{{editing.user}}') logged_is_editing = true
     if (logged_is_editing) {
       $('#edit')
         .removeAttr("disabled")
         .removeClass("disabled")
-        .addClass("bg-warning");
+        .addClass("bg-warning")
       $('#edit').attr("data-html", 'true')
       resume = ". {{i18n.i_next.resume}} <strong>{{i18n.i_resume}}</strong>"
     } else {
@@ -378,19 +380,19 @@
     var editing_tooltip = $('#editing').text().replace(/\s+/g, " ")
     if (logged_is_editing) editing_tooltip += '<h5>{{i18n.i_resume}}</h5>'
     $('#edit').attr("title", editing_tooltip)
-    if ("{{contributors}}".split(',').length > 1) $('#editing').append(". {{i18n.i_no-edit-by-others}}");
-    inform('warning', $('#editing').text().replace(/\s+/g, " ") + resume);
+    if ("{{contributors}}".split(',').length > 1) $('#editing').append(". {{i18n.i_no-edit-by-others}}")
+    inform('warning', $('#editing').text().replace(/\s+/g, " ") + resume)
     {{/editing}}
-    $('#edit').removeClass('d-none');
+    $('#edit').removeClass('d-none')
     responsiveUserMenu()
     {{/logged}}
     {{^statements}}
     {{^editing}}
-    $('#revert').removeClass('hidden');
+    $('#revert').removeClass('hidden')
     {{/editing}}
     $('#kwic').parent().parent().prepend($('#revert')).prepend($('.creator'))
-    $('#modify_rights').removeClass('hidden');
-    poller('memo', 'now');
+    $('#modify_rights').removeClass('hidden')
+    poller('memo', 'now')
     {{/statements}}
     {{#statements}}
     $('#groundings li').each(function() {
@@ -401,14 +403,14 @@
       }
     })
     setDiaryTooltip(diary_id)
-    poller('statements', '{{update_seq}}');
+    poller('statements', '{{update_seq}}')
     {{/statements}}
     stickToHeader()
     let codes = document.getElementsByTagName("code")
     for (let c of codes) {
       codeToGraph(c, 'memo')
     }
-  };
+  }
   {{/authorized}}
 
   {{>layoutscript}}

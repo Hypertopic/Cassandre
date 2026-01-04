@@ -135,7 +135,7 @@
         <div class="modal-content">
           <div class="modal-header">{{i18n.i_add_groundings}}</div>
           <div class="modal-body">
-            <select id="select_grounding" onChange="record('add_grounding', this.value);" hidden><option>{{i18n.i_select_grounding}}</option></select>
+            <select id="select_grounding" onChange="record('add_grounding', this.value)" hidden><option>{{i18n.i_select_grounding}}</option></select>
           </div>
         </div>
       </div>
@@ -145,7 +145,7 @@
         <div class="modal-content">
           <div class="modal-header">{{i18n.i_remove_grounding}}</div>
           <div class="modal-body">
-            <select onChange="record('remove_grounding', this.value);"><option>{{i18n.i_select_grounding}}</option></select>
+            <select onChange="record('remove_grounding', this.value)"><option>{{i18n.i_select_grounding}}</option></select>
           </div>
         </div>
       </div>
@@ -163,271 +163,271 @@
       selected = tip = '',
       diary_id = "{{diary}}",
       this_id = "{{_id}}",
-      this_type = "{{type}}";
+      this_type = "{{type}}"
   $(document).ready(function() {
     {{#logged}}
     setSignoutTooltip('{{logged}}')
     {{/logged}}
     {{>render}}
-    var cells = {{{cells}}};
-    var tbl_body = document.getElementById("table");
-    var tbl_header = tbl_body.tHead.children[0];
-    var created_headers = ["x"];
-    var hcell = tbl_header.insertCell(0);
+    var cells = {{{cells}}},
+        tbl_body = document.getElementById("table"),
+        tbl_header = tbl_body.tHead.children[0],
+        created_headers = ["x"],
+        hcell = tbl_header.insertCell(0)
 
     $.each(cells, function() {
-        var tbl_row = tbl_body.insertRow();
+        var tbl_row = tbl_body.insertRow()
         $.each(this, function(k , v) {
-            var cell = tbl_row.insertCell(0);
-            cell.appendChild(document.createTextNode(k.toString()));
-            cell.className = 'situations';
+            var cell = tbl_row.insertCell(0)
+            cell.appendChild(document.createTextNode(k.toString()))
+            cell.className = 'situations'
             $.each(this, function(k , v) {
               $.each(this, function(k , v) {
                 if (created_headers.indexOf(k) < 0) {
-                  created_headers.push(k);
-                  var hcell = tbl_header.insertCell(created_headers.indexOf(k));
-                  hcell.id = 'head'+k;
-                  hcell.innerHTML = $('#'+k).find('a').html();
-                  hcell.innerHTML += '<button type="button" title="{{i18n.i_create.diagram}}" class="create create-leave diagram">+';
-                  hcell.innerHTML += '<span title="{{i18n.i_loading}}" class="d-none spinner spinner-border spinner-border-sm" role="status"></span>';
-                  hcell.innerHTML += '</button>';
+                  created_headers.push(k)
+                  var hcell = tbl_header.insertCell(created_headers.indexOf(k))
+                  hcell.id = 'head'+k
+                  hcell.innerHTML = $('#'+k).find('a').html()
+                  hcell.innerHTML += '<button type="button" title="{{i18n.i_create.diagram}}" class="create create-leave diagram">+'
+                  hcell.innerHTML += '<span title="{{i18n.i_loading}}" class="d-none spinner spinner-border spinner-border-sm" role="status"></span>'
+                  hcell.innerHTML += '</button>'
                 }
                 while (tbl_row.cells.length < created_headers.indexOf(k)) {
-                  var cell = tbl_row.insertCell(tbl_row.cells.length);
-                  cell.appendChild(document.createTextNode(' '));
+                  var cell = tbl_row.insertCell(tbl_row.cells.length)
+                  cell.appendChild(document.createTextNode(' '))
                 }
                 if (!tbl_row.cells[created_headers.indexOf(k)]) {
-                  var cell = tbl_row.insertCell(created_headers.indexOf(k));
+                  var cell = tbl_row.insertCell(created_headers.indexOf(k))
                 } else {
-                  var cell = tbl_row.cells[created_headers.indexOf(k)];
+                  var cell = tbl_row.cells[created_headers.indexOf(k)]
                 }
                 switch(v) {
                   case true:
-                  cell.style.backgroundColor = 'green';
-                  cell.style.borderColor = 'green';
-                  break;
+                  cell.style.backgroundColor = 'green'
+                  cell.style.borderColor = 'green'
+                  break
                   case false:
-                  cell.style.backgroundColor = 'red';
-                  cell.style.borderColor = 'red';
-                  break;
+                  cell.style.backgroundColor = 'red'
+                  cell.style.borderColor = 'red'
+                  break
                 }
               })
             })
         })
     })
-    var table = document.getElementById("table");
+    var table = document.getElementById("table")
     for (var i = 1, row; row = table.rows[i]; i++) {
-      while (row.cells.length < created_headers.length) row.insertCell();
+      while (row.cells.length < created_headers.length) row.insertCell()
       for (var j = 1, cell; cell = row.cells[j]; j++) {
         if (!cell.id ){
-          cell.className = 'cells';
-          cell.id = table.rows[i].cells[0].innerHTML+'{}'+created_headers[j];
+          cell.className = 'cells'
+          cell.id = table.rows[i].cells[0].innerHTML+'{}'+created_headers[j]
         }
       }
     }
-    if (table.rows[table.rows.length-1].cells[0].innerHTML != '...') $('#add_row').removeClass('hidden');
-    var converter = new showdown.Converter({strikethrough: 'true'});
-    converter.setFlavor('github');
-    renderComments(converter);
-    renderPreviews(converter);
-    $('#modify_rights').removeClass('hidden');
+    if (table.rows[table.rows.length-1].cells[0].innerHTML != '...') $('#add_row').removeClass('hidden')
+    var converter = new showdown.Converter({strikethrough: 'true'})
+    converter.setFlavor('github')
+    renderComments(converter)
+    renderPreviews(converter)
+    $('#modify_rights').removeClass('hidden')
     {{#editable}}
-    if (document.getElementById('table').rows[0].cells.length < 4) tip += " {{i18n.i_content.table.column}} {{i18n.i_hereunder_button}}.";
-    if (document.getElementById('table').rows.length < 3) tip += " {{i18n.i_content.table.row}}";
-    if (tip.length > 0) inform('info', tip);
+    if (document.getElementById('table').rows[0].cells.length < 4) tip += " {{i18n.i_content.table.column}} {{i18n.i_hereunder_button}}."
+    if (document.getElementById('table').rows.length < 3) tip += " {{i18n.i_content.table.row}}"
+    if (tip.length > 0) inform('info', tip)
     {{/editable}}
-    poller('memo', '{{update_seq}}');
-  });
+    poller('memo', '{{update_seq}}')
+  })
 
   {{#editable}}
   $('table')
     .on('click', '.create', function() {
-      ground = [$(this).parent().attr("id").substr(4)];
+      ground = [$(this).parent().attr("id").substr(4)]
       create(
         $(this)[0].className.split(' ').pop(),
         $(this).parent().html().split('<')[0], '', 0
-      );
+      )
     })
     .on('click', '.situations', function() {
-      refresh = false;
-      $('#leave-name').addClass('hidden');
-      $('.create-leave').addClass('hidden');
-      $('.close').prop('disabled', true);
-      $('#footer > div > button').prop('disabled', true);
-      $('#kwic').parent().children().addClass('hidden');
-      $('a').removeAttr('href');
-      $('#diary').addClass('disabled');
-      $('#signout').prop('disabled', true);
-      $('.toast').toast('hide');
-      $('#modify_rights').remove();
-      $('#reload').prop('disabled', false);
-      $('#reload').removeClass('hidden');
-      $('#save_row').removeClass('hidden');
-      $('h1').unbind("click");   
-      $('h1').click(false);
-      $('#save_row').prop('disabled', false);
-      selected = this.innerHTML;
+      refresh = false
+      $('#leave-name').addClass('hidden')
+      $('.create-leave').addClass('hidden')
+      $('.close').prop('disabled', true)
+      $('#footer > div > button').prop('disabled', true)
+      $('#kwic').parent().children().addClass('hidden')
+      $('a').removeAttr('href')
+      $('#diary').addClass('disabled')
+      $('#signout').prop('disabled', true)
+      $('.toast').toast('hide')
+      $('#modify_rights').remove()
+      $('#reload').prop('disabled', false)
+      $('#reload').removeClass('hidden')
+      $('#save_row').removeClass('hidden')
+      $('h1').unbind("click")
+      $('h1').click(false)
+      $('#save_row').prop('disabled', false)
+      selected = this.innerHTML
       var inp = $(this).html($('<input>', {
         id: this.id,
         type: "text",
         placeHolder: "{{i18n.i_situation}}",
         value: this.innerHTML,
         name: this.innerHTML
-      }));
-      $('.situations').click(false);
-      $('.cells').click(false);
+      }))
+      $('.situations').click(false)
+      $('.cells').click(false)
     })
     .on('keypress', '.situations input', function(key) {
       if (key.which == 13) {
         var n = this.parentNode.parentNode.rowIndex-1,
             former = this.name,
-            future = this.value;
-        if (former != future  && this.value.trim().length > 0) record ('situation', this);
+            future = this.value
+        if (former != future  && this.value.trim().length > 0) record ('situation', this)
       }
     })
     .on('click', '.cells', function() {
-      var sel = document.getElementById('color');
-      sel.innerHTML = '';
-      sel.className = this.style.backgroundColor;
-      this.appendChild(sel);
+      var sel = document.getElementById('color')
+      sel.innerHTML = ''
+      sel.className = this.style.backgroundColor
+      this.appendChild(sel)
       var selected_cell = this.id +'{}',
           selected_color = this.style.backgroundColor,
           colors = [
         {'color':'green', 'value': true, 'text': "{{i18n.i_true}}" },
         {'color':'red', 'value': false, 'text': "{{i18n.i_false}}" },
         {'color':'', 'value': '...', 'text': "{{i18n.i_undef}}" }
-      ];
+      ]
       for (c of colors) {
-        var selected = false;
-        if (selected_color == c.color) selected = true ;
+        var selected = false
+        if (selected_color == c.color) selected = true
         $(this).find('select').append(
           $('<option>', { value: selected_cell+c.value, text: c.text, class:c.color, selected: selected })
-        );
+        )
       }
-  });
+  })
   {{/editable}}
 
   $('#color').on('change', function() {
-    record('cell', this.value);
+    record('cell', this.value)
   })
 
   $('#add_row').on('click', function() {
-    var table = document.getElementById("table");
-    record('add-row', table.rows[table.rows.length-1].cells[0].innerHTML);
-  });
+    var table = document.getElementById("table")
+    record('add-row', table.rows[table.rows.length-1].cells[0].innerHTML)
+  })
 
   $('#save_row').on('click', function() {
-    var obj = {};
-    obj.name = selected;
-    obj.value = $("td.situations input").val();
-    obj.parentNode = {};
-    obj.parentNode.parentNode = {};
-    obj.parentNode.parentNode.rowIndex = $("td.situations input").parent().parent().parent().children().index($("td.situations input").parent().parent());
-    if (obj.value.length > 0) record ('situation', obj);
-  });
+    var obj = {}
+    obj.name = selected
+    obj.value = $("td.situations input").val()
+    obj.parentNode = {}
+    obj.parentNode.parentNode = {}
+    obj.parentNode.parentNode.rowIndex = $("td.situations input").parent().parent().parent().children().index($("td.situations input").parent().parent())
+    if (obj.value.length > 0) record ('situation', obj)
+  })
   
   $('#add').on('click', function() {
-    var classlist = $(this)[0].classList;
-    create(classlist[classlist.length - 1], $('#leave-name').val().trim(), '', 0);
-  });
+    var classlist = $(this)[0].classList
+    create(classlist[classlist.length - 1], $('#leave-name').val().trim(), '', 0)
+  })
 
   function record(type, value) {
-    $('#'+type+' .modal-body').append($('#loading').removeClass('hidden'));
+    $('#'+type+' .modal-body').append($('#loading').removeClass('hidden'))
     $.ajax({
       url: "../{{_id}}",
       type: "GET",
       dataType: "json",
       success: function(data) {
-        var condition = true;
-        var keep_trace = true;
+        var condition = true
+        var keep_trace = true
         for (var i in data.groundings) {
-          if (!document.getElementById(data.groundings[i])) data.groundings.splice(i, 1);
+          if (!document.getElementById(data.groundings[i])) data.groundings.splice(i, 1)
         }
         switch(type) {
           case 'add_grounding':
-            var done = true;
-            if (data.groundings.indexOf(value) == -1) data.groundings.push(value);
-            var obj = {};
-            obj[value] = '...';
+            var done = true
+            if (data.groundings.indexOf(value) == -1) data.groundings.push(value)
+            var obj = {}
+            obj[value] = '...'
             $.each(data.cells[0], function(k , v) {
               $.each(v, function(k , v) {
                 $.each(v, function(k , v) {
-                  if (k == value) done = false;
-                });
-              });
-              if (done) v.push(obj);
-            });
-            $("#dialog").dialog('close');
-            break;
+                  if (k == value) done = false
+                })
+              })
+              if (done) v.push(obj)
+            })
+            $("#dialog").dialog('close')
+            break
           case 'cell':
-            var coord = value.split('{}');
-            var adding = false;
+            var coord = value.split('{}')
+            var adding = false
             var obj = {}
             switch (coord[2]){
               case 'true':
-              obj[coord[1]] = true;
-              break;
+              obj[coord[1]] = true
+              break
               case 'false':
-              obj[coord[1]] = false;
-              break;
+              obj[coord[1]] = false
+              break
               default:
-              obj[coord[1]] = '...';
-              break;
+              obj[coord[1]] = '...'
+              break
             }
-            var n = 0;
-            var row = coord[0];
+            var n = 0
+            var row = coord[0]
             $.each(data.cells, function(k , v) {
               $.each(v, function(k , v) {
                 if (k == coord[0]) {
                   $.each(v, function(k1 , v1) {
                     $.each(v1, function(k2 , v2) {
                       if (k2 == coord[1]) {
-                        adding = n;
+                        adding = n
                       }
-                      n++;
-                    });
-                  });
+                      n++
+                    })
+                  })
                   if (adding === false) {
-                    v.push(obj);
+                    v.push(obj)
                   } else {
-                    v[adding] = obj;
+                    v[adding] = obj
                   }
                 }
-              });
-            });
-            break;
+              })
+            })
+            break
           case 'add-row':
-            data.cells.push({'...': []});
-            break;
+            data.cells.push({'...': []})
+            break
           case 'remove_grounding':
             $.each(data.cells, function(k , row) {
               $.each(row, function(k , cells) {
-                var action = false;
+                var action = false
                 $.each(cells, function(k , cell) {
-                  if (value in cell) action = k;
-                });
-                if (action !== false) cells.splice(action, 1);
-              });
-            });
-            var i = data.groundings.indexOf(value);
-            if (i > -1) data.groundings.splice(i, 1);
-            keep_trace = false;
-            break;
+                  if (value in cell) action = k
+                })
+                if (action !== false) cells.splice(action, 1)
+              })
+            })
+            var i = data.groundings.indexOf(value)
+            if (i > -1) data.groundings.splice(i, 1)
+            keep_trace = false
+            break
           case 'situation':
-            var n = value.parentNode.parentNode.rowIndex-1;
-            var former = value.name;
-            var future = value.value;
+            var n = value.parentNode.parentNode.rowIndex-1,
+                former = value.name,
+                future = value.value
             $.each(data.cells[n], function(k , v) {
-              var obj = {};
-              obj[future] = v;
-              if (k == former) data.cells.splice(n, 1, obj); // else reload
-            });
-            break;
+              var obj = {}
+              obj[future] = v
+              if (k == former) data.cells.splice(n, 1, obj) // else reload
+            })
+            break
         }
         if (keep_trace) data.history.push({
           "user": user,
           "date": new Date().toJSON()
-        });
+        })
         if (condition) $.ajax({
           type: "PUT",
           url: "../{{_id}}",
@@ -435,10 +435,10 @@
           data: JSON.stringify(data)
         }).fail(error_alert)
         .done(function (){
-          refresh = true;
+          refresh = true
         }).done(reload)
       }
-    });
+    })
   }
 
   {{>layoutscript}}

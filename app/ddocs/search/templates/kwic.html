@@ -73,7 +73,7 @@
   <script src='../../script/log.js'></script>
   <script>
   const diary_id = '{{diary}}',
-        relpath = '../../';
+        relpath = '../../'
   $(document).ready(function() {
     $.ajax({
       url: "../../{{diary}}",
@@ -81,33 +81,33 @@
       dataType: "json",
     }).done(function(d) {
       updateTooltip('diary', d.diary_name)
-    });
-    stickToHeader();
+    })
+    stickToHeader()
     if ($(".interview").length > 0 && $(".occurrence").length > $(".interview").length)
-      $("#filter").parent('.dropdown').removeClass('hidden');
-  });
+      $("#filter").parent('.dropdown').removeClass('hidden')
+  })
 
   $('#diary').on('click', function(){
-    self.location = '../../diary/{{diary}}';
-  });
+    self.location = '../../diary/{{diary}}'
+  })
 
   function getUUID() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-      var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
-      return v.toString(16);
-    });
+      var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8)
+      return v.toString(16)
+    })
   }
 
   $('#new_pattern').on('click',function(){
-    var text_id = $('.occurrence').data('text');
-    $("#loading").removeClass("hidden");
+    var text_id = $('.occurrence').data('text')
+    $("#loading").removeClass("hidden")
     $.ajax({
       url: "../../" + text_id,
       type: "GET",
       dataType: "json",
       success: function(text) {
         if (!text.highlights) {
-          text.highlights = {};
+          text.highlights = {}
         }
         text.highlights[getUUID()] = {
           text: "{{pattern}}"
@@ -121,21 +121,21 @@
           self.location = '../../kwic/{{diary}}'
         }).fail(error_alert)
       }
-    });
-  });
+    })
+  })
 
   $('#show-transcript').on('click', function() {
-    $(".occurrence").addClass('d-none');
-    $(".transcript").parent().removeClass('d-none');
-    $(".interview").parent().removeClass('d-none');
-    $("#show-all").removeClass('disabled');
-    $("#show-transcript").addClass('disabled');
-  });
+    $(".occurrence").addClass('d-none')
+    $(".transcript").parent().removeClass('d-none')
+    $(".interview").parent().removeClass('d-none')
+    $("#show-all").removeClass('disabled')
+    $("#show-transcript").addClass('disabled')
+  })
   $('#show-all').on('click', function() {
-    $(".occurrence").removeClass('d-none');
-    $("#show-all").addClass('disabled');
-    $("#show-transcript").removeClass('disabled');
-  });
+    $(".occurrence").removeClass('d-none')
+    $("#show-all").addClass('disabled')
+    $("#show-transcript").removeClass('disabled')
+  })
 
   {{>layoutscript}}
   </script>

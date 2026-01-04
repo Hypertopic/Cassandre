@@ -3,32 +3,32 @@ function(head, req) {
   // !code lib/mustache.js
   // !code l10n/l10n.js
   // !code lib/shared.js
-  start({"headers":{"Content-Type":"text/html;charset=utf-8"}});
-  var diaries = [[[]]];
+  start({"headers":{"Content-Type":"text/html;charset=utf-8"}})
+  var diaries = [[[]]]
   var data = {
     i18n: localized(),
     locale: req.headers["Accept-Language"].split(',')[0].substring(0,2),
     logged: req.userCtx.name,
     diaries: [],
     peer: req.peer
-  };
+  }
   while (row = getRow()) {
-    var index = row.key[1];
+    var index = row.key[1]
     if (req.query.startkey[0] == req.userCtx.name || req.query.startkey[0] == null) {
       if (data.diaries.map(function(a){return a.id}).indexOf(index) < 0) {
         if (row.doc && row.doc.diary_name && index != null) data.diaries.push({
           'id': index,
           'name': row.doc.diary_name
-        });
+        })
       }
     }
   }
 
   provides("html", function() {
-    return Mustache.to_html(templates.diaries, data, shared);
-  });
+    return Mustache.to_html(templates.diaries, data, shared)
+  })
   provides("json", function() {
-    send(toJSON(data.diaries));
-  });
+    send(toJSON(data.diaries))
+  })
 
 }

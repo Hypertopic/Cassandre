@@ -68,87 +68,87 @@
     {char: '"', base: /[\u201C-\u201F]/g},
     {char: "'", base: /[\u2018-\u2019]/g},
     {char: 'EUR', base: /\u20AC/g}
-  ];
+  ]
   let diary_id = '{{_id}}',
       fullnames = types = [],
-      logged = '{{logged}}';
-  types["field"] = "{{i18n.i_memo.field}}";
-  types["interview"] = "{{i18n.i_memo.transcript}}";
-  types["transcript"] = "{{i18n.i_memo.transcript}}";
-  types["coding"] = "{{i18n.i_memo.coding}}";
-  types["theoretical"] = "{{i18n.i_memo.theoretical}}";
-  types["statement"] = "{{i18n.i_name.statement}}";
-  types["table"] = "{{i18n.i_memo.table}}";
-  types["diagram"] = "{{i18n.i_memo.diagram}}";
-  types["graph"] = "{{i18n.i_memo.graph}}";
-  types["operational"] = "{{i18n.i_memo.operational}}";
-  types["storyline"] = "{{i18n.i_memo.storyline}}";
+      logged = '{{logged}}'
+  types["field"] = "{{i18n.i_memo.field}}"
+  types["interview"] = "{{i18n.i_memo.transcript}}"
+  types["transcript"] = "{{i18n.i_memo.transcript}}"
+  types["coding"] = "{{i18n.i_memo.coding}}"
+  types["theoretical"] = "{{i18n.i_memo.theoretical}}"
+  types["statement"] = "{{i18n.i_name.statement}}"
+  types["table"] = "{{i18n.i_memo.table}}"
+  types["diagram"] = "{{i18n.i_memo.diagram}}"
+  types["graph"] = "{{i18n.i_memo.graph}}"
+  types["operational"] = "{{i18n.i_memo.operational}}"
+  types["storyline"] = "{{i18n.i_memo.storyline}}"
   $(document).ready(function() {
     {{#list}}
-    momentRelative('#memos');
+    momentRelative('#memos')
     var converter = new showdown.Converter({
       tables: 'true',
       tasklists: 'true',
       strikethrough: 'true'
-    });
-    converter.setFlavor('github');
+    })
+    converter.setFlavor('github')
     $('.content').html(function(i, text) {
-      return converter.makeHtml(text.trim());
-    });
+      return converter.makeHtml(text.trim())
+    })
     setSignoutTooltip(logged)
     setDiaryTooltip(diary_id)
     let diary_name = getDiaryname(diary_id)
     $('#json').prop('href', $('#json').prop('href')+diary_name)
     $('#xml').prop('href', $('#xml').prop('href')+diary_name)
-    $('#pdf').removeClass('disabled');
+    $('#pdf').removeClass('disabled')
     $('.type').each(function() {
-      let i = $(this).attr('data');
-      $(this).text(types[i].replace('&#39;', "'"));
-    });
+      let i = $(this).attr('data')
+      $(this).text(types[i].replace('&#39;', "'"))
+    })
     $('.user').each(function() {
-      let user_fullname = user = $(this).attr('data');
-      if (fullnames[user] == null) getFullname(user);
+      let user_fullname = user = $(this).attr('data')
+      if (fullnames[user] == null) getFullname(user)
       user_fullname = fullnames[user]
-      $(this).text(user_fullname);
-    });
+      $(this).text(user_fullname)
+    })
     $('.grounding').each(function() {
       let id = $(this).attr('data'),
-          text = $('#'+id).text();
+          text = $('#'+id).text()
       if ($(this).text().length == 0) {
         if (text.length > 0) {
-          $(this).find('a').html(text);
+          $(this).find('a').html(text)
         } else {
-          $(this).find('a').html("{{i18n.i_nothing-to-show}}");
+          $(this).find('a').html("{{i18n.i_nothing-to-show}}")
         }
       }
-      if (document.getElementById(id) == null) $(this).find('a').prop('href', "../memo/"+id);
-    });
+      if (document.getElementById(id) == null) $(this).find('a').prop('href', "../memo/"+id)
+    })
     {{/list}}
-    stickToHeader();
-  });
+    stickToHeader()
+  })
 
   $('#header')
     .on('click', '#diary', function() {
-      self.location = '../diary/{{diary}}';
+      self.location = '../diary/{{diary}}'
     })
     .on('click', '#pdf', function() {
-      printPDF();
-    });
+      printPDF()
+    })
 
   function inform(type, msg){
-    $('.alert-primary').remove();
-    $('.alert-success').remove();
-    $('<div class="alert alert-'+type+'" role="alert">'+msg+'</div>').insertAfter($('.alert').last());
+    $('.alert-primary').remove()
+    $('.alert-success').remove()
+    $('<div class="alert alert-'+type+'" role="alert">'+msg+'</div>').insertAfter($('.alert').last())
   }
 
   function printPDF() {
     inform('primary', '{{i18n.i_export.in-progress}}<div class="spinner-border spinner-border-sm"></div>');
-    const { jsPDF } = window.jspdf;
-    var doc = new jsPDF('p', 'mm', [297, 210]);
-    var content = document.body;
+    const { jsPDF } = window.jspdf
+    var doc = new jsPDF('p', 'mm', [297, 210])
+    var content = document.body
     $("#memos").children().each(function () {
-      $(this).html(replaceUnicode($(this).html()));
-    });
+      $(this).html(replaceUnicode($(this).html()))
+    })
     const diary_name = $('#diary').text()
     doc.html(document.getElementById("memos"),{
       html2canvas: {
@@ -158,7 +158,7 @@
       },
       callback: function(){
         const pageCount = doc.internal.getNumberOfPages()
-        doc.setTextColor("black");
+        doc.setTextColor("black")
         doc.setFontSize(8)
         for (var i = 1; i <= pageCount; i++) {
           doc.setPage(i)
@@ -167,24 +167,23 @@
           })
           doc.text(diary_name, doc.internal.pageSize.width - 10, 10, null, 270)
         }
-        inform('success', "{{i18n.i_export.done}}");
-        doc.save();
+        inform('success', "{{i18n.i_export.done}}")
+        doc.save()
       },
       x: 0,
       y: 10
-    });
+    })
   }
 
   function replaceUnicode(str){
     ansi.forEach(function(letter){
-      str = str.replace(letter.base, letter.char);
-    });
-    return str;
-  };
+      str = str.replace(letter.base, letter.char)
+    })
+    return str
+  }
 
   {{>layoutscript}}
   {{>logscript}}
   </script>
   </body>
 </html>
-

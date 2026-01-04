@@ -8,45 +8,45 @@ function(head, req) {
     logged: req.userCtx.name,
     diary: req.query.startkey[0],
     memos: [],
-  };
+  }
   while (row = getRow()) {
     var preview = '',
         id = row.value.id,
         diary = row.key[0],
         type = row.value.type,
-        rev = row.value.rev;
+        rev = row.value.rev
     switch (row.key[3]) {
       case ('M'):
         var name = row.value.name.replace(/"/g, '&#34;').replace(/\s/g, ' '),
             creator = row.value.creator,
             date = row.value.date,
-            path = 'memo';
+            path = 'memo'
         switch (row.value.type) {
           case ('graph'):
           case ('table'):
           case ('diagram'):
-            path = row.value.type;
-          break;
+            path = row.value.type
+          break
         }
         if ([null, req.userCtx.name].indexOf(row.key[2]) > -1) {
-          if (row.value.preview) preview = row.value.preview.replace(/\n\n/g, '\n \n');
+          if (row.value.preview) preview = row.value.preview.replace(/\n\n/g, '\n \n')
           if (row.value.type == 'statement') {
-            type = 'storyline';
-            path = 'statements';
-            name = i18n["i_name"]["statement"];
-            diary = '.';
+            type = 'storyline'
+            path = 'statements'
+            name = i18n["i_name"]["statement"]
+            diary = '.'
           }
           let sortkey = replaceDiacritics(name).toLowerCase()
           switch(row.key[1]) {
             case'date':
-              sortkey = date; 
-            break;
+              sortkey = date
+            break
             case'update':
-              sortkey = row.value.update; 
-            break;
+              sortkey = row.value.update
+            break
             case'type':
-              sortkey = row.key[4];
-            break;
+              sortkey = row.key[4]
+            break
           }
           data.memos.push({
             preview: preview,
@@ -61,10 +61,10 @@ function(head, req) {
             path: path,
             sortkey: sortkey,
             type: type
-          });
+          })
         }
-      break;
+      break
     }
   }
-  send(toJSON(data.memos));
+  send(toJSON(data.memos))
 }

@@ -88,15 +88,17 @@
       pathes = [],
       end,
       start,
-      the_diary = '{{i18n.i_the-diary}}';
+      the_diary = '{{i18n.i_the-diary}}'
   $(document).ready(function() {
-    {{^logged}}nothing_to_show +='. {{i18n.i_sign-in-for-more}}';{{/logged}}
+    {{^logged}}
+    nothing_to_show +='. {{i18n.i_sign-in-for-more}}'
+    {{/logged}}
     {{#logged}}
     setSignoutTooltip(logged)
     {{/logged}}
-    showMore("Z");
-    stickToHeader();
-  });
+    showMore("Z")
+    stickToHeader()
+  })
 
   {{>layoutscript}}
   {{>logscript}}

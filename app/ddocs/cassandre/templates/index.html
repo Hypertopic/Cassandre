@@ -64,7 +64,7 @@
     </nav>
     {{>script}}
     <script>
-      if ("{{locale}}" === "fr") $('.fr').removeClass('hidden');
+      if ("{{locale}}" === "fr") $('.fr').removeClass('hidden')
       let count = {'diaries': 0, 'memos': 0, 'users': 0},
           filled_diaries = 0
       $.ajax({
@@ -78,7 +78,7 @@
         }
         count['filled'] = filled_diaries
         stats_prompt(count)
-      });
+      })
       $.ajax({
         url: "../memos_count/",
         type: "GET",
@@ -86,7 +86,7 @@
       }).done(function(m){
         count.memos = m.rows[0].value
         stats_prompt(count)
-      });
+      })
       $.ajax({
         url: "../users_count/",
         type: "GET",
@@ -94,7 +94,7 @@
       }).done(function(n){
         count.users = n.rows[0].value
         stats_prompt(count)
-      });
+      })
       $.ajax({
         url: "../config",
         type: "GET",
@@ -103,7 +103,7 @@
         let maintenance_announce = ''
         if (new Date().toISOString().substr(0,10) == c.maintenance.date.substr(0,10)) {
           let now = new Date().getTime(),
-              interruption = new Date(c.maintenance.date).getTime();
+              interruption = new Date(c.maintenance.date).getTime()
           if (now < interruption) {
             maintenance_announce = "{{i18n.i_maintenance-today_pre}}".replace('@duration', c.maintenance.duration)
           } else {
@@ -112,7 +112,7 @@
           maintenance_announce += new Intl.DateTimeFormat('{{locale}}', {hour: "numeric", minute: "numeric"}).format(new Date(c.maintenance.date))
           inform('danger', maintenance_announce)
         }
-      });
+      })
       function stats_prompt(count){
         if (Object.values(count).every((v) => v > 0)) {
           let stats = "{{i18n.i_on_this_server}}"

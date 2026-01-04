@@ -7,5 +7,5 @@ function(o, req) {
     return {
       body: Mustache.to_html(templates.register, {i18n: localized()}, shared)
     }
-  });
+  })
 }

@@ -37,7 +37,7 @@
   <script src="../script/viz.js"></script>
   <script src="../script/full.render.js"></script>
   <script>
-  const diary_id = '{{diary}}';
+  const diary_id = '{{diary}}'
   let from = '0',
       fullnames = [],
       list = [],
@@ -47,24 +47,24 @@
       main = document.getElementById("content"),
       container = document.getElementById('graph'),
       result,
-      results = [];
+      results = []
   $(document).ready(function() {
-    drawGraphViz();
+    drawGraphViz()
     {{#logged}}
     setSignoutTooltip(logged)
     setDiaryTooltip(diary_id)
     stickToHeader()
     {{/logged}}
-  });
+  })
 
   function destroyGraphViz() {
     var context = document.getElementById("content"),
-        svg = context.getElementsByTagName("svg");
-    if (svg.length > 0) main.removeChild(svg[0]);
+        svg = context.getElementsByTagName("svg")
+    if (svg.length > 0) main.removeChild(svg[0])
   }
 
   function drawGraphViz() {
-    destroyGraphViz();
+    destroyGraphViz()
     let viz = new Viz(),
         node = '',
         nodes = [],
@@ -78,12 +78,12 @@
         field = 'subgraph field {node [color=grey]; rank = same; 3 [style = invis]',
         coding = 'subgraph coding {node [color=yellow]; {rank = same; 4 [style = invis]',
         diagram = 'subgraph diagram { node [color=purple]; rank = same; 5 [style = invis]',
-        storyline = 'subgraph storyline { node [color=blue]; rank = same; 6 [style = invis]';
+        storyline = 'subgraph storyline { node [color=blue]; rank = same; 6 [style = invis]'
 
     {{#nodes}}
-    var date = "{{date}}".substring(0,10);
-    var unique = date+"{{type}}";
-    var first = nodes.map(function(n){ return n.unique }).indexOf(unique);
+    var date = "{{date}}".substring(0,10),
+        unique = date+"{{type}}",
+        first = nodes.map(function(n){ return n.unique }).indexOf(unique)
     if (first == -1) {
       nodes.push({
         id: "{{id}}",
@@ -93,18 +93,18 @@
         type: "{{type}}",
         unique: unique,
         ids: ["{{id}}"]
-      });
+      })
     } else {
-      var exist = nodes[first];
-      exist.ids.push("{{id}}");
-      exist.name += ", {{name}}";
-      nodes.splice(first, 1, exist);
+      var exist = nodes[first]
+      exist.ids.push("{{id}}")
+      exist.name += ", {{name}}"
+      nodes.splice(first, 1, exist)
       surrenders.push({
         original: "{{id}}",
         by: nodes[first].id
-      });
+      })
     }
-    if ("{{name}}".length > 0) named_nodes.push('node{{id}}');
+    if ("{{name}}".length > 0) named_nodes.push('node{{id}}')
     {{/nodes}}
     {{#edges}}
     if (named_nodes.indexOf('node{{from}}') > -1) {
@@ -112,78 +112,80 @@
         from: "{{from}}",
         to: "{{to}}",
         color: "{{color}}"
-      });
+      })
     }
     {{/edges}}
 
     nodes.forEach(function(e, i) {
-      var style = 'href="../'+e.path+'/'+e.id+'", label="'+hr_date(e.date)+': '+e.name+'"';
-      if (e.ids.length > 1) style = 'fillcolor="white", width=.2, penwidth=3, '+style;
-      node = 'node'+e.id+' ['+style+'];';
+      var style = 'href="../'+e.path+'/'+e.id+'", label="'+hr_date(e.date)+': '+e.name+'"'
+      if (e.ids.length > 1) style = 'fillcolor="white", width=.2, penwidth=3, '+style
+      node = 'node'+e.id+' ['+style+'];'
       switch(e.type) {
         case 'coding':
-          coding += node; 
-        break;
+          coding += node
+        break
         case 'theoretical':
-          theoretical += node; 
-        break;
+          theoretical += node
+        break
         case 'operational':
-          operational += node; 
-        break;
+          operational += node
+        break
         case 'field':
         case 'interview':
         case 'transcript':
-          field += node;
-        break;
+          field += node
+        break
         case 'table':
         case 'diagram':
         case 'graph':
-          diagram += node; 
-        break;
+          diagram += node
+        break
         case 'storyline':
-          storyline += node; 
-        break;
+          storyline += node
+        break
       }
-    });
+    })
 
-    graphviz += theoretical + '}}' + operational + '}'+ field + '}' + coding + '}}' + diagram + '}'+ storyline + '}';
-    graphviz += '1->2->3->4->5->6 [style = invis]';
+    graphviz += theoretical + '}}' + operational + '}'+ field + '}' + coding + '}}' + diagram + '}'+ storyline + '}'
+    graphviz += '1->2->3->4->5->6 [style = invis]'
 
     for (var [i, e] of Object.entries(edges)) {
-      var f = e;
-      var j = surrenders.map(x => x.original).indexOf(e.from);
+      var f = e
+      var j = surrenders.map(x => x.original).indexOf(e.from)
       if (j > -1) {
-        f.from = surrenders[j].by;
-        edges.splice(i, 1, f);
+        f.from = surrenders[j].by
+        edges.splice(i, 1, f)
       }
-      var j = surrenders.map(x => x.original).indexOf(e.to);
+      var j = surrenders.map(x => x.original).indexOf(e.to)
       if (j > -1) {
-        f.to = surrenders[j].by;
-        edges.splice(i, 1, f);
+        f.to = surrenders[j].by
+        edges.splice(i, 1, f)
       }
     }
     for (var [i, e] of Object.entries(edges)) {
       if (edges.map(x => x.from+x.to).indexOf(e.from+e.to) == i && e.from != e.to) {
-        graphviz += 'node'+e.from+' -> node'+e.to+' [color='+e.color+', constraint=false];';
+        graphviz += 'node'+e.from+' -> node'+e.to+' [color='+e.color+', constraint=false];'
       }
     }
-    graphviz += '}';
+    graphviz += '}'
     var options = {
       engine: 'dot',
       format: 'svg'
-    };
+    }
     if (nodes.length == 0) {
-      var nothing_to_show = '{{i18n.i_nothing-to-show}}';
-      {{^logged}}nothing_to_show +='. {{i18n.i_sign-in-for-more}}';{{/logged}}
-      $('#graph').prev().text(nothing_to_show);
+      var nothing_to_show = '{{i18n.i_nothing-to-show}}'
+      {{^logged}}
+      nothing_to_show +='. {{i18n.i_sign-in-for-more}}'
+      {{/logged}}
+      $('#graph').prev().text(nothing_to_show)
     } else viz.renderSVGElement(graphviz, options)
     .then(function(element) {
-      main.insertBefore(element, container);
+      main.insertBefore(element, container)
     })
     .catch(error => {
-      viz = new Viz();
-      console.error(error);
-    });
+      viz = new Viz()
+      console.error(error)
+    })
   }
 
   {{>layoutscript}}
@@ -191,4 +193,3 @@
   </script>
   </body>
 </html>
-

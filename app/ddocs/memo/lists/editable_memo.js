@@ -3,54 +3,54 @@ function(head, req){
   // !code lib/mustache.js
   // !code l10n/l10n.js
   // !code lib/shared.js
-  start({"headers":{"Content-Type":"text/html;charset=utf-8"}});
+  start({"headers":{"Content-Type":"text/html;charset=utf-8"}})
 
-  var fullnames = [];
+  var fullnames = []
   while (row = getRow()) {
     switch (row.key[1]) {
       case ('C'):
       case ('R'):
       case ('M'):
       case ('H'):
-        var id = row.value._id;
-        var fullname = id;
-        if (row.doc && row.doc.fullname) fullname = row.doc.fullname;
-        if (row.doc && !fullnames[id]) fullnames[id] = fullname;
-      break;
+        var id = row.value._id,
+            fullname = id
+        if (row.doc && row.doc.fullname) fullname = row.doc.fullname
+        if (row.doc && !fullnames[id]) fullnames[id] = fullname
+      break
       case ('D'):
-        if (row.doc) data.diary_name = row.doc.diary_name;
-      break;
+        if (row.doc) data.diary_name = row.doc.diary_name
+      break
       case ('L'):
-      break;
+      break
       case ('G'):
         if (row.doc)  {
           if (row.value.preview) {
-            preview = [];
+            preview = []
             for (var p of row.value.preview) {
-              preview.push(p.text);
+              preview.push(p.text)
             }
-            preview = preview.join('\n \n---\n');
+            preview = preview.join('\n \n---\n')
           } else if (row.doc.body) {
-            var preview = row.doc.body.substr(0, 200);
+            var preview = row.doc.body.substr(0, 200)
           } else {
             if (row.doc.speeches) {
-              var preview = row.doc.speeches[0].text.substr(0, 200) || null;
+              var preview = row.doc.speeches[0].text.substr(0, 200) || null
             } else {
-              var preview = null;
+              var preview = null
             }
           }
-          var ground_type = row.doc.type || 'transcript';
+          var ground_type = row.doc.type || 'transcript'
           data.groundings.push({
             id: row.value._id,
             type: ground_type,
             preview: preview,
             name: row.doc.name
-          });
+          })
         }
-      break;
+      break
       default:
-        var username = req.userCtx.name;
-        var data = {
+        var username = req.userCtx.name,
+            data = {
           i18n: localized(),
           _id: row.doc._id,
           _rev: row.doc._rev,
@@ -67,9 +67,9 @@ function(head, req){
           body: row.doc.body,
           groundings:[]
         }
-      break;
+      break
       }
-    if (fullnames[username]) data.logged_fullname = fullnames[username];
+    if (fullnames[username]) data.logged_fullname = fullnames[username]
   }
-  return Mustache.to_html(templates.editable_memo, data, shared);
+  return Mustache.to_html(templates.editable_memo, data, shared)
 }

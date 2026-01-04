@@ -81,11 +81,11 @@
     tables: 'true',
     tasklists: 'true',
     strikethrough: 'true'
-  });
+  })
   {{#fullnames}}
-  fullnames['{{user}}'] = '{{name}}'; 
+  fullnames['{{user}}'] = '{{name}}'
   {{/fullnames}}
-  converter.setFlavor('github');
+  converter.setFlavor('github')
   let this_id = "{{_id}}", this_type = "{{type}}", diary_id = "{{diary}}", last_content = ''
   $(document).ready(function() {
     $.ajax({
@@ -95,10 +95,10 @@
     }).done(function(all){
       revisions = all._revs_info
       for (var s of revisions) {
-        var t = s.rev.split('-')[0];
+        var t = s.rev.split('-')[0]
         if(s.status == 'available' && t != current)
-          $('#bodies').append($('<div>', { class: 'version d-none', id: 'v'+t })); 
-          $('#groundings').append($('<li>', { id: 'tab_'+t}));
+          $('#bodies').append($('<div>', { class: 'version d-none', id: 'v'+t }))
+          $('#groundings').append($('<li>', { id: 'tab_'+t}))
       }
       var doc = {
         name: "{{{name}}}",
@@ -112,12 +112,12 @@
           style: 'background-color: rgb('+current_color.join(',')+'); border-color: rgb('+current_color.join(',')+')',
           html: version_tab(doc)
         }))
-        .on('click', function(){showOnly($(this).prop('id').split('_')[1]); });
+        .on('click', function(){showOnly($(this).prop('id').split('_')[1]); })
       for (var r of revisions) {
         if(r.status == 'available') {
-          if (r.rev != "{{_rev}}") getPrevious(r.rev);
+          if (r.rev != "{{_rev}}") getPrevious(r.rev)
         } else {
-          $('#tab_'+r.rev.split('-')[0]).remove();
+          $('#tab_'+r.rev.split('-')[0]).remove()
         }
       }
       if ($('#groundings li').length == 1) {
@@ -131,6 +131,7 @@
     stickToHeader()
     $(document).ajaxStop(function () {
       mdownLayout()
+      $('.content a').attr('href', '#')
       $(this).unbind('ajaxStop')
     })
   })

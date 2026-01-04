@@ -8,11 +8,11 @@ function(o) {
     if (typeof g === 'string' || g instanceof String) {
       if ([o.diary, o._id].indexOf(g) < 0) {
         emit([o._id, 'G'], {'_id': g})
-        emit([g, 'L']);
+        emit([g, 'L'])
       }
     } else {
-      emit([o._id, 'G'], g);
-      emit([g._id, 'L']);
+      emit([o._id, 'G'], g)
+      emit([g._id, 'L'])
     }
   }
   if (o.commented)

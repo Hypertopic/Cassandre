@@ -198,13 +198,13 @@ function create(type, name, highlight, anchor) {
     $.ajax({
       url: '../memo_attribute/'+diary_id+'',
       type: 'GET',
-      dataType: 'json',
+      dataType: 'json'
     }).done(function(existing_memos) {
       if (type == 'diagram') {
         i = -1
       } else {
         for (let j in existing_memos.rows) {
-          if (existing_memos.rows[j].key[4] === name) {
+          if (existing_memos.rows[j].value.name === name) {
             i = j
           }
         }
@@ -214,8 +214,8 @@ function create(type, name, highlight, anchor) {
           $('.spinner').addClass('d-none')
           alert(memo_already_linked)
         } else {
-          leaf_type = existing_memos.rows[i].value.type,
-          leaf_id = existing_memos.rows[i].value.id
+          var leaf_type = existing_memos.rows[i].value.type,
+              leaf_id = existing_memos.rows[i].value.id
           if (['diagram','graph','table'].indexOf(leaf_type) > -1
            || typeof (existing_memos.rows[i].value.initial) !== 'undefined') {
             $('.linkLeaf').addClass('d-none')

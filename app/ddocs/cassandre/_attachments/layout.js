@@ -2,10 +2,17 @@ $('#avatar').on('click', function() {
   if (!fullnames[user]) getFullname(user)
   let n = fullnames[user],
       i = getInitials(n)
-  $('#avatar_dialog .btn:last div').html(i)
-  $('#avatar_dialog .modal-title').html(select_avatar)
-  $('#avatar').tooltip('dispose')
-  $('#avatar_dialog').modal('show')
+  if (!$("#dialogs").length) $("body").append('<div id="dialogs"></div>')
+  if ($("#avatar_dialog").length) {
+    $('#avatar_dialog').modal('show')
+  } else {
+    $("#dialogs").load("/script/avatar_dialog.html", function() {
+      $('#avatar_dialog .btn:last div').html(i)
+      $('#avatar_dialog .modal-title').html(select_avatar)
+      $('#avatar').tooltip('dispose')
+      $('#avatar_dialog').modal('show')
+    })
+  }
 })
 $('body').on('click', '#avatar_dialog button:not(.close)', function() {
   let avatar = $(this).attr('id')
@@ -619,8 +626,6 @@ function setSignoutTooltip(u) {
   $("#user-menu").find(".dropdown-menu")
     .addClass(bg_color)
   $('#user-menu-btn').attr('title', n).html(i)
-  $("body").append('<div id="dialogs"></div>')
-  $("#dialogs").load( "/script/avatar_dialog.html" )
   updateTooltip('signout', sign_out+'<br/>'+n)
 }
 function getDiaryname(id) {

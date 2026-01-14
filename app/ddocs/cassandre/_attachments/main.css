@@ -335,18 +335,18 @@ button.comment {
   color: white;
 }
 
-.editor-toolbar {
+#header .editor-toolbar {
   border: 0px !important;
   margin-top: auto !important;
   margin-bottom: auto !important;
 }
 
-.editor-toolbar:before,
+#header .editor-toolbar:before,
 .editor-toolbar:after {
   content: none !important;
 }
 
-.editor-toolbar > button {
+#header .editor-toolbar > button {
   border: white;
   color: white;
 }
@@ -357,8 +357,8 @@ button.comment {
 
 #header .btn:not([disabled]):hover, #footer .btn:enabled:hover,
 #double:hover, #sign-in:hover,
-.editor-toolbar > button.active, 
-.editor-toolbar > button:hover {
+#header .editor-toolbar > button.active, 
+#header .editor-toolbar > button:hover {
   background-color: white;
   color: black !important;
 }

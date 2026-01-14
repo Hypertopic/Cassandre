@@ -1,6 +1,6 @@
 function (doc, req) {
-  if (req.body.length > 0) {
-    doc.text = req.body
+  if (req.body.trim().length > 0) {
+    doc.text = req.body.trim()
   } else {
     doc._deleted = true
   }

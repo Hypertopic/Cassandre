@@ -1,3 +1,4 @@
+var easymde, comment_id = '', commented_text = ''
 $('#comment_create').click(function () {
   refresh = false
   $("#comment_create").tooltip('hide')
@@ -13,37 +14,34 @@ $('#comment_create').click(function () {
   $('#header button').prop('disabled', true).tooltip('dispose')
   $('#add-leaves').addClass('hidden')
   $('#toasts').remove()
-  $('#comments').append($('#comments').find('textarea'))
   let anchor = $('#content>h1').text().trim()
   if ($('#kwic').val()) anchor = $('#kwic').val()
-  $('#comments').find('textarea').val('> '+ anchor+"\n \n")
-  $('#comments').find('textarea').removeClass('hidden')
+  $('#comment_input').val('> '+ anchor+"\n \n")
+  show_comment_dialog('create', '#comment_input')
   $('.comment').off('click')
   $('.comment_check').prop('disabled', true)
   $('#commented').removeClass('hidden')
-  $('#reload').removeClass('hidden')
   $('html, body').scrollTop($(document).height())
-  document.querySelector("textarea").focus()
 })
 $('#commented').on('click', function() {
-  if ($('#comments').find('textarea').val().trim() == '') {
+  if (easymde.value().trim().length < 1) {
     alert(enter_comment)
   } else {
     comment()
   }
 })
-var comment_id
 $('.comment').click(function(event) {
   refresh = false
   var user = $(this).find('.user').text()
   comment_id = $(this).closest('.comment').attr('id')
   if (logged_fullname == user && !$(event.target).is('input')) {
     $(this).find('.comment_text').hide()
-    $('#comments').find('textarea').text($('#'+comment_id).find('.comment_edit').text())
-    $('#'+comment_id).append($('#comments').find('textarea'))
-    $('#comments').find('textarea').attr('id', 'input'+comment_id)
-    $('#comments').find('textarea').attr('name', 'input'+comment_id)
-    $('#input'+comment_id).removeClass('hidden')
+    $('#comment_input')
+      .text($('#'+comment_id).find('.comment_edit').text())
+    $('#comment_input')
+      .attr('id', 'input'+comment_id)
+      .attr('name', 'input'+comment_id)
+    show_comment_dialog('update', '#input'+comment_id)
     $('#commented').remove()
     $('#footer > div > button').addClass('hidden')
     $('#add-leaves').addClass('hidden')
@@ -69,8 +67,89 @@ $('.comment_check').click(function() {
   }).done(function(){refresh = true})
 })
 $('#comment_updated').on('click', function() {
+  if (easymde.value().trim().length < 1) {
+    alert(enter_comment)
+  } else {
+    update_comment(comment_id)
+  }
+})
+$('#delete_comment').on('click', function() {
+  commented_text = ''
+  easymde.value('')
   update_comment(comment_id)
 })
+$('body').on('click', '#edit_commented_text', function() {
+  easymde.value(commented_text+"\n \n"+easymde.value())
+  commented_text = ''
+  $('#anchor_text').text('')
+  $('#edit_commented_text').addClass('hidden')
+})
+$('body').on('shown.bs.modal', '#comment_dialog', function() {
+  let input_id = $(this).find('.modal-body').find('textarea').attr('id')
+  enabling_mde('#'+input_id)
+})
+$('body').on('click', '#comment_dialog .close', function() {
+  location.reload()
+})
+function show_comment_dialog(action, cid) {
+  $('head').append('<link rel="stylesheet" href="../style/easymde.min.css" />')
+  $('body').append('<script src="../script/easymde.min.js"></script>')
+  if (!$("#dialogs").length) $("body").append('<div id="dialogs"></div>')
+  if ($("#comment_dialog").length) {
+    $('#comment_dialog').modal('show')
+  } else {
+    var comment_rest
+    $(cid).attr('placeHolder', enter_comment)
+    $("#dialogs").load("/script/comment_dialog.html", function() {
+      $('#comment_dialog .modal-title').html(comment_)
+      $('#comment_dialog .modal-body').append($(cid))
+      var i = $(cid).val().search(/\n[^>]/g)
+      if (i > -1) {
+        commented_text = $(cid).val().substring(0, i)
+        comment_rest = $(cid).val().substring(i+1).trim()
+      } else {
+        if ($(cid).val().substring(0, 1) === '>') {
+          commented_text = $(cid).val()
+        } else {
+          comment_rest = $(cid).val()
+        }
+      }
+      $('#anchor_text').html(commented_text)
+      renderComments(converter)
+      $(cid).val(comment_rest)
+      if(comment_id.length) $('#delete_comment').removeClass('hidden').appendTo($('#comment_dialog .modal-footer'))
+      $('#reload').removeClass('hidden').appendTo($('#comment_dialog .modal-footer'))
+      if (action === 'create') $('#comment_dialog .modal-footer').append($('#commented'))
+      if (action === 'update') $('#comment_dialog .modal-footer').append($('#comment_updated'))
+      $('#comment_dialog').modal('show')
+    })
+  }
+}
+function enabling_mde(id) {
+  easymde = new EasyMDE({
+    element: $(id)[0],
+    toolbar: ["bold", "italic", "strikethrough", "|", "unordered-list", "horizontal-rule", "|", "link", "image", "|", "guide"],
+    placeholder: enter_comment,
+    spellChecker: false
+  }), french = {
+    bold: 'Gras (ctrl-b)',
+    italic: 'Italique (ctrl-i)',
+    strikethrough: "Barré",
+    'heading-3': "Sous-titre (ctrl-alt-3)",
+    'unordered-list': "Liste (ctrl-l)",
+    'horizontal-rule': "Insérer une ligne horizontale",
+    link: "Créer un lien (ctrl+k)",
+    image: "Insérer une image (ctrl-alt-i)",
+    guide: "Guide de mise en page (en anglais)"
+  }
+  if (locale === "fr") {
+    for (const [btn, title] of Object.entries(french)) {
+      $('.editor-toolbar .'+btn).prop('title', title)
+    }
+    $('.editor-toolbar .bold').html('<strong>G</strong>')
+    $('.editor-toolbar .heading-3').html('T')
+  }
+}
 function show_comment(id, user, date, text, checked) {
   $('#comments .template').clone(true).attr('id', id).appendTo("#comments")
   if (checked) {
@@ -90,17 +169,18 @@ function update_comment(id) {
     url: '../update_comment_content/'+id,
     type: 'PUT',
     contentType: 'application/json',
-    data: $('#'+id+'>textarea').val().trim()
+    data: commented_text+"\n \n"+easymde.value().trim()
   }).done(reload)
 }
 function comment() {
   refresh = true
+  var data_text = commented_text+"\n \n"+easymde.value().trim()
   var data = {
     commented: this_id,
     diary: diary_id,
     user: user,
     date: new Date().toJSON(),
-    text: $('#comments').find('textarea').val().trim()
+    text: data_text.trim()
   }
   $.ajax({
     type: 'POST',

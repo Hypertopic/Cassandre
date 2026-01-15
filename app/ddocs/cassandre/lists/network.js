@@ -30,15 +30,26 @@ function(head, req) {
       break
       case 'M':
         if ([null, req.userCtx.name].indexOf(row.key[2]) > -1 && memos.map(function(a){return a.id}).indexOf(row.value.id) < 0) {
-          var color = 'lightgrey'
+          var color = 'lightgrey', path = 'memo'
           switch(row.value.type) {
-            case 'diagram': case 'storyline': case 'table': color='invis' break
-            case 'coding': color='lightgrey' break
-            case 'theoretical': color='grey' break
+            case 'diagram':
+            case 'storyline':
+            case 'table':
+              color='invis'
+            break
+            case 'coding':
+              color='lightgrey'
+            break
+            case 'theoretical':
+              color='grey'
+            break
           }
           switch(row.value.type) {
-            case 'diagram': case 'table': case 'graph': var path = row.value.type break
-            default : var path = 'memo' break
+            case 'diagram':
+            case 'table':
+            case 'graph':
+              path = row.value.type
+            break
           }
           data.nodes.push({
             'id': row.value.id,

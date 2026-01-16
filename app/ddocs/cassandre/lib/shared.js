@@ -257,7 +257,7 @@ let shared = {
         <use xlink:href='../style/bootstrap-icons.svg#trash'/>\
       </svg>\
     </button>\
-    <button class='btn btn-secondary hidden' type='button' id='reload' data-toggle='tooltip' data-placement='top' title='{{i18n.i_cancel}}'>\
+    <button class='btn navbar-btn btn-sm hidden' type='button' id='reload' data-toggle='tooltip' data-placement='top' title='{{i18n.i_cancel}}'>\
       <svg class='bi' width='24' height='24' fill='currentColor'>\
         <use xlink:href='../style/bootstrap-icons.svg#x-lg'/>\
       </svg>\

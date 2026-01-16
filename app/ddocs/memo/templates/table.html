@@ -158,6 +158,7 @@
   <script src="../script/grounding.js"></script>
   <script>
   let candidates = [],
+      converter = new showdown.Converter({strikethrough: 'true'}),
       fullnames = [],
       userids = [],
       selected = tip = '',
@@ -226,7 +227,6 @@
       }
     }
     if (table.rows[table.rows.length-1].cells[0].innerHTML != '...') $('#add_row').removeClass('hidden')
-    var converter = new showdown.Converter({strikethrough: 'true'})
     converter.setFlavor('github')
     renderComments(converter)
     renderPreviews(converter)

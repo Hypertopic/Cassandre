@@ -179,9 +179,10 @@
   <script src="../script/full.render.js"></script>
   <script src="../script/grounding.js"></script>
   <script>
-  let connected_nodes = "{{connected_nodes}}".split(','),
-      articulations = [],
+  let articulations = [],
       candidates = [],
+      connected_nodes = "{{connected_nodes}}".split(','),
+      converter = new showdown.Converter({strikethrough: 'true'}),
       edges = [],
       exporting = {},
       fullnames = [],
@@ -252,7 +253,6 @@
     edges = edges.filter(o => o.to !== '')
     nodes = nodes.filter(o => o.id !== '')
     drawGraphViz()
-    var converter = new showdown.Converter({strikethrough: 'true'})
     renderComments(converter)
     renderPreviews(converter)
     $('#modify_rights').removeClass('hidden')

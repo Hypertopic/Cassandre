@@ -104,21 +104,25 @@ function show_comment_dialog(action, cid) {
       $('#comment_dialog .modal-title').html(comment_)
       $('#comment_dialog .modal-body').append($(cid))
       var i = $(cid).val().search(/\n[^>]/g)
-      if (i > -1) {
-        commented_text = $(cid).val().substring(0, i)
-        comment_rest = $(cid).val().substring(i+1).trim()
-      } else {
-        if ($(cid).val().substring(0, 1) === '>') {
-          commented_text = $(cid).val()
+      if ($(cid).val().substring(0, 1) === '>') {
+        if (i > -1) {
+          commented_text = $(cid).val().substring(0, i)
+          comment_rest = $(cid).val().substring(i+1).trim()
         } else {
-          comment_rest = $(cid).val()
+          commented_text = $(cid).val()
         }
+        $('#edit_commented_text').removeClass('hidden')
+      } else {
+        comment_rest = $(cid).val()
       }
       $('#anchor_text').html(commented_text)
       renderComments(converter)
       $(cid).val(comment_rest)
       if(comment_id.length) $('#delete_comment').removeClass('hidden').appendTo($('#comment_dialog .modal-footer'))
-      $('#reload').removeClass('hidden').appendTo($('#comment_dialog .modal-footer'))
+      $('#reload')
+        .removeClass('navbar-btn btn-sm hidden')
+        .addClass('btn-secondary')
+        .appendTo($('#comment_dialog .modal-footer'))
       if (action === 'create') $('#comment_dialog .modal-footer').append($('#commented'))
       if (action === 'update') $('#comment_dialog .modal-footer').append($('#comment_updated'))
       $('#comment_dialog').modal('show')

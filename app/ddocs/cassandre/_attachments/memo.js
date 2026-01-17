@@ -67,6 +67,19 @@ $('#revert').on('click', function() {
   self.location = '../revert/' + this_id
 })
 
+$('#source2clipboard').on('click', function() {
+  var source = ''
+  $.ajax({
+    url: '../'+this_id,
+    type: "GET",
+    dataType: "json"
+  }).done(function(o) {
+    source = o.body
+    navigator.clipboard.writeText(source.trim())
+    alert(source_copied_to_clipboard)
+  })
+})
+
 $('#content').on('mouseup', function() {
   if (window.getSelection().anchorNode !== null) {
     var posts = document.getElementsByClassName('post'),
@@ -202,96 +215,95 @@ function wordMetrics(metrics, word, type) {
 }
 
 function memoType(this_type, this_id) {
-    switch (this_type) {
-      case ('field'):
-        $("h1>img").attr("title", type["field"]["title"])
-        $("#name").attr("placeHolder", type["field"]["placeHolder"])
-        $('#add')
-          .addClass('coding')
-          .attr("title", help["coding"]["create"])
-        $("#leave-name").attr("placeHolder", type["coding"]["placeHolder"])
-        break
-      case ('transcript'):
-        $("h1>img").attr("title", type["transcript"]["title"])
-        $("#name").attr("placeHolder", type["transcript"]["placeHolder"])
-        $('#add')
-          .addClass('coding')
-          .attr("title", help["coding"]["create"])
-        $("#leave-name").attr("placeHolder", type["coding"]["placeHolder"])
-        $('.writing').removeClass('writing').addClass('words')
-        break
-      case ('interview'):
-        $("h1>img").attr("title", type["transcript"]["title"])
-        $("#name").attr("placeHolder", type["transcript"]["placeHolder"])
-        $('#add')
-           .addClass('coding')
-          .attr("title", help["coding"]["create"])
-        $("#leave-name").attr("placeHolder", type["coding"]["placeHolder"])
-        $('#lexical').removeClass('hidden')
-        $('.post').children('font').wrapAll('<p></p>')
-        break
-      case ('coding'):
-        $("h1>img").attr("title", type["coding"]["title"])
-        $("#name").attr("placeHolder", type["coding"]["placeHolder"])
-        $('#add')
-          .addClass('theoretical')
-          .attr("title", help["theoretical"]["create"])
-        $("#leave-name").attr("placeHolder", type["theoretical"]["placeHolder"])
-        if ($('#name').val().length > 0) {
-          $('#create')
-            .addClass('diagram')
-            .attr("title", help["diagram"]["create"])
-        }
-        $('#add').parent().append($('#create'))
-        $('#add').parent().append($('#create-table'))
-        break
-      case ('theoretical'):
-        $("h1>img").attr("title", type["theoretical"]["title"])
-        $("#name").attr("placeHolder", type["theoretical"]["placeHolder"])
-        $('#add')
-          .addClass('operational')
-          .attr("title", help["operational"]["create"])
-        $("#leave-name").attr("placeHolder", type["operational"]["placeHolder"])
-        break
-      case ('operational'):
-        $("h1>img").attr("title", type["operational"]["title"])
-        $("#name").attr("placeHolder", type["operational"]["placeHolder"])
+  switch (this_type) {
+    case ('field'):
+      $("h1>img").attr("title", type["field"]["title"])
+      $("#name").attr("placeHolder", type["field"]["placeHolder"])
+      $('#add')
+        .addClass('coding')
+        .attr("title", help["coding"]["create"])
+      $("#leave-name").attr("placeHolder", type["coding"]["placeHolder"])
+    break
+    case ('transcript'):
+      $("h1>img").attr("title", type["transcript"]["title"])
+      $("#name").attr("placeHolder", type["transcript"]["placeHolder"])
+      $('#add')
+        .addClass('coding')
+        .attr("title", help["coding"]["create"])
+      $("#leave-name").attr("placeHolder", type["coding"]["placeHolder"])
+      $('.writing').removeClass('writing').addClass('words')
+    break
+    case ('interview'):
+      $("h1>img").attr("title", type["transcript"]["title"])
+      $("#name").attr("placeHolder", type["transcript"]["placeHolder"])
+      $('#add')
+        .addClass('coding')
+        .attr("title", help["coding"]["create"])
+      $("#leave-name").attr("placeHolder", type["coding"]["placeHolder"])
+      $('#lexical').removeClass('hidden')
+      $('.post').children('font').wrapAll('<p></p>')
+    break
+    case ('coding'):
+      $("h1>img").attr("title", type["coding"]["title"])
+      $("#name").attr("placeHolder", type["coding"]["placeHolder"])
+      $('#add')
+        .addClass('theoretical')
+        .attr("title", help["theoretical"]["create"])
+      $("#leave-name").attr("placeHolder", type["theoretical"]["placeHolder"])
+      if ($('#name').val().length > 0) {
         $('#create')
-          .addClass('interview')
-          .attr("title", help["transcript"]["create"])
-        $("#leave-name")
-          .attr("placeHolder", type["field"]["placeHolder"])
-          .prop("disabled", true)
-        $('#add')
-          .addClass('field')
-          .attr("title", help["field"]["create"])
-          .parent().append($('#create'))
-        $('#create_tasklist').removeClass('hidden').insertAfter($('#edit'))
-        break
-      case ('diagram'):
-        self.location = '../diagram/'+this_id
-        break
-      case ('table'):
-        self.location = '../table/'+this_id
-        break
-      case ('graph'):
-        self.location = '../graph/'+this_id
-        break
-      case ('storyline'):
-        $("h1>img").attr("title", type["storyline"]["title"])
-        $("#name").attr("placeHolder", type["storyline"]["placeHolder"])
-        $('#add').addClass('storyline').attr("title", help["storyline"]["create"])
-        $("#leave-name").attr("placeHolder", type["storyline"]["placeHolder"])
-        break
-    }
-    $('.post').html(function(i, text) {
-      if (this_type == 'interview') {
-        return text.replace(/\n \n/g, '</font></p><p><font>')
-      } else {
-        return converter.makeHtml(text.replace(/&gt;/g, '>').trim())
+          .addClass('diagram')
+          .attr("title", help["diagram"]["create"])
       }
-    })
-
+      $('#add').parent().append($('#create'))
+      $('#add').parent().append($('#create-table'))
+    break
+    case ('theoretical'):
+      $("h1>img").attr("title", type["theoretical"]["title"])
+      $("#name").attr("placeHolder", type["theoretical"]["placeHolder"])
+      $('#add')
+        .addClass('operational')
+        .attr("title", help["operational"]["create"])
+      $("#leave-name").attr("placeHolder", type["operational"]["placeHolder"])
+    break
+    case ('operational'):
+      $("h1>img").attr("title", type["operational"]["title"])
+      $("#name").attr("placeHolder", type["operational"]["placeHolder"])
+      $('#create')
+        .addClass('interview')
+        .attr("title", help["transcript"]["create"])
+      $("#leave-name")
+        .attr("placeHolder", type["field"]["placeHolder"])
+        .prop("disabled", true)
+      $('#add')
+        .addClass('field')
+        .attr("title", help["field"]["create"])
+        .parent().append($('#create'))
+      $('#create_tasklist').removeClass('hidden').insertAfter($('#edit'))
+    break
+    case ('diagram'):
+      self.location = '../diagram/'+this_id
+    break
+    case ('table'):
+      self.location = '../table/'+this_id
+    break
+    case ('graph'):
+      self.location = '../graph/'+this_id
+    break
+    case ('storyline'):
+      $("h1>img").attr("title", type["storyline"]["title"])
+      $("#name").attr("placeHolder", type["storyline"]["placeHolder"])
+      $('#add').addClass('storyline').attr("title", help["storyline"]["create"])
+      $("#leave-name").attr("placeHolder", type["storyline"]["placeHolder"])
+    break
+  }
+  $('.post').html(function(i, text) {
+    if (this_type == 'interview') {
+      return text.replace(/\n \n/g, '</font></p><p><font>')
+    } else {
+      return converter.makeHtml(text.replace(/&gt;/g, '>').trim())
+    }
+  })
 }
 
 function prepareLexicalFeatures(diary_id, this_id) {

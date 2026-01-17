@@ -186,6 +186,11 @@
           <li class="nav-item d-none d-sm-inline"><a class="nav-link btn-sm disabled" id='repeated'>{{i18n.i_phrases}}</a></li>
         </div>
         {{/authorized}}
+        <button class="btn navbar-btn" type="button" id="source2clipboard" data-toggle="tooltip" data-placement="bottom" title="{{i18n.i_copy_source_to_clipboard}}">
+          <svg class="bi" width="24" height="24" fill="currentColor">
+            <use xlink:href="../style/bootstrap-icons.svg#clipboard"/>
+          </svg>
+        </button>
       </ul>
       {{>log}}
     </nav>

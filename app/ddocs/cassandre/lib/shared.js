@@ -318,6 +318,7 @@ let shared = {
         relpath = '../',\
         select_avatar ='{{i18n.i_select_avatar}}',\
         sign_out = '{{i18n.i_sign-out}}',\
+        source_copied_to_clipboard = '{{i18n.i_source_copied_to_clipboard}}',\
         updated_diary = '{{i18n.i_updated-diary}}',\
         wrong_password = '{{i18n.i_wrong-password}}'.replace('&#39;','\\'');\
   var avatars = [],\

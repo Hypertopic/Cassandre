@@ -440,7 +440,7 @@ var getSatellites = function(logged, toDoAfter){
     for (var c of data.comments) {
       show_comment(c.id, c.user, c.date, c.text, c.checked)
     }
-    setSignoutTooltip(logged)
+    if (logged) setSignoutTooltip(logged)
     if (data.diary_name) {
       $('#diary').attr('title', data.diary_name)
       $('title').prepend(data.diary_name)

@@ -320,11 +320,10 @@ let shared = {
         sign_out = '{{i18n.i_sign-out}}',\
         updated_diary = '{{i18n.i_updated-diary}}',\
         wrong_password = '{{i18n.i_wrong-password}}'.replace('&#39;','\\'');\
-  getFullname('{{logged}}');\
   var avatars = [],\
       refresh = true,\
       fullname = null,\
-      logged_fullname = fullnames['{{logged}}'],\
+      logged_fullname = getFullname('{{logged}}'),\
       nothing_to_show = '{{i18n.i_nothing-to-show}}';\
   var user = '{{peer}}';\
   {{^list}}\

@@ -1,6 +1,6 @@
 function (doc, req) {
   if (req.body.trim().length > 0) {
-    doc.text = req.body.trim()
+    doc.text = req.body.replace(/\n( )*\n>/g, "\n>").trim()
   } else {
     doc._deleted = true
   }

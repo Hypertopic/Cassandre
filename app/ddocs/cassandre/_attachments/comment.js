@@ -191,7 +191,7 @@ function comment() {
     diary: diary_id,
     user: user,
     date: new Date().toJSON(),
-    text: data_text.trim()
+    text: data_text.replace(/\n( )*\n>/g, "\n>").trim()
   }
   $.ajax({
     type: 'POST',

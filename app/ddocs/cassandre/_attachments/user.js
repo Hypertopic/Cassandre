@@ -1,26 +1,26 @@
 $(window).scroll(function(){
   if ($(window).scrollTop() == $(document).height() - $(window).height()){
-    showMore($("li").last().find("span").attr('id'));
+    showMore($("li").last().find("span").attr('id'))
   }
-});
+})
 $('#diaries').on('click', function() {
-  self.location = '../diary/';
-});
+  self.location = '../diary/'
+})
 $('#next').on('click', function() {
-  showMore($("li").last().find("span").attr('id'));
-});
+  showMore($("li").last().find("span").attr('id'))
+})
 $('#all-activity').on('click', function() {
-  cal.update(all);
-});
+  cal.update(all)
+})
 $('#only-created').on('click', function() {
-  cal.update(created);
-});
+  cal.update(created)
+})
 $('#only-commented').on('click', function() {
-  cal.update(commented);
-});
+  cal.update(commented)
+})
 $('#only-modified').on('click', function() {
-  cal.update(modified);
-});
+  cal.update(modified)
+})
 $('#search-comments .input-group-text').on('click', function() {
   searchComments()
 })
@@ -31,7 +31,8 @@ $('body').on('click', '.source2clipboard', function(e) {
   navigator.clipboard.writeText($(this).siblings('.md_source').text())
   alert(source_copied_to_clipboard)
 })
-const copy_to_clipboard_btn = '<button class="btn source2clipboard" type="button" data-toggle="tooltip" data-placement="top">'
+const copy_to_clipboard_btn = '<button class="btn source2clipboard" type="button" data-toggle="tooltip" data-placement="top"'
+        + 'title="'+copy_source_to_clipboard+'">' 
         + '<svg class="bi" width="24" height="24" fill="currentColor">'
         + '<use xlink:href="../style/bootstrap-icons.svg#clipboard"/>'
         + '</svg></button>'

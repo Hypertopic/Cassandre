@@ -27,6 +27,14 @@ $('#search-comments .input-group-text').on('click', function() {
 $('#search-comments .form-control').on('keypress', function(key) {
   if (key.which == 13) searchComments()
 })
+$('body').on('click', '.source2clipboard', function(e) {
+  navigator.clipboard.writeText($(this).siblings('.md_source').text())
+  alert(source_copied_to_clipboard)
+})
+const copy_to_clipboard_btn = '<button class="btn source2clipboard" type="button" data-toggle="tooltip" data-placement="top">'
+        + '<svg class="bi" width="24" height="24" fill="currentColor">'
+        + '<use xlink:href="../style/bootstrap-icons.svg#clipboard"/>'
+        + '</svg></button>'
 function searchComments() {
   let search_input = $('#search-comments .form-control').val(),
       request = {
@@ -53,7 +61,8 @@ function searchComments() {
     if (search_input.length > 0) {
       for (var c of data.docs.sort((a, b) => new Date(a.date) - new Date(b.date))) {
         $("#activities").prepend('<li class="commented"><span id="'+c.date+'" class="'+c.date+' moment">'
-        +'</span>&nbsp;– <a href="../memo/'+c.commented+'">'+c.text.replace(search_input, '__'+search_input+'__')+'</a></li>')
+        +'</span>&nbsp;– <a href="../memo/'+c.commented+'">'+c.text.replace(search_input, '__'+search_input+'__')+'</a>'
+        +'<span class="md_source" hidden>'+c.text+'</span>'+copy_to_clipboard_btn+'</li>')
       }
     }
     rendering('#activities')
@@ -63,7 +72,7 @@ function rendering(o) {
   momentRelative(o)
   $('.commented>a').html(function(i, text) {
     let md = converter.makeHtml(text.replace(/&gt;/g, '>').replace(/\[([^\]]*)\]\([^\)]*\)/, '$1').trim())
-    if (md.substring(0,3) == '<p>') md = md.replace(/<\/?p>/g, '');
+    if (md.substring(0,3) == '<p>') md = md.replace(/<\/?p>/g, '')
     return md;
   })
 }
@@ -83,7 +92,7 @@ function showMore(start) {
     rendering('#events')
   }).then(function(){
     if ($('#events li').length == 0) $('#events').text(nothing_to_show);
-  });
+  })
 }
 
 function drawChart(array) {
@@ -102,5 +111,5 @@ function drawChart(array) {
     end: end,
     itemName: ["contribution", "contributions"],
     domainLabelFormat: ""
-  });
+  })
 }

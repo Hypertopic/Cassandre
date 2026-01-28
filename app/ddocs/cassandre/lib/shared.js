@@ -232,12 +232,12 @@ let shared = {
       <textarea id='comment_input' rows='1' type='text' class='form-control hidden' autocomplete='off'></textarea>\
     </div>",
   commentsbtn:"\
-    <button class='btn navbar-btn btn-sm' id='comment_create' data-toggle='tooltip' data-placement='bottom' title='{{i18n.i_comment}}'>\
+    <button class='btn navbar-btn btn-sm' id='comment_create' data-toggle='tooltip' data-placement='top' title='{{i18n.i_comment}}'>\
       <svg class='bi' width='24' height='24' fill='currentColor'>\
         <use xlink:href='../style/bootstrap-icons.svg#chat-right-text'/>\
       </svg>\
     </button>\
-    <button class='btn btn-primary hidden' type='button' id='commented' data-toggle='tooltip' data-placement='bottom' title='{{i18n.i_save}}'>\
+    <button class='btn btn-primary hidden' type='button' id='commented' data-toggle='tooltip' data-placement='top' title='{{i18n.i_save}}'>\
       <svg class='bi' width='24' height='24' fill='currentColor'>\
         <use xlink:href='../style/bootstrap-icons.svg#check-lg'/>\
       </svg>\

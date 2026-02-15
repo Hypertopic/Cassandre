@@ -4,6 +4,10 @@ function(o) {
     emit([o._id, null, 'B'], {diary_name: o.diary_name})
   if (o.commented && o.text && !o.checked)
     emit([o.diary, null, 'C', o.date], {'id': o.commented, '_id': o.commented, 'name': o.text})
+  if (o.commented && o.comments)
+    for (var c of o.comments) {
+      if (!c.checked) emit([o.diary, null, 'C', c.date], {'id': o.commented, '_id': o.commented, 'name': c.text})
+    }
   var contributors = []
   if (typeof o.readers !== "undefined") contributors = o.readers
   if (typeof o.contributors !== "undefined") contributors = contributors.concat(o.contributors)

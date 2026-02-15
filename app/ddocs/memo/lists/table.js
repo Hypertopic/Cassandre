@@ -30,14 +30,16 @@ function(head, req) {
         var user = row.value._id
         if (row.doc && !fullnames[user]) fullnames[user] = row.doc.fullname
         if (row.doc) user = row.doc.fullname
-        data.comments.push({
+        var c = {
           user: user,
           date: row.value.date,
           text: row.value.text,
           checked: row.value.checked,
           id: row.value.id,
           rev: row.value.rev
-        })
+        }
+        if (row.value.legacy === 'true') c.legacy = 'legacy'
+        data.comments.push(c)
       break
       case ('H'):
         var user = row.value._id

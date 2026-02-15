@@ -214,13 +214,13 @@ let shared = {
       </div>\
     </div>",
   comments:"\
-    <div id='comments'>\
+    <div class='py-3 my-3' id='comments'>\
       {{#comments}}\
       <div class='comment {{#checked}}checked{{/checked}}' id='{{id}}'>\
         <span class='meta'><span class='user'>{{user}}</span> (<span class='{{date}} moment'></span>)</span>:\
         {{#logged}}<span class='meta checker d-none d-sm-inline'>{{#checked}}{{i18n.i_checked_by}} {{checked}}{{/checked}}</span><div class='checkbox'><input type='checkbox' class='form-check-input position-static comment_check' {{#checked}}checked{{/checked}}></div>{{/logged}}<br/>\
         <span class='comment_text'>{{text}}</span>\
-        <div class='comment_edit hidden'>{{text}}</div>\
+        <div class='comment_edit hidden {{#legacy}}{{legacy}}{{/legacy}}'>{{text}}</div>\
       </div>\
       {{/comments}}\
       <div class='template comment hidden'>\
@@ -243,6 +243,11 @@ let shared = {
       </svg>\
     </button>\
     <button class='btn btn-primary hidden' type='button' id='comment_updated' data-toggle='tooltip' data-placement='top' title='{{i18n.i_save}}'>\
+      <svg class='bi' width='24' height='24' fill='currentColor'>\
+        <use xlink:href='../style/bootstrap-icons.svg#check-lg'/>\
+      </svg>\
+    </button>\
+    <button class='btn btn-primary hidden' type='button' id='convert_legacy_comment' data-toggle='tooltip' data-placement='top' title='{{i18n.i_save}}'>\
       <svg class='bi' width='24' height='24' fill='currentColor'>\
         <use xlink:href='../style/bootstrap-icons.svg#check-lg'/>\
       </svg>\

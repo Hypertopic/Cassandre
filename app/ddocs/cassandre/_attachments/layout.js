@@ -438,7 +438,7 @@ var getSatellites = function(logged, toDoAfter){
     dataType: "json"
   }).done(function(data){
     for (var c of data.comments) {
-      show_comment(c.id, c.user, c.date, c.text, c.checked)
+      show_comment(c.id, c.user, c.date, c.text, c.checked, c.legacy)
     }
     if (logged) setSignoutTooltip(logged)
     if (data.diary_name) {

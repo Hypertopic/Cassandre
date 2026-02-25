@@ -86,6 +86,7 @@ $('.more').on('click', function() {
   showMore($('li').last().find('span').attr('id'))
 })
 
+var previous_action_id = ''
 function showMore(start) {
   $.ajax({
     url: '../activity/'+diary_id+'/'+start,
@@ -115,7 +116,10 @@ function showMore(start) {
           +'<span id="'+date+'" class="'+date+' moment"></span>, '
           +'<span class="'+user+'">'+user_fullname+'</span> '
           + action + '</li>'
+        action_id = a.date.substring(0, 10)+user+action
+        if (previous_action_id !== action_id) 
         $("#activities").append(li)
+        previous_action_id = action_id
       }
     }
   }).always(function(){

@@ -77,6 +77,7 @@ function rendering(o) {
     return md;
   })
 }
+var previous_action_id = ''
 function showMore(start) {
   if ($("#events").length > 0) $.ajax({
     url: '../user/'+user_id+'/'+start,
@@ -84,24 +85,26 @@ function showMore(start) {
     dataType: "json"
   }).done(function(data){
     for (var e of data) {
-      $("#events").append('<li class="'+e.action+'">'
+      var li = '<li class="'+e.action+'">'
         +'<span id="'+e.date+'" class="'+e.date+' moment"></span>&nbsp;– '
         +'<a href="../'+e.type+'/'+e.id+'">'+e.name+'</a>'
-        +'</li>');
+        +'</li>'
+      action_id = e.date.substring(0, 10)+e.action+e.id+e.name
+      if (previous_action_id !== action_id) $("#events").append(li)
+      previous_action_id = action_id
     }
   }).done(function(){
     rendering('#events')
   }).then(function(){
-    if ($('#events li').length == 0) $('#events').text(nothing_to_show);
+    if ($('#events li').length == 0) $('#events').text(nothing_to_show)
   })
 }
-
 function drawChart(array) {
   cal.init({
     domain: "week",
     subDomain: "day",
     subDomainDateFormat: function(date) {
-      return hr_date(date);
+      return hr_date(date)
     },
     subDomainTitleFormat: {
       filled: "{count} {name}, {date}"

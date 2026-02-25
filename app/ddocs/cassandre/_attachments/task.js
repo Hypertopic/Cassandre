@@ -125,3 +125,8 @@ function populate_and_render_tasklist() {
     }
   })
 }
+function selectingWhat(sel){
+  $("#what").val(sel)
+  $(".what").removeClass('d-none')
+  $(".what-suggestions").addClass('d-none')
+}

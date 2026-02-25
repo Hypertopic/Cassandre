@@ -26,13 +26,38 @@
           {{#authorized}}
           <h1>{{i18n.i_create_task}}</h1>
         <form>
-          <label for="who" class="col-sm-3 col-form-label pseudonym">{{i18n.i_task_assignee}}</label>
-          <select id="who"></select><br/>
-          <label for="what" class="col-sm-3 col-form-label">{{i18n.i_task_definition}}</label>
-          <input id="what" type="text" placeholder="{{i18n.i_task_definition}}" value="{{#task}}{{action}}{{/task}}"/><br/>
-          <label for="when" class="col-sm-3 col-form-label">{{i18n.i_task_date}}</label>
-          <input id="when" type="text" class="datepicker" placeholder="" value="{{#task}}{{date}}{{/task}}"/>
-          <input id="id" type="text" class="hidden" value="{{#task}}{{id}}{{/task}}"/>
+          <div class="form-group row">
+            <label for="who" class="col-sm-3 col-form-label pseudonym">{{i18n.i_task_assignee}}</label>
+            <div class="col-sm-9">
+              <select id="who" class="form-control"></select>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="what" class="what col-sm-3 col-form-label d-none">{{i18n.i_task_definition}}</label>
+            {{^task}}
+            <label for="what-suggestions" class="what-suggestions col-sm-3 col-form-label">{{i18n.i_task_definition}}</label>
+            {{/task}}
+            <div class="col-sm-9">
+              {{^task}}
+              <select id="what-suggestions" class="form-control what-suggestions" onchange="selectingWhat(this.value)">
+                <option disabled='disabled'>select</option>
+                <option value="{{i18n.i_task.article}}">{{i18n.i_task.article}}</option>
+                <option value="{{i18n.i_task.interview}}">{{i18n.i_task.interview}}</option>
+                <option value="{{i18n.i_task.observation}}">{{i18n.i_task.observation}}</option>
+                <option value="{{i18n.i_task.transcribe}}">{{i18n.i_task.transcribe}}</option>
+                <option value="">{{i18n.i_task.other}}</option>
+              </select>
+              {{/task}}
+              <input id="what" class="what form-control d-none" type="text" placeholder="{{i18n.i_task_definition}}" value="{{#task}}{{action}}{{/task}}"/>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="when" class="col-sm-3 col-form-label">{{i18n.i_task_date}}</label>
+            <div class="col-sm-9">
+              <input id="when" type="text" class="form-control datepicker" placeholder="" value="{{#task}}{{date}}{{/task}}"/>
+              <input id="id" type="text" class="hidden" value="{{#task}}{{id}}{{/task}}"/>
+            </div>
+          </div>
         </form>
         <p class="py-3 my-3"></p>
         <p class="py-3 my-3"></p>
@@ -67,6 +92,9 @@
     responsiveUserMenu()
     {{/logged}}
     setDiaryTooltip(diary_id)
+    {{#task}}
+    $(".what").removeClass('d-none')
+    {{/task}}
     populate_task_plan("{{contributors}}".split(','), assigned_user)
   })
   function toDoAfter(){

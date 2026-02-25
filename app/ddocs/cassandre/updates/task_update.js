@@ -14,10 +14,14 @@ function (doc, req) {
           existing_task = update
         }
       }
-      if (existing_task.user && existing_task.date && existing_task.action) doc.deadlines.splice(i, 1, existing_task)
+      if (existing_task.user && existing_task.date && existing_task.action) {
+        existing_task.action = existing_task.action.charAt(0).toLowerCase() + existing_task.action.slice(1)
+        doc.deadlines.splice(i, 1, existing_task)
+      }
     }
   } else if (update.user && update.date && update.action) {
     update.id = doc.deadlines.length+'-'+Math.floor(Math.random() * 10)+Math.floor(Math.random() * 10)
+    update.action = update.action.charAt(0).toLowerCase() + update.action.slice(1)
     doc.deadlines.push(update)
   }
   return [doc, 'Task updated']

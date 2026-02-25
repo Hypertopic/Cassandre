@@ -179,6 +179,14 @@
       "revert": "Revert to this version",
       "keep-current": "Keep the current version"
     },
+    "i_task": {
+       "article": "reads a scientific article",
+       "code": "codes a transcript",
+       "interview": "interviews a person",
+       "observation": "conducts an observation",
+       "transcribe": "transcribes an interview",
+       "other": "Precise another action"
+    },
     "i_register_prompt": {
       "academic_staff": "I am a staff member of ULiege",
       "academic_staff_prompt": "You do not need to register : simply user the usual ULiege username and password on the page listing ",
@@ -455,6 +463,14 @@
        "single": "Aucune autre version n'est disponible",
        "revert": "Revenir à cette version",
        "keep-current": "Conserver la version actuelle"
+    },
+    "i_task": {
+       "article": "consulte un article scientifique",
+       "code": "étiquette une entrevue",
+       "interview": "conduit une entrevue",
+       "observation": "réalise une observation",
+       "transcribe": "transcrit une entrevue",
+       "other": "Préciser une autre action"
     },
     "i_register_prompt": {
        "academic_staff": "Je fais partie de l'université de Liège",

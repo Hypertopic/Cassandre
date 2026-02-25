@@ -13,6 +13,11 @@
             <use xlink:href="../style/bootstrap-icons.svg#journals"/>
           </svg>
         </a>
+        <button id="report-button" class="btn" title="{{i18n.i_activity}}" data-toggle="modal" data-target="#report">
+          <svg class='bi' width='24' height='24' fill='currentColor'>
+            <use xlink:href='../style/bootstrap-icons.svg#graph-up'/>
+          </svg>
+        </button>
         <button id='search-button' class="btn hidden" title="{{i18n.i_search}} {{i18n.i_comments}}">
           <svg class='bi' width='24' height='24' fill='currentColor'>
             <use xlink:href='../style/bootstrap-icons.svg#search'/>
@@ -21,7 +26,7 @@
         <div id='search-comments' class='input-group mr-1 hidden'>
           <input id='' type='search' class='form-control' placeholder="{{i18n.i_search}} {{i18n.i_comments}}" />
           <div class='input-group-append'>
-            <span class='input-group-text'>?</span>
+            <span class='input-group-text' title="{{i18n.i_search}} {{i18n.i_comments}}">?</span>
           </div>
         </div>
         <ul class="navbar-nav mr-auto"></ul>
@@ -67,6 +72,20 @@
         </a>
       </nav>
     </div>
+    <div id="report" class="modal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">{{i18n.i_activity}}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+          </div>
+        </div>
+      </div>
+    </div>
   {{>script}}
   <script type="text/javascript" src="../script/d3.3.5.17.js"></script>
   <script type="text/javascript" src="../script/cal-heatmap.min.js"></script>
@@ -78,12 +97,16 @@
   {{/authorized}}
   {{#authorized}}
   {{#stats}}
+  const creations = '{{i18n.i_creations}}'.replace('les ', ''),
+        edits = '{{i18n.i_modifications}}'.replace('les ', ''),
+        comments = '{{i18n.i_comments}}'.replace('les ', '')
   let cal = new CalHeatMap(),
       converter = new showdown.Converter({strikethrough: 'true'}),
       all = {},
       created = {},
       commented = {},
       modified = {},
+      report = [],
       end = new Date('{{end}}'),
       start = new Date('{{start}}')
   {{/stats}}
@@ -92,6 +115,11 @@
     $('#logged').parent().append($('#search-button'))
     stickToHeader()
     {{#activity}}
+    var year = '{{date}}'.substring(0, 4)
+    if (!report[year]) report[year] = {'comments':0, 'creations':0, 'edits': 0}
+    if ('{{action}}' === 'commented') report[year].comments++
+    if ('{{action}}' === 'created') report[year].creations++
+    if ('{{action}}' === 'modified') report[year].edits++
     if('{{date}}' > start.toJSON()) {
       all[unix_date('{{date}}')] = 1
       switch('{{action}}') {
@@ -109,6 +137,7 @@
     {{/activity}}
     {{#stats}}
     drawChart(all)
+    reporting()
     if ({{commented}} > 0) {
       $('#only-commented').removeClass('d-none')
       $('#search-button').removeClass('hidden')

@@ -23,6 +23,8 @@ $('#sign-in').on('click', function() {
 })
 $('#search-button').on('click', function() {
   $('#header .btn').addClass('disabled')
+  $('#footer .btn').tooltip('dispose')
+  $('#report-button').addClass('hidden')
   $('#search-comments').removeClass('hidden')
   $('#search-button').addClass('hidden')
 })

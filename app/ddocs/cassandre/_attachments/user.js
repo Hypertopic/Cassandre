@@ -99,6 +99,29 @@ function showMore(start) {
     if ($('#events li').length == 0) $('#events').text(nothing_to_show)
   })
 }
+function reporting() {
+  var years = Object.keys(report), 
+      period = years[0]
+  if (years.length > 1) period += '-'+years[years.length-1]
+  $('#report .modal-title').append(' ('+period+')')
+  for (let y of years) {
+    var rep = [], unit = '',
+        r = '<h3>'+y+'</h3><p>'
+    unit = creations
+    if (report[y].creations == 1) unit = unit.slice(0, -1)
+    if (report[y].creations > 0) rep.push(report[y].creations+'&nbsp;'+unit)
+    unit = edits
+    if (report[y].edits == 1) unit = unit.slice(0, -1)
+    if (report[y].edits > 0) rep.push(report[y].edits+'&nbsp;'+unit)
+    unit = comments
+    if (report[y].comments == 1) unit.slice(0, -1)
+    if (report[y].comments > 0) rep.push(report[y].comments+'&nbsp;'+unit)
+    var last = rep.pop()
+    if (rep.length > 0) r += rep.join(', ')+' & '
+    r += last+'</p>'
+    $('#report .modal-body').append(r)
+  }
+}
 function drawChart(array) {
   cal.init({
     domain: "week",

@@ -11,7 +11,7 @@ function (doc, req) {
   }
   if (!doc.history) doc.history = []
   doc.history.push(history)
-  doc.body = doc.body.replace(/\t/g, " ").replace('•', '*')
+  doc.body = doc.body.replaceAll("\t", ' ').replaceAll('•', '*')
   if (doc.type == "interview") doc.body = doc.body.replace(/  +/g, " ").replace(/\n \n /g, "\n \n")
   delete doc.editing
   return [doc, 'Memo updated']

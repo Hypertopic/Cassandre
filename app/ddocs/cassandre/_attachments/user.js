@@ -1,13 +1,13 @@
 $(window).scroll(function(){
   if ($(window).scrollTop() == $(document).height() - $(window).height()){
-    showMore($("li").last().find("span").attr('id'))
+    showMore(milestone)
   }
 })
 $('#diaries').on('click', function() {
   self.location = '../diary/'
 })
 $('#next').on('click', function() {
-  showMore($("li").last().find("span").attr('id'))
+  showMore(milestone)
 })
 $('#all-activity').on('click', function() {
   cal.update(all)
@@ -89,6 +89,7 @@ function showMore(start) {
         +'<span id="'+e.date+'" class="'+e.date+' moment"></span>&nbsp;– '
         +'<a href="../'+e.type+'/'+e.id+'">'+e.name+'</a>'
         +'</li>'
+      milestone = e.date
       action_id = e.date.substring(0, 10)+e.action+e.id+e.name
       if (previous_action_id !== action_id) $("#events").append(li)
       previous_action_id = action_id

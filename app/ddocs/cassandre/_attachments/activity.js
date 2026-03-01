@@ -83,7 +83,7 @@ $('#only-modified').on('click', function() {
 })
 
 $('.more').on('click', function() {
-  showMore($('li').last().find('span').attr('id'))
+  showMore(milestone)
 })
 
 var previous_action_id = ''
@@ -93,6 +93,7 @@ function showMore(start) {
     type: "GET",
     dataType: "json",
     success: function(data) {
+      var progress=0
       for (var a of data) {
         var [date, user, user_fullname, type, path] = [a.date, a.user, a.user_fullname, a.modified_type, a.path]
         if (typeof a.commented !== 'undefined') {
@@ -116,11 +117,15 @@ function showMore(start) {
           +'<span id="'+date+'" class="'+date+' moment"></span>, '
           +'<span class="'+user+'">'+user_fullname+'</span> '
           + action + '</li>'
+        milestone = date
         action_id = a.date.substring(0, 10)+user+action
-        if (previous_action_id !== action_id) 
-        $("#activities").append(li)
+        if (previous_action_id !== action_id && !$('#'+date).length) {
+          progress++
+          $("#activities").append(li)
+        }
         previous_action_id = action_id
       }
+      if (progress == 0) showMore(milestone)
     }
   }).always(function(){
     if ($('#activity ul li').length < 1) {

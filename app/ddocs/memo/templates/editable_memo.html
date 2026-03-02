@@ -126,7 +126,7 @@
   $("#name").attr("placeHolder", placeHolder["{{type}}"]["name"])
   {{#authorized}}
   {{#editing}}
-  var easymde = new EasyMDE({
+  let options = {
     element: $("#body")[0],
     autosave: {
       enabled: true,
@@ -136,7 +136,7 @@
     toolbar: ["bold", "italic", "strikethrough", "|", "heading-3", "unordered-list", "horizontal-rule", "|", "link", "image", "table", "|", "guide"],
     placeholder: placeHolder["{{type}}"]["content"],
     spellChecker: false
-  }), french = {
+  }, french = {
     bold: 'Gras (ctrl-b)',
     italic: 'Italique (ctrl-i)',
     strikethrough: "Barré",
@@ -148,12 +148,16 @@
     table: "Insérer un tableau",
     guide: "Guide de mise en page (en anglais)"
   }
+  if ("{{locale}}" === "fr") options.autosave.text = 'Sauvegardé à '
+  var easymde = new EasyMDE(options)
   if ("{{locale}}" === "fr") {
     for (const [btn, title] of Object.entries(french)) {
       $('.editor-toolbar .'+btn).prop('title', title)
     }
     $('.editor-toolbar .bold').html('<strong>G</strong>')
     $('.editor-toolbar .heading-3').html('T')
+    $('.editor-statusbar .words').addClass('words-french')
+    $('.editor-statusbar .lines').addClass('lines-french')
   }
   {{/editing}}
   {{/authorized}}

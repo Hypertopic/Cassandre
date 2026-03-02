@@ -159,6 +159,8 @@ function enabling_mde(id) {
     }
     $('.editor-toolbar .bold').html('<strong>G</strong>')
     $('.editor-toolbar .heading-3').html('T')
+    $('.editor-statusbar .words').addClass('words-french')
+    $('.editor-statusbar .lines').addClass('lines-french')
   }
 }
 function show_comment(id, user, date, text, checked) {

@@ -351,6 +351,13 @@ button.comment {
   color: white;
 }
 
+.words-french:before {
+  content: 'mots : ' !important;
+}
+.lines-french:before {
+  content: 'lignes : ' !important;
+}
+
 #footer .btn, #header .btn {
   color: white;
 }

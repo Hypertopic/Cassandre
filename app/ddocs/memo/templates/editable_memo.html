@@ -9,7 +9,7 @@
       <header>
         <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
           <ul class="navbar-nav mr-auto">
-            <li><button class="d-inline-block btn navbar-btn d-none" data-toggle="tooltip" data-placement="bottom" title="{{diary_name}}">
+            <li class="d-none d-sm-block"><button class="d-inline-block btn navbar-btn d-none" data-toggle="tooltip" data-placement="bottom" title="{{diary_name}}">
               <svg class="bi" width="24" height="24" fill="currentColor">
                 <use xlink:href="../style/bootstrap-icons.svg#book"/>
               </svg>
@@ -76,6 +76,7 @@
             <p>
               <textarea id="body" cols="80" rows="20" type="text" autocomplete="off">{{body}}</textarea>
             </p>
+            <p class="py-3 my-3"></p>
             {{/editing}}
             {{/authorized}}
           </main>
@@ -195,8 +196,9 @@
     $('#groundings').find('.toggle').next().slideToggle('fast')
     {{#authorized}}
     $('#header > ul > li:first').after($('.editor-toolbar'))
-    $('.editor-toolbar > button:last').addClass('d-none d-sm-inline')
-    if ("{{type}}" == 'interview') $('.editor-toolbar').remove ()
+    $('.editor-toolbar > button:last').addClass('d-none d-md-inline')
+    $('#logged').parent().parent().addClass('d-none d-md-block')
+    if ("{{type}}" == 'interview') $('.editor-toolbar').remove()
     if (local_text == remote_text) {
       easymde.clearAutosavedValue()
     } else {

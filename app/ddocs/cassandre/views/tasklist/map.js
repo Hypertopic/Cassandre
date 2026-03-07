@@ -45,5 +45,7 @@ function(o) {
     }
     if (o.type == 'diagram' && o.groundings && o.groundings.length == 1)
       emit([diary, user, 'A', history_first], {'id': o._id, '_id': o._id, 'name': o.name})
+    if (o.type == 'diagram' && o.statement.length < 2)
+      emit([diary, user, 'S', history_last], {'id': o._id, '_id': o._id, 'name': o.name})
   }
 }

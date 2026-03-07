@@ -20,6 +20,7 @@ function(head, req) {
     list: true,
     locale: req.headers["Accept-Language"].split(',')[0].substring(0,2),
     logged: req.userCtx.name,
+    statement: [],
     todo: [],
     ungrounded: [],
     unnamed: []
@@ -59,6 +60,9 @@ function(head, req) {
       case ('A'):
         data.diagram.push(obj)
       break
+      case ('S'):
+        data.statement.push(obj)
+      break
       case ('T'):
         obj['user'] = r.value.user
         obj['action'] = obj.name
@@ -97,6 +101,7 @@ function(head, req) {
       expired: data.expired.length,
       editing: data.editing.length,
       pending: data.todo.length,
+      statement: data.statement.length,
       ungrounded: data.ungrounded.length,
       unnamed: data.unnamed.length
     }))

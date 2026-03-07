@@ -71,6 +71,15 @@
             </li>
           {{/diagram}}
           </ul>
+          <h2 id='missing-statement' class="hidden">{{i18n.i_to-be-worded}}</h2>
+          <ul>
+          {{#statement}}
+            <li class='missing-statement'>
+              <span class="{{date}} moment"></span>&nbsp;–
+              <a href='../{{type}}/{{id}}'>{{name}}</a>
+            </li>
+          {{/statement}}
+          </ul>
           <h2 id='unnamed' class="hidden">{{i18n.i_unnamed}}</h2>
           <ul>
           {{#unnamed}}

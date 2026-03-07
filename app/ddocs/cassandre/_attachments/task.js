@@ -102,10 +102,10 @@ function populate_and_render_tasklist() {
     })
     stickToHeader()
   }).then(function(){
-    if ($('.deadline').length + $('.expired').length + $('.unchecked-todo').length + $('.unchecked-comment').length + $('.editing').length + $('.unarticulated').length + $('.unnamed').length + $('.ungrounded').length + $('.unchecked-todo').length + $('.deadend').length == 0) {
+    if ($('.deadline').length + $('.expired').length + $('.unchecked-todo').length + $('.unchecked-comment').length + $('.editing').length + $('.unarticulated').length + $('.missing-statement').length + $('.unnamed').length + $('.ungrounded').length + $('.unchecked-todo').length + $('.deadend').length == 0) {
       $('#todo').text(nothing_to_show)
     } else {
-      for (let c of ['unchecked-comment', 'unchecked-todo', 'editing', 'deadline', 'expired', 'completed', 'unarticulated', 'unnamed', 'ungrounded']) {
+      for (let c of ['unchecked-comment', 'unchecked-todo', 'editing', 'deadline', 'expired', 'completed', 'unarticulated', 'missing-statement', 'unnamed', 'ungrounded']) {
         if (['unchecked-comment', 'deadline', 'expired', 'completed'].indexOf(c) > -1 && $('.'+c).length < 2) $('h2#'+c).text($('h2#'+c).text().replace(/s /g, ' '))
         if ($('.'+c).length > 0) $('#'+c).removeClass('hidden')
       }

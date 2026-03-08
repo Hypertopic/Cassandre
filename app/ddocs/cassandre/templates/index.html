@@ -145,9 +145,6 @@ function stats_prompt(count){
   if (Object.values(count).every((v) => v > 0)) {
     let stats = "{{i18n.i_server_stats}}"
     for (key of Object.keys(count)) {
-      if (count[key] > 5000) {
-        count[key] = String(Math.trunc(count[key] / 1000))+'k+'
-      }
       stats = stats.replace('@'+key, count[key])
     }
     stats = stats.replace('@revision', '{{revision}}')

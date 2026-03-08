@@ -16,6 +16,11 @@
         <li class="nav-item active"><a class="nav-link" href="https://hypertopic.org/installer">Installer</a></li>
         <li class="nav-item active"><a class="nav-link" href="https://hypertopic.org/approfondir">Approfondir</a></li>
       </ul>
+      <button id="report-button" class="btn" title="{{i18n.i_about_this_server}}" data-toggle="modal" data-target="#report">
+        <svg class='bi' width='24' height='24' fill='currentColor'>
+          <use xlink:href='../style/bootstrap-icons.svg#graph-up'/>
+        </svg>
+      </button>
     </nav>
     <div class="jumbotron jumbotron-fluid library">
       <div class="container">
@@ -62,70 +67,106 @@
         </svg>
       </a></div>
     </nav>
+    <div id="report" class="modal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">
+              <span class="text-primary">
+                <svg class="bi mr-1 ml-auto" width="20" height="20" fill="currentColor"><use xlink:href="../style/bootstrap-icons.svg#info-circle"/></svg>
+              </span>{{i18n.i_about_this_server}}
+            </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <table style="width:100%"></table>
+          </div>
+        </div>
+      </div>
+    </div>
     {{>script}}
-    <script>
-      if ("{{locale}}" === "fr") $('.fr').removeClass('hidden')
-      let count = {'diaries': 0, 'memos': 0, 'users': 0},
-          filled_diaries = 0
-      $.ajax({
-        url: "../diaries_count/",
-        type: "GET",
-        dataType: "json"
-      }).done(function(d){
-        count.diaries = d.rows.length
-        for (r of d.rows) {
-          if (r.key[0] !== null && r.value > 2) filled_diaries++
-        }
-        count['filled'] = filled_diaries
-        stats_prompt(count)
-      })
-      $.ajax({
-        url: "../memos_count/",
-        type: "GET",
-        dataType: "json"
-      }).done(function(m){
-        count.memos = m.rows[0].value
-        stats_prompt(count)
-      })
-      $.ajax({
-        url: "../users_count/",
-        type: "GET",
-        dataType: "json"
-      }).done(function(n){
-        count.users = n.rows[0].value
-        stats_prompt(count)
-      })
-      $.ajax({
-        url: "../config",
-        type: "GET",
-        dataType: "json"
-      }).done(function(c){
-        let maintenance_announce = ''
-        if (new Date().toISOString().substr(0,10) == c.maintenance.date.substr(0,10)) {
-          let now = new Date().getTime(),
-              interruption = new Date(c.maintenance.date).getTime()
-          if (now < interruption) {
-            maintenance_announce = "{{i18n.i_maintenance-today_pre}}".replace('@duration', c.maintenance.duration)
-          } else {
-            maintenance_announce = "{{i18n.i_maintenance-today_post}}".replace('@duration', c.maintenance.duration)
-          }
-          maintenance_announce += new Intl.DateTimeFormat('{{locale}}', {hour: "numeric", minute: "numeric"}).format(new Date(c.maintenance.date))
-          inform('danger', maintenance_announce)
-        }
-      })
-      function stats_prompt(count){
-        if (Object.values(count).every((v) => v > 0)) {
-          let stats = "{{i18n.i_on_this_server}}"
-          for (key of Object.keys(count)) {
-            if (count[key] > 5000) {
-              count[key] = String(Math.trunc(count[key] / 1000))+'k+'
-            }
-            stats = stats.replace('@'+key, count[key])
-          }
-          inform('white', stats)
-          $('.alert-white').addClass('bg-white')
-        }
+<script>
+let count = {'diaries': 0, 'memos': 0, 'users': 0},
+    filled_diaries = 0,
+    last_maintenance = '',
+    locale = "{{locale}}"
+if (locale === 'fr') $('.fr').removeClass('hidden')
+$.ajax({
+  url: "../diaries_count/",
+  type: "GET",
+  dataType: "json"
+}).done(function(d){
+  count.diaries = d.rows.length
+  for (r of d.rows) {
+    if (r.key[0] !== null && r.value > 2) filled_diaries++
+  }
+  count['stub'] = count.diaries-filled_diaries
+  count['filled'] = filled_diaries
+  stats_prompt(count)
+})
+$.ajax({
+  url: "../memos_count/",
+  type: "GET",
+  dataType: "json"
+}).done(function(m){
+  count.memos = m.rows[0].value
+  stats_prompt(count)
+})
+$.ajax({
+  url: "../users_count/",
+  type: "GET",
+  dataType: "json"
+}).done(function(n){
+  count.users = n.rows[0].value
+  stats_prompt(count)
+})
+$.ajax({
+  url: "../config",
+  type: "GET",
+  dataType: "json"
+}).done(function(c){
+  let maintenance_announce = ''
+  last_maintenance = new Date(c.maintenance.date)
+  if (new Date().toISOString().substr(0,10) == c.maintenance.date.substr(0,10)) {
+    let now = new Date().getTime(),
+        interruption = new Date(c.maintenance.date).getTime()
+    if (now < interruption) {
+      maintenance_announce = "{{i18n.i_maintenance-today_pre}}".replace('@duration', c.maintenance.duration)
+    } else {
+      maintenance_announce = "{{i18n.i_maintenance-today_post}}".replace('@duration', c.maintenance.duration)
+    }
+    maintenance_announce += new Intl.DateTimeFormat(locale, {hour: "numeric", minute: "numeric"}).format(last_maintenance)
+    inform('danger', maintenance_announce)
+  }
+})
+function stats_prompt(count){
+  if (Object.values(count).every((v) => v > 0)) {
+    let stats = "{{i18n.i_server_stats}}"
+    for (key of Object.keys(count)) {
+      if (count[key] > 5000) {
+        count[key] = String(Math.trunc(count[key] / 1000))+'k+'
       }
+      stats = stats.replace('@'+key, count[key])
+    }
+    stats = stats.replace('@revision', '{{revision}}')
+            .replace('@last_maintenance', last_maintenance.toLocaleDateString(locale, {year: 'numeric', month: 'long', day: 'numeric'}))
+    var rows = stats.split('#'),
+        cells = ''
+    rows.forEach((r) => {
+      var style='width:50%; text-align:left;'
+      if (r.indexOf('- ') > -1) {
+        style = style.replace('left', 'right')
+        r = r.replace('- ', '&mdash; ')
+      }
+      cells += '<tr><td style="'+style+'">'
+               +r.replaceAll("\t", '</td><td style="width:50%; text-align:right">')
+               +'</td></tr>'
+    })
+    $('#report .modal-body table').append(cells)
+  }
+}
     </script>
   </body>
 </html>

@@ -3,11 +3,12 @@ function(o, req) {
   // !code lib/mustache.js
   // !code l10n/l10n.js
   // !code lib/shared.js
+  var revision = '3.26.03.08'
   provides('json', function() {
     return {
       body: JSON.stringify({
         service: 'Cassandre',
-        revision: '3.26.03.07',
+        revision: revision,
         update_seq: req.info.update_seq
       })
     }
@@ -15,7 +16,8 @@ function(o, req) {
   provides('html', function() {
     var data = {
       i18n: localized(),
-      locale: req.headers["Accept-Language"].split(',')[0].substring(0,2)
+      locale: req.headers["Accept-Language"].split(',')[0].substring(0,2),
+      revision: revision
     }
     return {
       body: Mustache.to_html(templates.index, data, shared)

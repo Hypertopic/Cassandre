@@ -14,8 +14,10 @@ function (o) {
       body = body.concat(o.body.split("\n \n").map(function(i){
         return {'text': i+'  '}
       }))
-    } else if (o.statement) {
-      body = body.concat([{'text': o.statement}])
+    } else if (type === 'diagram') {
+      if (o.negative) body = body.concat([{'text': o.negative}])
+      if (o.situation) body = body.concat([{'text': o.situation}])
+      if (o.statement) body = body.concat([{'text': o.statement}])
     }
     for (var [p, speech] of Object.entries(body || {})) {
       var speech_text = speech.text

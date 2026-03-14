@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+  <head>
+    <title>{{i18n.i_howtos}}</title>
+    {{>links}}
+  </head>
+  <body>
+    <div id="container">
+      <nav id="header" class="{{>navbarstyle}} navbar-expand bd-navbar fixed-top">
+        <ul class="navbar-nav mr-auto">
+          <a href='../diaries/' class="navbar-brand btn" id="diaries" data-toggle="tooltip" data-placement="bottom" title="{{i18n.i_diaries}}">
+            <svg class="bi" width="24" height="24" fill="currentColor">
+              <use xlink:href="../style/bootstrap-icons.svg#journals"/>
+            </svg>
+          </a>
+        </ul>
+        {{>log}}
+      </nav>
+      <div id="container" class='container-fluid pb-5'>
+        <div id="content" class='col'>
+          <h1>{{i18n.i_howtos}}</h1>
+            <h3>Journal</h3>
+            <div class="card-columns">
+            {{#diary_operations}}
+              <div class="card text-center bg-light mb-3">
+                {{#author}}<div class="card-body">{{/author}}
+                  <h5 class="card-title"><a href='{{url}}'>{{name}}</a></h5>
+                  {{#author}}<p class="card-text">{{author}}{{#date}}, <span class="d-none moment">{{date}}<span>{{/date}}</p>{{/author}}
+                {{#author}}</div>{{/author}}
+              </div>
+            {{/diary_operations}}
+            </div>
+            <h3>Compte-rendu</h3>
+            <div class="card-columns">
+            {{#memo_operations}}
+              <div class="card text-center bg-light mb-3">
+                {{#author}}<div class="card-body">{{/author}}
+                  <h5 class="card-title"><a href='{{url}}'>{{name}}</a></h5>
+                  {{#author}}<p class="card-text">{{author}}{{#date}}, <span class="d-none moment">{{date}}<span>{{/date}}</p>{{/author}}
+                {{#author}}</div>{{/author}}
+              </div>
+            {{/memo_operations}}
+            </div>
+            <h3>Opérations analytiques</h3>
+            <div class="card-columns">
+            {{#analytic_operations}}
+              <div class="card text-center bg-light mb-3">
+                {{#author}}<div class="card-body">{{/author}}
+                  <h5 class="card-title"><a href='{{url}}'>{{name}}</a></h5>
+                  {{#author}}<p class="card-text">{{author}}{{#date}}, <span class="d-none moment">{{date}}<span>{{/date}}</p>{{/author}}
+                {{#author}}</div>{{/author}}
+              </div>
+            {{/analytic_operations}}
+            </div>
+            <h3>Méthode</h3>
+            <div class="card-columns">
+            {{#handbook}}
+              <div class="card text-center bg-light mb-3">
+                {{#author}}<div class="card-body">{{/author}}
+                  <h5 class="card-title"><a href='{{url}}'>{{name}}</a></h5>
+                  {{#author}}<p class="card-text">{{author}}{{#date}}, <span class="d-none moment">{{date}}<span>{{/date}}</p>{{/author}}
+                {{#author}}</div>{{/author}}
+              </div>
+            {{/handbook}}
+            </div>
+          </div>
+        </div>
+      </div>
+      {{>storing_fullname_dialog}}
+    </div>
+  {{>script}}
+  <script>
+  let register = [],
+      fullnames = [],
+      logged = "{{logged}}"
+  $(document).ready(function() {
+    stickToHeader()
+    $('.moment').each(function() {
+      var m = $(this).text()
+      $(this).text(new Date(m).toLocaleDateString(locale, {year: 'numeric', month: 'long', day: 'numeric'}))
+      $(this).removeClass('d-none')
+    })
+    {{#logged}}
+    setSignoutTooltip(logged)
+    {{/logged}}
+  })
+  {{>layoutscript}}
+  {{>logscript}}
+  </script>
+  </body>
+</html>

@@ -88,6 +88,9 @@ function(req2) {
         break
       }
     break
+    case 'videos':
+      reply.path = '_show/videos'
+    break
     case 'memos':
       var reply = {}
       if (path[4]) {

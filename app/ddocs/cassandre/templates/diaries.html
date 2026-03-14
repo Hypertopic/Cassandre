@@ -96,9 +96,6 @@
       logged = "{{logged}}",
       to = ' {{i18n.i_to}} '
   $(document).ready(function() {
-    {{^logged}}
-    nothing_to_show +='. {{i18n.i_sign-in-for-more}}'
-    {{/logged}}
     stickToHeader()
     {{#logged}}
     if ("{{user_fullname}}".length > 0) {
@@ -180,13 +177,18 @@
       $(".collection").removeClass('d-none')
     }).done(function(){
       $("#loading").addClass('d-none').removeClass('d-flex')
-      if ($(".card").length == 0) $('h1').after(nothing_to_show)
+      toDoAfter()
     })
     {{/logged}}
     {{^logged}}
-    if ($(".card").length == 0) $('h1').after(nothing_to_show)
+    toDoAfter()
     {{/logged}}
   })
+
+  var toDoAfter = function(){
+    addToDom('videos', '{{i18n.i_howtos}}')
+    $('#videos').parent('p').prev('.card-icons').remove()
+  }
 
   function addToDom(id, name) {
     let card = toCard(id, name)
@@ -202,10 +204,12 @@
 
   function toCard(id, name) {
     if (!localStorage.getItem(id)) localStorage.setItem(id, name)
+    let path = '../diary/'+id
+    if (id === 'videos') path = '../'+id+'/'
     let card = '<div class="card text-center bg-light mb-3">'
               +'<div title="{{i18n.i_integrate}} {{i18n.i_to}} {{i18n.i_collection}}" class="in-collection d-none">'
               +'<svg class="bi" width="16" height="16" fill="currentColor"><use xlink:href="../style/bootstrap-icons.svg#chevron-down"/></svg></div>'
-              +'<h5><a href="../diary/'+id+'">'+name+'</a></h5>'
+              +'<h5><a href="'+path+'">'+name+'</a></h5>'
               +'<div title="{{i18n.i_restricted-access}}" class="card-icons text-secondary">'
               +'<svg class="bi" width="16" height="16" fill="currentColor"><use xlink:href="../style/bootstrap-icons.svg#lock"/></svg>'
               +'</div>'

@@ -94,6 +94,18 @@ let shared = {
               <use xlink:href='../style/bootstrap-icons.svg#person-circle'/>\
             </svg>\
           </button>\
+          {{#body}}\
+          <button class='btn' id='justify' data-placement='left' title='{{i18n.i_justify}}'>\
+            <svg class='bi' width='24' height='24' fill='currentColor'>\
+              <use href='../style/bootstrap-icons.svg#justify'/>\
+            </svg>\
+          </button>\
+          <button class='btn hidden' id='justify-left' data-placement='left' title='{{i18n.i_justify-left}}'>\
+            <svg class='bi' width='24' height='24' fill='currentColor'>\
+              <use href='../style/bootstrap-icons.svg#justify-left'/>\
+            </svg>\
+          </button>\
+          {{/body}}\
           <button class='btn navbar-btn' data-placement='left' data-html='true' title='{{i18n.i_sign-out}}<br/>{{#logged_fullname}}{{logged_fullname}}{{/logged_fullname}}' id='signout'>\
             <svg class='bi' width='24' height='24' fill='currentColor'>\
               <use xlink:href='../style/bootstrap-icons.svg#box-arrow-right'/>\

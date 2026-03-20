@@ -29,6 +29,22 @@ $('body').on('click', '#avatar_dialog button:not(.close)', function() {
 $('#user-menu').on('show.bs.dropdown', function() {
   $('#user-menu-btn').tooltip('dispose')
 })
+$('#justify, #justify-left').on('click', function() {
+  justify()
+})
+function justify() {
+  if ($('#justify').hasClass('hidden')) {
+    $('.writing p').removeClass('text-justify')
+    $('#justify-left').addClass('hidden')
+    $('#justify').removeClass('hidden')
+    localStorage.removeItem(user+'_align')
+  } else {
+    $('.writing p').addClass('text-justify')
+    $('#justify-left').removeClass('hidden')
+    $('#justify').addClass('hidden')
+    localStorage.setItem(user+'_align', 'justify')
+  }
+}
 function responsiveUserMenu() {
   $('#user-menu').addClass('d-none d-lg-block')
   $('#signout')

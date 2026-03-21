@@ -1,4 +1,4 @@
-var easymde, comment_id = '', commented_text = ''
+let easymde, comment_id = '', commented_text = ''
 $('#comment_create').click(function () {
   refresh = false
   $("#comment_create").tooltip('hide')
@@ -30,7 +30,8 @@ $('#commented').on('click', function() {
 })
 $('.comment').click(function(event) {
   refresh = false
-  var user = $(this).find('.user').text()
+  var user = $(this).find('.user').text(),
+      action = 'update'
   comment_id = $(this).closest('.comment').attr('id')
   if (logged_fullname == user && !$(event.target).is('input')) {
     $(this).find('.comment_text').hide()
@@ -39,12 +40,12 @@ $('.comment').click(function(event) {
     $('#comment_input')
       .attr('id', 'input'+comment_id)
       .attr('name', 'input'+comment_id)
-    show_comment_dialog('update', '#input'+comment_id)
+    if ($('#'+comment_id+' .comment_edit').hasClass('legacy')) action = 'legacy_update'
+    show_comment_dialog(action, '#input'+comment_id)
     $('#commented').remove()
     $('#footer > div > button').addClass('hidden')
     $('#add-leaves').addClass('hidden')
     $('#reload').removeClass('hidden')
-    $('#comment_updated').removeClass('hidden')
     $('.comment').off('click')
     $('.comment_check').prop('disabled', true)
     $('#kwic').parent().children().addClass('hidden')
@@ -57,24 +58,35 @@ $('.comment').click(function(event) {
   }
 })
 $('.comment_check').click(function() {
+  let doc = id = $(this).closest('.comment').attr('id')
+  if (!$('#'+id+' .comment_edit').hasClass('legacy')) doc = this_id+'_'+user
+  let data = {
+    'id': id,
+    'fullname': logged_fullname
+  }
   $.ajax({
-    url: '../checking_comment/'+$(this).closest('.comment').attr('id'),
+    url: '../checking_comment/'+doc,
     type: 'PUT',
     contentType: 'application/json',
-    data: logged_fullname
+    data: JSON.stringify(data)
   }).done(function(){refresh = true})
+})
+$('#convert_legacy_comment').on('click', function() {
+  if (easymde.value().trim().length < 1) {
+    alert(enter_comment)
+  } else {
+    update_legacy_comment(comment_id)
+  }
 })
 $('#comment_updated').on('click', function() {
   if (easymde.value().trim().length < 1) {
     alert(enter_comment)
   } else {
-    update_comment(comment_id)
+    update_comment(comment_id, commented_text+"\n \n"+easymde.value().trim())
   }
 })
 $('#delete_comment').on('click', function() {
-  commented_text = ''
-  easymde.value('')
-  update_comment(comment_id)
+  update_comment(comment_id, '')
 })
 $('body').on('click', '#edit_commented_text', function() {
   easymde.value(commented_text+"\n \n"+easymde.value())
@@ -121,7 +133,8 @@ function show_comment_dialog(action, cid) {
         .removeClass('navbar-btn btn-sm hidden')
         .addClass('btn-secondary')
         .appendTo($('#comment_dialog .modal-footer'))
-      if (action === 'update') $('#comment_dialog .modal-footer').append($('#comment_updated'))
+      if (action === 'legacy_update') $('#convert_legacy_comment').removeClass('hidden').appendTo($('#comment_dialog .modal-footer'))
+      if (action === 'update') $('#comment_updated').removeClass('hidden').appendTo($('#comment_dialog .modal-footer'))
       if (action === 'create') {
         $('#comment_dialog .modal-footer').append($('#commented'))
         $('#commented')
@@ -163,7 +176,7 @@ function enabling_mde(id) {
     $('.editor-statusbar .lines').addClass('lines-french')
   }
 }
-function show_comment(id, user, date, text, checked) {
+function show_comment(id, user, date, text, checked, legacy) {
   $('#comments .template').clone(true).attr('id', id).appendTo("#comments")
   if (checked) {
     $('#'+id).addClass('checked')
@@ -175,31 +188,85 @@ function show_comment(id, user, date, text, checked) {
   $('#'+id+' .comment_text').text(text)
   $('#'+id).removeClass('template hidden')
   $('#'+id+' .comment_edit').text(text)
+  if (legacy === 'true') {
+    $('#'+id+' .comment_edit').addClass('legacy')
+  }
 }
-function update_comment(id) {
+function create_or_feed_docid(toDoAfter) {
+  refresh = false
+  var data_text = commented_text+"\n \n"+easymde.value().trim(),
+      data_text = data_text.replace(/\n( )*\n>/g, "\n>").trim(),
+      comments_docid = this_id+'_'+user
+  $.ajax({
+    type: 'GET',
+    url: '../'+comments_docid,
+    dataType: 'json'
+  }).done(function(d){
+    $.ajax({
+      url: '../add_comment/'+comments_docid,
+      type: 'PUT',
+      contentType: 'application/json',
+      data: data_text
+    }).done(toDoAfter)
+  }).fail(function(){
+    var com_data = {
+      id: '0-'+Math.floor(Math.random() * 10)+Math.floor(Math.random() * 10),
+      date: new Date().toJSON(),
+      text: data_text
+    }
+    var doc_data = {
+      commented: this_id,
+      diary: diary_id,
+      user: user,
+      comments: []
+    }
+    doc_data.comments.push(com_data)
+    $.ajax({
+      type: 'PUT',
+      url: '../'+comments_docid,
+      contentType: 'application/json',
+      data: JSON.stringify(doc_data)
+    }).done(toDoAfter)
+  })
+}
+
+function update_legacy_comment(legacy_id) {
+  var data_text = commented_text+"\n \n"+easymde.value().trim(),
+      data_text = data_text.replace(/\n( )*\n>/g, "\n>").trim(),
+      comments_docid = this_id+'_'+user,
+      toDoAfter = function(){
+        delete_legacy_comment(legacy_id)
+      }
+  create_or_feed_docid(toDoAfter)
+}
+function update_comment(id, text) {
+  refresh = true
+  var comments_docid = this_id+'_'+user, 
+      o = {
+        'id': id,
+        'text': text
+      }
+  $.ajax({
+    url: '../comment_content/'+comments_docid,
+    type: 'PUT',
+    contentType: 'application/json',
+    data: JSON.stringify(o)
+  }).done(reload)
+}
+function delete_legacy_comment(id) {
   refresh = true
   $.ajax({
     url: '../update_comment_content/'+id,
     type: 'PUT',
+    async: 'false',
     contentType: 'application/json',
-    data: commented_text+"\n \n"+easymde.value().trim()
-  }).done(reload)
+    data: ''
+  }).done(reload) 
 }
 function comment() {
   refresh = true
-  var data_text = commented_text+"\n \n"+easymde.value().trim()
-  var data = {
-    commented: this_id,
-    diary: diary_id,
-    user: user,
-    date: new Date().toJSON(),
-    text: data_text.replace(/\n( )*\n>/g, "\n>").trim()
-  }
-  $.ajax({
-    type: 'POST',
-    url: '../',
-    contentType: 'application/json',
-    data: JSON.stringify(data)
-  }).done(reload)
-  .fail(error_alert)
+  var data_text = commented_text+"\n \n"+easymde.value().trim(),
+      data_text = data_text.replace(/\n( )*\n>/g, "\n>").trim()
+      doc_id = this_id+'_'+user
+  create_or_feed_docid(reload)    
 }

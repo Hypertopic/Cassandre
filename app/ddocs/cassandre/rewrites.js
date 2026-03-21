@@ -319,6 +319,8 @@ function(req2) {
     case 'adapt_memo':
     case 'checking_comment':
     case 'update_comment_content':
+    case 'comment_content':
+    case 'add_comment':
     case 'rename_diagram':
     case 'adapt_diagram':
     case 'adapt_graph':

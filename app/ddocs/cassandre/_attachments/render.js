@@ -5,6 +5,10 @@ function render(){
   momentRelative('')
   showCreator()
   stickToHeader()
+  if (localStorage.getItem(user+'_tips-off')) {
+    $('#tips-off').addClass('hidden')
+    $('#tips-on').removeClass('hidden')
+  }
   let refresh = true
 }
 function renderLeaves(){

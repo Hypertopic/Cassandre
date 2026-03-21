@@ -106,6 +106,18 @@ let shared = {
             </svg>\
           </button>\
           {{/body}}\
+          {{#type}}{{^statements}}\
+          <button class='btn hidden' id='tips-on' data-placement='left' title='{{i18n.i_tips-on}}'>\
+            <svg class='bi' width='24' height='24' fill='currentColor'>\
+              <use href='../style/bootstrap-icons.svg#lightbulb'/>\
+            </svg>\
+          </button>\
+          <button class='btn' id='tips-off' data-placement='left' title='{{i18n.i_tips-off}}'>\
+            <svg class='bi' width='24' height='24' fill='currentColor'>\
+              <use href='../style/bootstrap-icons.svg#lightbulb-off'/>\
+            </svg>\
+          </button>\
+          {{/statements}}{{/type}}\
           <button class='btn navbar-btn' data-placement='left' data-html='true' title='{{i18n.i_sign-out}}<br/>{{#logged_fullname}}{{logged_fullname}}{{/logged_fullname}}' id='signout'>\
             <svg class='bi' width='24' height='24' fill='currentColor'>\
               <use xlink:href='../style/bootstrap-icons.svg#box-arrow-right'/>\

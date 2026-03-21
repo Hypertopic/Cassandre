@@ -32,6 +32,14 @@ $('#user-menu').on('show.bs.dropdown', function() {
 $('#justify, #justify-left').on('click', function() {
   justify()
 })
+$('#tips-on, #tips-off').on('click', function() {
+  if ($('#tips-on').hasClass('hidden')) {
+    localStorage.setItem(user+'_tips-off', 'silent')
+  } else {
+    localStorage.removeItem(user+'_tips-off')
+  }
+  reload()
+})
 function justify() {
   if ($('#justify').hasClass('hidden')) {
     $('.writing p').removeClass('text-justify')
@@ -408,13 +416,7 @@ function inform(type, msg){
       $('.toast>.alert-'+type).parent().toast('show')
     break
     default:
-      const start = Date.now()
-      const loop = () => {
-        (Date.now() - start < 30000)
-          ? requestAnimationFrame(loop)
-          : $('.toast').toast('show')
-        }
-      requestAnimationFrame(loop)
+      if(!localStorage.getItem(user+'_tips-off')) $('.toast').toast('show')
     break
   }
 }

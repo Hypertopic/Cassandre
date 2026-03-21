@@ -13,7 +13,7 @@ function(head, req) {
     var found = false
     while (!found && (r=getRow())) {
       found = (r.value.item==id)
-    }  
+    }
     if (found) {
       send("{\"key\":[\"")
       send(url)

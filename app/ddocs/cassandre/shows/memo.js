@@ -10,7 +10,7 @@ function(o, req){
   if (!o) return Mustache.to_html(templates.deleted, {i18n: localized()}, shared)
   if (o.diary_name && !o.name) {
     return {
-      "code": 302, 
+      "code": 302,
       "headers":{ "Location": "../../diary/" + o._id }
     }
   }
@@ -25,8 +25,8 @@ function(o, req){
     i18n: localized(),
     _id: o._id,
     _rev: o._rev,
-    authorized: !o.readers || !o.contributors || o.readers.length==0 
-             || o.contributors.length==0 || o.readers.indexOf(username)>-1 
+    authorized: !o.readers || !o.contributors || o.readers.length==0
+             || o.contributors.length==0 || o.readers.indexOf(username)>-1
              || (o.contributors && o.contributors.indexOf(username)>-1) || req.userCtx.roles.indexOf("_admin")>-1,
     body: [],
     creator: creator,

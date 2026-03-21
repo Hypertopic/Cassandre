@@ -7,7 +7,7 @@ $('#sign-in').on('click', function() {
   $('#to-register').addClass('hidden')
   $('#diaries').parent().children().addClass('hidden')
   $('#render').parent().addClass('hidden')
-  $('#diary, #source2clipboard, #lexical').addClass('hidden')  
+  $('#diary, #source2clipboard, #lexical').addClass('hidden')
   $('#modify_rights').addClass('hidden')
   $('#revert').addClass('hidden')
   $('#show-activity').addClass('hidden')
@@ -104,7 +104,7 @@ function toUserDoc() {
     url: relpath+'config',
     dataType: 'json'
   }).done(function(data){
-    if (fullname.length > 0) { 
+    if (fullname.length > 0) {
       createUserDoc(user, data.sponsors.ldap, reload, updateUserDoc)
     } else alert($('#user_fullname').siblings('.text-info').text())
   })

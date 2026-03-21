@@ -52,7 +52,7 @@ function diffLayout(){
   $("#remote_diff").html(createDiff(remote_content, local_content, 'info'))
 }
 function createDiff(arrayOne, arrayTwo, color) {
-  let diff = ''	
+  let diff = ''
   for (let j in arrayOne) {
     let turn = arrayOne[j], style = ''
    if (turn.trim().length > 0) {

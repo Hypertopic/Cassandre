@@ -32,7 +32,7 @@ $('body').on('click', '.source2clipboard', function(e) {
   alert(source_copied_to_clipboard)
 })
 const copy_to_clipboard_btn = '<button class="btn source2clipboard" type="button" data-toggle="tooltip" data-placement="top"'
-        + 'title="'+copy_source_to_clipboard+'">' 
+        + 'title="'+copy_source_to_clipboard+'">'
         + '<svg class="bi" width="24" height="24" fill="currentColor">'
         + '<use xlink:href="../style/bootstrap-icons.svg#clipboard"/>'
         + '</svg></button>'
@@ -101,7 +101,7 @@ function showMore(start) {
   })
 }
 function reporting() {
-  var years = Object.keys(report), 
+  var years = Object.keys(report),
       period = years[0]
   if (years.length > 1) period += '-'+years[years.length-1]
   $('#report .modal-title').append(' ('+period+')')

@@ -241,7 +241,7 @@ function update_legacy_comment(legacy_id) {
 }
 function update_comment(id, text) {
   refresh = true
-  var comments_docid = this_id+'_'+user, 
+  var comments_docid = this_id+'_'+user,
       o = {
         'id': id,
         'text': text
@@ -261,12 +261,12 @@ function delete_legacy_comment(id) {
     async: 'false',
     contentType: 'application/json',
     data: ''
-  }).done(reload) 
+  }).done(reload)
 }
 function comment() {
   refresh = true
   var data_text = commented_text+"\n \n"+easymde.value().trim(),
       data_text = data_text.replace(/\n( )*\n>/g, "\n>").trim()
       doc_id = this_id+'_'+user
-  create_or_feed_docid(reload)    
+  create_or_feed_docid(reload)
 }

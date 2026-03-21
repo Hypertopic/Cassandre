@@ -20,7 +20,12 @@ if (locale === "fr") $.datepicker.setDefaults($.datepicker.regional['fr'])
 $('#create_task').on('click', function() {
   create_task()
 })
-$('#who, #when').on('change', function (e) {
+$('#when').on('change', function () {
+  let article = $("#what-suggestions option:not([disabled]):first").val()
+  if ($("#what").val().length === 0) $("#what").val(article)
+  enabling_task_creation()
+})
+$('#who, #what-suggestions').on('change', function () {
   enabling_task_creation()
 })
 $('#what').on('input', function() {
@@ -37,7 +42,7 @@ $('#save_task').on('click', function() {
 })
 $(".form-check-input").change(function() {
   let t = {'id': this.id}
-  if (this.checked) t.completed = new Date().toJSON()  
+  if (this.checked) t.completed = new Date().toJSON()
   save_task(t)
 })
 $('#tasklist').on('click', function() {
@@ -75,7 +80,7 @@ function populate_task_plan(usernames, assigned_user) {
 }
 function populate_and_render_tasklist() {
   let payload = '',
-      nComments = 0, 
+      nComments = 0,
       converter = new showdown.Converter({strikethrough: 'true'})
   $.ajax({
     url: '../comments/'+diary_id,
@@ -121,7 +126,7 @@ function populate_and_render_tasklist() {
         }).done(function(){
           $('#create_task').removeClass('hidden')
         })
-      }      
+      }
     }
   })
 }

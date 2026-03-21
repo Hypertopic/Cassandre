@@ -166,7 +166,7 @@ $('#modify_rights').on('click', function() {
 
 $('body').on('click', '#modify', function() {
   $('#loading').removeClass('hidden')
-  let i = 0, 
+  let i = 0,
       n_memo = memos.length
   for (let m of memos) {
     $.ajax({
@@ -197,7 +197,7 @@ function resetUI() {
 
 function taskreport(task, count) {
   let pill_color = 'info', alert_color = 'secondary'
-  if (['expired'].indexOf(task) > -1) alert_color = pill_color = 'danger'
+  if (['expired'].indexOf(task) > -1) pill_color = 'danger'
   if (count > 0) {
     $("#tasklist-alert").append($('<div>', {
       id: task,
@@ -220,7 +220,7 @@ $('.more').on('click', function() {
 function showMore() {
   includePublic()
 }
-  
+
 async function getMore(coord) {
   if (ready == true) return new Promise((resolve, reject) => {
     ready = false

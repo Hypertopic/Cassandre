@@ -35,7 +35,7 @@ function onError(message) {
 
 function registerFail(message) {
   $("#submit").removeAttr("disabled");
-  onError(message.status == 409 ? "\"" + $("#login").val() + "\"" + " username already exists." 
+  onError(message.status == 409 ? "\"" + $("#login").val() + "\"" + " username already exists."
     : "Your request produced an error. " + message.responseText);
 }
 

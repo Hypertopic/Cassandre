@@ -164,7 +164,7 @@ function download(filename, text) {
   a.click()
   document.body.removeChild(a)
 }
-  
+
 $('#exportSVG').on('click', function(e) {
   download(this_id+'.svg', exporting.svg)
 })

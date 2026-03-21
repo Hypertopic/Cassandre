@@ -1,5 +1,5 @@
 function version_tab(o){
-  let u = o.history[o.history.length-1].user, 
+  let u = o.history[o.history.length-1].user,
       d = o.history[o.history.length-1].date
   if (!fullnames[u]) getFullname(u)
   let tab_text = o.name.substr(0, 20)+'<br/>'+fullnames[u]+'<br/>'+ hr_time(d)
@@ -94,7 +94,7 @@ function diff_buttons(){
     if (!$('#only_diff').hasClass('hidden')) $('#only_diff').addClass('hidden')
   }
 }
-function showOnly(n){  
+function showOnly(n){
   selected = n
   $('#groundings li button').each(function() {
     let color = $(this).css('border-color')

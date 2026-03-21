@@ -13,8 +13,8 @@ function(o, req){
       data = {
     i18n: localized(),
     _id: o._id,
-    authorized: !o.readers || !o.contributors || o.readers.length==0 
-             || o.contributors.length==0 || o.readers.indexOf(username)>-1 
+    authorized: !o.readers || !o.contributors || o.readers.length==0
+             || o.contributors.length==0 || o.readers.indexOf(username)>-1
              || (o.contributors && o.contributors.indexOf(username)>-1) || req.userCtx.roles.indexOf("_admin")>-1,
     contributors: contributors,
     contributors_fullnames: contributors.map((i) => ({id: i, fullname: i})),

@@ -3,7 +3,7 @@ function(o, req) {
   // !code lib/mustache.js
   // !code l10n/l10n.js
   // !code lib/shared.js
-  var revision = '3.26.03.21'
+  let revision = '3.26.03.22'
   provides('json', function() {
     return {
       body: JSON.stringify({
@@ -14,7 +14,7 @@ function(o, req) {
     }
   })
   provides('html', function() {
-    var data = {
+    let data = {
       i18n: localized(),
       locale: req.headers["Accept-Language"].split(',')[0].substring(0,2),
       revision: revision

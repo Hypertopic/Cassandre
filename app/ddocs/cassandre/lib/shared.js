@@ -302,7 +302,9 @@ let shared = {
     {{^list}}\
     <script src='../script/render.js'></script>\
     <script src='../script/rights.js'></script>\
+    {{^editing}}\
     <script src='../script/comment.js'></script>\
+    {{/editing}}\
     {{/list}}\
     <link rel='stylesheet' href='../style/jquery-ui.min.css' />",
   layoutscript:"\

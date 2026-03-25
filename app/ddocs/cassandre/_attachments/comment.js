@@ -30,7 +30,7 @@ $('#commented').on('click', function() {
 })
 $('.comment').click(function(event) {
   refresh = false
-  var user = $(this).find('.user').text(),
+  let user = $(this).find('.user').text(),
       action = 'update'
   comment_id = $(this).closest('.comment').attr('id')
   if (logged_fullname == user && !$(event.target).is('input')) {
@@ -108,12 +108,12 @@ function show_comment_dialog(action, cid) {
   if ($("#comment_dialog").length) {
     $('#comment_dialog').modal('show')
   } else {
-    var comment_rest
+    let comment_rest
     $(cid).attr('placeHolder', enter_comment)
     $("#dialogs").load("/script/comment_dialog.html", function() {
       $('#comment_dialog .modal-title').html(comment_)
       $('#comment_dialog .modal-body').append($(cid))
-      var i = $(cid).val().search(/\n[^>]/g)
+      let i = $(cid).val().search(/\n[^>]/g)
       if ($(cid).val().substring(0, 1) === '>') {
         if (i > -1) {
           commented_text = $(cid).val().substring(0, i)
@@ -194,9 +194,13 @@ function show_comment(id, user, date, text, checked, legacy) {
 }
 function create_or_feed_docid(toDoAfter) {
   refresh = false
-  var data_text = commented_text+"\n \n"+easymde.value().trim(),
-      data_text = data_text.replace(/\n( )*\n>/g, "\n>").trim(),
+  let data_text = commented_text+"\n \n"+easymde.value().trim()
+  data_text = data_text.replace(/\n( )*\n>/g, "\n>").trim()
+  let com_data = {
+        text: data_text
+      },
       comments_docid = this_id+'_'+user
+  if (anchor && anchor > 0) com_data.anchor = anchor
   $.ajax({
     type: 'GET',
     url: '../'+comments_docid,
@@ -206,15 +210,12 @@ function create_or_feed_docid(toDoAfter) {
       url: '../add_comment/'+comments_docid,
       type: 'PUT',
       contentType: 'application/json',
-      data: data_text
+      data: JSON.stringify(com_data)
     }).done(toDoAfter)
   }).fail(function(){
-    var com_data = {
-      id: '0-'+Math.floor(Math.random() * 10)+Math.floor(Math.random() * 10),
-      date: new Date().toJSON(),
-      text: data_text
-    }
-    var doc_data = {
+    com_data.id = '0-'+Math.floor(Math.random() * 10)+Math.floor(Math.random() * 10)
+    com_data.date = new Date().toJSON()
+    let doc_data = {
       commented: this_id,
       diary: diary_id,
       user: user,
@@ -231,9 +232,9 @@ function create_or_feed_docid(toDoAfter) {
 }
 
 function update_legacy_comment(legacy_id) {
-  var data_text = commented_text+"\n \n"+easymde.value().trim(),
-      data_text = data_text.replace(/\n( )*\n>/g, "\n>").trim(),
-      comments_docid = this_id+'_'+user,
+  let data_text = commented_text+"\n \n"+easymde.value().trim()
+  data_text = data_text.replace(/\n( )*\n>/g, "\n>").trim()
+  let comments_docid = this_id+'_'+user,
       toDoAfter = function(){
         delete_legacy_comment(legacy_id)
       }
@@ -241,7 +242,7 @@ function update_legacy_comment(legacy_id) {
 }
 function update_comment(id, text) {
   refresh = true
-  var comments_docid = this_id+'_'+user,
+  let comments_docid = this_id+'_'+user,
       o = {
         'id': id,
         'text': text
@@ -264,9 +265,9 @@ function delete_legacy_comment(id) {
   }).done(reload)
 }
 function comment() {
-  refresh = true
-  var data_text = commented_text+"\n \n"+easymde.value().trim(),
-      data_text = data_text.replace(/\n( )*\n>/g, "\n>").trim()
-      doc_id = this_id+'_'+user
-  create_or_feed_docid(reload)
+  let toDoAfter = function(){
+    refresh = true
+    location.reload()
+  }
+  create_or_feed_docid(toDoAfter)
 }

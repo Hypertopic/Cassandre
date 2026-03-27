@@ -241,7 +241,7 @@ let shared = {
     <div class='py-3 my-3' id='comments'>\
       {{#comments}}\
       <div class='comment {{#checked}}checked{{/checked}}' id='{{id}}'>\
-        <span class='meta'><span class='user'>{{user}}</span> (<span class='{{date}} moment'></span>)</span>:\
+        <span class='meta'><span class='user {{user_id}}'>{{user}}</span> (<span class='{{date}} moment'></span>)</span>:\
         {{#logged}}<span class='meta checker d-none d-sm-inline'>{{#checked}}{{i18n.i_checked_by}} {{checked}}{{/checked}}</span><div class='checkbox'><input type='checkbox' class='form-check-input position-static comment_check' {{#checked}}checked{{/checked}}></div>{{/logged}}<br/>\
         <span class='comment_text'>{{text}}</span>\
         <div class='comment_edit hidden {{#legacy}}{{legacy}}{{/legacy}}'>{{text}}</div>\
@@ -302,9 +302,7 @@ let shared = {
     {{^list}}\
     <script src='../script/render.js'></script>\
     <script src='../script/rights.js'></script>\
-    {{^editing}}\
     <script src='../script/comment.js'></script>\
-    {{/editing}}\
     {{/list}}\
     <link rel='stylesheet' href='../style/jquery-ui.min.css' />",
   layoutscript:"\
@@ -326,6 +324,7 @@ let shared = {
   logscript: "\
   const checked_by = '{{i18n.i_checked_by}}',\
         comment_ ='{{i18n.i_comment}}',\
+        i_delete = '{{i18n.i_delete}}',\
         editable_by = '{{i18n.i_editable-by}}',\
         everyone = '{{i18n.i_everyone}}',\
         enter_comment ='{{i18n.i_enter_comment}}',\
@@ -339,6 +338,7 @@ let shared = {
         maintenance_in_progress = '{{i18n.i_maintenance-in-progress}}',\
         memo_already_linked = '{{i18n.i_memo_already_linked}}',\
         memos_number = '{{i18n.i_memos-number}}',\
+        modify = '{{i18n.i_edit}}',\
         name_negative_case = '{{i18n.i_name.negative-case}}',\
         name_situation = '{{i18n.i_name.situation}}',\
         name_statement = '{{i18n.i_name.statement}}',\

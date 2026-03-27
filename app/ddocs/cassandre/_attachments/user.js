@@ -38,14 +38,16 @@ const copy_to_clipboard_btn = '<button class="btn source2clipboard" type="button
         + '</svg></button>'
 function searchComments() {
   let search_input = $('#search-comments .form-control').val(),
+      occurrences = [],
+      regex = {"text": {"$regex": search_input}},
       request = {
     "selector": {
       "$and": [
-        {"text": {"$regex": search_input}},
+        {"$or": [regex,{"comments": {"$elemMatch": regex}}]},
         {"user": user_id}
       ]
     },
-    "fields": ["date", "commented", "text"],
+    "fields": ["date", "commented", "text", "comments"],
     "skip": 0,
     "execution_stats": true
   }
@@ -60,7 +62,24 @@ function searchComments() {
     $("#events").remove()
     $("#next").remove()
     if (search_input.length > 0) {
-      for (var c of data.docs.sort((a, b) => new Date(a.date) - new Date(b.date))) {
+      for (var d of data.docs) {
+        if (typeof (d.text) !== 'undefined') {
+          occurrences.push({
+            'commented': d.commented,
+            'date': d.date,
+            'text': d.text
+          })
+        } else {
+          if (d.comments) for (var x of d.comments) {
+             if (occurrences.map(a => a.date).indexOf(x.date) < 0 && x.text.indexOf(search_input) > -1) occurrences.push({
+              'commented': d.commented,
+              'date': x.date,
+              'text': x.text
+            })
+          }
+        }
+      }
+      for (var c of occurrences.sort((a, b) => new Date(a.date) - new Date(b.date))) {
         $("#activities").prepend('<li class="commented"><span id="'+c.date+'" class="'+c.date+' moment">'
         +'</span>&nbsp;– <a href="../memo/'+c.commented+'">'+c.text.replace(search_input, '__'+search_input+'__')+'</a>'
         +'<span class="md_source" hidden>'+c.text+'</span>'+copy_to_clipboard_btn+'</li>')

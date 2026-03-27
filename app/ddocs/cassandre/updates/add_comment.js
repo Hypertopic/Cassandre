@@ -7,7 +7,7 @@ function (doc, req) {
         date: new Date().toJSON(),
         text: text
       }
-  if (o.anchor && o.anchor > 0) added_comment.anchor = o.anchor
+  if (typeof o.anchor !== 'undefined' && o.anchor > 0) added_comment.anchor = o.anchor
   if (o.text.trim().length > 0) doc.comments.push(added_comment)
   return [doc, 'Comment added']
 }

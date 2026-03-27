@@ -1,7 +1,13 @@
 function(o) {
   var diary = o.diary || o.corpus
   if (o.commented) {
-    emit([o.user, o.date, 'M'], {'diary': diary, '_id': o.commented, 'text': o.text})
+    if (o.comments) {
+      for (var c of o.comments) {
+        emit([o.user, c.date, 'M'], {'diary': diary, '_id': o.commented, 'text': c.text})
+      }
+    } else {
+      emit([o.user, o.date, 'M'], {'diary': diary, '_id': o.commented, 'text': o.text})
+    }
   } else {
     if (o.history) for (var [key, h] of Object.entries(o.history)) {
       let operation = 'E'

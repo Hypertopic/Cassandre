@@ -1,4 +1,4 @@
-let easymde, comment_id = '', commented_text = ''
+let comment_easymde, comment_id = '', commented_text = ''
 $('#comment_create').click(function () {
   refresh = false
   $("#comment_create").tooltip('hide')
@@ -13,16 +13,16 @@ $('#comment_create').click(function () {
   $('#header button').prop('disabled', true).tooltip('dispose')
   $('#add-leaves').addClass('hidden')
   $('#toasts').remove()
-  let anchor = $('#content>h1').text().trim()
-  if ($('#kwic').val()) anchor = $('#kwic').val()
-  $('#comment_input').val('> '+anchor+"\n \n")
+  let anchor_text = $('#content>h1').text().trim()
+  if ($('#kwic').val()) anchor_text = $('#kwic').val()
+  $('#comment_input').val('> '+anchor_text+"\n \n")
   show_comment_dialog('create', '#comment_input')
   $('.comment').off('click')
   $('.comment_check').prop('disabled', true)
   $('html, body').scrollTop($(document).height())
 })
 $('#commented').on('click', function() {
-  if (easymde.value().trim().length < 1) {
+  if (comment_easymde.value().trim().length < 1) {
     alert(enter_comment)
   } else {
     comment()
@@ -59,7 +59,8 @@ $('.comment').click(function(event) {
 })
 $('.comment_check').click(function() {
   let doc = id = $(this).closest('.comment').attr('id')
-  if (!$('#'+id+' .comment_edit').hasClass('legacy')) doc = this_id+'_'+user
+  if (!$('#'+id+' .comment_edit').hasClass('legacy')) 
+    doc = this_id+'_'+$('#'+id+' .meta .user').attr('class').split(/\s+/)[1]
   let data = {
     'id': id,
     'fullname': logged_fullname
@@ -69,30 +70,39 @@ $('.comment_check').click(function() {
     type: 'PUT',
     contentType: 'application/json',
     data: JSON.stringify(data)
-  }).done(function(){refresh = true})
+  }).done(function(){
+    refresh = true
+    reload()
+  })
 })
 $('#convert_legacy_comment').on('click', function() {
-  if (easymde.value().trim().length < 1) {
+  if (comment_easymde.value().trim().length < 1) {
     alert(enter_comment)
   } else {
     update_legacy_comment(comment_id)
   }
 })
 $('#comment_updated').on('click', function() {
-  if (easymde.value().trim().length < 1) {
+  if (comment_easymde.value().trim().length < 1) {
     alert(enter_comment)
   } else {
-    update_comment(comment_id, commented_text+"\n \n"+easymde.value().trim())
+    update_comment(comment_id, commented_text+"\n \n"+comment_easymde.value().trim())
   }
 })
 $('#delete_comment').on('click', function() {
   update_comment(comment_id, '')
 })
 $('body').on('click', '#edit_commented_text', function() {
-  easymde.value(commented_text+"\n \n"+easymde.value())
+  comment_easymde.value(commented_text+"\n \n"+comment_easymde.value())
   commented_text = ''
   $('#anchor_text').text('')
-  $('#edit_commented_text').addClass('hidden')
+  $('#edit_commented_text, #delete_commented_text').addClass('hidden')
+})
+$('body').on('click', '#delete_commented_text', function() {
+  commented_text = ''
+  $('#anchor_text').text('')
+  if (typeof anchor !== 'undefined') anchor = 0
+  $('#edit_commented_text, #delete_commented_text').addClass('hidden')
 })
 $('body').on('shown.bs.modal', '#comment_dialog', function() {
   let input_id = $(this).find('.modal-body').find('textarea').attr('id')
@@ -121,7 +131,9 @@ function show_comment_dialog(action, cid) {
         } else {
           commented_text = $(cid).val()
         }
-        $('#edit_commented_text').removeClass('hidden')
+        $('#edit_commented_text').attr('title', modify)
+        $('#delete_commented_text').attr('title', i_delete)
+        $('#edit_commented_text, #delete_commented_text').removeClass('hidden')
       } else {
         comment_rest = $(cid).val()
       }
@@ -141,7 +153,7 @@ function show_comment_dialog(action, cid) {
           .prop('disabled', null)
           .removeClass('hidden')
       }
-      $('#comment_dialog .modal-footer button')
+      $('#comment_dialog button')
         .tooltip('dispose')
         .data('placement', 'bottom')
         .tooltip('update')
@@ -150,7 +162,7 @@ function show_comment_dialog(action, cid) {
   }
 }
 function enabling_mde(id) {
-  easymde = new EasyMDE({
+  comment_easymde = new EasyMDE({
     element: $(id)[0],
     toolbar: ["bold", "italic", "strikethrough", "|", "unordered-list", "horizontal-rule", "|", "link", "image", "|", "guide"],
     placeholder: enter_comment,
@@ -176,14 +188,14 @@ function enabling_mde(id) {
     $('.editor-statusbar .lines').addClass('lines-french')
   }
 }
-function show_comment(id, user, date, text, checked, legacy) {
+function show_comment(id, user, date, text, checked, legacy, user_id) {
   $('#comments .template').clone(true).attr('id', id).appendTo("#comments")
   if (checked) {
     $('#'+id).addClass('checked')
     $('#'+id+' .checker').text(checked_by+' '+checked)
     $('#'+id).find('.comment_check').prop('checked', true)
   }
-  $('#'+id+' .meta .user').text(user)
+  $('#'+id+' .meta .user').addClass(user_id).text(user)
   $('#'+id+' .meta .moment').removeClass('moment').addClass(date).addClass('moment')
   $('#'+id+' .comment_text').text(text)
   $('#'+id).removeClass('template hidden')
@@ -194,13 +206,13 @@ function show_comment(id, user, date, text, checked, legacy) {
 }
 function create_or_feed_docid(toDoAfter) {
   refresh = false
-  let data_text = commented_text+"\n \n"+easymde.value().trim()
+  let data_text = commented_text+"\n \n"+comment_easymde.value().trim()
   data_text = data_text.replace(/\n( )*\n>/g, "\n>").trim()
   let com_data = {
         text: data_text
       },
       comments_docid = this_id+'_'+user
-  if (anchor && anchor > 0) com_data.anchor = anchor
+  if (typeof anchor !== 'undefined' && anchor > 0) com_data.anchor = anchor
   $.ajax({
     type: 'GET',
     url: '../'+comments_docid,
@@ -232,7 +244,7 @@ function create_or_feed_docid(toDoAfter) {
 }
 
 function update_legacy_comment(legacy_id) {
-  let data_text = commented_text+"\n \n"+easymde.value().trim()
+  let data_text = commented_text+"\n \n"+comment_easymde.value().trim()
   data_text = data_text.replace(/\n( )*\n>/g, "\n>").trim()
   let comments_docid = this_id+'_'+user,
       toDoAfter = function(){

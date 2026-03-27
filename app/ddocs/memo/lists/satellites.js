@@ -44,11 +44,12 @@ function(head, req) {
         data.readers_fullnames.push({'id': id, 'fullname': fullname})
       break
       case ('M'):
-        var user = row.value._id
+        var user_id = user = row.value._id
         if (row.doc && !fullnames[user]) fullnames[user] = row.doc.fullname
         if (row.doc && row.doc.fullname) user = row.doc.fullname
         var comment = {
           user: user,
+          user_id: user_id,
           date: row.value.date,
           text: row.value.text,
           checked: row.value.checked,

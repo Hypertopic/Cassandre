@@ -61,13 +61,24 @@ function(o) {
       emit([diary, 'Z', h.date], value)
     }
   }
-  if (o.commented && o.text != "") {
-    emit([diary, 'Z', date], {
-      _id: o.commented,
-      comment: o.text,
-      modified_id: o.commented,
-      user: o.user
-    })
+  if (o.commented) {
+    if (o.comments) {
+      for (var c of o.comments) {
+        emit([diary, 'Z', c.date], {
+          _id: o.commented,
+          comment: c.text,
+          modified_id: o.commented,
+          user: o.user
+        })
+      }
+    } else {
+      if (o.text != '') emit([diary, 'Z', o.date], {
+        _id: o.commented,
+        comment: o.text,
+        modified_id: o.commented,
+        user: o.user
+      })
+    }
   }
   if (o.diary_name) {
     ['name', 'date', 'update', 'type'].forEach(function(order) {

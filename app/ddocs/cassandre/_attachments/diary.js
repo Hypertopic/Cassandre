@@ -261,11 +261,11 @@ function informingUser() {
 function cleaningUserDoc(d) {
   d = JSON.parse(d)
   var b = d.user_activity.filter(function(m) {
-    var p = memos.map(function(a){return a.id}).indexOf(m.doc)
+    var p = memos.map(a => a.id).indexOf(m.doc)
     return p > -1
   })
   var data = {
-    'memos': b.map(function(a){return a.doc})
+    'memos': b.map(a => a.doc)
   };
   if (d.memo_order && d.memo_order.length > 0) data.order = diary_id
   $.ajax({
@@ -293,7 +293,7 @@ function creatingDiaryUserDoc(by) {
   }).done(function(u) {
     if(u.activity && u.activity.length > 0) {
       user_activity = u.activity.filter(function(m) {
-        var p = memos.map(function(a){return a.id}).indexOf(m.doc)
+        var p = memos.map(a => a.id).indexOf(m.doc)
         return p > -1 && memos[p].date < m.date
       })
     }

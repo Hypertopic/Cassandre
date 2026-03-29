@@ -56,6 +56,7 @@ function(head, req) {
           id: row.value.id
         }
         if (row.value.legacy) comment.legacy = row.value.legacy
+        if (row.value.anchor) comment.anchor = row.value.anchor
         if (data && data.comments) data.comments.push(comment)
       break
       case ('H'):

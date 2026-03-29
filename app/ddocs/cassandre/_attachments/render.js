@@ -9,6 +9,10 @@ function render(){
     $('#tips-off').addClass('hidden')
     $('#tips-on').removeClass('hidden')
   }
+  if (localStorage.getItem(user+'_icons')) {
+    $('#icons-inline').addClass('hidden')
+    $('#icons-offline').removeClass('hidden')
+  }
   let refresh = true
 }
 function renderLeaves(){

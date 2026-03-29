@@ -105,6 +105,16 @@ let shared = {
               <use href='../style/bootstrap-icons.svg#justify-left'/>\
             </svg>\
           </button>\
+          <button class='btn hidden' id='icons-offline' data-placement='left' title='{{i18n.i_icons-offline}}'>\
+            <svg class='bi' width='24' height='24' fill='currentColor'>\
+              <use href='../style/bootstrap-icons.svg#toggle-on'/>\
+            </svg>\
+          </button>\
+          <button class='btn' id='icons-inline' data-placement='left' title='{{i18n.i_icons-inline}}'>\
+            <svg class='bi' width='24' height='24' fill='currentColor'>\
+              <use href='../style/bootstrap-icons.svg#toggle-off'/>\
+            </svg>\
+          </button>\
           {{/body}}\
           {{#type}}{{^statements}}\
           <button class='btn hidden' id='tips-on' data-placement='left' title='{{i18n.i_tips-on}}'>\

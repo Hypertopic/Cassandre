@@ -1,4 +1,4 @@
-let comment_easymde, comment_id = '', commented_text = ''
+let comment_easymde, comment_id = '', commented_text = '', comments = []
 $('#comment_create').click(function () {
   refresh = false
   $("#comment_create").tooltip('hide')
@@ -188,7 +188,7 @@ function enabling_mde(id) {
     $('.editor-statusbar .lines').addClass('lines-french')
   }
 }
-function show_comment(id, user, date, text, checked, legacy, user_id) {
+function show_comment(id, user, date, text, checked, legacy, anchor, user_id) {
   $('#comments .template').clone(true).attr('id', id).appendTo("#comments")
   if (checked) {
     $('#'+id).addClass('checked')
@@ -200,9 +200,46 @@ function show_comment(id, user, date, text, checked, legacy, user_id) {
   $('#'+id+' .comment_text').text(text)
   $('#'+id).removeClass('template hidden')
   $('#'+id+' .comment_edit').text(text)
-  if (legacy === 'true') {
-    $('#'+id+' .comment_edit').addClass('legacy')
+  if (legacy === 'true') $('#'+id+' .comment_edit').addClass('legacy')
+  if (['interview', 'diagram', 'graph', 'table'].indexOf(this_type) < 0 && localStorage.getItem(user_id+'_icons') === 'inline' && anchor > 0 && !checked) {
+    let icon = "<a href='#"+id+"'><button class='btn' data-toggle='tooltip' title='"+id+"' data-placement='top'>"
+         +"<svg class='bi' width='24' height='24' fill='currentColor'>"
+         +"<use xlink:href='../style/bootstrap-icons.svg#chat-left-text'/>"
+         +"</svg></button></a>",
+         first_quote = quoted_text = ''
+    if (text.substring(0, 1) === '>') {
+      let i = text.search(/\n[^>]/g)
+      if (i > -1) {
+        quoted_text = text.substring(1, i).replace(/[*~]/g, '').trim()
+        text = text.substring(i+1)
+      }
+    }
+    comments.push({
+      'id': id,
+      'title': text.replace(/[*~]/g, '').trim()
+    })
+    let paragraph_ref = '#content .post p:nth-child('+anchor+')'
+    if (!$(paragraph_ref).length)
+      paragraph_ref = '#content .post p:last-child'
+    let paragraph_html = $(paragraph_ref).html(),
+        j = -1
+    if (quoted_text.length > 0) {
+      first_quote = quoted_text.split("\n")[0]
+      j = paragraph_html.indexOf(first_quote.trim())
+    }
+    if (j < 0) {
+      $(paragraph_ref).append(icon)
+    } else {
+      let k = j+quoted_text.length
+      $(paragraph_ref).html(paragraph_html.substring(0, k)+icon+paragraph_html.substring(k))
+    }
   }
+}
+function inlineCommentsTooltips(){
+  $('#content .post button').each(function() {
+    let id = $(this).attr('title')
+    $(this).attr('title', comments.find(x => x.id === id).title)
+  })
 }
 function create_or_feed_docid(toDoAfter) {
   refresh = false

@@ -40,6 +40,14 @@ $('#tips-on, #tips-off').on('click', function() {
   }
   reload()
 })
+$('#icons-inline, #icons-offline').on('click', function() {
+  if ($('#icons-offline').hasClass('hidden')) {
+    localStorage.setItem(user+'_icons', 'inline')
+  } else {
+    localStorage.removeItem(user+'_icons')
+  }
+  reload()
+})
 function justify() {
   if ($('#justify').hasClass('hidden')) {
     $('.writing p').removeClass('text-justify')
@@ -445,7 +453,7 @@ var getSatellites = function(logged, toDoAfter){
     dataType: "json"
   }).done(function(data){
     for (var c of data.comments) {
-      show_comment(c.id, c.user, c.date, c.text, c.checked, c.legacy, c.user_id)
+      show_comment(c.id, c.user, c.date, c.text, c.checked, c.legacy, c.anchor, c.user_id)
     }
     if (logged) setSignoutTooltip(logged)
     if (data.diary_name) {
@@ -484,6 +492,7 @@ var getSatellites = function(logged, toDoAfter){
   }).done(function(){
     getAllFullnames()
     renderPreviews(converter)
+    inlineCommentsTooltips()
     renderComments(converter)
     toDoAfter()
   })

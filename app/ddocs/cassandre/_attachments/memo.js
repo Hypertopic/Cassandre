@@ -1,11 +1,13 @@
 function highlight(p) {
-  $('.post').children().eq(p-1).addClass('highlight')
-  var prev = document.querySelector(".highlight").previousSibling
-  if (p == '0' || p == '1') {
-    prev = document.getElementById('name')
-  } else if (this_type != 'interview') prev = prev.previousSibling
-  prev.scrollIntoView({ behavior: 'smooth', block: 'center'})
-  $('.highlight').addClass('fadeout')
+  if (typeof p === 'number') {
+    $('.post').children().eq(p-1).addClass('highlight')
+    var prev = document.querySelector(".highlight").previousSibling
+    if (p == '0' || p == '1') {
+      prev = document.getElementById('name')
+    } else if (this_type != 'interview') prev = prev.previousSibling
+    prev.scrollIntoView({ behavior: 'smooth', block: 'center'})
+    $('.highlight').addClass('fadeout')
+  }
 }
 
 $('#edit').on('click', function() {

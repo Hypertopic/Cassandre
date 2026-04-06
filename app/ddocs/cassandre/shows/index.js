@@ -3,7 +3,7 @@ function(o, req) {
   // !code lib/mustache.js
   // !code l10n/l10n.js
   // !code lib/shared.js
-  let revision = '3.26.03.29'
+  let revision = '3.26.04.10'
   provides('json', function() {
     return {
       body: JSON.stringify({

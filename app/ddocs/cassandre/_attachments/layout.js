@@ -137,7 +137,7 @@ var error_alert = function(qhr) {
 String.prototype.trimLeft = String.prototype.trimLeft || function() {
   return this.replace(/^\s+/,'')
 }
-$('#content').on('mouseup', function() {
+$('#content').on('touchend mouseup', function() {
   $('#kwic').val(
     document.getSelection().toString().trimLeft()
   )
@@ -492,7 +492,6 @@ var getSatellites = function(logged, toDoAfter){
   }).done(function(){
     getAllFullnames()
     renderPreviews(converter)
-    inlineCommentsTooltips()
     renderComments(converter)
     toDoAfter()
   })

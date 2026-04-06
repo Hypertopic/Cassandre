@@ -1,5 +1,5 @@
 function highlight(p) {
-  if (typeof p === 'number') {
+  if (p.indexOf('-') === -1) {
     $('.post').children().eq(p-1).addClass('highlight')
     var prev = document.querySelector(".highlight").previousSibling
     if (p == '0' || p == '1') {
@@ -82,7 +82,7 @@ $('#source2clipboard').on('click', function() {
   })
 })
 
-$('#content').on('mouseup', function() {
+$('#content').on('touchend mouseup', function() {
   if (window.getSelection().anchorNode !== null) {
     var posts = document.getElementsByClassName('post'),
         selected = window.getSelection().anchorNode.parentNode,
